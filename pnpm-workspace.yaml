@@ -1,1 +1,61 @@
+# pnpm-workspace.yaml
+# Рабочая конфигурация workspace для монорепозитория Rarog.
+# Файл готов к использованию при релизе — включает все типичные пакеты, docs, infra и примеры.
+# Комментарии на русском для удобства — YAML их игнорирует при парсинге.
 
+packages:
+  # Основные пакеты (ядро, утилиты, обёртки)
+  - 'packages/core'                # CSS-ядро (SCSS/PostCSS)
+  - 'packages/js'                  # vanilla JS utilities (ESM/UMD builds)
+  - 'packages/react'               # @rarog/react — React wrapper (TS)
+  - 'packages/vue'                 # @rarog/vue — Vue wrapper (опционально)
+  - 'packages/svelte'              # @rarog/svelte (опционально)
+  - 'packages/cli'                 # rarog CLI (theme generation, dev helpers)
+  - 'packages/docs-components'     # атомарные компоненты/хелперы для MDX (docs)
+
+  # Дополнительные пакеты и плагины
+  - 'packages/*-plugin'            # wildcard для плагинов (например rarog-plugin-*)
+  - 'packages/@rarog/*'            # scoped packages, если используем @rarog/* namespace
+  - 'packages/**/package.json'     # захватить вложенные пакеты (сабпакеты)
+
+  # Примеры, демо и стартеры
+  - 'examples/*'                   # простые приложения-примеры (vanilla, react, nextjs)
+  - 'examples/**/package.json'     # любые package.json внутри examples
+
+  # Документация и сайт
+  - 'docs'                         # docusaurus (или vitepress) — документация
+  - 'website'                      # маркетинговый сайт / docs variant
+
+  # Инфраструктура и CI вспомогательные пакеты (terraform helpers, infra scripts как пакеты)
+  - 'infra/*'                      # infra модули/скрипты (как отдельные пакеты, если нужно)
+  - 'tools/*'                      # вспомогательные скрипты/утилиты (build scripts, release tools)
+
+  # Тестовые и e2e окружения
+  - 'test/e2e'                     # e2e тесты (Playwright/Puppeteer)
+  - 'test/visual'                  # визуальные регрессии (Percy/Chromatic интеграции)
+
+  # Monorepo helpers, CI и internal packages
+  - '.github/actions/**'           # локальные GitHub Actions (если используются как пакеты)
+  - 'scripts'                      # общие скрипты (можно также оформить как пакет)
+
+# Замечания и рекомендации (комментарии — не часть конфигурации, но полезны):
+#
+# 1) Используйте гибридные шаблоны выше: конкретные пути (packages/core) + wildcard (packages/**/package.json)
+#    это позволяет pnpm корректно обнаруживать все пакеты и не пропустить вложенные.
+#
+# 2) Для ускорения установки в CI:
+#    - Запустите `pnpm install --frozen-lockfile` на уровне корня.
+#    - Используйте pnpm store / cache между джобами.
+#
+# 3) Настройка package manager:
+#    - В корневом package.json укажите: "packageManager": "pnpm@<версия>"
+#    - Для reproducible installs используйте lockfileVersion совместимую с CI.
+#
+# 4) Игнорирование артефактов:
+#    - Для игнорирования dist/ и node_modules/ используйте .gitignore/.npmignore,
+#      pnpm-workspace.yaml не поддерживает exclude patterns в разделе packages.
+#
+# 5) Если планируете использовать workspace:protocol в зависимостях,
+#    убедитесь, что все пакеты имеют корректные `name` и `version` в своих package.json.
+#
+# 6) Если в монорепо будут private пакеты для internal infra, установите `"private": true` в их package.json.
