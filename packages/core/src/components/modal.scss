@@ -1,1 +1,207 @@
+// Rarog — modal.scss
+// Файл: packages/core/src/components/modal.scss
+// Описание: Полнофункциональная SCSS-реализация модального окна для Rarog
+// Автор: TheSkiF4er
+// Лицензия: Apache-2.0
+// Цели: доступность (a11y), плавные анимации, backdrop, варианты размеров, поддержка density и skin tokens
 
+// -------------------------
+// Предполагаемые CSS-переменные (token points)
+// -------------------------
+:root {
+  /* цвета */
+  --tone-surface: 255 255 255; /* rgb parts */
+  --tone-on-surface: 18 18 20;
+  --tone-backdrop: 10 12 16; /* для затемнения */
+
+  /* radius */
+  --r-radius-md: 12px;
+
+  /* spacing */
+  --r-spacing-s4: 16px;
+  --r-spacing-s5: 20px;
+
+  /* depth / shadow */
+  --r-shadow-md: 0 18px 48px rgba(9,30,66,0.08);
+
+  /* motion */
+  --r-motion-fast: 160ms;
+  --r-motion-medium: 240ms;
+}
+
+// Фоллбеки для случаев, когда theme не подключён
+$modal-z-index: 9000 !default;
+$modal-backdrop-opacity: 0.56 !default;
+$modal-max-width: 900px !default;
+$modal-border-radius: var(--r-radius-md, 12px) !default;
+
+// -------------------------
+// Общие сбросы
+// -------------------------
+.r-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: $modal-z-index;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; // по умолчанию не интерактивен, пока не открыт
+}
+
+.r-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--tone-backdrop, 10 12 16), $modal-backdrop-opacity);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity var(--r-motion-medium, 240ms) ease;
+  pointer-events: auto;
+}
+
+.r-modal-panel {
+  position: relative;
+  z-index: $modal-z-index + 1;
+  width: calc(100% - 48px);
+  max-width: $modal-max-width;
+  max-height: calc(100vh - 64px);
+  overflow: auto;
+  background: rgb(var(--tone-surface, 255 255 255));
+  color: rgb(var(--tone-on-surface, 18 18 20));
+  border-radius: $modal-border-radius;
+  box-shadow: var(--r-shadow-md, #{$modal-z-index});
+  transform: translateY(8px) scale(0.995);
+  opacity: 0;
+  transition: transform var(--r-motion-medium, 240ms) cubic-bezier(.2,.9,.3,1), opacity var(--r-motion-medium, 240ms);
+  pointer-events: auto;
+  outline: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Контент внутри панели
+.r-modal-content {
+  padding: var(--r-spacing-s5, 20px);
+}
+
+.r-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.r-modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.r-modal-body {
+  margin-bottom: 12px;
+}
+
+.r-modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+// Close button
+.r-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: rgb(var(--tone-on-surface, 18 18 20));
+}
+.r-modal-close:focus-visible { box-shadow: 0 0 0 4px rgba(30,120,255,0.12); outline: none; }
+
+// -------------------------
+// State: open / closed
+// -------------------------
+.r-modal-root.is-open { pointer-events: auto; }
+.r-modal-root.is-open .r-modal-backdrop { opacity: $modal-backdrop-opacity; }
+.r-modal-root.is-open .r-modal-panel { transform: translateY(0) scale(1); opacity: 1; }
+
+// -------------------------
+// Sizes
+// -------------------------
+.r-modal-panel.size-sm { max-width: 420px; }
+.r-modal-panel.size-md { max-width: 640px; }
+.r-modal-panel.size-lg { max-width: 900px; }
+.r-modal-panel.size-full { width: 100%; max-width: 100%; height: 100vh; border-radius: 0; }
+
+// -------------------------
+// Variants: centered / top-aligned
+// -------------------------
+.r-modal-root.align-top { align-items: flex-start; padding-top: 28px; }
+.r-modal-root.align-center { align-items: center; }
+
+// -------------------------
+// Actionable / keyboard focus
+// -------------------------
+.r-modal-panel:focus { outline: none; }
+.r-modal-panel:focus-visible { box-shadow: 0 0 0 6px rgba(30,120,255,0.12); }
+
+// -------------------------
+// Backdrop click hint (pointer)
+// -------------------------
+.r-modal-backdrop.is-interactive { cursor: pointer; }
+
+// -------------------------
+// Animations: subtle scale + fade
+// -------------------------
+@keyframes rarog-modal-enter {
+  from { opacity: 0; transform: translateY(8px) scale(0.994); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rarog-modal-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(0.994); }
+}
+
+.r-modal-root.is-open .r-modal-panel { animation: rarog-modal-enter var(--r-motion-medium, 240ms) ease both; }
+.r-modal-root:not(.is-open) .r-modal-panel { animation: rarog-modal-exit var(--r-motion-fast, 160ms) ease both; }
+
+// -------------------------
+// Density modifiers (dens-*) — управляют padding/spacing
+// -------------------------
+.r-modal-panel.dens-1 .r-modal-content { padding: calc(var(--r-spacing-s5,20px) * 1.4); }
+.r-modal-panel.dens-2 .r-modal-content { padding: var(--r-spacing-s5,20px); }
+.r-modal-panel.dens-3 .r-modal-content { padding: calc(var(--r-spacing-s5,20px) * 0.85); }
+.r-modal-panel.dens-4 .r-modal-content { padding: calc(var(--r-spacing-s5,20px) * 0.7); }
+.r-modal-panel.dens-5 .r-modal-content { padding: calc(var(--r-spacing-s5,20px) * 0.55); }
+
+// -------------------------
+// Responsive tweaks
+// -------------------------
+@media (max-width: 640px) {
+  .r-modal-panel { width: calc(100% - 24px); max-height: calc(100vh - 40px); }
+  .r-modal-content { padding: 16px; }
+  .r-modal-close { top: 8px; right: 8px; }
+}
+
+// -------------------------
+// Accessibility helpers (visual only)
+// - ensure focus-visible states
+// - large text support
+// -------------------------
+:where(.r-modal-panel) { -webkit-font-smoothing:antialiased; }
+
+@media (prefers-reduced-motion: reduce) {
+  .r-modal-panel, .r-modal-backdrop { transition: none !important; animation: none !important; }
+}
+
+// -------------------------
+// Notes for implementer (not CSS):
+// - Добавлять/убирать класс .is-open на корневом элементе .r-modal-root
+// - Устанавливать aria-hidden на .r-modal-panel и управлять tabindex для focus trap
+// - При открытии — сохранять фокус, блокировать скролл (documentElement style top/position) и активировать focus trap
+// - При закрытии — восстанавливать фокус и скролл
+// -------------------------
+
+// Конец файла
