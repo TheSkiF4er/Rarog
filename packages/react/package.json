@@ -1,1 +1,63 @@
-
+{
+  "name": "@rarog/react",
+  "version": "0.1.0",
+  "private": false,
+  "description": "React-обёртки компонентов Rarog — доступные, лёгкие и стилизуемые компоненты для дизайн-системы Rarog (Button, Modal и пр.). (Русский)",
+  "author": "TheSkiF4er",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheSkiF4er/rarog.git"
+  },
+  "keywords": [
+    "rarog",
+    "react",
+    "ui",
+    "design-system",
+    "component"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
+    "dev": "ts-node -r tsconfig-paths/register src/index.tsx",
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}' --max-warnings=0",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",
+    "test": "vitest run --reporter=dot || true",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "classnames": "^2.3.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.0.0",
+    "rimraf": "^5.0.0",
+    "eslint": "^8.0.0",
+    "vitest": "^1.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/classnames": "^2.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
