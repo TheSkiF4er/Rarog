@@ -21,9 +21,6 @@ assignees: []
 
 1. Открыть `index.html` с подключённым `@rarog/core` v0.1.2
 2. Вставить код: `html <button class="r-btn r-btn--primary">Click me</button>`
-
-   ```
-   ```
 3. Открыть страницу в Safari 16 на macOS Monterey
 4. Нажать на кнопку
 
