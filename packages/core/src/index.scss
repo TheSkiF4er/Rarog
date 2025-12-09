@@ -1,1 +1,157 @@
+// Rarog — packages/core/src/index.scss
+// Точка входа CSS для ядра Rarog
+// Содержит: импорт токенов, утилит, базовых reset-стилей, layout, компоненты и экспорт точек расширения
+// Автор: TheSkiF4er
+// Лицензия: Apache-2.0
 
+// --- ОПИСАНИЕ ---
+// Этот файл — рекомендованный entry-point для сборки CSS ядра Rarog.
+// Он собирает в себе:
+// 1) tokens (dual token grid) — базовые CSS‑переменные
+// 2) utilities — spacing, typography, layout helpers
+// 3) base — reset и доступные defaults (focus-visible, accessibility helpers)
+// 4) components — btn, card, modal и др.
+// 5) themes — места для подключаемых тем (можно генерировать через generate-theme.js)
+// Файл написан с учётом того, что в production переменные лучше генерировать автоматически.
+
+// -------------------------
+// 1. TOKENS
+// -------------------------
+@import "./tokens/index.scss";
+
+// -------------------------
+// 2. BASE RESET & TYPOGRAPHY
+// -------------------------
+// Базовый CSS reset (не агрессивный) — сохраняем стили браузера, обеспечиваем консистентность
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family-system, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial);
+  font-size: 16px;
+  color: rgb(var(--tone-on-surface, 18 18 20));
+  background: rgb(var(--tone-surface, 255 255 255));
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+  margin: 0;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+
+// focus visible helper
+:focus { outline: none; }
+:where(:focus-visible) { outline: none; }
+
+// ensure focus-visible polyfill friendly
+[tabindex]:focus { outline: none; }
+
+// Links
+a { color: rgb(var(--tone-primary, 30 120 255)); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+// Images
+img { max-width: 100%; height: auto; display: block; }
+
+// Form defaults
+input, button, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+// Accessibility helpers
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+// -------------------------
+// 3. UTILITIES
+// -------------------------
+@import "./utilities/spacing.scss";
+// (в дальнейшем сюда можно добавить utilities/typography.scss, utilities/display.scss и т.д.)
+
+// -------------------------
+// 4. BASE COMPONENTS / ATOMS
+// -------------------------
+@import "./components/btn.scss";
+@import "./components/card.scss";
+@import "./components/modal.scss";
+
+// -------------------------
+// 5. LAYOUT / GRID (опционально)
+// -------------------------
+// Простая responsive grid, которую можно расширить
+.r-grid {
+  display: grid;
+  gap: var(--r-spacing-s4, 16px);
+}
+.r-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.r-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.r-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+  .r-grid--cols-3, .r-grid--cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+// -------------------------
+// 6. THEME EXTENSION POINTS
+// -------------------------
+// Места для пользовательских тем и модификаций. Генератор тем должен помещать
+// сгенерированные переменные ниже или в отдельный файл, который подключается
+// после этого index.scss (чтобы переопределять значения).
+
+/*
+Пример расширения (в rarog.theme.css, подключаемом после index.css):
+:root {
+  --tone-primary: 40 160 255;
+  --r-radius-md: 14px;
+  --r-spacing-s3: 14px;
+}
+*/
+
+// -------------------------
+// 7. UTILS FOR JS (CSS hooks)
+// -------------------------
+// Классы-утилиты, которые JS может использовать для быстрого state management
+.is-hidden { display: none !important; }
+.is-open { display: block !important; }
+.is-loading { pointer-events: none; }
+
+// -------------------------
+// 8. PRINT / MEDIA
+// -------------------------
+@media print {
+  .r-no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+}
+
+// -------------------------
+// 9. DOCUMENTATION / DEMO HELPERS
+// -------------------------
+.r-docs { font-family: var(--font-family-system); font-size: 14px; color: rgb(var(--tone-on-surface, 18 18 20)); }
+.r-docs .token { display: inline-block; padding: 6px 8px; border-radius: 6px; background: rgba(0,0,0,0.03); }
+
+// -------------------------
+// 10. BACKWARDS COMPATIBILITY
+// -------------------------
+/* Оставляем небольшие shim-классы для проектов, которые мигрируют с Tailwind / Bootstrap */
+.btn { @extend .r-btn; }
+.card { @extend .r-card; }
+.modal { @extend .r-modal-root; }
+
+// -------------------------
+// End of file — exported CSS ready for build tools
+// Рекомендации при сборке:
+// - в production использовать PostCSS + autoprefixer
+// - минифицировать CSS
+// - подключать rarog.theme.css после index.css чтобы переопределять токены
+// - при использовании монорепо — собирать packages/core/dist/rarog.css
+// -------------------------
