@@ -1,1 +1,263 @@
+#!/usr/bin/env node
+/*
+ generate-theme.js — генератор CSS-токенов темы для Rarog
+ Автор: TheSkiF4er
 
+ Описание:
+ Скрипт читает конфигурацию темы из rarog.config.js (или переданного файла) и генерирует:
+  - CSS-файл с :root переменными и классами тем (.theme-dark и т.д.)
+  - JSON файл с итоговыми токенами (для использования в CLI/JS)
+
+ Поддерживаемые опции CLI:
+  --config <file>      путь к rarog.config.js (по умолчанию ./rarog.config.js)
+  --out-dir <dir>      папка для вывода файлов (по умолчанию ./packages/core/dist or ./dist)
+  --watch              режим наблюдения за файлом конфига (fs.watch)
+  --pretty             красиво форматировать JSON (по умолчанию true)
+  --help               показать подсказку
+
+ Формат rarog.config.js (пример):
+ module.exports = {
+   name: 'rarog',
+   version: '0.1.0',
+   theme: {
+     colors: { primary: '30 120 255', bg: '255 255 255' },
+     spacing: [0,4,8,12,16],
+     radius: { sm: '6px', md: '12px' },
+     shadows: { sm: '0 1px 2px rgba(0,0,0,0.04)' }
+   }
+ }
+
+ Этот скрипт не требует внешних зависимостей (использует только Node.js стандартную библиотеку).
+*/
+
+const fs = require('fs');
+const path = require('path');
+
+function usage() {
+  console.log(`generate-theme.js — генератор CSS‑токенов для Rarog
+
+Usage:
+  node scripts/generate-theme.js [--config ./rarog.config.js] [--out-dir ./dist] [--watch] [--pretty]
+
+Опции:
+  --config    Указать путь к конфигу темы (JS или JSON). По умолчанию ./rarog.config.js
+  --out-dir   Куда записать сгенерированные файлы (по умолчанию ./dist)
+  --watch     Следить за изменениями конфига и перегенерировать
+  --pretty    Форматировать JSON (по умолчанию true)
+`);
+}
+
+function parseArgs() {
+  const argv = process.argv.slice(2);
+  const opts = { config: 'rarog.config.js', outDir: 'dist', watch: false, pretty: true };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--config') opts.config = argv[++i];
+    else if (a === '--out-dir') opts.outDir = argv[++i];
+    else if (a === '--watch') opts.watch = true;
+    else if (a === '--pretty') opts.pretty = true;
+    else if (a === '--no-pretty') opts.pretty = false;
+    else if (a === '--help' || a === '-h') { usage(); process.exit(0); }
+    else { console.error('Unknown arg:', a); usage(); process.exit(2); }
+  }
+  return opts;
+}
+
+function loadConfig(configPath) {
+  const abs = path.resolve(process.cwd(), configPath);
+  if (!fs.existsSync(abs)) {
+    throw new Error(`Config file not found: ${abs}`);
+  }
+  // Поддерживаем как JS (require) так и JSON
+  const ext = path.extname(abs).toLowerCase();
+  if (ext === '.js' || ext === '.cjs' || ext === '.mjs') {
+    // очищаем кеш require, чтобы при watch подхватывались изменения
+    delete require.cache[require.resolve(abs)];
+    const cfg = require(abs);
+    return cfg;
+  }
+  if (ext === '.json') {
+    return JSON.parse(fs.readFileSync(abs, 'utf8'));
+  }
+  throw new Error('Unsupported config file extension: ' + ext);
+}
+
+function ensureDir(dir) {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+function normalizeColorToken(value) {
+  // ожидание: цвет в формате "R G B" или HEX (#rrggbb)
+  if (typeof value !== 'string') return value;
+  const s = value.trim();
+  if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(s)) {
+    // конвертируем HEX в "R G B"
+    const hex = s.replace('#', '');
+    if (hex.length === 3) {
+      const r = parseInt(hex[0] + hex[0], 16);
+      const g = parseInt(hex[1] + hex[1], 16);
+      const b = parseInt(hex[2] + hex[2], 16);
+      return `${r} ${g} ${b}`;
+    }
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return `${r} ${g} ${b}`;
+  }
+  // если уже в формате RGB, оставляем
+  if (/^\d{1,3}\s+\d{1,3}\s+\d{1,3}$/.test(s)) return s;
+  return s; // fallback
+}
+
+function tokensFromConfig(cfg) {
+  const theme = cfg && cfg.theme ? cfg.theme : {};
+  const tokens = { colors: {}, spacing: {}, radius: {}, shadows: {}, misc: {} };
+
+  if (theme.colors) {
+    for (const [k, v] of Object.entries(theme.colors)) {
+      tokens.colors[k] = normalizeColorToken(String(v));
+    }
+  }
+  if (theme.spacing && Array.isArray(theme.spacing)) {
+    theme.spacing.forEach((s, i) => { tokens.spacing[`s${i}`] = String(s); });
+  } else if (theme.spacing && typeof theme.spacing === 'object') {
+    for (const [k, v] of Object.entries(theme.spacing)) tokens.spacing[k] = String(v);
+  }
+  if (theme.radius) {
+    for (const [k, v] of Object.entries(theme.radius)) tokens.radius[k] = String(v);
+  }
+  if (theme.shadows) {
+    for (const [k, v] of Object.entries(theme.shadows)) tokens.shadows[k] = String(v);
+  }
+  // Дополнительные поля — просто копируем
+  if (theme.tokens) {
+    for (const [k, v] of Object.entries(theme.tokens)) tokens.misc[k] = v;
+  }
+
+  return tokens;
+}
+
+function generateCss(tokens, cfg) {
+  const lines = [];
+  lines.push('/* Generated by scripts/generate-theme.js — Rarog */');
+  lines.push(':root {');
+  // цвета как переменные rgb parts
+  for (const [k, v] of Object.entries(tokens.colors)) {
+    lines.push(`  --r-${k}: ${v};`);
+  }
+  // radius
+  for (const [k, v] of Object.entries(tokens.radius)) {
+    lines.push(`  --r-radius-${k}: ${v};`);
+  }
+  // spacing
+  for (const [k, v] of Object.entries(tokens.spacing)) {
+    lines.push(`  --r-spacing-${k}: ${v};`);
+  }
+  // shadows
+  for (const [k, v] of Object.entries(tokens.shadows)) {
+    lines.push(`  --r-shadow-${k}: ${v};`);
+  }
+  lines.push('}');
+  lines.push('');
+
+  // helper classes for colors (background / text)
+  for (const k of Object.keys(tokens.colors)) {
+    lines.push(`.r-bg-${k} { background-color: rgb(var(--r-${k})); }`);
+    lines.push(`.r-text-${k} { color: rgb(var(--r-${k})); }`);
+  }
+  lines.push('');
+
+  // theme variants: support dark theme if provided in cfg.theme.themes
+  // структура: cfg.theme.themes = { 'dark': { colors: { bg: '18 18 20', text: '230 230 235' } } }
+  if (cfg.theme && cfg.theme.themes && typeof cfg.theme.themes === 'object') {
+    for (const [themeName, themeObj] of Object.entries(cfg.theme.themes)) {
+      lines.push(`.${themeName} {`);
+      if (themeObj.colors) {
+        for (const [ck, cv] of Object.entries(themeObj.colors)) {
+          const norm = normalizeColorToken(String(cv));
+          lines.push(`  --r-${ck}: ${norm};`);
+        }
+      }
+      lines.push('}');
+      lines.push('');
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function writeOutputs(outDir, css, tokens, cfg, pretty) {
+  ensureDir(outDir);
+  const cssPath = path.join(outDir, 'rarog.theme.css');
+  const jsonPath = path.join(outDir, 'rarog.theme.json');
+  const cfgCopyPath = path.join(outDir, 'rarog.config.json');
+
+  fs.writeFileSync(cssPath, css + '\n', 'utf8');
+  fs.writeFileSync(jsonPath, pretty ? JSON.stringify(tokens, null, 2) + '\n' : JSON.stringify(tokens) + '\n', 'utf8');
+  fs.writeFileSync(cfgCopyPath, pretty ? JSON.stringify(cfg, null, 2) + '\n' : JSON.stringify(cfg) + '\n', 'utf8');
+
+  console.log('Wrote:', cssPath, jsonPath, cfgCopyPath);
+}
+
+function validateTokens(tokens) {
+  // Простая валидация: цвета должны иметь формат R G B
+  for (const [k, v] of Object.entries(tokens.colors)) {
+    if (!/^\d{1,3}\s+\d{1,3}\s+\d{1,3}$/.test(String(v))) {
+      console.warn(`Warning: цвет токен "${k}" имеет необычный формат: "${v}"`);
+    }
+  }
+}
+
+function runOnce(opts) {
+  try {
+    const cfg = loadConfig(opts.config);
+    const tokens = tokensFromConfig(cfg);
+    validateTokens(tokens);
+    const css = generateCss(tokens, cfg);
+    // Попытка выбрать разумную папку вывода: если в monorepo есть packages/core/dist — использовать её
+    let outDir = opts.outDir;
+    // если outDir относительный и совпадает со стандартом, оставим
+    if (!path.isAbsolute(outDir) && fs.existsSync(path.join(process.cwd(), 'packages', 'core'))) {
+      // prefer packages/core/dist
+      const candidate = path.join('packages', 'core', 'dist');
+      if (fs.existsSync(path.join(process.cwd(), candidate)) || !fs.existsSync(path.resolve(process.cwd(), outDir))) {
+        outDir = candidate;
+      }
+    }
+    writeOutputs(outDir, css, tokens, cfg, opts.pretty);
+  } catch (err) {
+    console.error('Error generating theme:', err.message || err);
+    console.error(err.stack || '');
+    process.exitCode = 3;
+  }
+}
+
+function watchMode(opts) {
+  const abs = path.resolve(process.cwd(), opts.config);
+  console.log('Watch mode enabled. Watching config:', abs);
+  let timeout = null;
+  fs.watch(path.dirname(abs), { persistent: true }, (eventType, filename) => {
+    if (!filename) return;
+    if (filename === path.basename(abs)) {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        console.log('Config changed, regenerating theme...');
+        runOnce(opts);
+      }, 200);
+    }
+  });
+}
+
+// Entrypoint
+(function main() {
+  const opts = parseArgs();
+  // Если конфиг не найден рядом, пробуем примерный путь
+  if (!fs.existsSync(path.resolve(opts.config))) {
+    // попробовать в корне
+    const alt = path.resolve(process.cwd(), 'rarog.config.js');
+    if (fs.existsSync(alt)) opts.config = 'rarog.config.js';
+  }
+
+  runOnce(opts);
+  if (opts.watch) watchMode(opts);
+})();
