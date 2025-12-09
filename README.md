@@ -2,11 +2,11 @@
 
 **Rarog — лёгкая, современная и модульная CSS‑система для создания красивых и доступных интерфейсов.**
 
-Автор: **TheSkiF4er** · Лицензия: **Apache‑2.0**
-
 [![Build Status](https://img.shields.io/github/actions/workflow/status/TheSkiF4er/rarog/.github/workflows/ci.yml?branch=main)](https://github.com/TheSkiF4er/rarog/actions)
 [![npm version](https://img.shields.io/npm/v/@rarog/core?label=%40rarog%2Fcore)](https://www.npmjs.com/package/@rarog/core)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+
+Rarog — это **элементно-ориентированный CSS-фреймворк**, основанный на идее, что интерфейс должен собираться как "поток взаимодействующих сил", а не просто набор классов или компонентов.
 
 ---
 
