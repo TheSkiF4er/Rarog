@@ -1,1 +1,134 @@
+# .github/workflows/docs-deploy.yml
+# Деплой документации Rarog
+# Описание: сборка документации (Docusaurus/VitePress) и деплой на GitHub Pages или S3+CloudFront (опционально)
+# Автор: TheSkiF4er
 
+name: Deploy Docs
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Сборка документации
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            ~/.cache/pnpm
+            **/node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build docs (Docusaurus/VitePress)
+        working-directory: docs
+        env:
+          NODE_ENV: production
+        run: pnpm build
+
+      - name: Upload built docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-site
+          path: docs/.docusaurus/build || docs/.vitepress/dist || docs/.vuepress/dist || docs/.output/public || docs/dist
+
+  deploy-ghpages:
+    name: Деплой в GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ secrets.GITHUB_PAGES || true }} # выполняется по умолчанию; можно контролировать через секрет
+    steps:
+      - name: Download docs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-site
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/.docusaurus/build
+          # fallback paths to support different doc tools
+          # peaceiris expects the directory to exist; ensure the build step produced one of these
+
+  deploy-s3:
+    name: (Опционально) Деплой в S3 + CloudFront
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ secrets.AWS_ACCESS_KEY_ID && secrets.AWS_SECRET_ACCESS_KEY && secrets.S3_BUCKET }}
+    steps:
+      - name: Download docs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-site
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+      - name: Sync to S3
+        run: |
+          BUILD_DIR=$(bash -lc 'echo docs/.docusaurus/build docs/.vitepress/dist docs/.vuepress/dist docs/.output/public docs/dist | tr " " "\n" | while read d; do [ -d "$d" ] && echo "$d" && break; done')
+          echo "Using build dir: $BUILD_DIR"
+          aws s3 sync "$BUILD_DIR" "s3://${{ secrets.S3_BUCKET }}/" --delete --acl public-read --cache-control "max-age=3600,public"
+
+      - name: Invalidate CloudFront cache (optional)
+        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
+  notify:
+    name: Уведомление об успешном деплое
+    runs-on: ubuntu-latest
+    needs: [deploy-ghpages, deploy-s3]
+    steps:
+      - name: Create summary
+        run: |
+          echo "Docs deployed for $GITHUB_REPOSITORY at $GITHUB_REF" > deploy-summary.txt
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-deploy-summary
+          path: deploy-summary.txt
+
+# Рекомендации по секретам (GitHub repo secrets):
+# - GITHUB_TOKEN (встроенный) — используется actions-gh-pages
+# - AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY — для деплоя в S3
+# - S3_BUCKET — имя бакета для статики
+# - AWS_REGION — регион (опционально, default: us-east-1)
+# - CLOUDFRONT_DISTRIBUTION_ID — если есть и требуется инвалидация
+# - Для приватных организаций можно ограничить исполнение workflow по branch/paths
+
+# Примечания:
+# - Workflow поддерживает разные генераторы документации — Docusaurus, VitePress, VuePress, Nuxt static.
+# - Если вы используете Docusaurus и хотите версионирование, запускайте `pnpm --filter docs build` в соответствующей конфигурации.
+# - Для preview deployments (deploy preview) — можно добавить отдельный job, который деплоит кратковременно на S3 с префиксом branch/ и публикует URL в PR комментарии.
