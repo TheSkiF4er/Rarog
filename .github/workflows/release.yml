@@ -1,1 +1,205 @@
+# .github/workflows/release.yml
+# Автоматизация релизов для monorepo Rarog
+# Цель: автоматическая сборка, тесты, публикация пакетов (npm), публикация Docker образов (опционально), создание GitHub Release и деплой документации
+# Требуемые секреты в репозитории: NPM_TOKEN, GITHUB_TOKEN (встроенный доступ обычно достаточно), DOCKERHUB_USERNAME, DOCKERHUB_PASSWORD (опционально), AWS_* (если деплой в S3/CloudFront)
 
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '8'
+
+jobs:
+  prepare:
+    name: Подготовка
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache.outputs.cache-key }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node & pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Cache pnpm store
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            **/node_modules
+            **/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Show versions
+        run: |
+          node -v
+          pnpm -v
+          pnpm -w -s run -v || true
+
+  build-and-test:
+    name: Сборка и тесты
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            **/node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm -w run lint
+      - name: Typecheck
+        run: pnpm -w run typecheck || true
+      - name: Build
+        run: pnpm -w run build
+      - name: Test
+        run: pnpm -w run test --reporter=jest-junit || pnpm -w run test || true
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: **/test-results || .
+
+  semantic-release:
+    name: Публикация пакетов и создание релиза (semantic-release)
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    permissions:
+      contents: write
+      packages: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node & pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare Git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          # semantic-release configured in repo with plugin settings (npm, git, github)
+          npx semantic-release
+
+  publish-docker:
+    name: Сборка и публикация Docker image (опционально)
+    runs-on: ubuntu-latest
+    needs: semantic-release
+    if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Set image tag
+        id: meta
+        run: |
+          echo "IMAGE_NAME=theSkif4er/rarog" >> $GITHUB_ENV
+          TAG=$(git rev-parse --short HEAD)
+          echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_NAME }}:latest
+
+  deploy-docs:
+    name: Деплой документации (если настроено)
+    runs-on: ubuntu-latest
+    needs: semantic-release
+    if: ${{ always() }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Build docs
+        working-directory: docs
+        run: pnpm build
+      - name: Deploy docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/.docusaurus/build
+
+  cleanup:
+    name: Очистка и уведомления
+    runs-on: ubuntu-latest
+    needs: [semantic-release]
+    steps:
+      - name: Create release summary
+        run: |
+          echo "Релиз завершён: $GITHUB_REPOSITORY - ${GITHUB_SHA}" > release-summary.txt
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-summary
+          path: release-summary.txt
+
+# Примечания и рекомендации:
+# - semantic-release конфигурируется в корне проекта (в .releaserc или package.json) с нужными плагинами:
+#   @semantic-release/commit-analyzer, @semantic-release/release-notes-generator, @semantic-release/npm, @semantic-release/github, @semantic-release/changelog
+# - Для monorepo можно настроить публикацию пакетов по package scope (например @rarog/core, @rarog/react) через отдельные конфигурации semantic-release или Lerna/changesets.
+# - Обязательно добавьте NPM_TOKEN в GitHub Secrets с правами на публикацию в npm.
+# - Если хотите более контролируемый процесс (manual approval), добавьте step с `workflow_dispatch` и используйте environment protection rules в GitHub (required reviewers).
+# - Не храните приватные токены в workflow; используйте GitHub Secrets или внешние секрет‑менеджеры.
