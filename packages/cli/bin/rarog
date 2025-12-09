@@ -1,1 +1,275 @@
+#!/usr/bin/env bash
+# rarog — CLI для Rarog (wrapper)
+# Место: packages/cli/bin/rarog
+# Автор: TheSkiF4er
+# Язык: bash (POSIX-ish) — лёгкий wrapper для node скриптов/CLI пакета
+# Описание: универсальный CLI для управления темами, сборкой и локальной разработкой Rarog.
 
+set -euo pipefail
+IFS=$'\n\t'
+
+ROOT_DIR="$(cd "$(dirname "$0")/../../../.." && pwd)"
+CLI_NODE_SCRIPT_REL="packages/cli/dist/index.js"
+CLI_NODE_SCRIPT_DEV_REL="packages/cli/src/index.js"
+PNPM_CMD=${PNPM_CMD:-pnpm}
+NODE_CMD=${NODE_CMD:-node}
+
+# Colors
+CLR_RESET="\e[0m"
+CLR_BOLD="\e[1m"
+CLR_GREEN="\e[32m"
+CLR_YELLOW="\e[33m"
+CLR_RED="\e[31m"
+CLR_CYAN="\e[36m"
+
+echo_prefix() {
+  printf "%b[Rarog CLI]%b " "$CLR_CYAN" "$CLR_RESET"
+}
+
+warn() { echo_prefix; printf "%b%s%b\n" "$CLR_YELLOW" "$*" "$CLR_RESET"; }
+info() { echo_prefix; printf "%b%s%b\n" "$CLR_GREEN" "$*" "$CLR_RESET"; }
+err() { echo_prefix; printf "%b%s%b\n" "$CLR_RED" "$*" "$CLR_RESET"; }
+
+usage() {
+  cat <<EOF
+Rarog CLI — управление темами, сборкой и разработкой Rarog
+
+Использование:
+  rarog <команда> [опции]
+
+Команды:
+  init [--template <name>]       Инициализация проекта/темы (создаёт rarog.config.js)
+  theme:generate [--config <file>]  Сгенерировать CSS-токены и CSS-файл темы
+  build                          Запустить сборку пакетов (переходит в монорепо и запускает pnpm -w run build)
+  docs:dev                       Поднять локально docs dev server (docs)
+  docs:build                     Построить docs site (docs)
+  serve [--port <p>]             Локально развернуть собранный сайт (использует basic http server)
+  version                        Показать версию CLI
+  help                           Показать это сообщение
+
+Примеры:
+  rarog init --template minimal
+  rarog theme:generate --config rarog.config.js --out-dir packages/core/dist
+  rarog build
+  rarog docs:dev
+
+Для расширенных возможностей запустите rarog help или подключите node-based CLI (packages/cli).
+EOF
+}
+
+# find node script
+find_node_script() {
+  if [ -f "$ROOT_DIR/$CLI_NODE_SCRIPT_REL" ]; then
+    echo "$ROOT_DIR/$CLI_NODE_SCRIPT_REL"
+    return 0
+  fi
+  if [ -f "$ROOT_DIR/$CLI_NODE_SCRIPT_DEV_REL" ]; then
+    echo "$ROOT_DIR/$CLI_NODE_SCRIPT_DEV_REL"
+    return 0
+  fi
+  return 1
+}
+
+run_node_cli() {
+  local script
+  script="$(find_node_script || true)"
+  if [ -z "$script" ]; then
+    warn "Node CLI script not found (expected $CLI_NODE_SCRIPT_REL). Попытка выполнить встроенные команды shell."
+    return 2
+  fi
+  # Forward all args to node script
+  "$NODE_CMD" "$script" "$@"
+}
+
+ensure_pnpm() {
+  if ! command -v "$PNPM_CMD" >/dev/null 2>&1; then
+    warn "pnpm не найден в PATH — команда, требующая pnpm, не будет выполнена. Установите pnpm: https://pnpm.io/installation"
+  fi
+}
+
+serve_static() {
+  # Простое статическое развёртывание, использует node -e https server или python fallback
+  local dir=${1:-dist}
+  local port=${2:-8080}
+  if [ -d "$dir" ]; then
+    info "Serve directory: $dir on http://localhost:$port"
+    # prefer npx http-server if available
+    if command -v npx >/dev/null 2>&1 && "$PNPM_CMD" >/dev/null 2>&1; then
+      if "$PNPM_CMD" -w -s exec --silent -- npx --yes http-server "$dir" -p "$port"; then
+        return 0
+      fi
+    fi
+    # fallback to python http.server
+    if command -v python3 >/dev/null 2>&1; then
+      (cd "$dir" && python3 -m http.server "$port")
+      return 0
+    fi
+    if command -v python >/dev/null 2>&1; then
+      (cd "$dir" && python -m SimpleHTTPServer "$port")
+      return 0
+    fi
+    err "Не могу найти подходящий http сервер (npx http-server или python)."
+    return 2
+  else
+    err "Каталог $dir не найден"
+    return 1
+  fi
+}
+
+# Simple arg parsing
+if [ $# -lt 1 ]; then
+  usage
+  exit 0
+fi
+
+cmd="$1"; shift || true
+case "$cmd" in
+  help|-h|--help)
+    usage
+    exit 0
+    ;;
+  version|-v|--version)
+    # попытка прочитать version из package.json в packages/cli
+    if [ -f "$ROOT_DIR/packages/cli/package.json" ]; then
+      jq -r '.version' "$ROOT_DIR/packages/cli/package.json" 2>/dev/null || echo "0.0.0"
+      exit 0
+    fi
+    echo "0.0.0"
+    exit 0
+    ;;
+  init)
+    # forward to node CLI if exists, otherwise create a basic rarog.config.js skeleton
+    if run_node_cli init "$@"; then
+      exit $?
+    fi
+    # shell fallback
+    template="minimal"
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --template) template="$2"; shift 2;;
+        --help) usage; exit 0;;
+        *) shift;;
+      esac
+    done
+    target="./rarog.config.js"
+    if [ -f "$target" ]; then
+      warn "Файл $target уже существует. Отмена."
+      exit 1
+    fi
+    cat > "$target" <<'JS'
+module.exports = {
+  name: 'rarog',
+  version: '0.1.0',
+  theme: {
+    colors: {
+      primary: '30 120 255',
+      bg: '255 255 255'
+    },
+    spacing: [0,4,8,12,16],
+    radius: { sm: '6px', md: '12px' }
+  }
+}
+JS
+    info "Создан шаблон $target (template=$template). Отредактируйте по необходимости."
+    exit 0
+    ;;
+  theme:generate|theme:build|generate-theme)
+    ensure_pnpm
+    # forward to node CLI if available
+    if run_node_cli theme:generate "$@"; then
+      exit $?
+    fi
+    # fallback: try to run scripts/generate-theme.js
+    if [ -f "$ROOT_DIR/scripts/generate-theme.js" ]; then
+      info "Running local generate-theme.js"
+      "$NODE_CMD" "$ROOT_DIR/scripts/generate-theme.js" "$@"
+      exit $?
+    fi
+    err "Генератор темы не найден (packages/cli or scripts/generate-theme.js)."
+    exit 2
+    ;;
+  build)
+    ensure_pnpm
+    if run_node_cli build "$@"; then
+      exit $?
+    fi
+    info "Запуск pnpm -w run build"
+    (cd "$ROOT_DIR" && $PNPM_CMD -w run build)
+    exit $?
+    ;;
+  docs:dev)
+    ensure_pnpm
+    if run_node_cli docs:dev "$@"; then
+      exit $?
+    fi
+    if [ -d "$ROOT_DIR/docs" ]; then
+      info "Starting docs dev server (cd docs && pnpm dev)"
+      (cd "$ROOT_DIR/docs" && $PNPM_CMD install --frozen-lockfile >/dev/null 2>&1 || true && $PNPM_CMD dev)
+      exit $?
+    fi
+    err "Каталог docs не найден"
+    exit 2
+    ;;
+  docs:build)
+    ensure_pnpm
+    if run_node_cli docs:build "$@"; then
+      exit $?
+    fi
+    if [ -d "$ROOT_DIR/docs" ]; then
+      info "Building docs (cd docs && pnpm build)"
+      (cd "$ROOT_DIR/docs" && $PNPM_CMD install --frozen-lockfile >/dev/null 2>&1 || true && $PNPM_CMD build)
+      exit $?
+    fi
+    err "Каталог docs не найден"
+    exit 2
+    ;;
+  serve)
+    # serve [dir] [--port N]
+    port=8080
+    dir=""
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --port) port="$2"; shift 2;;
+        --help) usage; exit 0;;
+        *) if [ -z "$dir" ]; then dir="$1"; else shift; fi; shift;;
+      esac
+    done
+    if [ -z "$dir" ]; then
+      # try to find build dir
+      if [ -d "$ROOT_DIR/docs/.docusaurus/build" ]; then dir="$ROOT_DIR/docs/.docusaurus/build"; fi
+      if [ -z "$dir" ] && [ -d "$ROOT_DIR/packages/core/dist" ]; then dir="$ROOT_DIR/packages/core/dist"; fi
+      if [ -z "$dir" ]; then dir="$ROOT_DIR/dist"; fi
+    fi
+    serve_static "$dir" "$port"
+    exit $?
+    ;;
+  lint|lint:fix)
+    ensure_pnpm
+    if run_node_cli lint "$@"; then exit $?; fi
+    (cd "$ROOT_DIR" && $PNPM_CMD -w run lint)
+    exit $?
+    ;;
+  test)
+    ensure_pnpm
+    if run_node_cli test "$@"; then exit $?; fi
+    (cd "$ROOT_DIR" && $PNPM_CMD -w run test)
+    exit $?
+    ;;
+  daemon|watch)
+    info "Режим watch: будет перезапускать сборку при изменениях (используйте turbo/pnpm workspace)"
+    ensure_pnpm
+    (cd "$ROOT_DIR" && $PNPM_CMD -w run dev)
+    exit $?
+    ;;
+  *)
+    # попытка передать команду node cli
+    if run_node_cli "$cmd" "$@"; then
+      exit $?
+    fi
+    err "Неизвестная команда: $cmd"
+    usage
+    exit 2
+    ;;
+esac
+
+# end of script
