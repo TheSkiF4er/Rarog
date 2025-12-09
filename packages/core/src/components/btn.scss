@@ -1,1 +1,264 @@
+// Rarog — btn.scss
+// Файл: packages/core/src/components/btn.scss
+// Описание: Полнофункциональная, семантическая и доступная SCSS-реализация кнопки Rarog
+// Автор: TheSkiF4er
+// Лицензия: Apache-2.0
+// Подход: использует Dual Token Grid (force tokens + skin tokens)
 
+// -------------------------
+// Токены (точки взаимодействия с rarog.theme.css)
+// -------------------------
+// Предполагается, что эти переменные будут сгенерированы и/или переопределены
+// на уровне :root через скрипт generate-theme.js
+
+$btn-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$btn-font-weight: 600;
+$btn-line-height: 1.1;
+$btn-border-width: 1px;
+$btn-transition: 180ms cubic-bezier(.2,.9,.3,1);
+
+// fallback CSS variables (if theme not подключен)
+:root {
+  --force-imp: 1; /* импульс */
+  --force-dens: 3; /* плотность */
+  --skin-depth: 1; /* глубина */
+  --skin-tone-primary: 30 120 255; /* rgb parts */
+  --skin-glow: 0.0; /* intensity */
+  --r-radius-md: 12px;
+  --r-spacing-s2: 8px;
+}
+
+// helper: цвет по RGB-паре stored как "R G B"
+@function rgb-var($name) {
+  // возвращает rgb(var(--r-<name>))
+  @return unquote('rgb(var(--r-' + $name + '))');
+}
+
+// -------------------------
+// Миксины
+// -------------------------
+@mixin btn-base-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5ch;
+  font-family: $btn-font-family;
+  font-weight: $btn-font-weight;
+  line-height: $btn-line-height;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  vertical-align: middle;
+  user-select: none;
+  transition: transform $btn-transition, box-shadow $btn-transition, background-color $btn-transition, color $btn-transition, opacity $btn-transition;
+}
+
+@mixin btn-shape($radius: var(--r-radius-md)) {
+  border-radius: $radius;
+}
+
+@mixin btn-focus-ring($color, $width: 3px) {
+  box-shadow: 0 0 0 $width rgba($color, 0.18), 0 6px 18px rgba(0,0,0,0.06);
+}
+
+// small helper: convert RGB parts string into rgba in SCSS is not trivial — we rely on CSS rgb(var(--...)) forms
+
+// -------------------------
+// Основный класс .r-btn (семантический)
+// -------------------------
+.r-btn {
+  @include btn-base-reset;
+  @include btn-shape();
+  padding: calc(var(--r-spacing-s2, 8px) * 0.9) calc(var(--r-spacing-s2, 8px) * 1.6);
+  font-size: 0.95rem;
+  line-height: 1;
+  min-height: 36px;
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+  color: rgb(var(--tone-on, 255 255 255));
+  background-color: rgb(var(--tone-primary, 30 120 255));
+  border: $btn-border-width solid transparent;
+  will-change: transform, box-shadow, opacity;
+
+  // эстетика: лёгкий градиент/глубина
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03));
+    pointer-events: none;
+  }
+
+  &:where(a), &:where(button) {
+    text-align: center;
+  }
+
+  // focus
+  &:focus-visible {
+    outline: none;
+    // используем CSS переменную как базу цвета для ring
+    box-shadow: 0 0 0 3px rgba(30,120,255,0.18);
+  }
+
+  // disabled
+  &.is-disabled,
+  &[disabled],
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // loading state
+  &.is-loading {
+    cursor: wait;
+    .btn-content { opacity: 0.0; }
+    .btn-spinner { opacity: 1; transform: translateY(0); }
+  }
+}
+
+// -------------------------
+// Variants (btn-...)
+// Используем семантику skin + tone + depth → формируем визуал
+// -------------------------
+
+// Primary — акцентная
+.r-btn.btn-primary {
+  background-color: rgb(var(--tone-primary, 30 120 255));
+  color: rgb(var(--tone-on-primary, 255 255 255));
+  border-color: rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(9,30,66,0.08);
+
+  &:hover:not(.is-disabled):not(.is-loading) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(9,30,66,0.10);
+  }
+
+  &:active:not(.is-disabled):not(.is-loading) {
+    transform: translateY(0);
+    box-shadow: 0 6px 12px rgba(9,30,66,0.06) inset;
+  }
+}
+
+// Secondary — менее акцентная, outline-like
+.r-btn.btn-secondary {
+  background-color: transparent;
+  color: rgb(var(--tone-primary, 30 120 255));
+  border-color: rgb(var(--tone-primary, 30 120 255));
+  box-shadow: none;
+
+  &:hover:not(.is-disabled):not(.is-loading) {
+    background-color: rgba(30,120,255,0.06);
+  }
+}
+
+// Ghost — минималистичная
+.r-btn.btn-ghost {
+  background-color: transparent;
+  color: rgb(var(--tone-primary, 30 120 255));
+  border-color: transparent;
+
+  &:hover:not(.is-disabled):not(.is-loading) {
+    background-color: rgba(0,0,0,0.04);
+  }
+}
+
+// Danger
+.r-btn.btn-danger {
+  background-color: rgb(var(--tone-danger, 220 38 38));
+  color: rgb(var(--tone-on-danger, 255 255 255));
+}
+
+// Link — как ссылка
+.r-btn.btn-link {
+  background: transparent;
+  color: rgb(var(--tone-primary, 30 120 255));
+  padding: 0.25rem 0.25rem;
+  min-height: 0;
+  box-shadow: none;
+}
+
+// -------------------------
+// Sizes
+// -------------------------
+.r-btn.btn-size-xs { padding: 4px 8px; font-size: 0.75rem; min-height: 28px; }
+.r-btn.btn-size-sm { padding: 6px 12px; font-size: 0.85rem; min-height: 32px; }
+.r-btn.btn-size-md { padding: 8px 16px; font-size: 0.95rem; min-height: 36px; }
+.r-btn.btn-size-lg { padding: 12px 20px; font-size: 1.05rem; min-height: 44px; }
+
+// -------------------------
+// Icon support (иконка слева/справа)
+// -------------------------
+.r-btn .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.r-btn .btn-icon--left { margin-right: 0.5ch; }
+.r-btn .btn-icon--right { margin-left: 0.5ch; }
+
+// -------------------------
+// Spinner
+// -------------------------
+.r-btn .btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 120ms linear, transform 160ms $btn-transition;
+}
+
+.r-btn svg { width: 1em; height: 1em; }
+
+// -------------------------
+// Accessibility helpers
+// -------------------------
+// Keyboard focus visible state
+:where(.r-btn:focus-visible) {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(30,120,255,0.14);
+}
+
+// High-contrast / prefers-reduced-motion
+@media (prefers-reduced-motion: reduce) {
+  .r-btn { transition: none !important; }
+  .r-btn .btn-spinner { animation: none !important; }
+}
+
+// -------------------------
+// Density (dens- variant influences padding & size)
+// -------------------------
+// dens-1 (airy) -> smaller padding, dens-5 (compact) -> smaller gaps
+.r-btn.dens-1 { padding-left: 10px; padding-right: 10px; }
+.r-btn.dens-2 { padding-left: 12px; padding-right: 12px; }
+.r-btn.dens-3 { padding-left: 14px; padding-right: 14px; }
+.r-btn.dens-4 { padding-left: 10px; padding-right: 10px; }
+.r-btn.dens-5 { padding-left: 8px; padding-right: 8px; font-size: 0.9rem; }
+
+// -------------------------
+// Skin modifiers (skin-glow, skin-fade и т.д.) — небольшие визуальные эффекты
+// -------------------------
+.r-btn.skin-glow {
+  box-shadow: 0 8px 24px rgba(30,120,255,0.14);
+}
+.r-btn.skin-fade {
+  filter: saturate(0.95) brightness(1.02);
+}
+
+// -------------------------
+// Utilities for component composition
+// -------------------------
+// allow using <a class="r-btn"> and button interchangeably
+.r-btn[role='button'] { cursor: pointer; }
+
+// -------------------------
+// End
+// -------------------------
