@@ -1,0 +1,13 @@
+name: Фича-запрос
+description: Предложите улучшение или новый функционал для Rarog CSS
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Описание предложения
+      description: Опишите, что вы хотите добавить или улучшить.
+      placeholder: Что именно и зачем...
+    validations:
+      required: true

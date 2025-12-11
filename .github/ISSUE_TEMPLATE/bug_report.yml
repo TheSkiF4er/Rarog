@@ -1,0 +1,13 @@
+name: Отчет об ошибке
+description: Сообщите об ошибке в Rarog CSS
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Описание проблемы
+      description: Опишите, что произошло и чего вы ожидали.
+      placeholder: Краткое, но информативное описание...
+    validations:
+      required: true
