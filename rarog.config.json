@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "tokens": {
+    "colors": "packages/core/src/tokens/_color.css",
+    "spacing": "packages/core/src/tokens/_spacing.css",
+    "radius": "packages/core/src/tokens/_radius.css",
+    "shadow": "packages/core/src/tokens/_shadow.css"
+  },
+  "build": {
+    "core": true,
+    "utilities": true,
+    "components": true,
+    "themes": [
+      "default",
+      "dark"
+    ]
+  }
+}
