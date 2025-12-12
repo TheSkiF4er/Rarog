@@ -1,1 +1,11 @@
+.bg-primary { background-color: var(--rarog-color-primary); }
+.bg-secondary { background-color: var(--rarog-color-secondary); }
+.bg-surface { background-color: var(--rarog-color-surface); }
 
+.text-primary { color: var(--rarog-color-primary); }
+.text-muted { color: var(--rarog-color-text-muted); }
+
+.border { border-width: 1px; border-style: solid; border-color: var(--rarog-color-border); }
+.border-primary { border-color: var(--rarog-color-primary); }
+.rounded-md { border-radius: var(--rarog-radius-md); }
+.rounded-lg { border-radius: var(--rarog-radius-lg); }
