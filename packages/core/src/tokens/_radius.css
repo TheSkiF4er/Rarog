@@ -1,0 +1,8 @@
+:root {
+  --rarog-radius-xs: 0.125rem;
+  --rarog-radius-sm: 0.25rem;
+  --rarog-radius-md: 0.5rem;
+  --rarog-radius-lg: 0.75rem;
+  --rarog-radius-xl: 1rem;
+  --rarog-radius-full: 9999px;
+}

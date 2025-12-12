@@ -1,1 +1,23 @@
+:root {
+  /* Brand */
+  --rarog-color-primary: #2563eb;
+  --rarog-color-primary-foreground: #ffffff;
 
+  --rarog-color-secondary: #64748b;
+  --rarog-color-secondary-foreground: #ffffff;
+
+  /* Semantic */
+  --rarog-color-success: #16a34a;
+  --rarog-color-danger:  #dc2626;
+  --rarog-color-warning: #ea580c;
+  --rarog-color-info:    #0284c7;
+
+  /* Backgrounds */
+  --rarog-color-bg:          #f3f4f6;
+  --rarog-color-bg-soft:     #ffffff;
+  --rarog-color-surface:     #ffffff;
+  --rarog-color-border:      #e5e7eb;
+  --rarog-color-muted:       #9ca3af;
+  --rarog-color-text:        #0f172a;
+  --rarog-color-text-muted:  #6b7280;
+}
