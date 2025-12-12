@@ -1,1 +1,9 @@
+:root.theme-dark {
+  --rarog-color-bg: #020617;
+  --rarog-color-bg-soft: #020617;
+  --rarog-color-surface: #020617;
+  --rarog-color-border: #1f2937;
 
+  --rarog-color-text: #e5e7eb;
+  --rarog-color-text-muted: #9ca3af;
+}
