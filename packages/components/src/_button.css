@@ -1,1 +1,61 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rarog-space-2);
 
+  padding-inline: var(--rarog-space-4);
+  padding-block: var(--rarog-space-2);
+
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid transparent;
+
+  font-weight: 500;
+  font-size: 0.95rem;
+
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-out,
+    color 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    transform 0.08s ease-out;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--rarog-color-primary);
+  color: var(--rarog-color-primary-foreground);
+  box-shadow: var(--rarog-shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: var(--rarog-shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--rarog-color-secondary);
+  color: var(--rarog-color-secondary-foreground);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--rarog-color-border);
+  color: var(--rarog-color-text);
+}
+
+.btn-sm {
+  padding-inline: var(--rarog-space-3);
+  padding-block: var(--rarog-space-1);
+  font-size: 0.875rem;
+}
+
+.btn-lg {
+  padding-inline: var(--rarog-space-5);
+  padding-block: var(--rarog-space-3);
+  font-size: 1.05rem;
+}

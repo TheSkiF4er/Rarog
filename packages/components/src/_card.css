@@ -1,0 +1,18 @@
+.card {
+  background-color: var(--rarog-color-surface);
+  border-radius: var(--rarog-radius-lg);
+  border: 1px solid var(--rarog-color-border);
+  padding: var(--rarog-space-4);
+  box-shadow: var(--rarog-shadow-xs);
+}
+
+.card-header {
+  margin-bottom: var(--rarog-space-3);
+  font-weight: 600;
+}
+
+.card-footer {
+  margin-top: var(--rarog-space-3);
+  font-size: 0.875rem;
+  color: var(--rarog-color-text-muted);
+}
