@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.3.0] - 2025-12-27
+
+### Добавлено
+- Компоненты оповещений (alerts):
+  - `.alert`, `.alert-success`, `.alert-danger`, `.alert-warning`, `.alert-info`;
+  - вспомогательные классы `.alert-title` и `.alert-description`.
+- Компоненты бейджей (badges):
+  - `.badge`, `.badge-primary`, `.badge-secondary`, `.badge-outline`.
+- Компоненты списков и навигации:
+  - list group: `.list-group`, `.list-group-item`, модификаторы `.list-group-item-action`, `.list-group-item-active`;
+  - breadcrumbs: `.breadcrumb`, `.breadcrumb-item`, `.breadcrumb-item-active`.
+- Навигация и табы:
+  - `.nav`, `.nav-link`, `.nav-link-active`;
+  - `.nav-tabs` для таб-интерфейса на чистом CSS.
+- Пагинация и прогресс:
+  - `.pagination`, `.page-item`, `.page-link`, модификаторы `.page-item-active`, `.page-item-disabled`;
+  - `.progress`, `.progress-bar`.
+- Улучшения форм:
+  - layout-классы `.form-inline`, `.form-row`, `.form-horizontal`;
+  - helper-класс `.form-help` для текста под полями ввода.
+
+### Изменено
+- Обновлён сборочный вход компонентов `rarog-components.css` (подключены новые модульные файлы компонентов).
+
+
 ## [1.2.0] - 2025-12-27
 
 ### Добавлено

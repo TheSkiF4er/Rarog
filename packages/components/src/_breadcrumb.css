@@ -1,0 +1,41 @@
+/* Breadcrumb */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rarog-space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  font-size: 0.875rem;
+  color: var(--rarog-color-text-muted);
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumb-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--rarog-color-text);
+  text-decoration: underline;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: "/";
+  display: inline-block;
+  margin-inline: var(--rarog-space-2);
+  color: var(--rarog-color-muted);
+}
+
+.breadcrumb-item-active {
+  color: var(--rarog-color-text);
+  font-weight: 500;
+}

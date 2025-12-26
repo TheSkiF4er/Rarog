@@ -25,3 +25,66 @@
 .field {
   margin-bottom: var(--rarog-space-4);
 }
+
+/* Form layout helpers */
+
+.form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rarog-space-3);
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rarog-space-4);
+}
+
+.form-row .field {
+  flex: 1 1 0;
+  margin-bottom: 0;
+}
+
+/* Горизонтальная форма: label и input в одну строку на >= md */
+
+.form-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rarog-space-2);
+}
+
+.form-horizontal .label {
+  margin-bottom: 0;
+}
+
+.form-horizontal .form-control {
+  width: 100%;
+}
+
+@media (min-width: var(--rarog-breakpoint-md)) {
+  .form-horizontal {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .form-horizontal .label {
+    width: 25%;
+    text-align: right;
+    padding-right: var(--rarog-space-3);
+  }
+
+  .form-horizontal .field,
+  .form-horizontal .form-control {
+    flex: 1 1 0;
+    width: auto;
+  }
+}
+
+/* Helper-текст под полем ввода */
+
+.form-help {
+  margin-top: var(--rarog-space-1);
+  font-size: 0.8rem;
+  color: var(--rarog-color-text-muted);
+}

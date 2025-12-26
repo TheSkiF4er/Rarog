@@ -1,0 +1,52 @@
+/* Alerts */
+
+.alert {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rarog-space-3);
+
+  padding: var(--rarog-space-3) var(--rarog-space-4);
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border);
+  background-color: var(--rarog-color-bg-soft);
+
+  font-size: 0.95rem;
+  color: var(--rarog-color-text);
+}
+
+.alert-title {
+  font-weight: 600;
+  margin-bottom: var(--rarog-space-1);
+}
+
+.alert-description {
+  margin: 0;
+  color: var(--rarog-color-text-muted);
+}
+
+/* Semantic variants */
+
+.alert-success {
+  border-color: var(--rarog-color-success);
+  background-color: rgba(22, 163, 74, 0.06);
+  color: var(--rarog-color-success);
+}
+
+.alert-danger {
+  border-color: var(--rarog-color-danger);
+  background-color: rgba(220, 38, 38, 0.06);
+  color: var(--rarog-color-danger);
+}
+
+.alert-warning {
+  border-color: var(--rarog-color-warning);
+  background-color: rgba(234, 88, 12, 0.06);
+  color: var(--rarog-color-warning);
+}
+
+.alert-info {
+  border-color: var(--rarog-color-info);
+  background-color: rgba(2, 132, 199, 0.06);
+  color: var(--rarog-color-info);
+}

@@ -1,0 +1,42 @@
+/* List Group */
+
+.list-group {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  border-radius: var(--rarog-radius-lg);
+  border: 1px solid var(--rarog-color-border);
+  background-color: var(--rarog-color-surface);
+}
+
+.list-group-item {
+  padding: var(--rarog-space-3) var(--rarog-space-4);
+  border-bottom: 1px solid var(--rarog-color-border);
+  font-size: 0.95rem;
+  color: var(--rarog-color-text);
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item-muted {
+  color: var(--rarog-color-text-muted);
+}
+
+.list-group-item-action {
+  cursor: pointer;
+  transition: background-color 0.12s ease-out, color 0.12s ease-out;
+}
+
+.list-group-item-action:hover {
+  background-color: var(--rarog-color-bg);
+}
+
+.list-group-item-active {
+  background-color: var(--rarog-color-primary);
+  color: var(--rarog-color-primary-foreground);
+}

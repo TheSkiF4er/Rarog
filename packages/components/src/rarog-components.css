@@ -1,5 +1,12 @@
-/* Rarog Components 1.0.0 */
+/* Rarog Components 1.3.0 */
 @import "./_button.css";
 @import "./_card.css";
 @import "./_form.css";
 @import "./_navbar.css";
+@import "./_alert.css";
+@import "./_badge.css";
+@import "./_list-group.css";
+@import "./_breadcrumb.css";
+@import "./_nav.css";
+@import "./_pagination.css";
+@import "./_progress.css";
