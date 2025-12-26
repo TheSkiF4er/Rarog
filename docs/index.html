@@ -2,11 +2,13 @@
 <html lang="ru" class="theme-dark">
 <head>
   <meta charset="UTF-8">
-  <title>Rarog CSS Framework 1.3.0 — Документация</title>
+  <title>Rarog CSS Framework 1.4.0 — Документация</title>
   <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
   <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
   <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
+  <link rel="stylesheet" href="../packages/themes/src/rarog-theme-default.css">
   <link rel="stylesheet" href="../packages/themes/src/rarog-theme-dark.css">
+  <link rel="stylesheet" href="../packages/themes/src/rarog-theme-contrast.css">
 </head>
 <body>
   <header class="navbar">
@@ -17,6 +19,7 @@
         <a href="#utilities" class="navbar-link">Утилиты</a>
         <a href="#grid-layout" class="navbar-link">Grid &amp; Layout</a>
         <a href="#components" class="navbar-link">Компоненты</a>
+        <a href="#theming" class="navbar-link">Theming &amp; Tokens</a>
         <a href="#responsive" class="navbar-link">Responsive</a>
         <a href="#states" class="navbar-link">States</a>
       </nav>
@@ -27,11 +30,11 @@
     <section id="intro" class="mb-4">
       <div class="card">
         <div class="card-header">
-          Добро пожаловать в Rarog 1.3.0
+          Добро пожаловать в Rarog 1.4.0
         </div>
         <p class="text-muted">
           Это демо-страница, показывающая базовые возможности фреймворка: дизайн-токены,
-          утилиты, сетку, компоненты, адаптивность и state-классы.
+          утилиты, сетку, компоненты, темы, адаптивность и state-классы.
         </p>
         <div class="card-footer">
           <button class="btn btn-primary btn-lg hover:bg-primary hover:text-primary">
@@ -319,6 +322,102 @@
             </div>
           </form>
         </div>
+      </div>
+    </section>
+
+    <section id="theming" class="mb-4">
+      <h2>Theming &amp; Design Tokens</h2>
+      <p class="text-muted">
+        Rarog строится вокруг CSS-переменных (дизайн-токенов) и поддерживает несколько тем "из коробки":
+        <code>default</code>, <code>dark</code>, <code>contrast</code>.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Базовые токены и шкалы
+        </div>
+        <p class="text-muted">
+          Базовые цветовые шкалы определены в <code>packages/core/src/tokens/_color.css</code>:
+          <code>--rarog-color-primary-50</code> … <code>-900</code> и аналогичные шкалы для
+          <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>.
+        </p>
+        <p class="text-muted">
+          Поверх шкал определены semantic alias'ы:
+          <code>--rarog-color-bg-elevated</code>, <code>--rarog-color-border-subtle</code>,
+          <code>--rarog-color-focus-ring</code> и др. Компоненты и утилиты ориентируются именно
+          на semantic-токены, что упрощает создание новых тем.
+        </p>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Как включить тему
+        </div>
+        <p class="text-muted">
+          В сборке доступны минимум три темы:
+        </p>
+        <ul class="list-group mt-2">
+          <li class="list-group-item">
+            <code>rarog-theme-default.css</code> — светлая тема по умолчанию (селектор <code>:root</code>).
+          </li>
+          <li class="list-group-item">
+            <code>rarog-theme-dark.css</code> — тёмная тема (селектор <code>:root.theme-dark</code>).
+          </li>
+          <li class="list-group-item">
+            <code>rarog-theme-contrast.css</code> — high-contrast тема (селектор <code>:root.theme-contrast</code>).
+          </li>
+        </ul>
+
+        <p class="text-muted mt-3">
+          Для переключения темы достаточно добавить класс на корневой элемент:
+        </p>
+
+<pre class="mt-2"><code>&lt;html class="theme-dark"&gt;
+  ...
+&lt;/html&gt;
+
+&lt;html class="theme-contrast"&gt;
+  ...
+&lt;/html&gt;</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Своя тема на базе Rarog
+        </div>
+        <p class="text-muted">
+          Есть два основных пути создать свою тему:
+        </p>
+        <ol class="mt-2 text-muted">
+          <li>
+            <strong>Переопределить переменные в своём CSS.</strong><br>
+            Подключите базовые токены и утилиты, а затем в отдельном файле переопределите
+            нужные переменные, например:
+<pre><code>:root.my-brand {
+  --rarog-color-primary: #8b5cf6;
+  --rarog-color-bg: #0b1020;
+  --rarog-color-text: #f9fafb;
+}</code></pre>
+            После этого добавьте класс <code>my-brand</code> на <code>&lt;html&gt;</code> или <code>&lt;body&gt;</code>.
+          </li>
+          <li class="mt-2">
+            <strong>Создать отдельный файл темы.</strong><br>
+            Скопируйте один из файлов тем (например <code>rarog-theme-dark.css</code>) в
+            <code>packages/themes/src/rarog-theme-mybrand.css</code>, адаптируйте значения переменных
+            и добавьте новую тему в конфигурацию сборки <code>rarog.config.json</code>.
+          </li>
+        </ol>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          JSON-токены для design tools
+        </div>
+        <p class="text-muted">
+          Файл <code>rarog.tokens.json</code> в корне репозитория содержит те же токены в JSON-формате
+          (цветовые шкалы, spacing, радиусы и тени). Его можно использовать как источник правды
+          для Figma-плагинов или любых инструментов работы с Design Tokens.
+        </p>
       </div>
     </section>
 

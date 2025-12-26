@@ -1,5 +1,31 @@
 # Changelog
 
+
+## [1.4.0] - 2025-12-27
+
+### Добавлено
+- Цветовые шкалы для ключевых тонов:
+  - `--rarog-color-primary-50` … `--rarog-color-primary-900`;
+  - аналогичные шкалы для `secondary`, `success`, `danger`, `warning`, `info`.
+- Базовые semantic alias'ы для дизайн-системы:
+  - фон: `--rarog-color-bg-elevated`, `--rarog-color-bg-elevated-soft`;
+  - границы: `--rarog-color-border-subtle`, `--rarog-color-border-strong`;
+  - вспомогательные: `--rarog-color-focus-ring`, `--rarog-color-accent-soft`.
+- High-contrast тема:
+  - новая тема `rarog-theme-contrast` на базе селектора `:root.theme-contrast`;
+  - усиленный контраст текста, фона и границ, более заметный `focus-ring`.
+- JSON-представление токенов:
+  - файл `rarog.tokens.json` с экспортом цветовых шкал, spacing, radius и shadow-токенов;
+  - подготовка к интеграции с Figma/Design Tokens tooling.
+- Улучшения системы тем:
+  - актуализированные темы `default` и `dark` с учётом новых semantic-переменных;
+  - конфигурация сборки поддерживает минимум три темы: `default`, `dark`, `contrast`.
+
+### Изменено
+- Обновлён файл цветовых токенов `packages/core/src/tokens/_color.css` до версии v2 (шкалы + semantic alias'ы).
+- Обновлён раздел документации по темизации (Theming & Design Tokens).
+
+
 ## [1.3.0] - 2025-12-27
 
 ### Добавлено

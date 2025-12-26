@@ -1,0 +1,18 @@
+:root.theme-contrast {
+  /* Максимально контрастный светлый вариант */
+  --rarog-color-bg: #ffffff;
+  --rarog-color-bg-soft: #ffffff;
+  --rarog-color-bg-elevated: #ffffff;
+  --rarog-color-bg-elevated-soft: #f9fafb;
+  --rarog-color-surface: #ffffff;
+
+  --rarog-color-border-subtle: #4b5563;
+  --rarog-color-border: #111827;
+  --rarog-color-border-strong: #000000;
+
+  --rarog-color-text: #000000;
+  --rarog-color-text-muted: #111827;
+
+  /* Более яркий focus-ring для доступности */
+  --rarog-color-focus-ring: #000000;
+}

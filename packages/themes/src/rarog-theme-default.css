@@ -1,8 +1,13 @@
 :root {
   --rarog-color-bg: #f3f4f6;
   --rarog-color-bg-soft: #ffffff;
+  --rarog-color-bg-elevated: #ffffff;
+  --rarog-color-bg-elevated-soft: #f9fafb;
   --rarog-color-surface: #ffffff;
+
+  --rarog-color-border-subtle: #e5e7eb;
   --rarog-color-border: #e5e7eb;
+  --rarog-color-border-strong: #111827;
 
   --rarog-color-text: #0f172a;
   --rarog-color-text-muted: #6b7280;

@@ -1,23 +1,104 @@
 :root {
-  /* Brand */
-  --rarog-color-primary: #2563eb;
+  /* Primary scale (blue) */
+  --rarog-color-primary-50:  #eff6ff;
+  --rarog-color-primary-100: #dbeafe;
+  --rarog-color-primary-200: #bfdbfe;
+  --rarog-color-primary-300: #93c5fd;
+  --rarog-color-primary-400: #60a5fa;
+  --rarog-color-primary-500: #3b82f6;
+  --rarog-color-primary-600: #2563eb;
+  --rarog-color-primary-700: #1d4ed8;
+  --rarog-color-primary-800: #1e40af;
+  --rarog-color-primary-900: #1e3a8a;
+
+  /* Secondary scale (slate) */
+  --rarog-color-secondary-50:  #f8fafc;
+  --rarog-color-secondary-100: #f1f5f9;
+  --rarog-color-secondary-200: #e2e8f0;
+  --rarog-color-secondary-300: #cbd5e1;
+  --rarog-color-secondary-400: #94a3b8;
+  --rarog-color-secondary-500: #64748b;
+  --rarog-color-secondary-600: #475569;
+  --rarog-color-secondary-700: #334155;
+  --rarog-color-secondary-800: #1e293b;
+  --rarog-color-secondary-900: #0f172a;
+
+  /* Success scale (green) */
+  --rarog-color-success-50:  #ecfdf3;
+  --rarog-color-success-100: #dcfce7;
+  --rarog-color-success-200: #bbf7d0;
+  --rarog-color-success-300: #86efac;
+  --rarog-color-success-400: #4ade80;
+  --rarog-color-success-500: #22c55e;
+  --rarog-color-success-600: #16a34a;
+  --rarog-color-success-700: #15803d;
+  --rarog-color-success-800: #166534;
+  --rarog-color-success-900: #14532d;
+
+  /* Danger scale (red) */
+  --rarog-color-danger-50:  #fef2f2;
+  --rarog-color-danger-100: #fee2e2;
+  --rarog-color-danger-200: #fecaca;
+  --rarog-color-danger-300: #fca5a5;
+  --rarog-color-danger-400: #f87171;
+  --rarog-color-danger-500: #ef4444;
+  --rarog-color-danger-600: #dc2626;
+  --rarog-color-danger-700: #b91c1c;
+  --rarog-color-danger-800: #991b1b;
+  --rarog-color-danger-900: #7f1d1d;
+
+  /* Warning scale (orange) */
+  --rarog-color-warning-50:  #fff7ed;
+  --rarog-color-warning-100: #ffedd5;
+  --rarog-color-warning-200: #fed7aa;
+  --rarog-color-warning-300: #fdba74;
+  --rarog-color-warning-400: #fb923c;
+  --rarog-color-warning-500: #f97316;
+  --rarog-color-warning-600: #ea580c;
+  --rarog-color-warning-700: #c2410c;
+  --rarog-color-warning-800: #9a3412;
+  --rarog-color-warning-900: #7c2d12;
+
+  /* Info scale (sky) */
+  --rarog-color-info-50:  #f0f9ff;
+  --rarog-color-info-100: #e0f2fe;
+  --rarog-color-info-200: #bae6fd;
+  --rarog-color-info-300: #7dd3fc;
+  --rarog-color-info-400: #38bdf8;
+  --rarog-color-info-500: #0ea5e9;
+  --rarog-color-info-600: #0284c7;
+  --rarog-color-info-700: #0369a1;
+  --rarog-color-info-800: #075985;
+  --rarog-color-info-900: #0c4a6e;
+
+  /* Brand (semantic base) */
+  --rarog-color-primary: var(--rarog-color-primary-600);
   --rarog-color-primary-foreground: #ffffff;
 
-  --rarog-color-secondary: #64748b;
+  --rarog-color-secondary: var(--rarog-color-secondary-600);
   --rarog-color-secondary-foreground: #ffffff;
 
-  /* Semantic */
-  --rarog-color-success: #16a34a;
-  --rarog-color-danger:  #dc2626;
-  --rarog-color-warning: #ea580c;
-  --rarog-color-info:    #0284c7;
+  --rarog-color-success: var(--rarog-color-success-600);
+  --rarog-color-danger:  var(--rarog-color-danger-600);
+  --rarog-color-warning: var(--rarog-color-warning-600);
+  --rarog-color-info:    var(--rarog-color-info-600);
 
-  /* Backgrounds */
-  --rarog-color-bg:          #f3f4f6;
-  --rarog-color-bg-soft:     #ffffff;
-  --rarog-color-surface:     #ffffff;
-  --rarog-color-border:      #e5e7eb;
-  --rarog-color-muted:       #9ca3af;
-  --rarog-color-text:        #0f172a;
-  --rarog-color-text-muted:  #6b7280;
+  /* Backgrounds & neutrals (default theme) */
+  --rarog-color-bg:              #f3f4f6;
+  --rarog-color-bg-soft:         #ffffff;
+  --rarog-color-bg-elevated:     #ffffff;
+  --rarog-color-bg-elevated-soft:#f9fafb;
+  --rarog-color-surface:         #ffffff;
+
+  --rarog-color-border-subtle:   #e5e7eb;
+  --rarog-color-border:          #e5e7eb;
+  --rarog-color-border-strong:   #111827;
+
+  --rarog-color-muted:           #9ca3af;
+  --rarog-color-text:            #0f172a;
+  --rarog-color-text-muted:      #6b7280;
+
+  /* Semantic helpers */
+  --rarog-color-focus-ring:      var(--rarog-color-primary-500);
+  --rarog-color-accent-soft:     var(--rarog-color-primary-50);
 }
