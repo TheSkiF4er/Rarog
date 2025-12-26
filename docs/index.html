@@ -2,7 +2,7 @@
 <html lang="ru" class="theme-dark">
 <head>
   <meta charset="UTF-8">
-  <title>Rarog CSS Framework 1.0.0 — Документация</title>
+  <title>Rarog CSS Framework 1.1.0 — Документация</title>
   <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
   <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
   <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
@@ -15,7 +15,8 @@
       <nav class="navbar-nav">
         <a href="#intro" class="navbar-link">Введение</a>
         <a href="#utilities" class="navbar-link">Утилиты</a>
-        <a href="#components" class="navbar-link">Компоненты</a>
+        <a href="#responsive" class="navbar-link">Responsive</a>
+        <a href="#states" class="navbar-link">States</a>
       </nav>
     </div>
   </header>
@@ -24,13 +25,16 @@
     <section id="intro" class="mb-4">
       <div class="card">
         <div class="card-header">
-          Добро пожаловать в Rarog 1.0.0
+          Добро пожаловать в Rarog 1.1.0
         </div>
         <p class="text-muted">
-          Это демо‑страница, показывающая базовые возможности фреймворка.
+          Это демо-страница, показывающая базовые возможности фреймворка: токены, утилиты,
+          компоненты, адаптивность и state-классы.
         </p>
         <div class="card-footer">
-          <button class="btn btn-primary btn-lg">Кнопка Rarog</button>
+          <button class="btn btn-primary btn-lg hover:bg-primary hover:text-primary">
+            Кнопка Rarog
+          </button>
         </div>
       </div>
     </section>
@@ -38,8 +42,86 @@
     <section id="utilities" class="mb-4">
       <h2>Утилиты</h2>
       <p class="text-muted">
-        Попробуйте изменить классы <code>mt-*</code>, <code>p-*</code>, <code>gap-*</code>, <code>d-flex</code> и другие.
+        Базовые утилиты Rarog покрывают layout, отступы, цвета, типографику и размеры.
+        Попробуйте классы <code>d-flex</code>, <code>gap-3</code>, <code>mt-4</code>, <code>text-muted</code> и другие.
       </p>
+    </section>
+
+    <section id="responsive" class="mb-4">
+      <h2>Responsive</h2>
+      <p class="text-muted">
+        Rarog поддерживает Tailwind-подобные префиксы <code>sm:</code>, <code>md:</code>,
+        <code>lg:</code>, <code>xl:</code>, <code>2xl:</code> для адаптивной верстки.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Пример адаптивного layout
+        </div>
+        <div class="d-flex flex-column sm:d-flex sm:flex-row gap-3">
+          <div class="card p-3 sm:flex-1">
+            <div class="card-header">
+              Колонка 1
+            </div>
+            <p class="text-muted">
+              На маленьких экранах карточки идут столбцом, на <code>sm</code> и выше — в одну строку.
+            </p>
+          </div>
+          <div class="card p-3 sm:flex-1">
+            <div class="card-header">
+              Колонка 2
+            </div>
+            <p class="text-muted">
+              Используются классы <code>sm:d-flex</code>, <code>sm:flex-row</code> и <code>gap-3</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <p class="text-left sm:text-center lg:text-right">
+            Этот текст выравнивается по-разному на разных брейкпоинтах:
+            слева (xs), по центру (sm+), справа (lg+).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="states" class="mb-4">
+      <h2>States</h2>
+      <p class="text-muted">
+        State-утилиты позволяют быстро задавать стили для состояний <code>:hover</code> и <code>:focus</code>.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Hover
+        </div>
+        <p class="text-muted mb-2">
+          Наведите на кнопку, чтобы увидеть работу <code>hover:bg-primary</code> и
+          <code>hover:text-primary</code>.
+        </p>
+        <button class="btn btn-outline hover:bg-primary hover:text-primary">
+          Кнопка с hover-стилями
+        </button>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Focus
+        </div>
+        <p class="text-muted mb-2">
+          Класс <code>focus:border-primary</code> подчёркивает фокус поля ввода.
+        </p>
+        <label class="label sr-only" for="email-demo">
+          Email
+        </label>
+        <input
+          id="email-demo"
+          type="email"
+          class="input focus:border-primary"
+          placeholder="you@example.com"
+        >
+      </div>
     </section>
   </main>
 </body>

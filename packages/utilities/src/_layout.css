@@ -4,6 +4,7 @@
 .d-flex { display: flex; }
 .d-inline-flex { display: inline-flex; }
 .d-grid { display: grid; }
+.d-none { display: none; }
 
 .flex-row { flex-direction: row; }
 .flex-column { flex-direction: column; }

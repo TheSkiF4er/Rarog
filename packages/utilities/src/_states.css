@@ -1,0 +1,30 @@
+/* Rarog State Utilities (hover/focus)
+ *
+ * Использование:
+ *   class="btn btn-outline hover:bg-primary hover:text-primary"
+ *   class="input focus:border-primary"
+ *
+ * В CSS двоеточие экранируется: .hover\:bg-primary:hover { ... }
+ */
+
+/* Hover: фон и текст */
+
+.hover\:bg-primary:hover {
+  background-color: var(--rarog-color-primary);
+  color: var(--rarog-color-primary-foreground);
+}
+
+.hover\:text-primary:hover {
+  color: var(--rarog-color-primary);
+}
+
+.hover\:underline:hover {
+  text-decoration: underline;
+}
+
+/* Focus: рамка */
+
+.focus\:border-primary:focus {
+  border-color: var(--rarog-color-primary);
+  box-shadow: 0 0 0 1px var(--rarog-color-primary);
+}

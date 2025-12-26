@@ -1,0 +1,19 @@
+/* Rarog CSS Framework - Breakpoints
+ *
+ * Рекомендуемые значения (min-width):
+ *   sm: 640px   — малые экраны (телефоны в горизонтали, небольшие планшеты)
+ *   md: 768px   — планшеты
+ *   lg: 1024px  — ноутбуки
+ *   xl: 1280px  — широкие экраны
+ *   2xl: 1536px — очень широкие экраны и десктопы
+ *
+ * Эти значения можно переопределять в своей теме или через сборку.
+ */
+
+:root {
+  --rarog-breakpoint-sm: 640px;
+  --rarog-breakpoint-md: 768px;
+  --rarog-breakpoint-lg: 1024px;
+  --rarog-breakpoint-xl: 1280px;
+  --rarog-breakpoint-2xl: 1536px;
+}
