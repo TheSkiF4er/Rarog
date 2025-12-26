@@ -12,3 +12,25 @@ body {
   padding-inline: var(--rarog-space-4);
   max-width: 1200px;
 }
+
+/* Варианты контейнера по ширине */
+.rg-container-sm {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--rarog-space-4);
+  max-width: var(--rarog-breakpoint-sm);
+}
+
+.rg-container-lg {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--rarog-space-4);
+  max-width: var(--rarog-breakpoint-xl);
+}
+
+/* Утилита для контейнера без горизонтальных отступов */
+.rg-container-nopad,
+.rg-container-sm.rg-container-nopad,
+.rg-container-lg.rg-container-nopad {
+  padding-inline: 0;
+}

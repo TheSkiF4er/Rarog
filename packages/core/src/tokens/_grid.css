@@ -1,0 +1,12 @@
+/* Rarog CSS Framework - Grid Tokens
+ *
+ * Управление отступами (gutter) в сетке rarog-grid.
+ * Значения по умолчанию используют дизайн-токены отступов.
+ */
+
+:root {
+  /* Горизонтальные отступы между колонками */
+  --rarog-grid-gap-x: var(--rarog-space-4);
+  /* Вертикальные отступы между рядами */
+  --rarog-grid-gap-y: var(--rarog-space-4);
+}

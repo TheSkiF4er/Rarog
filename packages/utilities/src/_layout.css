@@ -26,6 +26,9 @@
 .gap-4 { gap: var(--rarog-space-4); }
 .gap-6 { gap: var(--rarog-space-6); }
 
+/* Legacy simple grid helpers — сохранены для обратной совместимости.
+ * Предпочтительно использовать .rg-row / .rg-col.
+ */
 .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }

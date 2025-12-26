@@ -1,4 +1,4 @@
-/* Rarog Utilities 1.1.0 */
+/* Rarog Utilities 1.2.0 */
 
 @import "./_layout.css";
 @import "./_spacing.css";
@@ -7,5 +7,6 @@
 @import "./_sizing.css";
 @import "./_overflow.css";
 @import "./_accessibility.css";
+@import "./_grid.css";
 @import "./_responsive.css";
 @import "./_states.css";

@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.0] - 2025-12-27
+
+### Добавлено
+- 12-колоночная сетка rarog-grid:
+  - базовые классы `.rg-row`, `.rg-col`, `.rg-col-auto`;
+  - фиксированные колонки `.rg-col-1` … `.rg-col-12`;
+  - responsive-варианты `.rg-col-sm-*`, `.rg-col-md-*`, `.rg-col-lg-*`, `.rg-col-xl-*`, `.rg-col-2xl-*`.
+- Управление порядком и смещениями колонок:
+  - `.rg-order-0` … `.rg-order-12` и responsive-варианты `.rg-order-{sm,md,lg,xl,2xl}-N`;
+  - `.rg-offset-0` … `.rg-offset-11` и responsive-варианты `.rg-offset-{sm,md,lg,xl,2xl}-N`.
+- Токены gutter'ов сетки:
+  - `--rarog-grid-gap-x`, `--rarog-grid-gap-y` в `tokens/_grid.css`.
+- Варианты контейнеров:
+  - `.rg-container-sm` и `.rg-container-lg` с фиксированными `max-width` на основе брейкпоинтов;
+  - утилита `.rg-container-nopad` для контейнера без горизонтальных отступов.
+- Новый модуль утилит сетки `packages/utilities/src/_grid.css` и обновлённый вход `rarog-utilities.css`.
+
+### Изменено
+- `.grid-2`, `.grid-3`, `.grid-4` помечены как legacy-хелперы (сохранены для обратной совместимости, предпочтительно использовать `.rg-row`/`.rg-col`).
+
+
 ## [1.1.0] - 2025-12-26
 
 ### Добавлено

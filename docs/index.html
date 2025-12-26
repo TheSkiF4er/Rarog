@@ -2,7 +2,7 @@
 <html lang="ru" class="theme-dark">
 <head>
   <meta charset="UTF-8">
-  <title>Rarog CSS Framework 1.1.0 — Документация</title>
+  <title>Rarog CSS Framework 1.2.0 — Документация</title>
   <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
   <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
   <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
@@ -15,21 +15,22 @@
       <nav class="navbar-nav">
         <a href="#intro" class="navbar-link">Введение</a>
         <a href="#utilities" class="navbar-link">Утилиты</a>
+        <a href="#grid-layout" class="navbar-link">Grid &amp; Layout</a>
         <a href="#responsive" class="navbar-link">Responsive</a>
         <a href="#states" class="navbar-link">States</a>
       </nav>
     </div>
   </header>
 
-  <main class="rg-container mt-4">
+  <main class="rg-container-lg mt-4">
     <section id="intro" class="mb-4">
       <div class="card">
         <div class="card-header">
-          Добро пожаловать в Rarog 1.1.0
+          Добро пожаловать в Rarog 1.2.0
         </div>
         <p class="text-muted">
-          Это демо-страница, показывающая базовые возможности фреймворка: токены, утилиты,
-          компоненты, адаптивность и state-классы.
+          Это демо-страница, показывающая базовые возможности фреймворка: дизайн-токены,
+          утилиты, сетку, компоненты, адаптивность и state-классы.
         </p>
         <div class="card-footer">
           <button class="btn btn-primary btn-lg hover:bg-primary hover:text-primary">
@@ -47,6 +48,97 @@
       </p>
     </section>
 
+    <section id="grid-layout" class="mb-4">
+      <h2>Grid &amp; Layout</h2>
+      <p class="text-muted">
+        Сетка <code>rarog-grid</code> — это 12-колоночная система в стиле Bootstrap на базе
+        классов <code>.rg-row</code> и <code>.rg-col</code> с responsive-модификаторами.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Двухколоночный layout
+        </div>
+        <div class="rg-row">
+          <div class="rg-col-12 rg-col-md-8">
+            <div class="card p-3">
+              <div class="card-header">Основной контент</div>
+              <p class="text-muted">
+                На маленьких экранах занимает всю ширину, на <code>md</code> и выше — 8/12.
+              </p>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card p-3">
+              <div class="card-header">Правая колонка</div>
+              <p class="text-muted">
+                На <code>md</code> и выше занимает 4/12 ширины. Используются классы
+                <code>.rg-col-md-8</code> и <code>.rg-col-md-4</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Три колонки
+        </div>
+        <div class="rg-row">
+          <div class="rg-col-12 rg-col-sm-6 rg-col-lg-4">
+            <div class="card p-3">
+              <div class="card-header">Колонка 1</div>
+              <p class="text-muted">
+                На xs — 12/12, на sm — 6/12, на lg — 4/12.
+              </p>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-sm-6 rg-col-lg-4">
+            <div class="card p-3">
+              <div class="card-header">Колонка 2</div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-sm-6 rg-col-lg-4">
+            <div class="card p-3">
+              <div class="card-header">Колонка 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Sidebar + Content
+        </div>
+        <div class="rg-row">
+          <div class="rg-col-12 rg-col-lg-3 rg-order-lg-1">
+            <div class="card p-3">
+              <div class="card-header">Sidebar</div>
+              <p class="text-muted">
+                Фиксированная ширина 3/12 на больших экранах. Можно изменять порядок через
+                <code>.rg-order-*</code>-классы.
+              </p>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-lg-9 rg-order-lg-0">
+            <div class="card p-3">
+              <div class="card-header">Основной контент</div>
+              <p class="text-muted">
+                Занимает 9/12 ширины на <code>lg</code> и выше. Смещения и порядок можно
+                тонко настраивать с помощью <code>.rg-offset-*</code> и <code>.rg-order-*</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-muted mt-3">
+        Классы <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code> всё ещё
+        доступны как простые helper'ы, но считаются legacy. Для новых layout'ов
+        рекомендуется использовать <code>.rg-row</code>/<code>.rg-col</code>.
+      </p>
+    </section>
+
     <section id="responsive" class="mb-4">
       <h2>Responsive</h2>
       <p class="text-muted">
@@ -56,7 +148,7 @@
 
       <div class="card mt-2">
         <div class="card-header">
-          Пример адаптивного layout
+          Пример адаптивного layout (утилиты)
         </div>
         <div class="d-flex flex-column sm:d-flex sm:flex-row gap-3">
           <div class="card p-3 sm:flex-1">
