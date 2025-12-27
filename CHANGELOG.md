@@ -6,6 +6,31 @@
 
 
 
+## [2.2.0] - 2025-12-27
+
+### Добавлено
+- Компонент `Navbar` с примером responsive-хедера и интеграцией с Offcanvas.
+- Новый компонент `Offcanvas` (`.offcanvas`, `.offcanvas-end`, `.offcanvas-bottom`) с JS-ядром:
+  открытие/закрытие, backdrop, блокировка скролла `body`, ARIA-атрибуты.
+- Компонент `Toast` (`.toast`, `.toast-header`, `.toast-body`) с JS-API и auto-hide.
+- Компоненты `Tooltip` и `Popover`:
+  инициализация по `data-rg-toggle="tooltip|popover"`, упрощённое позиционирование и ARIA.
+- Таблицы v2 (`.table`, `.table-striped`, `.table-hover`, `.table-bordered`, `.table-responsive`).
+- Forms v2:
+  `input-group`, `form-floating` (floating labels), CSS-валидация (`.is-valid`, `.is-invalid`,
+  `.valid-feedback`, `.invalid-feedback`).
+- Расширен JS Core:
+  новые классы `Offcanvas`, `Toast`, `Tooltip`, `Popover`, единый Data-API и event API
+  (`rg:modal:show/hide`, `rg:dropdown:show/hide`, `rg:collapse:show/hide`, `rg:offcanvas:*`,
+  `rg:toast:*`, `rg:tooltip:*`, `rg:popover:*`).
+
+### Изменено
+- Обновлена документация:
+  - раздел **Components** дополнен примерами Navbar + Offcanvas, Tables v2, Forms v2, Toasts, Tooltips/Popovers;
+  - раздел **JavaScript** описывает полный список компонентов JS, Data-API и события.
+- Пример `examples/starters/html-basic` обновлён: добавлены Navbar и Offcanvas на главной странице.
+- Версия пакета и токенов обновлена до `2.2.0`.
+
 ## [2.1.0] - 2025-12-27
 
 ### Добавлено

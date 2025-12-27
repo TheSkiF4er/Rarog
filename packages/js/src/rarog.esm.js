@@ -8,6 +8,21 @@
 const _dropdownInstances = new WeakMap();
 const _collapseInstances = new WeakMap();
 const _modalInstances = new WeakMap();
+const _offcanvasInstances = new WeakMap();
+const _toastInstances = new WeakMap();
+const _tooltipInstances = new WeakMap();
+const _popoverInstances = new WeakMap();
+
+function _dispatchEvent(element, name, detail = {}) {
+  if (!element || typeof CustomEvent === "undefined") return;
+  const evt = new CustomEvent(name, {
+    bubbles: true,
+    cancelable: false,
+    detail
+  });
+  element.dispatchEvent(evt);
+}
+
 
 function _resolveTarget(trigger, explicitTarget) {
   if (explicitTarget) return explicitTarget;
@@ -429,6 +444,468 @@ class Modal {
 }
 
 /* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* Offcanvas / Drawer                                                         */
+/* -------------------------------------------------------------------------- */
+
+class Offcanvas {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Offcanvas: element is required");
+    }
+    this._element = element;
+    this._isOpen = element.classList.contains("is-open");
+    this._backdrop = null;
+    this._options = Object.assign(
+      {
+        backdrop: true,
+        scroll: false
+      },
+      options
+    );
+    this._onKeydown = this._handleKeydown.bind(this);
+
+    _offcanvasInstances.set(element, this);
+  }
+
+  show() {
+    if (typeof document === "undefined") return;
+    if (this._isOpen) return;
+
+    this._isOpen = true;
+
+    if (this._options.backdrop) {
+      this._createBackdrop();
+    }
+
+    if (!this._options.scroll) {
+      document.body.classList.add("rg-offcanvas-open");
+    }
+
+    this._element.classList.add("is-open");
+    this._element.removeAttribute("aria-hidden");
+    this._element.setAttribute("aria-modal", "true");
+    this._element.setAttribute("role", "dialog");
+
+    document.addEventListener("keydown", this._onKeydown);
+    _dispatchEvent(this._element, "rg:offcanvas:show", { instance: this });
+  }
+
+  hide() {
+    if (typeof document === "undefined") return;
+    if (!this._isOpen) return;
+
+    this._isOpen = false;
+
+    this._element.classList.remove("is-open");
+    this._element.setAttribute("aria-hidden", "true");
+    this._element.removeAttribute("aria-modal");
+
+    document.removeEventListener("keydown", this._onKeydown);
+
+    if (!this._options.scroll) {
+      document.body.classList.remove("rg-offcanvas-open");
+    }
+
+    this._removeBackdrop();
+    _dispatchEvent(this._element, "rg:offcanvas:hide", { instance: this });
+  }
+
+  toggle() {
+    if (this._isOpen) {
+      this.hide();
+    } else {
+      this.show();
+    }
+  }
+
+  _createBackdrop() {
+    if (this._backdrop || typeof document === "undefined") return;
+
+    const backdrop = document.createElement("div");
+    backdrop.className = "offcanvas-backdrop";
+    document.body.appendChild(backdrop);
+
+    requestAnimationFrame(() => {
+      backdrop.classList.add("is-visible");
+    });
+
+    backdrop.addEventListener("click", () => {
+      this.hide();
+    });
+
+    this._backdrop = backdrop;
+  }
+
+  _removeBackdrop() {
+    const backdrop = this._backdrop;
+    if (!backdrop) return;
+
+    backdrop.classList.remove("is-visible");
+    const remove = () => {
+      if (backdrop.parentNode) {
+        backdrop.parentNode.removeChild(backdrop);
+      }
+    };
+
+    backdrop.addEventListener("transitionend", remove, { once: true });
+    this._backdrop = null;
+  }
+
+  _handleKeydown(event) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      this.hide();
+    }
+  }
+
+  static getInstance(element) {
+    return _offcanvasInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Offcanvas(element, options);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Toast                                                                      */
+/* -------------------------------------------------------------------------- */
+
+class Toast {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Toast: element is required");
+    }
+    this._element = element;
+    this._isVisible = element.classList.contains("is-visible");
+    this._options = Object.assign(
+      {
+        autoHide: true,
+        delay: 5000
+      },
+      options
+    );
+    this._timeoutId = null;
+
+    _toastInstances.set(element, this);
+  }
+
+  show() {
+    if (this._isVisible) return;
+
+    this._isVisible = true;
+    this._element.classList.add("is-visible");
+    this._element.setAttribute("role", "status");
+    this._element.setAttribute("aria-live", "polite");
+
+    _dispatchEvent(this._element, "rg:toast:show", { instance: this });
+
+    if (this._options.autoHide) {
+      this._clearTimer();
+      this._timeoutId = setTimeout(() => {
+        this.hide();
+      }, this._options.delay);
+    }
+  }
+
+  hide() {
+    if (!this._isVisible) return;
+
+    this._isVisible = false;
+    this._element.classList.remove("is-visible");
+    this._element.removeAttribute("aria-live");
+
+    this._clearTimer();
+    _dispatchEvent(this._element, "rg:toast:hide", { instance: this });
+  }
+
+  _clearTimer() {
+    if (this._timeoutId) {
+      clearTimeout(this._timeoutId);
+      this._timeoutId = null;
+    }
+  }
+
+  static getInstance(element) {
+    return _toastInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Toast(element, options);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Tooltip                                                                    */
+/* -------------------------------------------------------------------------- */
+
+class Tooltip {
+  constructor(trigger, options = {}) {
+    if (!trigger) {
+      throw new Error("Rarog.Tooltip: trigger element is required");
+    }
+
+    this._trigger = trigger;
+    this._options = Object.assign(
+      {
+        placement: trigger.getAttribute("data-rg-placement") || "top"
+      },
+      options
+    );
+
+    this._tooltip = null;
+    this._isVisible = false;
+    this._originalTitle =
+      trigger.getAttribute("data-rg-title") || trigger.getAttribute("title") || "";
+
+    if (this._originalTitle) {
+      trigger.setAttribute("data-rg-original-title", this._originalTitle);
+      trigger.removeAttribute("title");
+    }
+
+    this._onMouseEnter = () => this.show();
+    this._onMouseLeave = () => this.hide();
+    this._onFocus = () => this.show();
+    this._onBlur = () => this.hide();
+
+    trigger.addEventListener("mouseenter", this._onMouseEnter);
+    trigger.addEventListener("mouseleave", this._onMouseLeave);
+    trigger.addEventListener("focus", this._onFocus);
+    trigger.addEventListener("blur", this._onBlur);
+
+    _tooltipInstances.set(trigger, this);
+  }
+
+  _createTooltip() {
+    if (this._tooltip || typeof document === "undefined") return;
+    const text = this._originalTitle || this._trigger.getAttribute("aria-label");
+    if (!text) return;
+
+    const el = document.createElement("div");
+    el.className = "tooltip";
+    el.dataset.rgPlacement = this._options.placement;
+
+    const inner = document.createElement("div");
+    inner.className = "tooltip-inner";
+    inner.textContent = text;
+    el.appendChild(inner);
+
+    document.body.appendChild(el);
+    this._tooltip = el;
+  }
+
+  show() {
+    if (this._isVisible || typeof document === "undefined") return;
+
+    this._createTooltip();
+    if (!this._tooltip) return;
+
+    this._position();
+    this._tooltip.classList.add("is-visible");
+    this._trigger.setAttribute("aria-describedby", this._tooltip.id || "");
+    this._isVisible = true;
+
+    _dispatchEvent(this._tooltip, "rg:tooltip:show", { instance: this });
+  }
+
+  hide() {
+    if (!this._isVisible) return;
+    if (!this._tooltip) return;
+
+    this._tooltip.classList.remove("is-visible");
+    this._trigger.removeAttribute("aria-describedby");
+    this._isVisible = false;
+
+    _dispatchEvent(this._tooltip, "rg:tooltip:hide", { instance: this });
+  }
+
+  _position() {
+    if (!this._tooltip || typeof window === "undefined") return;
+
+    const triggerRect = this._trigger.getBoundingClientRect();
+    const tooltipRect = this._tooltip.getBoundingClientRect();
+    const scrollY = window.scrollY || window.pageYOffset;
+    const scrollX = window.scrollX || window.pageXOffset;
+
+    let top = 0;
+    let left = 0;
+
+    if (this._options.placement === "bottom") {
+      top = triggerRect.bottom + 8 + scrollY;
+      left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2 + scrollX;
+    } else {
+      // top (default)
+      top = triggerRect.top - tooltipRect.height - 8 + scrollY;
+      left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2 + scrollX;
+    }
+
+    this._tooltip.style.top = `${Math.round(top)}px`;
+    this._tooltip.style.left = `${Math.round(left)}px`;
+  }
+
+  static getInstance(trigger) {
+    return _tooltipInstances.get(trigger) || null;
+  }
+
+  static getOrCreate(trigger, options) {
+    return this.getInstance(trigger) || new Tooltip(trigger, options);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Popover                                                                    */
+/* -------------------------------------------------------------------------- */
+
+class Popover {
+  constructor(trigger, options = {}) {
+    if (!trigger) {
+      throw new Error("Rarog.Popover: trigger element is required");
+    }
+
+    this._trigger = trigger;
+    this._options = Object.assign(
+      {
+        placement: trigger.getAttribute("data-rg-placement") || "top",
+        title: trigger.getAttribute("data-rg-popover-title") || "",
+        content: trigger.getAttribute("data-rg-popover-content") || ""
+      },
+      options
+    );
+
+    this._popover = null;
+    this._isVisible = false;
+
+    this._onClick = event => {
+      event.preventDefault();
+      this.toggle();
+    };
+
+    trigger.addEventListener("click", this._onClick);
+    _popoverInstances.set(trigger, this);
+  }
+
+  _createPopover() {
+    if (this._popover || typeof document === "undefined") return;
+
+    const el = document.createElement("div");
+    el.className = "popover";
+    el.dataset.rgPlacement = this._options.placement;
+
+    if (this._options.title) {
+      const header = document.createElement("div");
+      header.className = "popover-header";
+      header.textContent = this._options.title;
+      el.appendChild(header);
+    }
+
+    const body = document.createElement("div");
+    body.className = "popover-body";
+    body.textContent = this._options.content;
+    el.appendChild(body);
+
+    document.body.appendChild(el);
+    this._popover = el;
+  }
+
+  show() {
+    if (this._isVisible) return;
+
+    this._createPopover();
+    if (!this._popover) return;
+
+    this._position();
+    this._popover.classList.add("is-visible");
+    this._trigger.setAttribute("aria-expanded", "true");
+
+    this._isVisible = true;
+    _dispatchEvent(this._popover, "rg:popover:show", { instance: this });
+  }
+
+  hide() {
+    if (!this._isVisible || !this._popover) return;
+
+    this._popover.classList.remove("is-visible");
+    this._trigger.setAttribute("aria-expanded", "false");
+
+    this._isVisible = false;
+    _dispatchEvent(this._popover, "rg:popover:hide", { instance: this });
+  }
+
+  toggle() {
+    if (this._isVisible) {
+      this.hide();
+    } else {
+      this.show();
+    }
+  }
+
+  _position() {
+    if (!this._popover || typeof window === "undefined") return;
+
+    const triggerRect = this._trigger.getBoundingClientRect();
+    const popRect = this._popover.getBoundingClientRect();
+    const scrollY = window.scrollY || window.pageYOffset;
+    const scrollX = window.scrollX || window.pageXOffset;
+
+    let top = 0;
+    let left = 0;
+
+    if (this._options.placement === "bottom") {
+      top = triggerRect.bottom + 8 + scrollY;
+      left = triggerRect.left + triggerRect.width / 2 - popRect.width / 2 + scrollX;
+    } else {
+      // top (default)
+      top = triggerRect.top - popRect.height - 8 + scrollY;
+      left = triggerRect.left + triggerRect.width / 2 - popRect.width / 2 + scrollX;
+    }
+
+    this._popover.style.top = `${Math.round(top)}px`;
+    this._popover.style.left = `${Math.round(left)}px`;
+  }
+
+  static getInstance(trigger) {
+    return _popoverInstances.get(trigger) || null;
+  }
+
+  static getOrCreate(trigger, options) {
+    return this.getInstance(trigger) || new Popover(trigger, options);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Event wrappers for existing components                                     */
+/* -------------------------------------------------------------------------- */
+
+function _attachEventsForClass(klass, getElement, name) {
+  if (!klass || typeof klass.prototype !== "object") return;
+
+  ["show", "hide"].forEach(methodName => {
+    const original = klass.prototype[methodName];
+    if (typeof original !== "function") return;
+
+    klass.prototype[methodName] = function (...args) {
+      const el = getElement(this);
+      if (methodName === "show") {
+        _dispatchEvent(el, `rg:${name}:show`, { instance: this });
+      }
+
+      const result = original.apply(this, args);
+
+      if (methodName === "hide") {
+        _dispatchEvent(el, `rg:${name}:hide`, { instance: this });
+      }
+
+      return result;
+    };
+  });
+}
+
+// Подвязываем события для Dropdown/Collapse/Modal
+_attachEventsForClass(Dropdown, inst => inst._menu || inst._trigger, "dropdown");
+_attachEventsForClass(Collapse, inst => inst._target, "collapse");
+_attachEventsForClass(Modal, inst => inst._element, "modal");
 /* Data API                                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -442,26 +919,83 @@ function initDataApi(root = document) {
 
   document.addEventListener("click", event => {
     const toggle = event.target.closest("[data-rg-toggle]");
-    if (!toggle || !root.contains(toggle)) return;
+    const dismiss = event.target.closest("[data-rg-dismiss]");
 
-    const type = toggle.getAttribute("data-rg-toggle");
-    if (!type) return;
+    // toggle handlers
+    if (toggle && root.contains(toggle)) {
+      const type = toggle.getAttribute("data-rg-toggle");
+      if (!type) return;
 
-    if (type === "dropdown") {
-      event.preventDefault();
-      const instance = Dropdown.getOrCreate(toggle);
-      instance.toggle();
-    } else if (type === "collapse") {
-      event.preventDefault();
-      const instance = Collapse.getOrCreate(toggle);
-      instance.toggle();
-    } else if (type === "modal") {
-      event.preventDefault();
-      const target = _resolveTarget(toggle);
-      if (!target) return;
-      const instance = Modal.getOrCreate(target);
-      instance.toggle();
+      if (type === "dropdown") {
+        event.preventDefault();
+        const instance = Dropdown.getOrCreate(toggle);
+        instance.toggle();
+      } else if (type === "collapse") {
+        event.preventDefault();
+        const instance = Collapse.getOrCreate(toggle);
+        instance.toggle();
+      } else if (type === "modal") {
+        event.preventDefault();
+        const target = _resolveTarget(toggle);
+        if (!target) return;
+        const instance = Modal.getOrCreate(target);
+        instance.toggle();
+      } else if (type === "offcanvas") {
+        event.preventDefault();
+        const target = _resolveTarget(toggle);
+        if (!target) return;
+        const instance = Offcanvas.getOrCreate(target);
+        instance.toggle();
+      } else if (type === "toast") {
+        event.preventDefault();
+        const target = _resolveTarget(toggle);
+        if (!target) return;
+        const instance = Toast.getOrCreate(target);
+        instance.show();
+      } else if (type === "tooltip") {
+        event.preventDefault();
+        Tooltip.getOrCreate(toggle);
+      } else if (type === "popover") {
+        event.preventDefault();
+        Popover.getOrCreate(toggle).toggle();
+      }
+
+      return;
     }
+
+    // dismiss handlers
+    if (dismiss && root.contains(dismiss)) {
+      const type = dismiss.getAttribute("data-rg-dismiss");
+      if (!type) return;
+
+      if (type === "modal") {
+        const target = dismiss.closest(".modal");
+        if (!target) return;
+        const instance = Modal.getOrCreate(target);
+        instance.hide();
+      } else if (type === "offcanvas") {
+        const target = dismiss.closest(".offcanvas");
+        if (!target) return;
+        const instance = Offcanvas.getOrCreate(target);
+        instance.hide();
+      } else if (type === "toast") {
+        const target = dismiss.closest(".toast");
+        if (!target) return;
+        const instance = Toast.getOrCreate(target);
+        instance.hide();
+      }
+    }
+  });
+
+  // Инициализация tooltip/popover по data-атрибутам
+  const tooltipTriggers = root.querySelectorAll("[data-rg-toggle='tooltip']");
+  tooltipTriggers.forEach(trigger => {
+    Tooltip.getOrCreate(trigger);
+  });
+
+  const popoverTriggers = root.querySelectorAll("[data-rg-toggle='popover']");
+  popoverTriggers.forEach(trigger => {
+    Popover.getOrCreate(trigger);
   });
 }
 
@@ -477,8 +1011,12 @@ const Rarog = {
   Dropdown,
   Collapse,
   Modal,
+  Offcanvas,
+  Toast,
+  Tooltip,
+  Popover,
   initDataApi
 };
 
-export { Dropdown, Collapse, Modal, initDataApi, Rarog };
+export { Dropdown, Collapse, Modal, Offcanvas, Toast, Tooltip, Popover, initDataApi, Rarog };
 export default Rarog;
