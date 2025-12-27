@@ -6,6 +6,31 @@
 
 
 
+## [2.5.0] - 2025-12-27
+
+### Добавлено
+- Раздел **Cookbook & Patterns**:
+  - layout‑паттерны (двухколоночный layout, sidebar + content, dashboard, landing);
+  - UI‑паттерны (модалки, alerts/notifications, формы).
+- Отдельные **Guides под стеки**:
+  - `guide-laravel` — подробный Laravel Guide;
+  - `guide-react` — React + Vite;
+  - `guide-vue`, `guide-nextjs`, `guide-cajeer-stack`.
+- Страница **Why Rarog**:
+  - позиционирование как альтернатива Tailwind + Bootstrap;
+  - таблица сравнения по tokens/utilities/components/JS/JIT/DX.
+- Страница **Performance & Bundle Size**:
+  - описание full vs JIT;
+  - рекомендации по оптимизации `content`, arbitrary values и тем.
+- Страница **Branding**:
+  - мини‑брендбук (название, тэглайн, цвета, tone of voice).
+
+### Изменено
+- Обновлён VitePress‑navigation:
+  - добавлены разделы Cookbook, Guides, Why Rarog, Performance, Branding.
+- Версия фреймворка обновлена до `2.5.0`.
+
+
 ## [2.4.0] - 2025-12-27
 
 ### Добавлено

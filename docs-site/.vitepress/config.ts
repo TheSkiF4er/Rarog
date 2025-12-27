@@ -8,19 +8,39 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Getting Started', link: '/getting-started' },
+      { text: 'Why Rarog', link: '/why-rarog' },
       { text: 'Tokens', link: '/tokens' },
       { text: 'Utilities', link: '/utilities' },
       { text: 'Variants & JIT', link: '/variants-jit' },
       { text: 'Components', link: '/components' },
       { text: 'JavaScript', link: '/javascript' },
       { text: 'Theming', link: '/theming' },
-      { text: 'API Reference', link: '/api-reference' },
-      { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
-      { text: 'Versioning & Support', link: '/versioning' },
-      { text: 'Integration Guides', link: '/integration-guides' },
-      { text: 'IDE & Plugins', link: '/ide-plugins' },
-      { text: 'Playground', link: '/playground' }
+      { text: 'Cookbook', link: '/cookbook' },
+      {
+        text: 'Guides',
+        items: [
+          { text: 'Laravel Guide', link: '/guide-laravel' },
+          { text: 'React Guide', link: '/guide-react' },
+          { text: 'Vue Guide', link: '/guide-vue' },
+          { text: 'Next.js Guide', link: '/guide-nextjs' },
+          { text: 'Cajeer Stack Guide', link: '/guide-cajeer-stack' }
+        ]
+      },
+      {
+        text: 'More',
+        items: [
+          { text: 'Integration Guides', link: '/integration-guides' },
+          { text: 'IDE & Plugins', link: '/ide-plugins' },
+          { text: 'Performance', link: '/performance' },
+          { text: 'Branding', link: '/branding' },
+          { text: 'Versioning & Support', link: '/versioning' },
+          { text: 'API Reference', link: '/api-reference' },
+          { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
+          { text: 'Playground', link: '/playground' }
+        ]
+      }
     ],
+
     sidebar: {
       '/': [
         {
