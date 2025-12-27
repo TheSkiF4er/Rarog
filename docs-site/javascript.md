@@ -195,3 +195,38 @@ Rarog.Events.on("rg:modal:show", ({ element, detail }) => {
   window.RAROG_DEBUG = true;
 </script>
 ```
+
+
+## Debug / Devtools
+
+Для отладки поведения компонент и событий Rarog JS Core есть debug-режим.
+
+Варианты включения:
+
+- через глобальные флаги (ещё до загрузки скриптов):
+
+  ```html
+  <script>
+    window.RAROG_DEBUG = true;
+  </script>
+  <script src="/js/rarog.umd.js"></script>
+  ```
+
+- через JS-API в рантайме:
+
+  ```js
+  import Rarog from "rarog-css/dist/rarog.esm.js";
+
+  Rarog.setDebug(true);
+  console.log(Rarog.isDebugEnabled()); // true
+  ```
+
+Что делает debug-режим:
+
+- логирует все `rg:*`-события через `console.log("[Rarog]", "event", type, payload)`;
+- выводит предупреждения о некорректной структуре HTML/атрибутов
+  (например, отсутствующий `.modal-dialog` или `.stepper-step`);
+- логирует ошибки обработчиков событий в консоль как `[Rarog Events]`.
+
+Debug-режим не должен использоваться в production-сборках; его цель — помочь
+разработчику во время интеграции и настройки компонент.

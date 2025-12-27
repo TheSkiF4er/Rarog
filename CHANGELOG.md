@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.5.0] - 2025-12-27
+
+**Фокус:** Reliability, Observability & Ecosystem — укрепление качества,
+наблюдаемости и экосистемы вокруг Rarog 3.x.
+
+### Добавлено
+- Debug-режим JS Core v3 с публичными методами `Rarog.setDebug()` и
+  `Rarog.isDebugEnabled()`, а также логированием `rg:*`-событий через event-bus.
+- Playwright e2e-тесты (`tests/e2e`) и базовые визуальные регресс-тесты
+  (скриншоты ключевых сценариев — модалка, carousel, stepper).
+- Конфигурация `playwright.config.ts` и npm-скрипты:
+  - `npm run test:unit` — Vitest unit/behavior-тесты,
+  - `npm run test:e2e` — Playwright-тесты,
+  - `npm test` — оба набора подряд.
+- Registry плагинов `plugins/registry.json` и страницы docs
+  `plugins-registry.md` (RU/EN) с описанием экосистемы плагинов.
+- Обновлённые разделы docs по Performance v2 и стратегии split/JIT-сборок.
+- Страницы `versioning.md` (RU/EN) с политикой поддержки ветки 3.x и планом на 4.x.
+- Раздел **Debug / Devtools** в документации по JavaScript (RU/EN).
+
+### Изменено
+- Event-bus JS Core теперь умеет логировать события в debug-режиме,
+  что упрощает отладку сложных интерфейсов (forms, data-table, carousel и т.п.).
+- Integration/docs страницы дополнены ссылками на registry плагинов и
+  обновлённые performance-гайды.
+
+### Совместимость
+- Все публичные CSS/JS-API, доступные в 3.4.x, остаются совместимыми.
+- Debug-режим по умолчанию выключен и включается только через глобальные
+  флаги или `Rarog.setDebug(true)`.
+
+
 ## [3.4.0] - 2025-12-27
 
 **Фокус:** SPA/SSR & Multi-Framework Integration — сделать Rarog «drop-in» решением для современных фронтенд-стеков.

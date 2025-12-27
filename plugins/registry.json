@@ -1,0 +1,15 @@
+{
+  "official": [
+    {
+      "name": "@rarog/plugin-forms",
+      "description": "Форменные утилиты и паттерны поверх Rarog.",
+      "since": "2.4.0"
+    },
+    {
+      "name": "@rarog/plugin-typography",
+      "description": "Типографика для статей, документации, блогов.",
+      "since": "2.4.0"
+    }
+  ],
+  "community": []
+}

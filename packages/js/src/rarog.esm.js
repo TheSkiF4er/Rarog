@@ -71,6 +71,7 @@ const Events = {
     }
   },
   emit(type, payload = {}) {
+    _debugLog("event", type, payload);
     _emitOnBus(type, payload);
   }
 };
@@ -2598,6 +2599,19 @@ const Rarog = {
   InputMask,
   Events,
   config: RarogConfig,
+  /**
+   * Включить/выключить debug-режим в рантайме.
+   * Эквивалентно установке window.RAROG_DEBUG / RAROG_DEV, но управляется из кода.
+   */
+  setDebug(value) {
+    RarogConfig.debug = !!value;
+  },
+  /**
+   * Проверить, активен ли debug-режим.
+   */
+  isDebugEnabled() {
+    return !!RarogConfig.debug;
+  },
   initDataApi,
   init,
   dispose,

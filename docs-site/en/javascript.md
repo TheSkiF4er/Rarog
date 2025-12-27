@@ -41,3 +41,36 @@ Recommended pattern:
 
 - initialize Rarog in the root layout;
 - for dynamically mounted/unmounted widgets use `Rarog.init`/`Rarog.dispose` on their DOM container.
+
+
+## Debug / Devtools
+
+Rarog JS Core ships with a lightweight debug mode.
+
+How to enable:
+
+- via global flags (before loading scripts):
+
+  ```html
+  <script>
+    window.RAROG_DEBUG = true;
+  </script>
+  <script src="/js/rarog.umd.js"></script>
+  ```
+
+- via JS API at runtime:
+
+  ```js
+  import Rarog from "rarog-css/dist/rarog.esm.js";
+
+  Rarog.setDebug(true);
+  console.log(Rarog.isDebugEnabled()); // true
+  ```
+
+What debug mode does:
+
+- logs all `rg:*` events as `console.log("[Rarog]", "event", type, payload)`;
+- prints warnings about invalid HTML structure/attributes;
+- reports handler errors as `[Rarog Events]` in the console.
+
+Do not enable debug mode in production builds — it is meant as a developer aid.
