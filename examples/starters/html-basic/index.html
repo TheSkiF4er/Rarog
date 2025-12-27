@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rarog HTML Starter</title>
+  <link rel="stylesheet" href="../../dist/rarog-core.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-utilities.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-components.min.css" />
+  <script src="../../packages/js/dist/rarog.js" defer></script>
+</head>
+<body class="p-4">
+  <header class="mb-4">
+    <h1 class="text-2xl mb-1">Rarog HTML Starter</h1>
+    <p class="text-muted">
+      Чистый HTML + Rarog. Этот шаблон можно положить на любой хостинг.
+    </p>
+  </header>
+
+  <main class="rg-container-lg">
+    <div class="rg-row rg-gap-y-4">
+      <div class="rg-col-12 rg-col-md-8">
+        <div class="card">
+          <div class="card-header">
+            Карточка с кнопкой
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              Здесь вы видите базовую сетку, карточку, типографику и кнопку Rarog.
+            </p>
+            <button class="btn btn-primary" data-rg-toggle="modal" data-rg-target="#welcomeModal">
+              Открыть модалку
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="rg-col-12 rg-col-md-4">
+        <div class="alert alert-info">
+          <strong>Подсказка:</strong> подключите JIT-сборку, чтобы уменьшить размер CSS под проект.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal" id="welcomeModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="card-header">Добро пожаловать в Rarog</h2>
+      </div>
+      <div class="modal-body">
+        <p>Этот HTML-шаблон входит в состав <code>examples/starters/html-basic</code>.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-rg-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

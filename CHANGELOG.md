@@ -3,6 +3,24 @@
 
 
 
+
+## [1.8.0] - 2025-12-27
+
+### Добавлено
+- Docs v2 на базе VitePress:
+  - отдельный docs-сайт с разделами: Getting Started, Tokens, Utilities, Components, JavaScript, Theming, Integration Guides, Playground;
+  - конфигурация в `docs-site/.vitepress/config.ts` с базовым путём `/rarog/` (готово к деплою, например, на `https://docs.cajeer.ru/rarog`).
+- Примерные проекты (starters) в директории `examples/starters`:
+  - `html-basic` — чистый HTML starter с подключением Rarog из `dist/` и демонстрацией сетки, карточек, alerts и модалки;
+  - `laravel` — базовый гайд по интеграции Rarog в Laravel-проект с использованием JIT-режима;
+  - `vite-react` — Vite + React starter с подключением Rarog и стартовым макетом.
+- Встроенный Playground:
+  - страница `Playground` в docs-сайте с iframe на CodeSandbox и инструкцией по локальному playground на базе Vite + React starter.
+
+### Изменено
+- README дополнен ссылками на docs-сайт и директорию с примерами.
+- Версия пакета и конфигов обновлена до 1.8.0.
+
 ## [1.7.0] - 2025-12-27
 
 ### Добавлено
