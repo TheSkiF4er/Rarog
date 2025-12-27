@@ -12,6 +12,14 @@ const _offcanvasInstances = new WeakMap();
 const _toastInstances = new WeakMap();
 const _tooltipInstances = new WeakMap();
 const _popoverInstances = new WeakMap();
+const _datepickerInstances = new WeakMap();
+const _datetimePickerInstances = new WeakMap();
+const _selectInstances = new WeakMap();
+const _comboboxInstances = new WeakMap();
+const _tagsInputInstances = new WeakMap();
+const _dataTableInstances = new WeakMap();
+const _maskHandlers = Object.create(null);
+
 const _eventBusListeners = new Map();
 
 const RarogConfig = {
@@ -1229,6 +1237,1187 @@ class Stepper {
   }
 }
 
+class Datepicker {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Datepicker: element is required");
+    }
+
+    const root =
+      element.matches("[data-rg-datepicker]") || element.classList.contains("rg-datepicker")
+        ? element
+        : element.closest("[data-rg-datepicker], .rg-datepicker") || element;
+
+    this._element = root;
+    this._options = Object.assign(
+      {
+        format: root.getAttribute("data-rg-format") || "yyyy-MM-dd"
+      },
+      options
+    );
+
+    this._input =
+      root.tagName === "INPUT"
+        ? root
+        : root.querySelector("input[type='date'], input[type='text'], input");
+
+    if (!this._input) {
+      _debugWarn("Rarog.Datepicker: input not found", element);
+    }
+
+    this._popup = root.querySelector(".rg-datepicker-popup");
+    if (!this._popup && typeof document !== "undefined") {
+      this._popup = document.createElement("div");
+      this._popup.className = "rg-datepicker-popup";
+      this._popup.innerHTML =
+        '<div class="rg-datepicker-header">' +
+        '  <button type="button" class="rg-datepicker-prev" aria-label="Previous month">‹</button>' +
+        '  <div class="rg-datepicker-title"></div>' +
+        '  <button type="button" class="rg-datepicker-next" aria-label="Next month">›</button>' +
+        "</div>" +
+        '<div class="rg-datepicker-weekdays">' +
+        "  <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>" +
+        "</div>" +
+        '<div class="rg-datepicker-grid"></div>';
+      this._element.appendChild(this._popup);
+    }
+
+    this._grid = this._popup ? this._popup.querySelector(".rg-datepicker-grid") : null;
+    this._title = this._popup ? this._popup.querySelector(".rg-datepicker-title") : null;
+    this._currentDate = new Date();
+    this._selectedDate = null;
+    this._isOpen = false;
+
+    this._onInputClick = event => {
+      event.preventDefault();
+      this.toggle();
+    };
+
+    this._onDocumentClick = event => {
+      if (!this._isOpen) return;
+      if (!this._element.contains(event.target)) {
+        this.hide();
+      }
+    };
+
+    this._onPrevClick = () => {
+      const month = this._currentDate.getMonth();
+      this._currentDate.setMonth(month - 1);
+      this._render();
+    };
+
+    this._onNextClick = () => {
+      const month = this._currentDate.getMonth();
+      this._currentDate.setMonth(month + 1);
+      this._render();
+    };
+
+    this._onGridClick = event => {
+      const target = event.target.closest("[data-rg-date]");
+      if (!target) return;
+      const value = target.getAttribute("data-rg-date");
+      if (!value) return;
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        this._selectedDate = value;
+      } else {
+        this._selectedDate = date;
+      }
+      this._updateInputFromSelected();
+      this.hide();
+      _dispatchEvent(this._element, "rg:datepicker:select", { value: this._input ? this._input.value : null });
+    };
+
+    if (this._input) {
+      this._input.addEventListener("focus", this._onInputClick);
+      this._input.addEventListener("click", this._onInputClick);
+    }
+    if (typeof document !== "undefined") {
+      document.addEventListener("click", this._onDocumentClick);
+    }
+    if (this._popup) {
+      const prevBtn = this._popup.querySelector(".rg-datepicker-prev");
+      const nextBtn = this._popup.querySelector(".rg-datepicker-next");
+      if (prevBtn) prevBtn.addEventListener("click", this._onPrevClick);
+      if (nextBtn) nextBtn.addEventListener("click", this._onNextClick);
+      if (this._grid) this._grid.addEventListener("click", this._onGridClick);
+    }
+
+    this._render();
+    _datepickerInstances.set(this._element, this);
+  }
+
+  _formatDate(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "";
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    // Пока поддерживаем только yyyy-MM-dd
+    return `${year}-${month}-${day}`;
+  }
+
+  _updateInputFromSelected() {
+    if (!this._input) return;
+    if (this._selectedDate instanceof Date) {
+      this._input.value = this._formatDate(this._selectedDate);
+    } else if (typeof this._selectedDate === "string") {
+      this._input.value = this._selectedDate;
+    }
+  }
+
+  _render() {
+    if (!this._popup || !this._grid || !this._title) return;
+
+    const year = this._currentDate.getFullYear();
+    const month = this._currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const firstWeekday = (firstDay.getDay() + 6) % 7; // 0 = Monday
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    this._title.textContent = this._currentDate.toLocaleDateString(undefined, {
+      month: "long",
+      year: "numeric"
+    });
+
+    this._grid.innerHTML = "";
+
+    for (let i = 0; i < firstWeekday; i++) {
+      const placeholder = document.createElement("div");
+      placeholder.className = "rg-datepicker-day rg-datepicker-empty";
+      this._grid.appendChild(placeholder);
+    }
+
+    const today = new Date();
+    const todayY = today.getFullYear();
+    const todayM = today.getMonth();
+    const todayD = today.getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cellDate = new Date(year, month, day);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "rg-datepicker-day";
+      button.textContent = String(day);
+      button.setAttribute("data-rg-date", this._formatDate(cellDate));
+
+      if (
+        year === todayY &&
+        month === todayM &&
+        day === todayD
+      ) {
+        button.classList.add("is-today");
+      }
+
+      if (this._input && this._input.value) {
+        const currentValue = this._input.value;
+        const cellValue = this._formatDate(cellDate);
+        if (currentValue === cellValue) {
+          button.classList.add("is-selected");
+        }
+      }
+
+      this._grid.appendChild(button);
+    }
+  }
+
+  show() {
+    if (!this._popup) return;
+    this._popup.removeAttribute("hidden");
+    this._popup.classList.add("is-open");
+    this._isOpen = true;
+    _dispatchEvent(this._element, "rg:datepicker:show", {});
+  }
+
+  hide() {
+    if (!this._popup) return;
+    this._popup.setAttribute("hidden", "true");
+    this._popup.classList.remove("is-open");
+    this._isOpen = false;
+    _dispatchEvent(this._element, "rg:datepicker:hide", {});
+  }
+
+  toggle() {
+    if (this._isOpen) {
+      this.hide();
+    } else {
+      this.show();
+    }
+  }
+
+  dispose() {
+    if (this._input) {
+      this._input.removeEventListener("focus", this._onInputClick);
+      this._input.removeEventListener("click", this._onInputClick);
+    }
+    if (typeof document !== "undefined") {
+      document.removeEventListener("click", this._onDocumentClick);
+    }
+    if (this._popup && this._grid) {
+      this._grid.removeEventListener("click", this._onGridClick);
+      const prevBtn = this._popup.querySelector(".rg-datepicker-prev");
+      const nextBtn = this._popup.querySelector(".rg-datepicker-next");
+      if (prevBtn) prevBtn.removeEventListener("click", this._onPrevClick);
+      if (nextBtn) nextBtn.removeEventListener("click", this._onNextClick);
+    }
+    _datepickerInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _datepickerInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Datepicker(element, options);
+  }
+}
+
+class DatetimePicker extends Datepicker {
+  constructor(element, options = {}) {
+    super(element, options);
+    _datetimePickerInstances.set(this._element, this);
+  }
+
+  static getInstance(element) {
+    return _datetimePickerInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new DatetimePicker(element, options);
+  }
+}
+
+class Select {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Select: element is required");
+    }
+
+    this._element = element;
+    this._options = Object.assign(
+      {
+        multiple: element.getAttribute("data-rg-multiple") === "true"
+      },
+      options
+    );
+
+    this._toggle =
+      element.querySelector("[data-rg-select-toggle]") ||
+      element.querySelector(".rg-select-toggle") ||
+      element.querySelector("button");
+    this._menu =
+      element.querySelector("[data-rg-select-menu]") ||
+      element.querySelector(".rg-select-menu");
+    this._items = this._menu ? Array.from(this._menu.querySelectorAll("[data-rg-value], .rg-select-option")) : [];
+    this._hiddenInput =
+      element.querySelector("input[type='hidden']") ||
+      element.querySelector("select.rg-select-native");
+
+    this._isOpen = false;
+    this._activeIndex = -1;
+    this._value = this._options.multiple ? new Set() : null;
+
+    this._onDocumentClick = event => {
+      if (!this._isOpen) return;
+      if (!this._element.contains(event.target)) {
+        this.hide();
+      }
+    };
+
+    this._onToggleClick = event => {
+      event.preventDefault();
+      this.toggle();
+    };
+
+    this._onItemClick = event => {
+      const item = event.currentTarget;
+      this._selectItem(item);
+    };
+
+    this._onKeyDown = event => {
+      if (!this._isOpen && (event.key === "ArrowDown" || event.key === "ArrowUp" || event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        this.show();
+        return;
+      }
+
+      if (!this._isOpen) return;
+
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        this._moveActive(event.key === "ArrowDown" ? 1 : -1);
+      } else if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        const current = this._items[this._activeIndex];
+        if (current) this._selectItem(current);
+      } else if (event.key === "Escape") {
+        this.hide();
+      }
+    };
+
+    if (this._toggle) {
+      this._toggle.addEventListener("click", this._onToggleClick);
+      this._toggle.addEventListener("keydown", this._onKeyDown);
+      this._toggle.setAttribute("aria-haspopup", "listbox");
+      this._toggle.setAttribute("aria-expanded", "false");
+    }
+    if (this._menu) {
+      this._menu.setAttribute("role", "listbox");
+    }
+
+    this._items.forEach((item, index) => {
+      item.setAttribute("role", "option");
+      item.addEventListener("click", this._onItemClick);
+      if (item.classList.contains("is-selected") || item.getAttribute("aria-selected") === "true") {
+        this._activeIndex = index;
+        if (this._options.multiple) {
+          this._value.add(this._getItemValue(item));
+        } else {
+          this._value = this._getItemValue(item);
+        }
+      }
+    });
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("click", this._onDocumentClick);
+    }
+
+    this._syncHidden();
+    _selectInstances.set(this._element, this);
+  }
+
+  _getItemValue(item) {
+    const explicit = item.getAttribute("data-rg-value");
+    if (explicit != null) return explicit;
+    if (this._hiddenInput && this._hiddenInput.tagName === "SELECT") {
+      const optionIndex = this._items.indexOf(item);
+      const option = this._hiddenInput.options[optionIndex];
+      return option ? option.value : item.textContent.trim();
+    }
+    return item.textContent.trim();
+  }
+
+  _syncHidden() {
+    if (!this._hiddenInput) return;
+
+    if (this._hiddenInput.tagName === "SELECT") {
+      const values = this._options.multiple
+        ? Array.from(this._value)
+        : this._value != null
+        ? [this._value]
+        : [];
+      Array.from(this._hiddenInput.options).forEach(option => {
+        option.selected = values.includes(option.value);
+      });
+    } else {
+      if (this._options.multiple) {
+        this._hiddenInput.value = Array.from(this._value).join(",");
+      } else {
+        this._hiddenInput.value = this._value != null ? String(this._value) : "";
+      }
+    }
+  }
+
+  _updateToggleLabel() {
+    if (!this._toggle) return;
+    const labelSpan =
+      this._toggle.querySelector(".rg-select-label") || this._toggle;
+    let text = "";
+    if (this._options.multiple) {
+      const values = Array.from(this._value);
+      text = values.length ? values.join(", ") : this._toggle.getAttribute("data-rg-placeholder") || "";
+    } else {
+      text =
+        this._value != null
+          ? String(this._value)
+          : this._toggle.getAttribute("data-rg-placeholder") || "";
+    }
+    labelSpan.textContent = text;
+  }
+
+  _moveActive(delta) {
+    if (!this._items.length) return;
+    let next = this._activeIndex + delta;
+    if (next < 0) next = this._items.length - 1;
+    if (next >= this._items.length) next = 0;
+    this._setActiveIndex(next);
+  }
+
+  _setActiveIndex(index) {
+    this._items.forEach((item, i) => {
+      if (i === index) {
+        item.classList.add("is-active");
+        item.setAttribute("aria-selected", "true");
+        item.scrollIntoView({ block: "nearest" });
+      } else {
+        item.classList.remove("is-active");
+        if (!item.classList.contains("is-selected")) {
+          item.setAttribute("aria-selected", "false");
+        }
+      }
+    });
+    this._activeIndex = index;
+  }
+
+  _selectItem(item) {
+    const value = this._getItemValue(item);
+
+    if (this._options.multiple) {
+      const isSelected = this._value.has(value);
+      if (isSelected) {
+        this._value.delete(value);
+        item.classList.remove("is-selected");
+        item.setAttribute("aria-selected", "false");
+      } else {
+        this._value.add(value);
+        item.classList.add("is-selected");
+        item.setAttribute("aria-selected", "true");
+      }
+    } else {
+      this._value = value;
+      this._items.forEach(it => {
+        if (it === item) {
+          it.classList.add("is-selected");
+          it.setAttribute("aria-selected", "true");
+        } else {
+          it.classList.remove("is-selected");
+          it.setAttribute("aria-selected", "false");
+        }
+      });
+      this.hide();
+    }
+
+    this._syncHidden();
+    this._updateToggleLabel();
+    _dispatchEvent(this._element, "rg:select:change", { value: this._value });
+  }
+
+  show() {
+    if (!this._menu) return;
+    this._menu.removeAttribute("hidden");
+    this._menu.classList.add("is-open");
+    if (this._toggle) {
+      this._toggle.setAttribute("aria-expanded", "true");
+    }
+    this._isOpen = true;
+    if (this._activeIndex === -1 && this._items.length) {
+      this._setActiveIndex(0);
+    }
+  }
+
+  hide() {
+    if (!this._menu) return;
+    this._menu.setAttribute("hidden", "true");
+    this._menu.classList.remove("is-open");
+    if (this._toggle) {
+      this._toggle.setAttribute("aria-expanded", "false");
+    }
+    this._isOpen = false;
+  }
+
+  toggle() {
+    if (this._isOpen) {
+      this.hide();
+    } else {
+      this.show();
+    }
+  }
+
+  dispose() {
+    if (this._toggle) {
+      this._toggle.removeEventListener("click", this._onToggleClick);
+      this._toggle.removeEventListener("keydown", this._onKeyDown);
+    }
+    this._items.forEach(item => {
+      item.removeEventListener("click", this._onItemClick);
+    });
+    if (typeof document !== "undefined") {
+      document.removeEventListener("click", this._onDocumentClick);
+    }
+    _selectInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _selectInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Select(element, options);
+  }
+}
+
+class Combobox {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Combobox: element is required");
+    }
+
+    this._element = element;
+    this._options = options;
+    this._input =
+      element.querySelector(".rg-combobox-input") ||
+      element.querySelector("input[type='text'], input[type='search']");
+    this._toggle =
+      element.querySelector("[data-rg-combobox-toggle]") ||
+      element.querySelector(".rg-combobox-toggle");
+    this._list =
+      element.querySelector(".rg-combobox-list") ||
+      element.querySelector("[data-rg-combobox-list]");
+    this._items = this._list ? Array.from(this._list.querySelectorAll("[data-rg-value], .rg-combobox-option")) : [];
+    this._hiddenInput = element.querySelector("input[type='hidden']");
+
+    this._isOpen = false;
+    this._activeIndex = -1;
+
+    this._onInput = event => {
+      const query = event.target.value.toLowerCase();
+      this._filter(query);
+      if (!this._isOpen) this.show();
+    };
+
+    this._onKeyDown = event => {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const delta = event.key === "ArrowDown" ? 1 : -1;
+        this._moveActive(delta);
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        const current = this._items[this._activeIndex];
+        if (current) this._selectItem(current);
+      } else if (event.key === "Escape") {
+        this.hide();
+      }
+    };
+
+    this._onToggleClick = event => {
+      event.preventDefault();
+      this.toggle();
+      if (this._isOpen && this._input) {
+        this._input.focus();
+      }
+    };
+
+    this._onItemClick = event => {
+      const item = event.currentTarget;
+      this._selectItem(item);
+    };
+
+    this._onDocumentClick = event => {
+      if (!this._isOpen) return;
+      if (!this._element.contains(event.target)) {
+        this.hide();
+      }
+    };
+
+    if (this._input) {
+      this._input.addEventListener("input", this._onInput);
+      this._input.addEventListener("keydown", this._onKeyDown);
+      this._input.setAttribute("role", "combobox");
+      this._input.setAttribute("aria-autocomplete", "list");
+    }
+    if (this._toggle) {
+      this._toggle.addEventListener("click", this._onToggleClick);
+    }
+    if (this._list) {
+      this._list.setAttribute("role", "listbox");
+    }
+    this._items.forEach(item => {
+      item.setAttribute("role", "option");
+      item.addEventListener("click", this._onItemClick);
+    });
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("click", this._onDocumentClick);
+    }
+
+    _comboboxInstances.set(this._element, this);
+  }
+
+  _filter(query) {
+    this._items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const match = text.indexOf(query) !== -1;
+      item.style.display = match ? "" : "none";
+    });
+    if (query) {
+      const firstVisible = this._items.find(item => item.style.display !== "none");
+      if (firstVisible) {
+        this._activeIndex = this._items.indexOf(firstVisible);
+        this._setActiveIndex(this._activeIndex);
+      }
+    }
+  }
+
+  _moveActive(delta) {
+    const visibleItems = this._items.filter(item => item.style.display !== "none");
+    if (!visibleItems.length) return;
+
+    let currentItem = this._items[this._activeIndex];
+    if (!currentItem || currentItem.style.display === "none") {
+      currentItem = visibleItems[0];
+    }
+    let idx = visibleItems.indexOf(currentItem);
+    idx += delta;
+    if (idx < 0) idx = visibleItems.length - 1;
+    if (idx >= visibleItems.length) idx = 0;
+
+    const target = visibleItems[idx];
+    this._activeIndex = this._items.indexOf(target);
+    this._setActiveIndex(this._activeIndex);
+  }
+
+  _setActiveIndex(index) {
+    this._items.forEach((item, i) => {
+      if (i === index) {
+        item.classList.add("is-active");
+        item.setAttribute("aria-selected", "true");
+        item.scrollIntoView({ block: "nearest" });
+      } else {
+        item.classList.remove("is-active");
+        if (!item.classList.contains("is-selected")) {
+          item.setAttribute("aria-selected", "false");
+        }
+      }
+    });
+  }
+
+  _getItemValue(item) {
+    const explicit = item.getAttribute("data-rg-value");
+    return explicit != null ? explicit : item.textContent.trim();
+  }
+
+  _selectItem(item) {
+    const value = this._getItemValue(item);
+    if (this._input) {
+      this._input.value = item.textContent.trim();
+    }
+    if (this._hiddenInput) {
+      this._hiddenInput.value = value;
+    }
+    this._items.forEach(it => {
+      if (it === item) {
+        it.classList.add("is-selected");
+        it.setAttribute("aria-selected", "true");
+      } else {
+        it.classList.remove("is-selected");
+        it.setAttribute("aria-selected", "false");
+      }
+    });
+    this.hide();
+    _dispatchEvent(this._element, "rg:combobox:change", { value });
+  }
+
+  show() {
+    if (!this._list) return;
+    this._list.removeAttribute("hidden");
+    this._list.classList.add("is-open");
+    this._isOpen = true;
+    _dispatchEvent(this._element, "rg:combobox:open", {});
+  }
+
+  hide() {
+    if (!this._list) return;
+    this._list.setAttribute("hidden", "true");
+    this._list.classList.remove("is-open");
+    this._isOpen = false;
+    _dispatchEvent(this._element, "rg:combobox:close", {});
+  }
+
+  toggle() {
+    if (this._isOpen) {
+      this.hide();
+    } else {
+      this.show();
+    }
+  }
+
+  dispose() {
+    if (this._input) {
+      this._input.removeEventListener("input", this._onInput);
+      this._input.removeEventListener("keydown", this._onKeyDown);
+    }
+    if (this._toggle) {
+      this._toggle.removeEventListener("click", this._onToggleClick);
+    }
+    this._items.forEach(item => {
+      item.removeEventListener("click", this._onItemClick);
+    });
+    if (typeof document !== "undefined") {
+      document.removeEventListener("click", this._onDocumentClick);
+    }
+    _comboboxInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _comboboxInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Combobox(element, options);
+  }
+}
+
+class TagsInput {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.TagsInput: element is required");
+    }
+
+    this._element = element;
+    this._options = options;
+    this._tagsContainer =
+      element.querySelector(".rg-tags") ||
+      element.querySelector("[data-rg-tags-container]");
+    this._input =
+      element.querySelector(".rg-tags-input-input") ||
+      element.querySelector("input[type='text'], input[type='search']");
+    this._hiddenInput = element.querySelector("input[type='hidden']");
+
+    this._tags = [];
+
+    this._onKeyDown = event => {
+      if (event.key === "Enter" || event.key === ",") {
+        event.preventDefault();
+        const value = (this._input ? this._input.value : "").trim();
+        if (value) {
+          this.addTag(value);
+          this._input.value = "";
+        }
+      } else if (event.key === "Backspace" && this._input && this._input.value === "") {
+        const last = this._tags[this._tags.length - 1];
+        if (last) {
+          this.removeTag(last.value);
+        }
+      }
+    };
+
+    this._onClick = event => {
+      if (this._input) {
+        this._input.focus();
+      }
+    };
+
+    this._onTagRemoveClick = event => {
+      const button = event.currentTarget;
+      const tagEl = button.closest("[data-rg-tag-value]");
+      if (!tagEl) return;
+      const value = tagEl.getAttribute("data-rg-tag-value");
+      this.removeTag(value);
+    };
+
+    if (this._input) {
+      this._input.addEventListener("keydown", this._onKeyDown);
+    }
+    this._element.addEventListener("click", this._onClick);
+
+    if (this._hiddenInput && this._hiddenInput.value) {
+      const initial = this._hiddenInput.value
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean);
+      initial.forEach(value => this._createTagElement(value));
+    }
+
+    _tagsInputInstances.set(this._element, this);
+  }
+
+  _createTagElement(value) {
+    if (!this._tagsContainer && typeof document !== "undefined") {
+      this._tagsContainer = document.createElement("div");
+      this._tagsContainer.className = "rg-tags";
+      this._element.insertBefore(this._tagsContainer, this._input || null);
+    }
+    if (!this._tagsContainer || typeof document === "undefined") return;
+
+    const tagEl = document.createElement("span");
+    tagEl.className = "rg-tag";
+    tagEl.setAttribute("data-rg-tag-value", value);
+
+    const label = document.createElement("span");
+    label.className = "rg-tag-label";
+    label.textContent = value;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "rg-tag-remove";
+    removeBtn.setAttribute("aria-label", "Remove tag");
+    removeBtn.innerHTML = "×";
+    removeBtn.addEventListener("click", this._onTagRemoveClick);
+
+    tagEl.appendChild(label);
+    tagEl.appendChild(removeBtn);
+
+    this._tagsContainer.appendChild(tagEl);
+    this._tags.push({ value, element: tagEl });
+  }
+
+  _syncHidden() {
+    if (!this._hiddenInput) return;
+    this._hiddenInput.value = this._tags.map(t => t.value).join(",");
+  }
+
+  addTag(value) {
+    if (!value) return;
+    if (this._tags.some(t => t.value === value)) return;
+    this._createTagElement(value);
+    this._syncHidden();
+    _dispatchEvent(this._element, "rg:tags-input:change", {
+      values: this._tags.map(t => t.value)
+    });
+  }
+
+  removeTag(value) {
+    const idx = this._tags.findIndex(t => t.value === value);
+    if (idx === -1) return;
+    const tag = this._tags[idx];
+    if (tag.element && tag.element.parentNode) {
+      tag.element.parentNode.removeChild(tag.element);
+    }
+    this._tags.splice(idx, 1);
+    this._syncHidden();
+    _dispatchEvent(this._element, "rg:tags-input:change", {
+      values: this._tags.map(t => t.value)
+    });
+  }
+
+  clear() {
+    this._tags.forEach(tag => {
+      if (tag.element && tag.element.parentNode) {
+        tag.element.parentNode.removeChild(tag.element);
+      }
+    });
+    this._tags = [];
+    this._syncHidden();
+  }
+
+  dispose() {
+    if (this._input) {
+      this._input.removeEventListener("keydown", this._onKeyDown);
+    }
+    this._element.removeEventListener("click", this._onClick);
+    this._tags.forEach(tag => {
+      const btn = tag.element.querySelector(".rg-tag-remove");
+      if (btn) btn.removeEventListener("click", this._onTagRemoveClick);
+    });
+    this.clear();
+    _tagsInputInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _tagsInputInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new TagsInput(element, options);
+  }
+}
+
+class DataTable {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.DataTable: element is required");
+    }
+
+    this._element = element;
+    this._options = Object.assign(
+      {
+        pageSize: Number(element.getAttribute("data-rg-page-size")) || 10
+      },
+      options
+    );
+
+    this._table = element.tagName === "TABLE" ? element : element.querySelector("table");
+    this._tbody = this._table ? this._table.querySelector("tbody") : null;
+    this._rows = this._tbody ? Array.from(this._tbody.rows) : [];
+
+    this._searchInput =
+      element.querySelector("[data-rg-table-search]") ||
+      element.querySelector("input[data-rg-role='table-search']");
+    this._paginationContainer =
+      element.querySelector("[data-rg-table-pagination]") ||
+      element.querySelector(".rg-table-pagination");
+
+    this._state = {
+      search: "",
+      sortKey: null,
+      sortDir: "asc",
+      page: 1
+    };
+
+    this._onSearchInput = event => {
+      this._state.search = (event.target.value || "").toLowerCase();
+      this._state.page = 1;
+      this._apply();
+    };
+
+    this._onHeaderClick = event => {
+      const th = event.currentTarget;
+      const key = th.getAttribute("data-rg-sort");
+      if (!key) return;
+
+      if (this._state.sortKey === key) {
+        this._state.sortDir = this._state.sortDir === "asc" ? "desc" : "asc";
+      } else {
+        this._state.sortKey = key;
+        this._state.sortDir = "asc";
+      }
+
+      this._apply();
+    };
+
+    this._onPageClick = event => {
+      event.preventDefault();
+      const page = Number(event.currentTarget.getAttribute("data-rg-page"));
+      if (!Number.isNaN(page)) {
+        this._state.page = page;
+        this._apply({ focusPagination: true });
+      }
+    };
+
+    if (this._searchInput) {
+      this._searchInput.addEventListener("input", this._onSearchInput);
+    }
+
+    if (this._table) {
+      const sortableHeaders = this._table.querySelectorAll("thead th[data-rg-sort]");
+      sortableHeaders.forEach(th => {
+        th.classList.add("is-sortable");
+        th.addEventListener("click", this._onHeaderClick);
+      });
+    }
+
+    this._apply();
+    _dataTableInstances.set(this._element, this);
+  }
+
+  _filterRows() {
+    const search = this._state.search;
+    if (!search) return this._rows.slice();
+
+    return this._rows.filter(row => {
+      const text = row.textContent || "";
+      return text.toLowerCase().indexOf(search) !== -1;
+    });
+  }
+
+  _sortRows(rows) {
+    const key = this._state.sortKey;
+    if (!key) return rows;
+
+    const dir = this._state.sortDir === "desc" ? -1 : 1;
+
+    const header = this._table.querySelector("thead th[data-rg-sort='" + key + "']");
+    const index = header ? Array.from(header.parentNode.children).indexOf(header) : -1;
+    if (index === -1) return rows;
+
+    const type = header.getAttribute("data-rg-sort-type") || "string";
+
+    return rows.slice().sort((a, b) => {
+      const aCell = a.cells[index];
+      const bCell = b.cells[index];
+      const aText = aCell ? (aCell.textContent || "").trim() : "";
+      const bText = bCell ? (bCell.textContent || "").trim() : "";
+
+      if (type === "number") {
+        const aNum = parseFloat(aText.replace(/\s+/g, "").replace(",", "."));
+        const bNum = parseFloat(bText.replace(/\s+/g, "").replace(",", "."));
+        if (Number.isNaN(aNum) || Number.isNaN(bNum)) {
+          return dir * aText.localeCompare(bText);
+        }
+        if (aNum === bNum) return 0;
+        return aNum > bNum ? dir : -dir;
+      }
+
+      return dir * aText.localeCompare(bText, undefined, { numeric: true });
+    });
+  }
+
+  _paginateRows(rows) {
+    if (!this._paginationContainer || !this._options.pageSize) {
+      return { rows, page: 1, pages: 1 };
+    }
+
+    const total = rows.length;
+    const pages = Math.max(1, Math.ceil(total / this._options.pageSize));
+    let page = this._state.page;
+    if (page < 1) page = 1;
+    if (page > pages) page = pages;
+
+    const start = (page - 1) * this._options.pageSize;
+    const end = start + this._options.pageSize;
+
+    return { rows: rows.slice(start, end), page, pages };
+  }
+
+  _renderPagination(page, pages) {
+    if (!this._paginationContainer) return;
+
+    this._paginationContainer.innerHTML = "";
+    if (pages <= 1) return;
+
+    const list = document.createElement("ul");
+    list.className = "pagination";
+
+    for (let i = 1; i <= pages; i++) {
+      const li = document.createElement("li");
+      li.className = "page-item" + (i === page ? " is-active" : "");
+
+      const link = document.createElement("a");
+      link.href = "#";
+      link.className = "page-link";
+      link.textContent = String(i);
+      link.setAttribute("data-rg-page", String(i));
+      link.addEventListener("click", this._onPageClick);
+
+      li.appendChild(link);
+      list.appendChild(li);
+    }
+
+    this._paginationContainer.appendChild(list);
+  }
+
+  _apply(options = {}) {
+    if (!this._tbody) return;
+
+    let rows = this._filterRows();
+    rows = this._sortRows(rows);
+    const paginated = this._paginateRows(rows);
+
+    this._tbody.innerHTML = "";
+    paginated.rows.forEach(row => {
+      this._tbody.appendChild(row);
+    });
+
+    this._renderPagination(paginated.page, paginated.pages);
+
+    const header = this._state.sortKey
+      ? this._table.querySelector("thead th[data-rg-sort='" + this._state.sortKey + "']")
+      : null;
+    if (header) {
+      this._table
+        .querySelectorAll("thead th[data-rg-sort]")
+        .forEach(th => th.classList.remove("is-sorted-asc", "is-sorted-desc"));
+      header.classList.add(
+        this._state.sortDir === "desc" ? "is-sorted-desc" : "is-sorted-asc"
+      );
+    }
+
+    _dispatchEvent(this._element, "rg:table:update", {
+      search: this._state.search,
+      sortKey: this._state.sortKey,
+      sortDir: this._state.sortDir,
+      page: paginated.page,
+      pages: paginated.pages
+    });
+
+    if (options.focusPagination && this._paginationContainer) {
+      const activeLink = this._paginationContainer.querySelector(".page-item.is-active .page-link");
+      if (activeLink) activeLink.focus();
+    }
+  }
+
+  dispose() {
+    if (this._searchInput) {
+      this._searchInput.removeEventListener("input", this._onSearchInput);
+    }
+    if (this._table) {
+      const sortableHeaders = this._table.querySelectorAll("thead th[data-rg-sort]");
+      sortableHeaders.forEach(th => {
+        th.removeEventListener("click", this._onHeaderClick);
+      });
+    }
+    if (this._paginationContainer) {
+      this._paginationContainer.innerHTML = "";
+    }
+    _dataTableInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _dataTableInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new DataTable(element, options);
+  }
+}
+
+function _formatPatternDigits(rawValue, pattern) {
+  const digits = (rawValue || "").replace(/\D+/g, "");
+  if (!pattern) return digits;
+  let result = "";
+  let di = 0;
+  for (let i = 0; i < pattern.length; i++) {
+    const ch = pattern[i];
+    if (ch === "X") {
+      if (di >= digits.length) break;
+      result += digits[di++];
+    } else {
+      result += ch;
+    }
+  }
+  return result;
+}
+
+function _applyMaskToInput(element) {
+  if (!element || element.dataset.rgMaskBound === "true") return;
+
+  const type = element.getAttribute("data-rg-mask");
+  if (!type) return;
+
+  const handler = _maskHandlers[type];
+
+  const onInput = event => {
+    const value = event.target.value || "";
+    let formatted = value;
+
+    if (handler) {
+      formatted = handler(value, element);
+    } else if (type === "phone") {
+      const pattern =
+        element.getAttribute("data-rg-mask-pattern") || "+X (XXX) XXX-XX-XX";
+      formatted = _formatPatternDigits(value, pattern);
+    } else if (type === "card") {
+      const pattern =
+        element.getAttribute("data-rg-mask-pattern") || "XXXX XXXX XXXX XXXX";
+      formatted = _formatPatternDigits(value, pattern);
+    } else if (type === "custom") {
+      const pattern = element.getAttribute("data-rg-mask-pattern");
+      if (pattern) {
+        formatted = _formatPatternDigits(value, pattern);
+      }
+    }
+
+    if (formatted !== value) {
+      const selectionStart = element.selectionStart;
+      const selectionEnd = element.selectionEnd;
+      event.target.value = formatted;
+      if (
+        typeof selectionStart === "number" &&
+        typeof selectionEnd === "number" &&
+        element === document.activeElement
+      ) {
+        const diff = formatted.length - value.length;
+        const pos = selectionEnd + diff;
+        element.setSelectionRange(pos, pos);
+      }
+    }
+  };
+
+  element.addEventListener("input", onInput);
+  element.dataset.rgMaskBound = "true";
+}
+
+const InputMask = {
+  register(name, handler) {
+    if (!name || typeof handler !== "function") return;
+    _maskHandlers[name] = handler;
+  },
+  apply(element) {
+    _applyMaskToInput(element);
+  }
+};
+
 /* Lifecycle helpers                                                          */
 /* -------------------------------------------------------------------------- */
 
@@ -1344,6 +2533,42 @@ function initDataApi(root = document) {
   popoverTriggers.forEach(trigger => {
     Popover.getOrCreate(trigger);
   });
+
+
+  const datepickerElements = root.querySelectorAll("[data-rg-datepicker]");
+  datepickerElements.forEach(element => {
+    Datepicker.getOrCreate(element);
+  });
+
+  const datetimePickerElements = root.querySelectorAll("[data-rg-datetime-picker]");
+  datetimePickerElements.forEach(element => {
+    DatetimePicker.getOrCreate(element);
+  });
+
+  const selectElements = root.querySelectorAll("[data-rg-select]");
+  selectElements.forEach(element => {
+    Select.getOrCreate(element);
+  });
+
+  const comboboxElements = root.querySelectorAll("[data-rg-combobox]");
+  comboboxElements.forEach(element => {
+    Combobox.getOrCreate(element);
+  });
+
+  const tagsInputs = root.querySelectorAll("[data-rg-tags-input]");
+  tagsInputs.forEach(element => {
+    TagsInput.getOrCreate(element);
+  });
+
+  const dataTables = root.querySelectorAll("[data-rg-table]");
+  dataTables.forEach(element => {
+    DataTable.getOrCreate(element);
+  });
+
+  const maskedInputs = root.querySelectorAll("[data-rg-mask]");
+  maskedInputs.forEach(element => {
+    _applyMaskToInput(element);
+  });
 }
 
 if (typeof document !== "undefined") {
@@ -1364,6 +2589,13 @@ const Rarog = {
   Popover,
   Carousel,
   Stepper,
+  Datepicker,
+  DatetimePicker,
+  Select,
+  Combobox,
+  TagsInput,
+  DataTable,
+  InputMask,
   Events,
   config: RarogConfig,
   initDataApi,
@@ -1382,6 +2614,13 @@ export {
   Popover,
   Carousel,
   Stepper,
+  Datepicker,
+  DatetimePicker,
+  Select,
+  Combobox,
+  TagsInput,
+  DataTable,
+  InputMask,
   Events,
   initDataApi,
   init,

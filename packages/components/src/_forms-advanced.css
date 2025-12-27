@@ -1,0 +1,401 @@
+/* -------------------------------------------------------------------------- */
+/* Advanced form components: datepicker, select/combobox, tags-input          */
+/* -------------------------------------------------------------------------- */
+
+/* Datepicker / Datetime picker --------------------------------------------- */
+
+.rg-datepicker,
+.rg-datetime-picker {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--rarog-space-1);
+  width: 100%;
+}
+
+.rg-datepicker-input,
+.rg-datetime-input {
+  padding-inline-end: calc(var(--rarog-space-8));
+}
+
+.rg-datepicker-icon,
+.rg-datetime-icon {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--rarog-space-3);
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--rarog-color-text-muted);
+}
+
+.rg-datepicker-popup {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(100% + var(--rarog-space-1));
+  min-width: 16rem;
+  border-radius: var(--rarog-radius-lg);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-bg-elevated, var(--rarog-color-surface));
+  box-shadow: var(--rarog-shadow-lg);
+  padding: var(--rarog-space-3);
+  z-index: 40;
+}
+
+.rg-datepicker-popup.is-open {
+  display: block;
+}
+
+.rg-datepicker-popup[hidden] {
+  display: none;
+}
+
+.rg-datepicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rarog-space-2);
+  margin-block-end: var(--rarog-space-2);
+}
+
+.rg-datepicker-title {
+  font-size: var(--rarog-font-size-sm);
+  font-weight: var(--rarog-font-weight-medium);
+}
+
+.rg-datepicker-prev,
+.rg-datepicker-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--rarog-radius-full);
+  border: none;
+  background-color: transparent;
+  color: var(--rarog-color-text-muted);
+  cursor: pointer;
+}
+
+.rg-datepicker-prev:hover,
+.rg-datepicker-next:hover {
+  background-color: var(--rarog-color-surface-subtle);
+}
+
+.rg-datepicker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  margin-block-end: 0.25rem;
+  font-size: var(--rarog-font-size-xs);
+  color: var(--rarog-color-text-muted);
+  text-align: center;
+}
+
+.rg-datepicker-weekdays span {
+  padding-block: 0.25rem;
+}
+
+.rg-datepicker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.rg-datepicker-day {
+  border-radius: var(--rarog-radius-md);
+  border: none;
+  background-color: transparent;
+  padding-block: 0.375rem;
+  font-size: var(--rarog-font-size-sm);
+  cursor: pointer;
+  text-align: center;
+}
+
+.rg-datepicker-day.is-today {
+  border: 1px solid var(--rarog-color-primary-400);
+}
+
+.rg-datepicker-day.is-selected {
+  background-color: var(--rarog-color-primary-600);
+  color: var(--rarog-color-primary-contrast);
+}
+
+.rg-datepicker-day:hover {
+  background-color: var(--rarog-color-surface-subtle);
+}
+
+/* Select ------------------------------------------------------------------- */
+
+.rg-select {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--rarog-space-1);
+  width: 100%;
+}
+
+.rg-select-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rarog-space-2);
+  width: 100%;
+  padding-inline: var(--rarog-space-3);
+  padding-block: var(--rarog-space-2);
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-surface);
+  color: var(--rarog-color-text);
+  font-size: var(--rarog-font-size-sm);
+  cursor: pointer;
+}
+
+.rg-select-toggle:is(:hover, :focus-visible) {
+  border-color: var(--rarog-color-primary-500);
+  box-shadow: var(--rarog-shadow-xs);
+}
+
+.rg-select-label {
+  flex: 1;
+  text-align: start;
+}
+
+.rg-select-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rarog-color-text-muted);
+}
+
+.rg-select-menu {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(100% + var(--rarog-space-1));
+  min-width: 100%;
+  max-height: 14rem;
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-bg-elevated, var(--rarog-color-surface));
+  box-shadow: var(--rarog-shadow-lg);
+  padding-block: 0.25rem;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.rg-select-menu[hidden] {
+  display: none;
+}
+
+.rg-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rarog-space-2);
+  width: 100%;
+  padding-inline: var(--rarog-space-3);
+  padding-block: 0.375rem;
+  font-size: var(--rarog-font-size-sm);
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  text-align: start;
+}
+
+.rg-select-option.is-active {
+  background-color: var(--rarog-color-surface-subtle);
+}
+
+.rg-select-option.is-selected {
+  color: var(--rarog-color-primary-600);
+  font-weight: var(--rarog-font-weight-medium);
+}
+
+.rg-select-option-icon {
+  color: var(--rarog-color-primary-500);
+}
+
+/* Combobox ----------------------------------------------------------------- */
+
+.rg-combobox {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--rarog-space-1);
+  width: 100%;
+}
+
+.rg-combobox-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--rarog-space-1);
+  padding-inline: var(--rarog-space-3);
+  padding-block: var(--rarog-space-1-5, 0.375rem);
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-surface);
+}
+
+.rg-combobox-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: var(--rarog-font-size-sm);
+}
+
+.rg-combobox-toggle {
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--rarog-color-text-muted);
+  cursor: pointer;
+}
+
+.rg-combobox-inner:is(:focus-within, :hover) {
+  border-color: var(--rarog-color-primary-500);
+  box-shadow: var(--rarog-shadow-xs);
+}
+
+.rg-combobox-list {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(100% + var(--rarog-space-1));
+  min-width: 100%;
+  max-height: 14rem;
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-bg-elevated, var(--rarog-color-surface));
+  box-shadow: var(--rarog-shadow-lg);
+  padding-block: 0.25rem;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.rg-combobox-list[hidden] {
+  display: none;
+}
+
+.rg-combobox-option {
+  display: block;
+  width: 100%;
+  padding-inline: var(--rarog-space-3);
+  padding-block: 0.375rem;
+  font-size: var(--rarog-font-size-sm);
+  cursor: pointer;
+}
+
+.rg-combobox-option.is-active {
+  background-color: var(--rarog-color-surface-subtle);
+}
+
+.rg-combobox-option.is-selected {
+  color: var(--rarog-color-primary-600);
+  font-weight: var(--rarog-font-weight-medium);
+}
+
+/* Tags input --------------------------------------------------------------- */
+
+.rg-tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rarog-space-1);
+  padding-inline: var(--rarog-space-2);
+  padding-block: var(--rarog-space-1);
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-surface);
+  cursor: text;
+}
+
+.rg-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rarog-space-1);
+}
+
+.rg-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-inline: 0.5rem;
+  padding-block: 0.125rem;
+  border-radius: 999px;
+  background-color: var(--rarog-color-surface-subtle);
+  color: var(--rarog-color-text-muted);
+  font-size: var(--rarog-font-size-xs);
+}
+
+.rg-tag-label {
+  line-height: 1.2;
+}
+
+.rg-tag-remove {
+  border: none;
+  background: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--rarog-color-text-muted);
+}
+
+.rg-tags-input-input {
+  flex: 1;
+  min-width: 6ch;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: var(--rarog-font-size-sm);
+}
+
+/* Validation integration --------------------------------------------------- */
+
+.rg-select.is-invalid .rg-select-toggle,
+.has-error .rg-select-toggle,
+.rg-tags-input.is-invalid,
+.has-error .rg-tags-input,
+.rg-combobox.is-invalid .rg-combobox-inner,
+.has-error .rg-combobox-inner,
+.rg-datepicker.is-invalid .rg-datepicker-input,
+.rg-datetime-picker.is-invalid .rg-datetime-input {
+  border-color: var(--rarog-color-danger-500);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--rarog-color-danger-500) 40%, transparent);
+}
+
+.rg-select.is-valid .rg-select-toggle,
+.rg-tags-input.is-valid,
+.rg-combobox.is-valid .rg-combobox-inner,
+.rg-datepicker.is-valid .rg-datepicker-input,
+.rg-datetime-picker.is-valid .rg-datetime-input {
+  border-color: var(--rarog-color-success-500);
+}
+
+.rg-select-xs .rg-select-toggle,
+.rg-combobox-xs .rg-combobox-inner,
+.rg-tags-input-xs {
+  padding-block: 0.25rem;
+  padding-inline: var(--rarog-space-2);
+  font-size: var(--rarog-font-size-xs);
+}
+
+.rg-select-sm .rg-select-toggle,
+.rg-combobox-sm .rg-combobox-inner,
+.rg-tags-input-sm {
+  padding-block: 0.375rem;
+  font-size: var(--rarog-font-size-sm);
+}
+
+.rg-select-lg .rg-select-toggle,
+.rg-combobox-lg .rg-combobox-inner,
+.rg-tags-input-lg {
+  padding-block: 0.625rem;
+  font-size: var(--rarog-font-size-base);
+}

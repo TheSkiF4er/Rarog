@@ -195,3 +195,27 @@
 .invalid-feedback {
   color: var(--rarog-color-danger, var(--rarog-color-danger-400));
 }
+
+/* Extended validation helpers --------------------------------------------- */
+
+.has-warning .form-control,
+.has-warning .input {
+  border-color: var(--rarog-color-warning-500);
+}
+
+.form-message {
+  margin-block-start: 0.25rem;
+  font-size: var(--rarog-font-size-xs);
+}
+
+.form-message-error {
+  color: var(--rarog-color-danger-500);
+}
+
+.form-message-warning {
+  color: var(--rarog-color-warning-500);
+}
+
+.form-message-success {
+  color: var(--rarog-color-success-500);
+}

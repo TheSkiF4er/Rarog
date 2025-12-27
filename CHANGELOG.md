@@ -6,6 +6,34 @@
 
 
 
+## [3.1.0] - 2025-12-27
+
+**Фокус:** расширенные форменные компоненты (datepicker, select/combobox, tags-input), input-маски и Data Table (MVP).
+
+### Добавлено
+- `rg-datepicker` и `rg-datetime-picker` — базовый календарь на JS с popup-окном, управлением через data-атрибуты и событиями `rg:datepicker:*`.
+- `rg-select` — настраиваемый select с поддержкой single/multiple, клавиатурной навигации и data-API (`data-rg-select`).
+- `rg-combobox` — комбинированный input+dropdown с поиском по опциям и событиями `rg:combobox:*`.
+- `rg-tags-input` — компонент для ввода тегов с добавлением по Enter/запятой, удалением по Backspace и интеграцией с валидацией.
+- Input masks (`data-rg-mask="phone|card|custom"`) и API `Rarog.InputMask.register()` для подключения своих масок.
+- `DataTable` (MVP) — сортировка по колонкам (`data-rg-sort`), поиск по таблице и клиентская пагинация через `data-rg-table`.
+
+### Улучшено
+- Валидационные состояния: `has-warning`, `form-message-*` для унифицированных сообщений об ошибках/успехе.
+- Табличные паттерны: вспомогательные классы для сортировки и пагинации (`rg-table`, `rg-table-pagination`).
+
+### Документация
+- Обновлён раздел **Components**: добавлены блоки по advanced form-компонентам и Data Table.
+- В разделе **Accessibility** — заметки по a11y для новых форменных и табличных компонентов.
+
+
+
+
+
+
+
+
+
 
 
 ## [3.0.0] - 2025-12-27

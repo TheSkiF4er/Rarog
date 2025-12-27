@@ -297,3 +297,140 @@
 - **Dropdown / Tooltip / Popover** — не прячьте критически важную информацию только в hover-состоянии, дублируйте текстом.
 - **Carousel / Stepper** — используйте понятные подписи и информируйте пользователя о текущем состоянии (номер шага, номер слайда).
 
+
+## Advanced forms: datepicker, select, combobox, tags-input
+
+В 3.1.0 поверх базового форменного слоя появились более «богатые» компоненты, которые
+закрывают типовые кейсы форм без сторонних библиотек.
+
+### Datepicker / Datetime picker
+
+Компонент `rg-datepicker`/`rg-datetime-picker` представляет собой обёртку над `<input>`,
+которая рендерит popup-календарь и управляется через data-API:
+
+```html
+<div class="rg-datepicker" data-rg-datepicker>
+  <label class="form-label">Дата рождения</label>
+  <input
+    type="date"
+    class="form-control rg-datepicker-input"
+    name="birthday"
+    placeholder="Выберите дату"
+  />
+</div>
+```
+
+- JS-инициализация: автоматически через `initDataApi()` (по `data-rg-datepicker`).
+- События: `rg:datepicker:show`, `rg:datepicker:hide`, `rg:datepicker:select`.
+- Формат значения по умолчанию — `YYYY-MM-DD` (совместим с `type="date"`).
+
+Для datetime-варианта используется `data-rg-datetime-picker` и `<input type="datetime-local">`.
+
+### Select / Combobox
+
+`rg-select` — настраиваемый выпадающий список с поддержкой single/multiple:
+
+```html
+<div class="rg-select" data-rg-select data-rg-multiple="false">
+  <button type="button" class="rg-select-toggle" data-rg-select-toggle>
+    <span class="rg-select-label" data-rg-placeholder="Выберите опцию"></span>
+    <span class="rg-select-icon">▾</span>
+  </button>
+  <div class="rg-select-menu" data-rg-select-menu hidden>
+    <button type="button" class="rg-select-option" data-rg-value="basic">
+      Basic
+    </button>
+    <button type="button" class="rg-select-option" data-rg-value="pro">
+      Pro
+    </button>
+  </div>
+  <input type="hidden" name="plan" />
+</div>
+```
+
+`rg-combobox` добавляет текстовый input и поиск по опциям:
+
+```html
+<div class="rg-combobox" data-rg-combobox>
+  <div class="rg-combobox-inner">
+    <input class="rg-combobox-input" placeholder="Найдите пользователя" />
+    <button type="button" class="rg-combobox-toggle" aria-label="Открыть список">▾</button>
+  </div>
+  <div class="rg-combobox-list" hidden>
+    <button type="button" class="rg-combobox-option" data-rg-value="1">Alice</button>
+    <button type="button" class="rg-combobox-option" data-rg-value="2">Bob</button>
+  </div>
+  <input type="hidden" name="user_id" />
+</div>
+```
+
+### Tags input
+
+`rg-tags-input` — компонент для ввода тегов (например, интересов или ключевых слов):
+
+```html
+<div class="rg-tags-input" data-rg-tags-input>
+  <div class="rg-tags"></div>
+  <input class="rg-tags-input-input" placeholder="Добавьте тег и нажмите Enter" />
+  <input type="hidden" name="tags" value="design,frontend" />
+</div>
+```
+
+Поведение по умолчанию:
+
+- Enter или запятая — добавляют новый тег;
+- Backspace на пустом input — удаляет последний тег;
+- значения синхронизируются с `hidden`-полем (через запятую).
+
+Компонент интегрируется с валидацией через классы `.is-valid`/`.is-invalid`/`.has-warning`.
+
+## Data Table (MVP)
+
+`DataTable` закрывает базовый сценарий работы с таблицами: сортировка, поиск и
+клиентская пагинация.
+
+Разметка:
+
+```html
+<div class="table-card" data-rg-table data-rg-page-size="10">
+  <div class="table-toolbar">
+    <div class="table-toolbar-left">
+      <span class="text-muted">Пользователи</span>
+    </div>
+    <div class="table-toolbar-right">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Поиск"
+        data-rg-table-search
+      />
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table rg-table">
+      <thead>
+        <tr>
+          <th data-rg-sort="name">Имя</th>
+          <th data-rg-sort="role">Роль</th>
+          <th data-rg-sort="age" data-rg-sort-type="number">Возраст</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- строки данных -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rg-table-pagination" data-rg-table-pagination></div>
+</div>
+```
+
+Возможности:
+
+- Поиск по таблице (по тексту строки) через `data-rg-table-search`.
+- Сортировка по колонкам с `data-rg-sort` (+ `data-rg-sort-type="number"` при необходимости).
+- Клиентская пагинация при наличии `data-rg-table-pagination` и `data-rg-page-size`.
+
+Все компоненты автоматически инициализируются при вызове `Rarog.initDataApi()` или
+`Rarog.init()`.
