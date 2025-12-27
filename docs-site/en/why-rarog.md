@@ -22,3 +22,19 @@ used in any PHP/JS stack.
 - You like **utility-first** workflow, but still want components and JS.
 - You plan to build a product with **clear theming** and **multi-branding**.
 - You want a framework that is **open-source** and evolves in the open.
+
+
+## UI kits and templates
+
+Starting from 2.9.0, Rarog ships not only as a framework but also with
+ready‑made UI kits:
+
+- **Rarog UI Admin** — admin dashboard;
+- **Rarog Landing Kit** — landing page sections;
+- **Rarog SaaS Starter** — auth/dashboard/settings/billing layout.
+
+These help you:
+
+- show Rarog “in action” to your team or stakeholders;
+- copy layouts into Laravel/React/Next.js/Cajeer projects;
+- treat Rarog as part of a full design system, not just a CSS layer.

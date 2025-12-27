@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rarog SaaS Starter – Dashboard</title>
+  <link rel="stylesheet" href="../../dist/rarog-core.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-utilities.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-components.min.css" />
+  <script src="../../packages/js/dist/rarog.js" defer></script>
+</head>
+<body class="p-4">
+  <header class="navbar mb-4">
+    <div class="navbar-inner">
+      <div class="d-flex items-center gap-3">
+        <a href="#" class="navbar-brand">
+          <span class="navbar-logo">Rarog SaaS</span>
+        </a>
+        <span class="badge badge-outline">Starter</span>
+      </div>
+      <nav class="navbar-nav d-none md:d-flex">
+        <a href="dashboard.html" class="navbar-link navbar-link-active">Dashboard</a>
+        <a href="settings.html" class="navbar-link">Настройки</a>
+        <a href="settings.html#billing" class="navbar-link">Billing</a>
+      </nav>
+      <div class="d-flex items-center gap-2">
+        <span class="text-muted" style="font-size: 0.85rem;">you@example.com</span>
+        <button class="btn btn-ghost btn-sm">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="rg-container-lg">
+    <div class="rg-row rg-gap-y-4">
+      <div class="rg-col-12 rg-col-md-8">
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-between items-center">
+            <span>Usage overview</span>
+            <span class="badge badge-success">План Pro</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              Примеры блоков usage: здесь могут быть графики, статистика по API‑запросам, хранилищу и т.п.
+            </p>
+            <div class="rg-row rg-gap-y-4">
+              <div class="rg-col-12 rg-col-md-4">
+                <div class="card">
+                  <div class="card-header">API calls</div>
+                  <div class="card-body">
+                    <div style="font-size: 1.4rem; font-weight: 600;">120k</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">из 500k лимита</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rg-col-12 rg-col-md-4">
+                <div class="card">
+                  <div class="card-header">Storage</div>
+                  <div class="card-body">
+                    <div style="font-size: 1.4rem; font-weight: 600;">18 GB</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">из 50 GB</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rg-col-12 rg-col-md-4">
+                <div class="card">
+                  <div class="card-header">Active seats</div>
+                  <div class="card-body">
+                    <div style="font-size: 1.4rem; font-weight: 600;">7</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">из 10 мест</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-between items-center">
+            <span class="text-muted" style="font-size: 0.85rem;">Данные демо‑проекта.</span>
+            <a href="settings.html#billing" class="btn btn-secondary btn-sm">Управлять планом</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Recent activity</div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <strong>Новый workspace создан</strong>
+                <div class="text-muted" style="font-size: 0.8rem;">5 минут назад</div>
+              </li>
+              <li class="list-group-item">
+                <strong>План обновлён до Pro</strong>
+                <div class="text-muted" style="font-size: 0.8rem;">2 часа назад</div>
+              </li>
+              <li class="list-group-item">
+                <strong>Добавлен новый участник команды</strong>
+                <div class="text-muted" style="font-size: 0.8rem;">Вчера</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="rg-col-12 rg-col-md-4">
+        <div class="card mb-4">
+          <div class="card-header">Onboarding checklist</div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <input type="checkbox" checked /> Подключить домен
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" /> Настроить webhooks
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" /> Пригласить команду
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Next steps</div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              Этот layout можно использовать как базу для любого SaaS‑dashboard.
+            </p>
+            <a href="settings.html" class="btn btn-primary w-full mb-2">Перейти в настройки</a>
+            <a href="#" class="btn btn-ghost w-full">Открыть документацию API</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

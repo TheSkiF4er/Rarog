@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rarog UI Admin – Dashboard</title>
+  <link rel="stylesheet" href="../../dist/rarog-core.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-utilities.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-components.min.css" />
+  <script src="../../packages/js/dist/rarog.js" defer></script>
+  <style>
+    body {
+      background-color: var(--rarog-color-bg, #020617);
+      color: var(--rarog-color-text, #e5e7eb);
+    }
+
+    .admin-layout {
+      min-height: 100vh;
+    }
+
+    .admin-sidebar {
+      width: 260px;
+      border-right: 1px solid var(--rarog-color-border);
+      background-color: var(--rarog-color-bg-soft, #020617);
+    }
+
+    .admin-sidebar-header {
+      padding: var(--rarog-space-4);
+      border-bottom: 1px solid var(--rarog-color-border-subtle, rgba(148, 163, 184, 0.3));
+    }
+
+    .admin-sidebar-nav {
+      padding: var(--rarog-space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--rarog-space-2);
+    }
+
+    .admin-sidebar-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: var(--rarog-space-3);
+      padding-block: var(--rarog-space-2);
+      border-radius: var(--rarog-radius-md);
+      text-decoration: none;
+      color: var(--rarog-color-text-muted, #9ca3af);
+      font-size: 0.9rem;
+    }
+
+    .admin-sidebar-link.is-active,
+    .admin-sidebar-link:hover {
+      background-color: var(--rarog-color-primary-soft, rgba(59, 130, 246, 0.12));
+      color: var(--rarog-color-primary-100, #dbeafe);
+    }
+
+    .admin-main {
+      flex: 1 1 auto;
+      padding: var(--rarog-space-4);
+    }
+
+    .admin-main-header {
+      margin-bottom: var(--rarog-space-4);
+    }
+
+    .status-dot {
+      inline-size: 0.5rem;
+      block-size: 0.5rem;
+      border-radius: 999px;
+      background-color: #22c55e;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout d-flex">
+    <aside class="admin-sidebar d-none md:d-flex flex-column">
+      <div class="admin-sidebar-header d-flex items-center justify-between gap-3">
+        <div>
+          <div class="text-primary mb-1" style="font-weight: 600;">Rarog Admin</div>
+          <div class="text-muted" style="font-size: 0.8rem;">Demo dashboard kit</div>
+        </div>
+        <span class="badge badge-success">v2.9</span>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <a href="#" class="admin-sidebar-link is-active">
+          <span>Overview</span>
+          <span class="status-dot"></span>
+        </a>
+        <a href="#" class="admin-sidebar-link">
+          <span>Users</span>
+          <span class="badge badge-secondary">128</span>
+        </a>
+        <a href="#" class="admin-sidebar-link">
+          <span>Billing</span>
+        </a>
+        <a href="#" class="admin-sidebar-link">
+          <span>Settings</span>
+        </a>
+        <hr class="m-0" />
+        <a href="#" class="admin-sidebar-link">
+          <span>Docs</span>
+        </a>
+      </nav>
+    </aside>
+
+    <div class="admin-main d-flex flex-column w-full">
+      <header class="navbar navbar-sticky admin-main-header">
+        <div class="navbar-inner">
+          <div class="d-flex items-center gap-3">
+            <button
+              class="btn btn-ghost d-inline-flex md:d-none"
+              type="button"
+              aria-label="Toggle sidebar"
+              data-rg-toggle="offcanvas"
+              data-rg-target="#adminSidebarOffcanvas"
+            >
+              ☰
+            </button>
+            <h1 class="h4 m-0">Dashboard</h1>
+            <span class="badge badge-outline">Today</span>
+          </div>
+
+          <div class="d-flex items-center gap-3">
+            <button class="btn btn-ghost" data-rg-toggle="modal" data-rg-target="#createProjectModal">
+              + New project
+            </button>
+            <button class="btn btn-ghost" data-rg-toggle="toast" data-rg-target="#savedToast">
+              Save
+            </button>
+            <div class="avatar-small bg-primary rounded-full d-inline-flex items-center justify-center p-2">
+              <span class="sr-only">Open profile</span>
+              <span>SK</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- KPIs row -->
+      <section class="rg-container-lg mb-4">
+        <div class="rg-row rg-gap-y-4">
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card">
+              <div class="card-header">MRR</div>
+              <div class="card-body">
+                <div class="d-flex items-center justify-between">
+                  <div>
+                    <div style="font-size: 1.5rem; font-weight: 600;">$24,300</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">+12% vs last month</div>
+                  </div>
+                  <span class="badge badge-success">↑</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card">
+              <div class="card-header">Active users</div>
+              <div class="card-body">
+                <div class="d-flex items-center justify-between">
+                  <div>
+                    <div style="font-size: 1.5rem; font-weight: 600;">1,238</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">+89 new this week</div>
+                  </div>
+                  <span class="badge badge-primary">Live</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card">
+              <div class="card-header">Error rate</div>
+              <div class="card-body">
+                <div class="d-flex items-center justify-between">
+                  <div>
+                    <div style="font-size: 1.5rem; font-weight: 600;">0.21%</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">SLA is healthy</div>
+                  </div>
+                  <span class="badge badge-warning">OK</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Table + filters -->
+      <section class="rg-container-lg">
+        <div class="card">
+          <div class="card-header d-flex justify-between items-center">
+            <span>Recent users</span>
+            <button class="btn btn-secondary btn-sm">Export</button>
+          </div>
+          <div class="card-body">
+            <div class="table-toolbar">
+              <div class="table-toolbar-left">
+                <button class="btn btn-outline btn-sm">Bulk actions</button>
+                <select class="input" style="max-width: 160px;">
+                  <option>All</option>
+                  <option>Active</option>
+                  <option>Invited</option>
+                  <option>Blocked</option>
+                </select>
+              </div>
+              <div class="table-toolbar-right">
+                <input type="search" class="input" placeholder="Search users..." style="max-width: 220px;" />
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">
+                      <input type="checkbox" />
+                    </th>
+                    <th scope="col">User</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Last active</th>
+                    <th scope="col" class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>Jane Doe</td>
+                    <td>Admin</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td>5 min ago</td>
+                    <td class="text-right">
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>Alex Smith</td>
+                    <td>Member</td>
+                    <td><span class="badge badge-secondary">Invited</span></td>
+                    <td>1 day ago</td>
+                    <td class="text-right">
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>Chris Lee</td>
+                    <td>Owner</td>
+                    <td><span class="badge badge-danger">Blocked</span></td>
+                    <td>2 weeks ago</td>
+                    <td class="text-right">
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-between items-center">
+            <span class="text-muted" style="font-size: 0.85rem;">Showing 3 of 128 users</span>
+            <nav class="pagination">
+              <button class="page-link">Prev</button>
+              <button class="page-link is-active">1</button>
+              <button class="page-link">2</button>
+              <button class="page-link">Next</button>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings / form row -->
+      <section class="rg-container-lg mt-4 mb-4">
+        <div class="rg-row rg-gap-y-4">
+          <div class="rg-col-12 rg-col-md-6">
+            <div class="card">
+              <div class="card-header">Project settings</div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label class="label" for="projectName">Project name</label>
+                  <input id="projectName" class="input" value="Rarog Admin Demo" />
+                </div>
+                <div class="mb-3">
+                  <label class="label" for="projectSlug">Slug</label>
+                  <input id="projectSlug" class="input" value="rarog-admin" />
+                </div>
+                <div class="mb-3">
+                  <label class="label" for="timezone">Timezone</label>
+                  <select id="timezone" class="input">
+                    <option>UTC</option>
+                    <option selected>Europe/Riga</option>
+                    <option>America/New_York</option>
+                  </select>
+                </div>
+              </div>
+              <div class="card-footer d-flex justify-end gap-2">
+                <button class="btn btn-ghost btn-sm">Cancel</button>
+                <button class="btn btn-primary btn-sm">Save changes</button>
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-6">
+            <div class="card">
+              <div class="card-header">Activity</div>
+              <div class="card-body">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <strong>You</strong> created project <code>rarog-admin</code>.
+                    <div class="text-muted" style="font-size: 0.8rem;">5 minutes ago</div>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>System</strong> synced tokens with Figma.
+                    <div class="text-muted" style="font-size: 0.8rem;">1 hour ago</div>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Deploy</strong> to production succeeded.
+                    <div class="text-muted" style="font-size: 0.8rem;">Yesterday</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="rg-container-lg mt-4 mb-4 text-muted" style="font-size: 0.8rem;">
+        Built with Rarog UI Admin Kit (examples/ui-kits/admin-dashboard).
+      </footer>
+    </div>
+  </div>
+
+  <!-- Mobile sidebar (offcanvas) -->
+  <div class="offcanvas offcanvas-left" id="adminSidebarOffcanvas" aria-hidden="true">
+    <div class="offcanvas-header">
+      <div class="offcanvas-title">Navigation</div>
+      <button class="btn btn-ghost" data-rg-dismiss="offcanvas" aria-label="Close">
+        ✕
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <nav class="navbar-nav d-flex flex-column gap-2">
+        <a href="#" class="navbar-link">Overview</a>
+        <a href="#" class="navbar-link">Users</a>
+        <a href="#" class="navbar-link">Billing</a>
+        <a href="#" class="navbar-link">Settings</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="createProjectModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="card-header m-0">Create project</h2>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="label" for="newProjectName">Name</label>
+          <input id="newProjectName" class="input" />
+        </div>
+        <div class="mb-3">
+          <label class="label" for="newProjectDesc">Description</label>
+          <textarea id="newProjectDesc" class="input" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-end gap-2">
+        <button class="btn btn-secondary" data-rg-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast toast-bottom-right" id="savedToast" aria-live="polite" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Changes saved</strong>
+      <small>Just now</small>
+      <button type="button" class="btn btn-ghost btn-sm" data-rg-dismiss="toast" aria-label="Close">
+        ✕
+      </button>
+    </div>
+    <div class="toast-body">
+      Your dashboard configuration has been saved.
+    </div>
+  </div>
+</body>
+</html>

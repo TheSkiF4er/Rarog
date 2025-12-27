@@ -115,3 +115,17 @@ JIT найдёт классы в:
 - `clsx(...)` / `cx(...)` / `classnames(...)`.
 
 Подробнее — в разделе [Variants & JIT](/variants-jit).
+
+## UI‑киты как React‑страницы
+
+UI‑киты из монорепы можно использовать как основу для React‑компонентов:
+
+- `examples/ui-kits/admin-dashboard/index.html` → страница `/admin`;
+- `examples/ui-kits/landing-kit/index.html` → публичный лендинг;
+- `examples/ui-kits/saas-starter/*.html` → auth/dashboard/settings.
+
+Типичный flow:
+
+1. Копируете HTML‑разметку в JSX/TSX.
+2. Заменяете статические тексты и списки на пропсы/стейт.
+3. Подключаете Rarog CSS/JS как описано выше (через Vite plugin/JIT).

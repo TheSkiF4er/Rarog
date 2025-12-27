@@ -6,6 +6,26 @@
 
 
 
+
+## [2.9.0] - 2025-12-27
+
+### Добавлено
+- Rarog UI Kits & Templates:
+  - **Rarog UI Admin** (`examples/ui-kits/admin-dashboard`) — демонстрационный admin‑dashboard с sidebar, navbar, KPI‑карточками, таблицами, формами, модалками и toast‑уведомлениями;
+  - **Rarog Landing Kit** (`examples/ui-kits/landing-kit`) — набор секций для лендингов (hero, features, pricing, blog, FAQ, CTA);
+  - **Rarog SaaS Starter** (`examples/ui-kits/saas-starter`) — мини‑проект с layout’ами auth, dashboard и settings/billing для SaaS‑приложений.
+- Showcase & Docs:
+  - новая страница **Showcase & UI Kits** в документации;
+  - обновлённые Laravel/React/Next.js/Cajeer guides с примерами интеграции UI‑китов;
+  - дополнения в **Why Rarog** и README про UI‑киты и позиционирование Rarog как «готового» решения.
+- Guides & Examples:
+  - связка guides ↔ examples через ссылки на `examples/ui-kits/*`;
+  - README обновлён списком доступных starters и UI‑китов.
+
+### Изменено
+- Версия фреймворка обновлена до `2.9.0` в README и документации.
+- Навигация docs дополнена пунктом **Showcase** в верхнем меню и сайдбаре.
+
 ## [2.8.0] - 2025-12-27
 
 ### Добавлено

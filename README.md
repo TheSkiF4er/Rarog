@@ -1,11 +1,11 @@
-# Rarog CSS Framework 2.0.0
+# Rarog CSS Framework 2.9.0
 
 **Rarog** — современный, лёгкий и расширяемый CSS‑фреймворк для создания быстрых, выразительных и масштабируемых интерфейсов.
 
 - Автор: **TheSkiF4er**
 - Лицензия: **Apache 2.0**
 - Контакты: `support@cajeer.ru`
-- Текущая версия: **2.0.0**
+- Текущая версия: **2.9.0**
 
 ## Особенности
 
@@ -32,7 +32,7 @@
 <div class="rg-container mt-4">
   <div class="card">
     <div class="card-header">
-      Добро пожаловать в Rarog 1.0.0
+      Добро пожаловать в Rarog 2.9.0
     </div>
     <p class="text-muted">
       Это современный CSS‑фреймворк с design‑tokens, утилитами и компонентами.
@@ -107,6 +107,9 @@ npm run docs:build
 - `html-basic` — чистый HTML starter;
 - `laravel` — базовый гайд по интеграции в Laravel;
 - `vite-react` — Vite + React starter с подключённым Rarog.
+- `ui-kits/admin-dashboard` — готовый admin‑dashboard;
+- `ui-kits/landing-kit` — лендинговые секции;
+- `ui-kits/saas-starter` — SaaS‑layout’ы (auth, dashboard, settings/billing).
 
 Рекомендуется вынести примеры в отдельный репозиторий (например, `rarog-examples` или `rarog-starters`)
 и подключать их как сабмодули или через документацию.

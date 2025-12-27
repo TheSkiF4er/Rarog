@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rarog SaaS Starter – Settings & Billing</title>
+  <link rel="stylesheet" href="../../dist/rarog-core.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-utilities.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-components.min.css" />
+  <script src="../../packages/js/dist/rarog.js" defer></script>
+</head>
+<body class="p-4">
+  <header class="navbar mb-4">
+    <div class="navbar-inner">
+      <div class="d-flex items-center gap-3">
+        <a href="dashboard.html" class="navbar-brand">
+          <span class="navbar-logo">Rarog SaaS</span>
+        </a>
+        <span class="badge badge-outline">Starter</span>
+      </div>
+      <nav class="navbar-nav d-none md:d-flex">
+        <a href="dashboard.html" class="navbar-link">Dashboard</a>
+        <a href="settings.html" class="navbar-link navbar-link-active">Настройки</a>
+        <a href="#billing" class="navbar-link">Billing</a>
+      </nav>
+      <div class="d-flex items-center gap-2">
+        <span class="text-muted" style="font-size: 0.85rem;">you@example.com</span>
+        <button class="btn btn-ghost btn-sm">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="rg-container-lg">
+    <div class="rg-row rg-gap-y-4">
+      <div class="rg-col-12 rg-col-md-4">
+        <div class="card">
+          <div class="card-header">Настройки аккаунта</div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item"><a href="#profile">Профиль</a></li>
+              <li class="list-group-item"><a href="#security">Безопасность</a></li>
+              <li class="list-group-item"><a href="#billing">Billing & Usage</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="rg-col-12 rg-col-md-8">
+        <section id="profile" class="card mb-4">
+          <div class="card-header">Профиль</div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="label" for="name">Имя</label>
+              <input id="name" class="input" value="Dmitry" />
+            </div>
+            <div class="mb-3">
+              <label class="label" for="company">Компания</label>
+              <input id="company" class="input" value="Cajeer" />
+            </div>
+            <button class="btn btn-primary">Сохранить профиль</button>
+          </div>
+        </section>
+
+        <section id="security" class="card mb-4">
+          <div class="card-header">Безопасность</div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="label" for="passwordNew">Новый пароль</label>
+              <input id="passwordNew" type="password" class="input" />
+            </div>
+            <div class="mb-3">
+              <label class="label" for="twoFA">Двухфакторная аутентификация</label>
+              <select id="twoFA" class="input">
+                <option>Выключена</option>
+                <option selected>Через приложение‑аутентификатор</option>
+              </select>
+            </div>
+            <button class="btn btn-primary">Обновить настройки безопасности</button>
+          </div>
+        </section>
+
+        <section id="billing" class="card">
+          <div class="card-header d-flex justify-between items-center">
+            <span>Billing & Usage</span>
+            <span class="badge badge-success">План Pro</span>
+          </div>
+          <div class="card-body">
+            <div class="rg-row rg-gap-y-4">
+              <div class="rg-col-12 rg-col-md-6">
+                <h3 class="h5 mb-2">Платёжные данные</h3>
+                <p class="text-muted mb-2">
+                  Visa •••• 4242 — 12/26
+                </p>
+                <button class="btn btn-secondary btn-sm mb-2">
+                  Обновить карту
+                </button>
+                <p class="text-muted" style="font-size: 0.8rem;">
+                  Следующее списание: 29 $ — 1 числа следующего месяца.
+                </p>
+              </div>
+              <div class="rg-col-12 rg-col-md-6">
+                <h3 class="h5 mb-2">Лимиты usage</h3>
+                <ul class="list-group mb-2">
+                  <li class="list-group-item d-flex justify-between">
+                    <span>API calls</span>
+                    <span>120k / 500k</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-between">
+                    <span>Storage</span>
+                    <span>18 GB / 50 GB</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-between">
+                    <span>Seats</span>
+                    <span>7 / 10</span>
+                  </li>
+                </ul>
+                <button class="btn btn-ghost btn-sm">
+                  Посмотреть детали в dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-between items-center">
+            <span class="text-muted" style="font-size: 0.85rem;">
+              Все значения — демо, адаптируйте под свой биллинг.
+            </span>
+            <button class="btn btn-danger btn-sm">
+              Отменить подписку
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

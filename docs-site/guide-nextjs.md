@@ -84,3 +84,17 @@ export default function Page() {
 ---
 
 Оптимизации и особенности JIT описаны в разделе [Performance & Bundle Size](/performance).
+
+## Использование UI‑китов в Next.js
+
+Любой из HTML‑layout’ов из `examples/ui-kits` можно перенести в `app/` или
+`pages/`:
+
+- Admin dashboard → `/app/(dashboard)/page.tsx`;
+- Landing Kit → `/app/page.tsx`;
+- SaaS Starter → `/app/(auth)/login/page.tsx`, `/app/(app)/dashboard/page.tsx` и т.п.
+
+Важно:
+
+- классы Rarog остаются без изменений;
+- сборка CSS/JS происходит через `rarog build` и подключается в `_app`/layout.

@@ -17,6 +17,7 @@ export default defineConfig({
       { text: 'Accessibility', link: '/accessibility' },
       { text: 'Theming', link: '/theming' },
       { text: 'Cookbook', link: '/cookbook' },
+      { text: 'Showcase', link: '/showcase' },
       {
         text: 'Guides',
         items: [
@@ -69,7 +70,8 @@ export default defineConfig({
           items: [
             { text: 'Integration Guides', link: '/integration-guides' },
       { text: 'IDE & Plugins', link: '/ide-plugins' },
-            { text: 'Playground', link: '/playground' }
+            { text: 'Playground', link: '/playground' },
+            { text: 'Showcase', link: '/showcase' }
           ]
         }
       ]

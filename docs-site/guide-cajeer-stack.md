@@ -83,3 +83,17 @@ export default config;
 - минимальный custom‑CSS;
 - возможность переиспользовать дизайн‑токены в Figma (`design/figma.tokens.json`).
 
+## UI‑киты для Cajeer‑стека
+
+Rarog UI‑киты удобно использовать как базовые layout’ы для админок и лендингов
+Cajeer:
+
+- Admin dashboard — панели управления CajeerEngine/новыми CMS;
+- Landing Kit — промо‑страницы продуктов Cajeer;
+- SaaS Starter — кабинеты и биллинг‑разделы.
+
+Подход:
+
+- копируете HTML в шаблоны Cajeer;
+- оставляете классы Rarog как есть;
+- подключаете Rarog как общий CSS/JS‑слой для всего проекта.

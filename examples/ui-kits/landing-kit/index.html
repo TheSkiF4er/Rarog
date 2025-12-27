@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rarog Landing Kit</title>
+  <link rel="stylesheet" href="../../dist/rarog-core.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-utilities.min.css" />
+  <link rel="stylesheet" href="../../dist/rarog-components.min.css" />
+  <script src="../../packages/js/dist/rarog.js" defer></script>
+  <style>
+    body {
+      background-color: var(--rarog-color-bg, #020617);
+      color: var(--rarog-color-text, #e5e7eb);
+    }
+
+    .hero {
+      padding-block: var(--rarog-space-10, 4rem);
+    }
+
+    .pricing-card-highlight {
+      border-width: 2px;
+      border-color: var(--rarog-color-primary);
+      box-shadow: var(--rarog-shadow-lg);
+    }
+
+    .section-muted {
+      background-color: var(--rarog-color-bg-soft, #020617);
+    }
+
+    .badge-pill {
+      border-radius: 999px;
+      padding-inline: var(--rarog-space-2);
+      padding-block: 2px;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar navbar-sticky">
+    <div class="navbar-inner">
+      <div class="d-flex items-center gap-3">
+        <a href="#" class="navbar-brand">
+          <span class="navbar-logo">Rarog</span>
+        </a>
+        <span class="badge badge-outline badge-pill">Landing Kit</span>
+      </div>
+      <nav class="navbar-nav d-none md:d-flex">
+        <a href="#features" class="navbar-link">Возможности</a>
+        <a href="#pricing" class="navbar-link">Тарифы</a>
+        <a href="#blog" class="navbar-link">Блог</a>
+        <a href="#faq" class="navbar-link">FAQ</a>
+      </nav>
+      <div class="d-flex items-center gap-2">
+        <button class="btn btn-ghost d-inline-flex md:d-none" data-rg-toggle="offcanvas" data-rg-target="#landingMenu">
+          ☰
+        </button>
+        <button class="btn btn-ghost d-none md:d-inline-flex">Войти</button>
+        <button class="btn btn-primary">Начать бесплатно</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="offcanvas offcanvas-end" id="landingMenu" aria-hidden="true">
+    <div class="offcanvas-header">
+      <div class="offcanvas-title">Меню</div>
+      <button class="btn btn-ghost" data-rg-dismiss="offcanvas" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="offcanvas-body">
+      <nav class="navbar-nav d-flex flex-column gap-2">
+        <a href="#features" class="navbar-link">Возможности</a>
+        <a href="#pricing" class="navbar-link">Тарифы</a>
+        <a href="#blog" class="navbar-link">Блог</a>
+        <a href="#faq" class="navbar-link">FAQ</a>
+      </nav>
+      <hr class="mt-3 mb-3" />
+      <button class="btn btn-ghost w-full mb-2">Войти</button>
+      <button class="btn btn-primary w-full">Начать бесплатно</button>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero">
+      <div class="rg-container-lg">
+        <div class="rg-row rg-gap-y-4">
+          <div class="rg-col-12 rg-col-md-6">
+            <span class="badge badge-secondary mb-2">Новый UI‑kit на Rarog</span>
+            <h1 class="h2 mb-3">
+              Запусти лендинг за вечер, <br />
+              не трогая кастомный CSS
+            </h1>
+            <p class="text-muted mb-4">
+              Rarog Landing Kit даёт готовые секции для SaaS, продуктов и сервисов:
+              hero, features, pricing, FAQ, блог и CTA — всё на дизайн‑токенах Rarog.
+            </p>
+            <div class="d-flex flex-column sm:flex-row gap-2">
+              <button class="btn btn-primary">Демо‑лендинг</button>
+              <button class="btn btn-ghost">Документация</button>
+            </div>
+            <p class="text-muted mt-3" style="font-size: 0.85rem;">
+              Без привязки к фреймворку — просто HTML + Rarog.
+            </p>
+          </div>
+          <div class="rg-col-12 rg-col-md-6">
+            <div class="card">
+              <div class="card-header">Пример секции pricing</div>
+              <div class="card-body">
+                <div class="rg-row rg-gap-y-4">
+                  <div class="rg-col-12 rg-col-md-6">
+                    <div class="card mb-3">
+                      <div class="card-header">Starter</div>
+                      <div class="card-body">
+                        <div style="font-size: 1.5rem; font-weight: 600;">$19</div>
+                        <div class="text-muted mb-3">в месяц</div>
+                        <ul class="mb-3">
+                          <li>До 3 проектов</li>
+                          <li>Базовые компоненты</li>
+                          <li>Поддержка по email</li>
+                        </ul>
+                        <button class="btn btn-secondary w-full">Выбрать</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rg-col-12 rg-col-md-6">
+                    <div class="card pricing-card-highlight">
+                      <div class="card-header d-flex justify-between items-center">
+                        <span>Pro</span>
+                        <span class="badge badge-primary">Популярно</span>
+                      </div>
+                      <div class="card-body">
+                        <div style="font-size: 1.8rem; font-weight: 600;">$39</div>
+                        <div class="text-muted mb-3">в месяц</div>
+                        <ul class="mb-3">
+                          <li>Неограниченно проектов</li>
+                          <li>Полный набор компонентов</li>
+                          <li>Приоритетная поддержка</li>
+                        </ul>
+                        <button class="btn btn-primary w-full">Попробовать Pro</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-muted mt-3" style="font-size: 0.8rem;">
+                  Этот блок — пример, как можно собирать pricing на Rarog без дополнительного CSS.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section-muted py-6">
+      <div class="rg-container-lg">
+        <h2 class="h3 mb-3">Что входит в Landing Kit</h2>
+        <p class="text-muted mb-4">
+          Набор секций, которые чаще всего встречаются в лендингах SaaS/продуктов.
+        </p>
+        <div class="rg-row rg-gap-y-4">
+          <div class="rg-col-12 rg-col-md-3">
+            <div class="card">
+              <div class="card-header">Hero</div>
+              <div class="card-body">
+                Большой заголовок, подзаголовок, CTA‑кнопки и бейджи для статусов продукта.
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-3">
+            <div class="card">
+              <div class="card-header">Features</div>
+              <div class="card-body">
+                Сетка преимуществ, иконки, подписи. Можно использовать и для roadmap.
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-3">
+            <div class="card">
+              <div class="card-header">Pricing</div>
+              <div class="card-body">
+                2–3 тарифа с выделенным «основным», списки фич и CTA‑кнопки.
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-3">
+            <div class="card">
+              <div class="card-header">FAQ & Blog</div>
+              <div class="card-body">
+                Частые вопросы и блок с последними статьями/новостями продукта.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing section (full) -->
+    <section id="pricing" class="py-6">
+      <div class="rg-container-lg">
+        <h2 class="h3 mb-3">Прозрачные тарифы</h2>
+        <p class="text-muted mb-4">
+          Настоящие цены вы задаёте в своём продукте — здесь только структура.
+        </p>
+        <div class="rg-row rg-gap-y-4">
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card">
+              <div class="card-header">Free</div>
+              <div class="card-body">
+                <div style="font-size: 1.5rem; font-weight: 600;">$0</div>
+                <div class="text-muted mb-3">на всегда</div>
+                <ul class="mb-3">
+                  <li>1 проект</li>
+                  <li>Ограниченный набор компонентов</li>
+                  <li>Базовая поддержка</li>
+                </ul>
+                <button class="btn btn-secondary w-full">Начать</button>
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card pricing-card-highlight">
+              <div class="card-header d-flex justify-between items-center">
+                <span>Pro</span>
+                <span class="badge badge-primary">Рекомендовано</span>
+              </div>
+              <div class="card-body">
+                <div style="font-size: 1.8rem; font-weight: 600;">$29</div>
+                <div class="text-muted mb-3">в месяц</div>
+                <ul class="mb-3">
+                  <li>До 10 проектов</li>
+                  <li>Все UI‑киты и компоненты</li>
+                  <li>Приоритетная поддержка</li>
+                </ul>
+                <button class="btn btn-primary w-full">Выбрать Pro</button>
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-4">
+            <div class="card">
+              <div class="card-header">Enterprise</div>
+              <div class="card-body">
+                <div style="font-size: 1.5rem; font-weight: 600;">Custom</div>
+                <div class="text-muted mb-3">по запросу</div>
+                <ul class="mb-3">
+                  <li>Неограниченно проектов</li>
+                  <li>White‑label темы</li>
+                  <li>Выделенная поддержка</li>
+                </ul>
+                <button class="btn btn-secondary w-full">Связаться с нами</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog & FAQ -->
+    <section id="blog" class="section-muted py-6">
+      <div class="rg-container-lg">
+        <div class="rg-row rg-gap-y-4">
+          <div class="rg-col-12 rg-col-md-6">
+            <h2 class="h3 mb-3">Последние статьи</h2>
+            <div class="card mb-3">
+              <div class="card-header">Как мы строим UI‑киты на Rarog</div>
+              <div class="card-body">
+                Краткий рассказ о том, как использовать дизайн‑токены, утилиты и компоненты вместе.
+              </div>
+            </div>
+            <div class="card mb-3">
+              <div class="card-header">Миграция с Bootstrap/Tailwind</div>
+              <div class="card-body">
+                Шаги для переноса существующего лендинга на Rarog без боли.
+              </div>
+            </div>
+          </div>
+          <div class="rg-col-12 rg-col-md-6" id="faq">
+            <h2 class="h3 mb-3">FAQ</h2>
+            <div class="list-group">
+              <div class="list-group-item">
+                <strong>Можно ли использовать только часть секций?</strong>
+                <p class="text-muted">
+                  Да, каждая секция — это независимый блок HTML, который можно копировать по отдельности.
+                </p>
+              </div>
+              <div class="list-group-item">
+                <strong>Поддерживает ли Landing Kit тёмную тему?</strong>
+                <p class="text-muted">
+                  Структура секций не зависит от темы — вы можете подключить `rarog-theme-dark` и переопределить цвета.
+                </p>
+              </div>
+              <div class="list-group-item">
+                <strong>Можно ли использовать его с React/Vue?</strong>
+                <p class="text-muted">
+                  Да, это обычная разметка и классы. См. React/Vue guides и examples/starters.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-6">
+      <div class="rg-container-lg">
+        <div class="card d-flex flex-column sm:flex-row items-center justify-between gap-3">
+          <div>
+            <h2 class="h3 mb-2">Готовый лендинг за сегодня</h2>
+            <p class="text-muted m-0">
+              Скопируй секции из `examples/ui-kits/landing-kit` и адаптируй под свой продукт.
+            </p>
+          </div>
+          <button class="btn btn-primary">
+            Открыть Landing Kit
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-4 text-muted" style="font-size: 0.8rem;">
+    <div class="rg-container-lg d-flex justify-between items-center">
+      <span>© Rarog Landing Kit.</span>
+      <span>Собрано на Rarog CSS.</span>
+    </div>
+  </footer>
+</body>
+</html>
