@@ -2,7 +2,7 @@
 <html lang="ru" class="theme-dark">
 <head>
   <meta charset="UTF-8">
-  <title>Rarog CSS Framework 1.5.0 — Документация</title>
+  <title>Rarog CSS Framework 1.6.0 — Документация</title>
   <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
   <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
   <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
@@ -20,6 +20,7 @@
         <a href="#grid-layout" class="navbar-link">Grid &amp; Layout</a>
         <a href="#components" class="navbar-link">Компоненты</a>
         <a href="#theming" class="navbar-link">Theming &amp; Tokens</a>
+        <a href="#config-cli" class="navbar-link">Config &amp; CLI</a>
         <a href="#javascript" class="navbar-link">JavaScript</a>
         <a href="#responsive" class="navbar-link">Responsive</a>
         <a href="#states" class="navbar-link">States</a>
@@ -31,7 +32,7 @@
     <section id="intro" class="mb-4">
       <div class="card">
         <div class="card-header">
-          Добро пожаловать в Rarog 1.4.0
+          Добро пожаловать в Rarog 1.6.0
         </div>
         <p class="text-muted">
           Это демо-страница, показывающая базовые возможности фреймворка: дизайн-токены,
@@ -418,6 +419,109 @@
           Файл <code>rarog.tokens.json</code> в корне репозитория содержит те же токены в JSON-формате
           (цветовые шкалы, spacing, радиусы и тени). Его можно использовать как источник правды
           для Figma-плагинов или любых инструментов работы с Design Tokens.
+        </p>
+      </div>
+    </section>
+
+
+
+    <section id="config-cli" class="mb-4">
+      <h2>Config &amp; CLI</h2>
+      <p class="text-muted">
+        Начиная с версии <strong>1.6.0</strong>, Rarog поддерживает Tailwind-подобный конфиг
+        <code>rarog.config.js/ts</code> и CLI-утилиту <code>rarog</code>, которая умеет собирать
+        токены и запускать документацию.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          rarog.config.js / rarog.config.ts
+        </div>
+        <p class="text-muted">
+          Конфиг хранит дизайн-токены и брейкпоинты:
+        </p>
+<pre><code>// rarog.config.js
+/** @type {import("./rarog.config.types").RarogConfig} */
+const config = {
+  theme: {
+    colors: {
+      primary: { /* шкала 50–900 */ },
+      secondary: { /* ... */ },
+      // success / danger / warning / info / semantic
+    },
+    spacing: {
+      0: "0",
+      1: "0.25rem",
+      2: "0.5rem",
+      // ...
+    },
+    radius: {
+      xs: "0.125rem",
+      sm: "0.25rem",
+      md: "0.5rem",
+      lg: "0.75rem",
+      xl: "1rem",
+      full: "9999px"
+    },
+    shadow: {
+      xs: "0 1px 2px rgba(15, 23, 42, 0.08)",
+      sm: "0 2px 4px rgba(15, 23, 42, 0.12)",
+      md: "0 4px 6px rgba(15, 23, 42, 0.16)",
+      lg: "0 10px 15px rgba(15, 23, 42, 0.25)"
+    }
+  },
+  screens: {
+    sm: "640px",
+    md: "768px",
+    lg: "1024px",
+    xl: "1280px",
+    "2xl": "1536px"
+  },
+  extend: {
+    colors: {},
+    spacing: {},
+    radius: {},
+    shadow: {}
+  },
+  plugins: []
+};
+
+module.exports = config;</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Rarog CLI
+        </div>
+        <p class="text-muted">
+          CLI добавляется через поле <code>bin</code> в <code>package.json</code> и предоставляет
+          одну команду <code>rarog</code> с подкомандами:
+        </p>
+<pre><code>npx rarog build   # сгенерировать CSS-токены и rarog.tokens.json из rarog.config.js
+npx rarog init    # создать rarog.config.js/ts и пример проекта (examples/starter)
+npx rarog docs    # запустить dev-документацию (tools/docs-dev.mjs)</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Связка config → tokens
+        </div>
+        <p class="text-muted">
+          Команда <code>rarog build</code> читает <code>rarog.config.js</code>, объединяет его с
+          дефолтной темой и пересобирает:
+        </p>
+        <ul class="text-muted">
+          <li><code>packages/core/src/tokens/_color.css</code></li>
+          <li><code>packages/core/src/tokens/_spacing.css</code></li>
+          <li><code>packages/core/src/tokens/_radius.css</code></li>
+          <li><code>packages/core/src/tokens/_shadow.css</code></li>
+          <li><code>packages/core/src/tokens/_breakpoints.css</code></li>
+          <li><code>rarog.tokens.json</code> — JSON-представление токенов для design tools.</li>
+        </ul>
+        <p class="text-muted mt-2">
+          Для изменения палитры, spacing или брейкпоинтов теперь достаточно поменять значения
+          в <code>rarog.config.js</code> и выполнить <code>rarog build</code> — остальной код
+          фреймворка продолжит использовать CSS-переменные.
         </p>
       </div>
     </section>

@@ -1,8 +1,8 @@
-{
-  "version": "1.6.0",
-  "source": "Rarog CSS Framework",
-  "tokens": {
-    "color": {
+import type { RarogConfig } from "./rarog.config.types";
+
+const config: RarogConfig = {
+  "theme": {
+    "colors": {
       "primary": {
         "50": "#eff6ff",
         "100": "#dbeafe",
@@ -13,9 +13,7 @@
         "600": "#2563eb",
         "700": "#1d4ed8",
         "800": "#1e40af",
-        "900": "#1e3a8a",
-        "base": "{color.primary.600}",
-        "foreground": "#ffffff"
+        "900": "#1e3a8a"
       },
       "secondary": {
         "50": "#f8fafc",
@@ -27,9 +25,7 @@
         "600": "#475569",
         "700": "#334155",
         "800": "#1e293b",
-        "900": "#0f172a",
-        "base": "{color.secondary.600}",
-        "foreground": "#ffffff"
+        "900": "#0f172a"
       },
       "success": {
         "50": "#ecfdf3",
@@ -95,8 +91,8 @@
         "muted": "#9ca3af",
         "text": "#0f172a",
         "textMuted": "#6b7280",
-        "focusRing": "#3b82f6",
-        "accentSoft": "#eff6ff"
+        "focusRing": "var(--rarog-color-primary-500)",
+        "accentSoft": "var(--rarog-color-primary-50)"
       }
     },
     "spacing": {
@@ -112,7 +108,7 @@
       "12": "3rem"
     },
     "radius": {
-      "none": "0",
+      "xs": "0.125rem",
       "sm": "0.25rem",
       "md": "0.5rem",
       "lg": "0.75rem",
@@ -125,5 +121,21 @@
       "md": "0 4px 6px rgba(15, 23, 42, 0.16)",
       "lg": "0 10px 15px rgba(15, 23, 42, 0.25)"
     }
-  }
-}
+  },
+  "screens": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+  "extend": {
+    "colors": {},
+    "spacing": {},
+    "radius": {},
+    "shadow": {}
+  },
+  "plugins": []
+} as RarogConfig;
+
+export default config;
