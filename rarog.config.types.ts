@@ -38,6 +38,8 @@ export interface RarogThemeConfig {
 export interface RarogConfig {
   theme: RarogThemeConfig;
   screens: Record<string, string>;
+  mode?: "full" | "jit";
+  content?: string[];
   extend?: {
     colors?: Partial<RarogThemeColors>;
     spacing?: Record<string, string>;

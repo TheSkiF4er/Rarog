@@ -2,7 +2,7 @@
 <html lang="ru" class="theme-dark">
 <head>
   <meta charset="UTF-8">
-  <title>Rarog CSS Framework 1.6.0 — Документация</title>
+  <title>Rarog CSS Framework 1.7.0 — Документация</title>
   <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
   <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
   <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
@@ -24,6 +24,8 @@
         <a href="#javascript" class="navbar-link">JavaScript</a>
         <a href="#responsive" class="navbar-link">Responsive</a>
         <a href="#states" class="navbar-link">States</a>
+        <a href="#build-modes" class="navbar-link">Build modes</a>
+        <a href="#arbitrary-values" class="navbar-link">Arbitrary values</a>
       </nav>
     </div>
   </header>
@@ -32,7 +34,7 @@
     <section id="intro" class="mb-4">
       <div class="card">
         <div class="card-header">
-          Добро пожаловать в Rarog 1.6.0
+          Добро пожаловать в Rarog 1.7.0
         </div>
         <p class="text-muted">
           Это демо-страница, показывающая базовые возможности фреймворка: дизайн-токены,
@@ -524,7 +526,99 @@ npx rarog docs    # запустить dev-документацию (tools/docs-
           фреймворка продолжит использовать CSS-переменные.
         </p>
       </div>
+
+    <section id="build-modes" class="mb-4">
+      <h2>Build modes</h2>
+      <p class="text-muted">
+        Начиная с версии <strong>1.7.0</strong>, Rarog умеет собирать CSS в двух режимах:
+        <code>full</code> (полная сборка) и <code>jit</code> (JIT / tree-shaking).
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Режим <code>full</code>
+        </div>
+        <p class="text-muted">
+          В режиме <code>full</code> используется полный набор CSS-файлов:
+          <code>rarog-core.css</code>, <code>rarog-utilities.css</code>, <code>rarog-components.css</code>,
+          а команда <code>rarog build</code> отвечает только за пересборку дизайн-токенов
+          (<code>_color.css</code>, <code>_spacing.css</code>, <code>_radius.css</code>, <code>_shadow.css</code>,
+          <code>_breakpoints.css</code>, <code>rarog.tokens.json</code>).
+        </p>
+        <p class="text-muted">
+          Это режим по умолчанию, удобный на этапе разработки дизайн-системы и компонентов.
+        </p>
+<pre><code>// rarog.config.js
+module.exports = {
+  mode: "full",
+  content: ["./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"],
+  theme: { /* ... */ },
+  screens: { /* ... */ }
+};</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Режим <code>jit</code> (JIT / Tree-shaking)
+        </div>
+        <p class="text-muted">
+          В режиме <code>jit</code> CLI анализирует файлы проекта (из секции <code>content</code> в
+          <code>rarog.config.js</code>), собирает список реально используемых классов и на основе него
+          формирует минимальный CSS-файл <code>dist/rarog.jit.css</code>.
+        </p>
+<pre><code>// rarog.config.js
+module.exports = {
+  mode: "jit",
+  content: ["./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"],
+  theme: { /* ... */ },
+  screens: { /* ... */ }
+};
+
+// Сборка токенов + JIT-CSS
+npx rarog build
+
+// Результат:
+//  - rarog.tokens.json + CSS-токены (как в режиме full)
+//  - dist/rarog.jit.css — урезанный CSS под конкретный проект</code></pre>
+        <p class="text-muted">
+          В JIT-файле всегда присутствуют дизайн-токены (CSS-переменные) и только те утилиты/компоненты,
+          классы которых были найдены в исходниках. Таким образом, для небольшого проекта размер CSS
+          становится заметно меньше по сравнению с полной сборкой.
+        </p>
+      </div>
     </section>
+
+    <section id="arbitrary-values" class="mb-4">
+      <h2>Arbitrary values</h2>
+      <p class="text-muted">
+        JIT-режим также поддерживает простой вариант произвольных значений по Tailwind-подобному синтаксису.
+        Классы с форматами <code>w-[...]</code>, <code>h-[...]</code>, <code>bg-[...]</code>,
+        <code>text-[...]</code> автоматически превращаются в CSS-правила.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Примеры произвольных значений
+        </div>
+<pre><code>&lt;div class="w-[320px] h-[200px] bg-[#0f172a] text-[white]"&gt;
+  Бокс фиксированного размера с произвольным цветом фона и текста
+&lt;/div&gt;</code></pre>
+        <p class="text-muted">
+          При JIT-сборке будет сгенерирован CSS следующего вида:
+        </p>
+<pre><code>.w-\[320px\] { width: 320px; }
+.h-\[200px\] { height: 200px; }
+.bg-\[#0f172a\] { background-color: #0f172a; }
+.text-\[white\] { color: white; }</code></pre>
+        <p class="text-muted">
+          На текущем этапе произвольные значения поддерживаются для размеров
+          (<code>w-[...]</code>, <code>h-[...]</code>) и цветов (<code>bg-[...]</code>, <code>text-[...]</code>).
+          Этого достаточно, чтобы описывать редкие, нестандартные случаи, не засоряя общий набор токенов.
+        </p>
+      </div>
+    </section>
+
+</section>
 
 
     <section id="javascript" class="mb-4">

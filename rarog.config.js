@@ -139,7 +139,11 @@ const config = {
     "radius": {},
     "shadow": {}
   },
-  "plugins": []
+  "plugins": [],
+  "mode": "full",
+  "content": [
+    "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"
+  ]
 };
 
 module.exports = config;

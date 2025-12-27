@@ -135,7 +135,11 @@ const config: RarogConfig = {
     "radius": {},
     "shadow": {}
   },
-  "plugins": []
+  "plugins": [],
+  "mode": "full",
+  "content": [
+    "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"
+  ]
 } as RarogConfig;
 
 export default config;

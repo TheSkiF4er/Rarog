@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "tokens": {
     "colors": "packages/core/src/tokens/_color.css",
     "spacing": "packages/core/src/tokens/_spacing.css",
