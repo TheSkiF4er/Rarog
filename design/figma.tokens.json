@@ -425,5 +425,341 @@
       "value": "0 10px 15px rgba(15, 23, 42, 0.25)",
       "type": "boxShadow"
     }
+  },
+  "semantic": {
+    "bg": {
+      "value": "#f3f4f6",
+      "type": "color"
+    },
+    "bgSoft": {
+      "value": "#ffffff",
+      "type": "color"
+    },
+    "bgElevated": {
+      "value": "#ffffff",
+      "type": "color"
+    },
+    "bgElevatedSoft": {
+      "value": "#f9fafb",
+      "type": "color"
+    },
+    "surface": {
+      "value": "#ffffff",
+      "type": "color"
+    },
+    "border": {
+      "value": "#e5e7eb",
+      "type": "color"
+    },
+    "borderSubtle": {
+      "value": "#e5e7eb",
+      "type": "color"
+    },
+    "borderStrong": {
+      "value": "#111827",
+      "type": "color"
+    },
+    "muted": {
+      "value": "#9ca3af",
+      "type": "color"
+    },
+    "text": {
+      "value": "#0f172a",
+      "type": "color"
+    },
+    "textMuted": {
+      "value": "#6b7280",
+      "type": "color"
+    },
+    "focusRing": {
+      "value": "#3b82f6",
+      "type": "color"
+    },
+    "accentSoft": {
+      "value": "#eff6ff",
+      "type": "color"
+    }
+  },
+  "themes": {
+    "default": {
+      "semantic": {
+        "bg": {
+          "value": "#f3f4f6",
+          "type": "color"
+        },
+        "bgSoft": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "bgElevated": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "bgElevatedSoft": {
+          "value": "#f9fafb",
+          "type": "color"
+        },
+        "surface": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "border": {
+          "value": "#e5e7eb",
+          "type": "color"
+        },
+        "borderSubtle": {
+          "value": "#e5e7eb",
+          "type": "color"
+        },
+        "borderStrong": {
+          "value": "#111827",
+          "type": "color"
+        },
+        "muted": {
+          "value": "#9ca3af",
+          "type": "color"
+        },
+        "text": {
+          "value": "#0f172a",
+          "type": "color"
+        },
+        "textMuted": {
+          "value": "#6b7280",
+          "type": "color"
+        },
+        "focusRing": {
+          "value": "#3b82f6",
+          "type": "color"
+        },
+        "accentSoft": {
+          "value": "#eff6ff",
+          "type": "color"
+        }
+      }
+    },
+    "dark": {
+      "semantic": {
+        "bg": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "bgSoft": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "bgElevated": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "bgElevatedSoft": {
+          "value": "#0b1120",
+          "type": "color"
+        },
+        "surface": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "border": {
+          "value": "#1e293b",
+          "type": "color"
+        },
+        "borderSubtle": {
+          "value": "#0f172a",
+          "type": "color"
+        },
+        "borderStrong": {
+          "value": "#f9fafb",
+          "type": "color"
+        },
+        "muted": {
+          "value": "#64748b",
+          "type": "color"
+        },
+        "text": {
+          "value": "#f9fafb",
+          "type": "color"
+        },
+        "textMuted": {
+          "value": "#cbd5f5",
+          "type": "color"
+        },
+        "focusRing": {
+          "value": "#38bdf8",
+          "type": "color"
+        },
+        "accentSoft": {
+          "value": "#0f172a",
+          "type": "color"
+        }
+      }
+    },
+    "contrast": {
+      "semantic": {
+        "bg": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "bgSoft": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "bgElevated": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "bgElevatedSoft": {
+          "value": "#f4f4f5",
+          "type": "color"
+        },
+        "surface": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "border": {
+          "value": "#000000",
+          "type": "color"
+        },
+        "borderSubtle": {
+          "value": "#0f172a",
+          "type": "color"
+        },
+        "borderStrong": {
+          "value": "#000000",
+          "type": "color"
+        },
+        "muted": {
+          "value": "#4b5563",
+          "type": "color"
+        },
+        "text": {
+          "value": "#000000",
+          "type": "color"
+        },
+        "textMuted": {
+          "value": "#262626",
+          "type": "color"
+        },
+        "focusRing": {
+          "value": "#000000",
+          "type": "color"
+        },
+        "accentSoft": {
+          "value": "#e4e4e7",
+          "type": "color"
+        }
+      }
+    },
+    "enterprise": {
+      "semantic": {
+        "bg": {
+          "value": "#f4f4f5",
+          "type": "color"
+        },
+        "bgSoft": {
+          "value": "#f9fafb",
+          "type": "color"
+        },
+        "bgElevated": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "bgElevatedSoft": {
+          "value": "#f9fafb",
+          "type": "color"
+        },
+        "surface": {
+          "value": "#ffffff",
+          "type": "color"
+        },
+        "border": {
+          "value": "#e4e4e7",
+          "type": "color"
+        },
+        "borderSubtle": {
+          "value": "#e4e4e7",
+          "type": "color"
+        },
+        "borderStrong": {
+          "value": "#111827",
+          "type": "color"
+        },
+        "muted": {
+          "value": "#9ca3af",
+          "type": "color"
+        },
+        "text": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "textMuted": {
+          "value": "#4b5563",
+          "type": "color"
+        },
+        "focusRing": {
+          "value": "#0f766e",
+          "type": "color"
+        },
+        "accentSoft": {
+          "value": "#ecfeff",
+          "type": "color"
+        }
+      }
+    },
+    "creative": {
+      "semantic": {
+        "bg": {
+          "value": "#0f172a",
+          "type": "color"
+        },
+        "bgSoft": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "bgElevated": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "bgElevatedSoft": {
+          "value": "#0f172a",
+          "type": "color"
+        },
+        "surface": {
+          "value": "#020617",
+          "type": "color"
+        },
+        "border": {
+          "value": "#22c55e",
+          "type": "color"
+        },
+        "borderSubtle": {
+          "value": "#0f172a",
+          "type": "color"
+        },
+        "borderStrong": {
+          "value": "#22c55e",
+          "type": "color"
+        },
+        "muted": {
+          "value": "#6b7280",
+          "type": "color"
+        },
+        "text": {
+          "value": "#f9fafb",
+          "type": "color"
+        },
+        "textMuted": {
+          "value": "#bae6fd",
+          "type": "color"
+        },
+        "focusRing": {
+          "value": "#e11d48",
+          "type": "color"
+        },
+        "accentSoft": {
+          "value": "#fdf2ff",
+          "type": "color"
+        }
+      }
+    }
   }
 }

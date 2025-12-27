@@ -1,5 +1,32 @@
 # Changelog
 
+## [3.3.0] - 2025-12-27
+
+**Фокус:** Design System Suite & Figma — сделать Rarog полноценной дизайн‑системой.
+
+### Добавлено
+- Расширенный формат `rarog.tokens.json` (**token pipeline v2**):
+  - разделение на сырые шкалы, semantic‑токены и набор тем `tokens.themes.*`;
+  - преднастроенные темы: `default`, `dark`, `contrast`, `enterprise`, `creative`.
+- Theme‑packs в `packages/themes`:
+  - новые файлы `rarog-theme-enterprise.css` и `rarog-theme-creative.css`,
+  - выровненные семантические переменные под дизайн‑токены.
+- Папка `design/`:
+  - `design/figma.tokens.json` с semantic‑слоем и темами,
+  - `design/figma-kit/README.md` с описанием официального Figma Design Kit.
+- Новый раздел документации **Design System Suite** (`/design-system`)
+  и обновлённые разделы **Tokens** / **Theming** с описанием пайплайна токенов.
+
+### Изменено
+- README дополнен блоком о Rarog как production‑ready дизайн‑системе.
+- Структура токенов уточнена под сценарий синхронизации «Figma ↔ код».
+
+### Совместимость
+- Обновление не ломает публичный API 3.0.x–3.2.x.
+- Существующие проекты могут начать использовать новые темы и Figma‑пайплайн
+  без изменений в верстке.
+
+
 
 
 

@@ -1,5 +1,5 @@
 {
-  "version": "3.2.0",
+  "version": "3.3.0",
   "source": "Rarog CSS Framework",
   "tokens": {
     "color": {
@@ -140,6 +140,108 @@
         "value": "1024px",
         "type": "dimension",
         "description": "Container query breakpoint for large components/panels."
+      }
+    },
+    "semantic": {
+      "bg": "#f3f4f6",
+      "bgSoft": "#ffffff",
+      "bgElevated": "#ffffff",
+      "bgElevatedSoft": "#f9fafb",
+      "surface": "#ffffff",
+      "border": "#e5e7eb",
+      "borderSubtle": "#e5e7eb",
+      "borderStrong": "#111827",
+      "muted": "#9ca3af",
+      "text": "#0f172a",
+      "textMuted": "#6b7280",
+      "focusRing": "#3b82f6",
+      "accentSoft": "#eff6ff"
+    },
+    "themes": {
+      "default": {
+        "semantic": {
+          "bg": "#f3f4f6",
+          "bgSoft": "#ffffff",
+          "bgElevated": "#ffffff",
+          "bgElevatedSoft": "#f9fafb",
+          "surface": "#ffffff",
+          "border": "#e5e7eb",
+          "borderSubtle": "#e5e7eb",
+          "borderStrong": "#111827",
+          "muted": "#9ca3af",
+          "text": "#0f172a",
+          "textMuted": "#6b7280",
+          "focusRing": "#3b82f6",
+          "accentSoft": "#eff6ff"
+        }
+      },
+      "dark": {
+        "semantic": {
+          "bg": "#020617",
+          "bgSoft": "#020617",
+          "bgElevated": "#020617",
+          "bgElevatedSoft": "#0b1120",
+          "surface": "#020617",
+          "border": "#1e293b",
+          "borderSubtle": "#0f172a",
+          "borderStrong": "#f9fafb",
+          "muted": "#64748b",
+          "text": "#f9fafb",
+          "textMuted": "#cbd5f5",
+          "focusRing": "#38bdf8",
+          "accentSoft": "#0f172a"
+        }
+      },
+      "contrast": {
+        "semantic": {
+          "bg": "#ffffff",
+          "bgSoft": "#ffffff",
+          "bgElevated": "#ffffff",
+          "bgElevatedSoft": "#f4f4f5",
+          "surface": "#ffffff",
+          "border": "#000000",
+          "borderSubtle": "#0f172a",
+          "borderStrong": "#000000",
+          "muted": "#4b5563",
+          "text": "#000000",
+          "textMuted": "#262626",
+          "focusRing": "#000000",
+          "accentSoft": "#e4e4e7"
+        }
+      },
+      "enterprise": {
+        "semantic": {
+          "bg": "#f4f4f5",
+          "bgSoft": "#f9fafb",
+          "bgElevated": "#ffffff",
+          "bgElevatedSoft": "#f9fafb",
+          "surface": "#ffffff",
+          "border": "#e4e4e7",
+          "borderSubtle": "#e4e4e7",
+          "borderStrong": "#111827",
+          "muted": "#9ca3af",
+          "text": "#020617",
+          "textMuted": "#4b5563",
+          "focusRing": "#0f766e",
+          "accentSoft": "#ecfeff"
+        }
+      },
+      "creative": {
+        "semantic": {
+          "bg": "#0f172a",
+          "bgSoft": "#020617",
+          "bgElevated": "#020617",
+          "bgElevatedSoft": "#0f172a",
+          "surface": "#020617",
+          "border": "#22c55e",
+          "borderSubtle": "#0f172a",
+          "borderStrong": "#22c55e",
+          "muted": "#6b7280",
+          "text": "#f9fafb",
+          "textMuted": "#bae6fd",
+          "focusRing": "#e11d48",
+          "accentSoft": "#fdf2ff"
+        }
       }
     }
   }

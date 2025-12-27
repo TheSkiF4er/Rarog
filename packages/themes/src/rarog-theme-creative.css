@@ -1,0 +1,19 @@
+:root.theme-creative {
+  /* Creative (более «живой» вариант для маркетинга/side‑проектов) */
+  --rarog-color-bg: #0f172a;
+  --rarog-color-bg-soft: #020617;
+  --rarog-color-bg-elevated: #020617;
+  --rarog-color-bg-elevated-soft: #0f172a;
+  --rarog-color-surface: #020617;
+
+  --rarog-color-border-subtle: #0f172a;
+  --rarog-color-border: #22c55e;
+  --rarog-color-border-strong: #22c55e;
+
+  --rarog-color-muted: #6b7280;
+  --rarog-color-text: #f9fafb;
+  --rarog-color-text-muted: #bae6fd;
+
+  --rarog-color-focus-ring: #e11d48;
+  --rarog-color-accent-soft: #fdf2ff;
+}

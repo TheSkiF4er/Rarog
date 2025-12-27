@@ -1,11 +1,11 @@
-# Rarog CSS Framework 3.0.0
+# Rarog CSS Framework 3.3.0
 
 **Rarog** — современный, лёгкий и расширяемый CSS‑фреймворк для создания быстрых, выразительных и масштабируемых интерфейсов.
 
 - Автор: **TheSkiF4er**
 - Лицензия: **Apache 2.0**
 - Контакты: `support@cajeer.ru`
-- Текущая версия: **3.0.0**
+- Текущая версия: **3.3.0**
 
 ## Особенности
 
@@ -32,7 +32,7 @@
 <div class="rg-container mt-4">
   <div class="card">
     <div class="card-header">
-      Добро пожаловать в Rarog 3.0.0
+      Добро пожаловать в Rarog 3.3.0
     </div>
     <p class="text-muted">
       Это современный CSS‑фреймворк с design‑tokens, утилитами и компонентами.
@@ -153,3 +153,16 @@ An early English documentation entry-point is available at:
 Начиная с 3.0.0, Rarog фиксирует публичный API в отдельном разделе
 документации **API Contract**. Всё, что описано там, считается стабильным
 для ветки 3.x (utilities, компоненты, JS Core, конфиг, Plugin API).
+
+## Design System Suite (3.3.0)
+
+Начиная с версии 3.3.0, Rarog официально позиционируется как **готовая к
+production дизайн‑система**:
+
+- единый слой токенов (`rarog.tokens.json` + CSS‑переменные);
+- theme‑packs (`default`, `dark`, `contrast`, `enterprise`, `creative`) в `packages/themes`;
+- Figma Design Kit и экспорт токенов в `design/`;
+- согласованный flow Design → Dev через `rarog.config.*` и CLI.
+
+Это означает, что Rarog можно использовать как foundation‑слой для визуального
+языка продуктов Cajeer и внешних команд, а не только как CSS‑библиотеку.

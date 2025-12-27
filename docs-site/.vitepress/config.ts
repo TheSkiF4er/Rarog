@@ -10,6 +10,7 @@ export default defineConfig({
       { text: 'Getting Started', link: '/getting-started' },
       { text: 'Why Rarog', link: '/why-rarog' },
       { text: 'Tokens', link: '/tokens' },
+      { text: 'Design System', link: '/design-system' },
       { text: 'Utilities', link: '/utilities' },
       { text: 'Variants & JIT', link: '/variants-jit' },
       { text: 'Components', link: '/components' },
@@ -55,6 +56,7 @@ export default defineConfig({
           items: [
             { text: 'Getting Started', link: '/getting-started' },
             { text: 'Tokens', link: '/tokens' },
+      { text: 'Design System', link: '/design-system' },
             { text: 'Utilities', link: '/utilities' },
       { text: 'Variants & JIT', link: '/variants-jit' },
             { text: 'Components', link: '/components' },

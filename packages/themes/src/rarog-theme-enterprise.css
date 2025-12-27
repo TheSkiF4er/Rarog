@@ -1,0 +1,19 @@
+:root.theme-enterprise {
+  /* Enterprise (спокойная B2B‑палитра) */
+  --rarog-color-bg: #f4f4f5;
+  --rarog-color-bg-soft: #f9fafb;
+  --rarog-color-bg-elevated: #ffffff;
+  --rarog-color-bg-elevated-soft: #f9fafb;
+  --rarog-color-surface: #ffffff;
+
+  --rarog-color-border-subtle: #e4e4e7;
+  --rarog-color-border: #e4e4e7;
+  --rarog-color-border-strong: #111827;
+
+  --rarog-color-muted: #9ca3af;
+  --rarog-color-text: #020617;
+  --rarog-color-text-muted: #4b5563;
+
+  --rarog-color-focus-ring: #0f766e;
+  --rarog-color-accent-soft: #ecfeff;
+}
