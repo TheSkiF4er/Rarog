@@ -26,7 +26,7 @@ used in any PHP/JS stack.
 
 ## UI kits and templates
 
-Starting from 2.9.0, Rarog ships not only as a framework but also with
+Starting from 3.0.0, Rarog ships not only as a framework but also with
 ready‑made UI kits:
 
 - **Rarog UI Admin** — admin dashboard;

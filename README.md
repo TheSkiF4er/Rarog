@@ -1,11 +1,11 @@
-# Rarog CSS Framework 2.9.0
+# Rarog CSS Framework 3.0.0
 
 **Rarog** — современный, лёгкий и расширяемый CSS‑фреймворк для создания быстрых, выразительных и масштабируемых интерфейсов.
 
 - Автор: **TheSkiF4er**
 - Лицензия: **Apache 2.0**
 - Контакты: `support@cajeer.ru`
-- Текущая версия: **2.9.0**
+- Текущая версия: **3.0.0**
 
 ## Особенности
 
@@ -32,7 +32,7 @@
 <div class="rg-container mt-4">
   <div class="card">
     <div class="card-header">
-      Добро пожаловать в Rarog 2.9.0
+      Добро пожаловать в Rarog 3.0.0
     </div>
     <p class="text-muted">
       Это современный CSS‑фреймворк с design‑tokens, утилитами и компонентами.
@@ -146,3 +146,10 @@ An early English documentation entry-point is available at:
 - Utilities overview (EN): `/en/utilities`
 - Guides: `/en/guide-react`, `/en/guide-laravel`
 
+
+
+## Rarog 3.x API Contract
+
+Начиная с 3.0.0, Rarog фиксирует публичный API в отдельном разделе
+документации **API Contract**. Всё, что описано там, считается стабильным
+для ветки 3.x (utilities, компоненты, JS Core, конфиг, Plugin API).

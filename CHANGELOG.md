@@ -7,6 +7,37 @@
 
 
 
+
+## [3.0.0] - 2025-12-27
+
+### Добавлено
+- Container Queries & Modern Layout:
+  - токены `--rarog-cq-sm`, `--rarog-cq-md`, `--rarog-cq-lg`;
+  - утилиты `.rg-cq`, `.rg-cq-page` и базовые container query-классы
+    (`cq-md:d-flex`, `cq-md:rg-cols-2` и др.);
+  - subgrid-хелперы `rg-subgrid-*` с graceful degradation.
+- API Contract:
+  - новый раздел **Rarog 3.x API Contract** (RU/EN) с формальным описанием
+    публичного API (tokens, utilities, components, JS Core, CLI, Plugin API);
+  - фиксация 3.x как стабильной ветки.
+- Миграция 2.x → 3.0.0:
+  - отдельный гайд `migration-2x-to-3x` (RU/EN);
+  - чек-лист по обновлению проектов.
+- Документация и i18n:
+  - расширенная EN-ветка docs (основные разделы приведены к паритету с RU);
+  - страницы `/v2` и `/v3` как основа для версионирования документации;
+  - обновлён `versioning.md` с описанием политики 3.x и docs-versioning.
+
+### Изменено
+- Версия пакета обновлена до `3.0.0` (`package.json`, `rarog.config.*`,
+  `rarog.tokens.json` и заголовки core/components/JS).
+- Уточнено позиционирование Rarog как стабильной альтернативы Tailwind+Bootstrap
+  для дизайн-систем и Cajeer-экосистемы.
+
+### Удалено / очищено
+- Внутренние/experimental API, не задокументированные в 2.x, формально
+  вынесены за рамки публичного контракта (см. `API Contract`).
+
 ## [2.9.0] - 2025-12-27
 
 ### Добавлено

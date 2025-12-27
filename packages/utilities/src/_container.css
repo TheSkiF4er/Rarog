@@ -1,0 +1,72 @@
+/* Rarog Container & Modern Layout Helpers (3.0.0)
+ *
+ * Цель: дать простой слой для использования container queries и новых layout-фич.
+ *
+ * Использование:
+ *   - .rg-cq        — объявляет контейнер для @container (inline-size)
+ *   - .rg-cq-page   — контейнер верхнего уровня (page-level), с именем rg-page
+ *
+ * Пример:
+ *   <section class="rg-cq">
+ *     <div class="cq-md:d-flex d-grid">...</div>
+ *   </section>
+ *
+ * В CSS двоеточие экранируется: .cq-md\:d-flex { ... }
+ */
+
+/* Container-enabled blocks */
+.rg-cq {
+  container-type: inline-size;
+}
+
+.rg-cq-page {
+  container-type: inline-size;
+  container-name: rg-page;
+}
+
+/* Subgrid helpers (graceful degradation) */
+.rg-subgrid-cols {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.rg-subgrid-rows {
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+/* При отсутствии поддержки subgrid браузер просто игнорирует значение и использует обычный grid. */
+
+/* Container query variants (MVP)
+ *
+ * Маппинг на существующие утилиты, но через @container:
+ *   class="d-grid cq-md:d-flex"
+ */
+@container (min-width: var(--rarog-cq-md)) {
+  /* Layout */
+  .cq-md\:d-block { display: block; }
+  .cq-md\:d-flex { display: flex; }
+  .cq-md\:d-grid { display: grid; }
+
+  .cq-md\:flex-row { flex-direction: row; }
+  .cq-md\:flex-column { flex-direction: column; }
+
+  .cq-md\:justify-start { justify-content: flex-start; }
+  .cq-md\:justify-center { justify-content: center; }
+  .cq-md\:justify-between { justify-content: space-between; }
+  .cq-md\:justify-end { justify-content: flex-end; }
+
+  .cq-md\:items-start { align-items: flex-start; }
+  .cq-md\:items-center { align-items: center; }
+  .cq-md\:items-end { align-items: flex-end; }
+
+  /* Columns helpers */
+  .cq-md\:rg-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cq-md\:rg-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Пример page-level container queries по имени контейнера */
+@container rg-page (min-width: var(--rarog-cq-lg)) {
+  .cq-page-lg\:d-flex { display: flex; }
+  .cq-page-lg\:rg-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

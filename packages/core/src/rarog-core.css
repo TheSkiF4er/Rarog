@@ -1,4 +1,4 @@
-/* Rarog Core 2.9.0 */
+/* Rarog Core 3.0.0 */
 
 @import "./base/_reset.css";
 @import "./base/_globals.css";
@@ -10,3 +10,4 @@
 @import "./tokens/_shadow.css";
 @import "./tokens/_breakpoints.css";
 @import "./tokens/_grid.css";
+@import "./tokens/_container.css";

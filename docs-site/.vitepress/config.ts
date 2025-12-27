@@ -41,6 +41,7 @@ export default defineConfig({
           { text: 'Branding', link: '/branding' },
           { text: 'Versioning & Support', link: '/versioning' },
           { text: 'API Reference', link: '/api-reference' },
+            { text: 'API Contract', link: '/api-contract' },
           { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
           { text: 'Playground', link: '/playground' }
         ]
@@ -61,6 +62,7 @@ export default defineConfig({
       { text: 'Accessibility', link: '/accessibility' },
             { text: 'Theming', link: '/theming' },
             { text: 'API Reference', link: '/api-reference' },
+            { text: 'API Contract', link: '/api-contract' },
             { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
             { text: 'Versioning & Support', link: '/versioning' }
           ]

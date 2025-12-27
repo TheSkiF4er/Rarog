@@ -1,0 +1,17 @@
+/* Rarog Container Queries Tokens
+ *
+ * Токены для container-based breakpoints.
+ * Это не замена классическим breakpoints, а дополнительный слой
+ * для компонентного/локального ресайза.
+ *
+ * Рекомендуемые значения:
+ *   cq-sm: 480px  — компактные компоненты / мобильные контейнеры
+ *   cq-md: 768px  — стандартный компонентный breakpoint
+ *   cq-lg: 1024px — широкие панели/контейнеры
+ */
+
+:root {
+  --rarog-cq-sm: 480px;
+  --rarog-cq-md: 768px;
+  --rarog-cq-lg: 1024px;
+}
