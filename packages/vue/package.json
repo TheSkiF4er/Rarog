@@ -1,0 +1,13 @@
+{
+  "name": "@rarog/vue",
+  "version": "3.4.0",
+  "description": "Vue 3 bindings and wrapper components for Rarog CSS/JS core",
+  "author": "TheSkiF4er <dev@cajeer.ru>",
+  "license": "Apache-2.0",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "vue": ">=3.3.0"
+  }
+}

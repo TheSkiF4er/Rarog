@@ -1,6 +1,6 @@
 # Vue Guide
 
-Официального Vue‑starter‑а в репозитории пока нет, но интеграция повторяет
+В репозитории есть Nuxt/Vue‑starter (`examples/starters/nuxt-rarog`), а также
 React/Vite сценарий.
 
 ## 1. Установка
@@ -74,3 +74,55 @@ createApp(App).mount('#app')
 ```
 
 JIT будет анализировать все `.vue` файлы, поэтому классы попадут в итоговый CSS.
+
+
+## 4. @rarog/vue и Nuxt‑starter
+
+Для Vue 3 доступен пакет `@rarog/vue` с компонентами `RarogProvider`, `RarogModal`,
+`RarogOffcanvas`, `RarogDropdown`.
+
+Установка (в отдельном проекте):
+
+```bash
+npm install rarog-css @rarog/vue
+```
+
+Пример базовой интеграции в Nuxt 3 (упрощённо):
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  css: [
+    "rarog-css/dist/rarog-core.min.css",
+    "rarog-css/dist/rarog-utilities.min.css",
+    "rarog-css/dist/rarog-components.min.css",
+    "rarog-css/dist/rarog.jit.css"
+  ]
+});
+```
+
+```vue
+<!-- app.vue -->
+<template>
+  <RarogProvider>
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-rg-toggle="modal"
+      data-rg-target="#demoModal"
+    >
+      Открыть модалку
+    </button>
+
+    <RarogModal id="demoModal" title="Rarog Modal">
+      <p class="mb-0">Контент модального окна.</p>
+    </RarogModal>
+  </RarogProvider>
+</template>
+
+<script setup lang="ts">
+import { RarogProvider, RarogModal } from "@rarog/vue";
+</script>
+```
+
+Готовый пример Nuxt‑интеграции лежит в `examples/starters/nuxt-rarog`.

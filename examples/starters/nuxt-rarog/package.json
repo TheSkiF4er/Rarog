@@ -1,0 +1,18 @@
+{
+  "name": "rarog-nuxt-starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "rarog:build": "rarog build"
+  },
+  "dependencies": {
+    "nuxt": "^3.11.0",
+    "vue": "^3.3.0",
+    "@rarog/vue": "^3.4.0",
+    "rarog-css": "^3.4.0"
+  }
+}

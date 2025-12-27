@@ -129,3 +129,53 @@ UI‑киты из монорепы можно использовать как �
 1. Копируете HTML‑разметку в JSX/TSX.
 2. Заменяете статические тексты и списки на пропсы/стейт.
 3. Подключаете Rarog CSS/JS как описано выше (через Vite plugin/JIT).
+
+
+## 4. @rarog/react: обёртки над JS‑ядром
+
+Начиная с версии 3.4.0 доступен пакет `@rarog/react` с лёгкими обёртками над
+JS‑ядром Rarog.
+
+Установка (в реальном проекте):
+
+```bash
+npm install rarog-css @rarog/react
+```
+
+Базовый пример с `<RarogProvider>` и модалкой:
+
+```tsx
+import React from "react";
+import { RarogProvider, RarogModal } from "@rarog/react";
+import "rarog-css/dist/rarog-core.min.css";
+import "rarog-css/dist/rarog-utilities.min.css";
+import "rarog-css/dist/rarog-components.min.css";
+import "rarog-css/dist/rarog.jit.css";
+
+export function App() {
+  return (
+    <RarogProvider>
+      <main className="rg-container-lg py-10">
+        <button
+          type="button"
+          className="btn btn-primary"
+          data-rg-toggle="modal"
+          data-rg-target="#demoModal"
+        >
+          Открыть модалку
+        </button>
+
+        <RarogModal id="demoModal" title="Rarog Modal">
+          <p className="mb-0">
+            Содержимое модального окна. JS‑логика берётся из Rarog JS Core,
+            React‑компоненты отвечают за удобную разметку.
+          </p>
+        </RarogModal>
+      </main>
+    </RarogProvider>
+  );
+}
+```
+
+`RarogProvider` обеспечивает SPA/SSR‑friendly инициализацию: при монтировании
+дерева выполняется `Rarog.init(root)`, при размонтировании — `Rarog.dispose(root)`.

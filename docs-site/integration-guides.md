@@ -53,3 +53,32 @@ export default defineConfig({
   }
 }
 ```
+
+
+## SPA/SSR‑стартовые проекты
+
+В репозитории есть готовые starters для SPA/SSR‑стеков:
+
+- `examples/starters/nextjs-rarog` — Next.js 14 (App Router) + Rarog + `@rarog/react`;
+- `examples/starters/nuxt-rarog` — Nuxt 3 + Rarog + `@rarog/vue`;
+- `examples/starters/sveltekit-rarog` — SvelteKit + Rarog.
+
+Они демонстрируют:
+
+- подключение CSS/JS Rarog в SSR‑фреймворках;
+- использование JS‑ядра в SPA‑навигации;
+- работу Rarog в гибридном режиме (SSR + client hydration).
+
+## Microfrontends / Module Federation (MVP)
+
+Rarog можно использовать в микрофронтендах при общей дизайн‑системе:
+
+- выносите токены и темы в общий пакет (например, `rarog-css` + темы);
+- подключайте общий CSS‑бандл (или несколько тем) во все микрофронты;
+- JS‑ядро можно шарить как singleton‑модуль (Webpack Module Federation, Vite + `remoteEntry` и т.п.).
+
+Основные рекомендации:
+
+- использовать единый источник токенов (`rarog.tokens.json` + theme‑packs);
+- следить, чтобы Rarog JS Core подключался один раз (singleton);
+- для каждого микрофронта вызывать `Rarog.init(root)` / `Rarog.dispose(root)` на уровне его контейнера.

@@ -1,5 +1,42 @@
 # Changelog
 
+## [3.4.0] - 2025-12-27
+
+**Фокус:** SPA/SSR & Multi-Framework Integration — сделать Rarog «drop-in» решением для современных фронтенд-стеков.
+
+### Добавлено
+- Пакет `@rarog/react` (`packages/react`) с:
+  - компонентом `<RarogProvider>` для SPA/SSR‑friendly инициализации JS‑ядра,
+  - обёртками `RarogModal`, `RarogOffcanvas`, `RarogDropdown`,
+  - helper‑функцией `withRarogTooltip`.
+- Пакет `@rarog/vue` (`packages/vue`) с Vue 3‑компонентами:
+  - `RarogProvider`, `RarogModal`, `RarogOffcanvas`, `RarogDropdown`.
+- Новые starters в `examples/starters`:
+  - `nextjs-rarog` — Next.js 14 App Router + Rarog + `@rarog/react`,
+  - `nuxt-rarog` — Nuxt 3 + Rarog + `@rarog/vue`,
+  - `sveltekit-rarog` — SvelteKit + Rarog.
+- Обновлённые integration‑гайды (RU/EN):
+  - раздел про SPA/SSR‑стартовые проекты,
+  - рекомендации для microfrontends/Module Federation,
+  - явные паттерны `Rarog.init` / `Rarog.dispose` / `Rarog.reinit` в SPA.
+- Обновлённый раздел **JavaScript**:
+  - отдельный блок про SPA/SSR интеграцию и работу JS Core v3,
+  - ссылки на `@rarog/react` и `@rarog/vue`.
+- Дополненные React/Vue‑гайды с примерами использования новых пакетов.
+
+### Изменено
+- Документация по интеграции приведена к единому виду для React/Next.js,
+  Vue/Nuxt и SvelteKit.
+- README и раздел **Integration Guides** теперь явно позиционируют Rarog
+  как SPA/SSR‑friendly решение.
+
+### Совместимость
+- Публичный API 3.0.x–3.3.x остаётся валидным.
+- Новые пакеты `@rarog/react` и `@rarog/vue` являются опциональным слоем поверх
+  существующего JS‑ядра и не ломают current‑проекты.
+
+
+
 ## [3.3.0] - 2025-12-27
 
 **Фокус:** Design System Suite & Figma — сделать Rarog полноценной дизайн‑системой.

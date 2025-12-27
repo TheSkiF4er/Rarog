@@ -21,3 +21,23 @@ Each component exposes:
 See also:
 
 - `API Contract` for the list of stable methods/events.
+
+
+## SPA/SSR integration
+
+Rarog JS Core is designed to work in SPA and SSR frameworks:
+
+- global initialization via `Rarog.init()`;
+- container‑scoped initialization via `Rarog.init(root)`;
+- safe reinitialization via `Rarog.reinit(root)`;
+- cleanup of tooltips/popovers and other ephemeral elements via `Rarog.dispose(root)`.
+
+For React/Vue there are wrappers:
+
+- `@rarog/react` — `<RarogProvider>` and helpers (`RarogModal`, `RarogOffcanvas`);
+- `@rarog/vue` — `<RarogProvider>` and Vue wrappers.
+
+Recommended pattern:
+
+- initialize Rarog in the root layout;
+- for dynamically mounted/unmounted widgets use `Rarog.init`/`Rarog.dispose` on their DOM container.
