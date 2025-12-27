@@ -13,6 +13,9 @@ export default defineConfig({
       { text: 'Components', link: '/components' },
       { text: 'JavaScript', link: '/javascript' },
       { text: 'Theming', link: '/theming' },
+      { text: 'API Reference', link: '/api-reference' },
+      { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
+      { text: 'Versioning & Support', link: '/versioning' },
       { text: 'Integration Guides', link: '/integration-guides' },
       { text: 'Playground', link: '/playground' }
     ],
@@ -26,7 +29,10 @@ export default defineConfig({
             { text: 'Utilities', link: '/utilities' },
             { text: 'Components', link: '/components' },
             { text: 'JavaScript', link: '/javascript' },
-            { text: 'Theming', link: '/theming' }
+            { text: 'Theming', link: '/theming' },
+            { text: 'API Reference', link: '/api-reference' },
+            { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
+            { text: 'Versioning & Support', link: '/versioning' }
           ]
         },
         {
