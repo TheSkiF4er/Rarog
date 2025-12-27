@@ -1,0 +1,41 @@
+/* Modal */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(15, 23, 42, 0.75);
+}
+
+.modal.rg-modal-open {
+  display: flex;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 32rem;
+  margin: 0 var(--rarog-space-4);
+  border-radius: var(--rarog-radius-lg);
+  background-color: var(--rarog-color-bg-elevated);
+  box-shadow: var(--rarog-shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header,
+.modal-footer {
+  padding: var(--rarog-space-3) var(--rarog-space-4);
+  border-bottom: 1px solid var(--rarog-color-border-subtle);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--rarog-color-border-subtle);
+  border-bottom: none;
+}
+
+.modal-body {
+  padding: var(--rarog-space-3) var(--rarog-space-4);
+}

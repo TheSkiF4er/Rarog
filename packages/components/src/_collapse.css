@@ -1,0 +1,14 @@
+/* Collapse / Accordion */
+
+.collapse {
+  transition: height 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.collapse[hidden] {
+  display: none;
+  opacity: 0;
+}
+
+.collapse.rg-collapse-open {
+  opacity: 1;
+}

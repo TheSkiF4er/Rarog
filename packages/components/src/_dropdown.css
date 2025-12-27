@@ -1,0 +1,30 @@
+/* Dropdown */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 40;
+  min-width: 10rem;
+  margin-top: var(--rarog-space-2);
+  padding: var(--rarog-space-2) 0;
+  border-radius: var(--rarog-radius-md);
+  border: 1px solid var(--rarog-color-border-subtle);
+  background-color: var(--rarog-color-bg-elevated);
+  box-shadow: var(--rarog-shadow-md);
+}
+
+.dropdown-menu[hidden] {
+  display: none;
+}
+
+/* open state from JS */
+.dropdown-menu.rg-open {
+  display: block;
+}

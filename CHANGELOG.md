@@ -1,6 +1,31 @@
 # Changelog
 
 
+
+## [1.5.0] - 2025-12-27
+
+### Добавлено
+- JS Core v1 для интерактивных компонентов без jQuery:
+  - единый бандл `rarog.js` (UMD) и модульная версия `rarog.esm.js` (ESM);
+  - классы `Rarog.Dropdown`, `Rarog.Collapse`, `Rarog.Modal`.
+- Data-API:
+  - атрибуты `data-rg-toggle="dropdown|collapse|modal"`, `data-rg-target="#id"`;
+  - поддержка закрытия модалки через `data-rg-dismiss="modal"`.
+- Базовая доступность (a11y):
+  - автоматическая установка ARIA-атрибутов для dropdown/collapse/modal;
+  - фокус-ловушка и закрытие по ESC для модальных окон;
+  - навигация по пунктам dropdown с помощью стрелок.
+- Минимальная CSS-поддержка для интерактивных компонентов:
+  - базовые стили для `.dropdown`, `.dropdown-menu`, `.collapse`, `.modal`, `.modal-dialog` и т.д.
+- Простые браузерные тесты:
+  - файл `tests/rarog-js-core.test.html` с проверкой базового поведения dropdown, collapse и modal.
+- Документация:
+  - раздел "JavaScript" в `docs/index.html` с примерами Data-API и JS-API.
+
+### Изменено
+- Обновлены версии пакетов и заголовки сборочных файлов до 1.5.0.
+
+
 ## [1.4.0] - 2025-12-27
 
 ### Добавлено

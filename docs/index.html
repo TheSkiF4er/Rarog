@@ -2,7 +2,7 @@
 <html lang="ru" class="theme-dark">
 <head>
   <meta charset="UTF-8">
-  <title>Rarog CSS Framework 1.4.0 — Документация</title>
+  <title>Rarog CSS Framework 1.5.0 — Документация</title>
   <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
   <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
   <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
@@ -20,6 +20,7 @@
         <a href="#grid-layout" class="navbar-link">Grid &amp; Layout</a>
         <a href="#components" class="navbar-link">Компоненты</a>
         <a href="#theming" class="navbar-link">Theming &amp; Tokens</a>
+        <a href="#javascript" class="navbar-link">JavaScript</a>
         <a href="#responsive" class="navbar-link">Responsive</a>
         <a href="#states" class="navbar-link">States</a>
       </nav>
@@ -420,6 +421,137 @@
         </p>
       </div>
     </section>
+
+
+    <section id="javascript" class="mb-4">
+      <h2>JavaScript</h2>
+      <p class="text-muted">
+        Rarog JS Core v1.5.0 даёт базовую интерактивность для компонентов без jQuery.
+        Один бандл <code>rarog.js</code> включает поддержку dropdown, collapse/accordion и modal.
+      </p>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Подключение
+        </div>
+        <p class="text-muted">
+          Самый простой вариант — подключить UMD-бандл как обычный скрипт:
+        </p>
+<pre><code>&lt;script src="../packages/js/dist/rarog.js"&gt;&lt;/script&gt;</code></pre>
+        <p class="text-muted mt-2">
+          Для модульного окружения (ESM) используйте:
+        </p>
+<pre><code>&lt;script type="module"&gt;
+  import Rarog, { Modal } from "../packages/js/dist/rarog.esm.js";
+
+  const modalEl = document.getElementById("demo-modal");
+  const modal = Modal.getOrCreate(modalEl);
+  modal.show();
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Data-API
+        </div>
+        <p class="text-muted">
+          Все интерактивные компоненты работают через data-атрибуты. Rarog автоматически
+          инициализирует обработчики на <code>DOMContentLoaded</code>.
+        </p>
+
+        <h3 class="mt-3">Dropdown</h3>
+<pre><code>&lt;div class="dropdown"&gt;
+  &lt;button
+    class="btn btn-secondary dropdown-toggle"
+    data-rg-toggle="dropdown"
+    data-rg-target="#userMenu"
+  &gt;
+    Menu
+  &lt;/button&gt;
+  &lt;div id="userMenu" class="dropdown-menu" hidden&gt;
+    &lt;a class="dropdown-item" href="#"&gt;Profile&lt;/a&gt;
+    &lt;a class="dropdown-item" href="#"&gt;Settings&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+        <h3 class="mt-3">Collapse / Accordion</h3>
+<pre><code>&lt;button
+  class="btn btn-outline"
+  data-rg-toggle="collapse"
+  data-rg-target="#faqItem1"
+&gt;
+  Показать ответ
+&lt;/button&gt;
+&lt;div id="faqItem1" class="collapse mt-2" hidden&gt;
+  Ответ на вопрос
+&lt;/div&gt;</code></pre>
+
+        <h3 class="mt-3">Modal</h3>
+<pre><code>&lt;button
+  class="btn btn-primary"
+  data-rg-toggle="modal"
+  data-rg-target="#demoModal"
+&gt;
+  Открыть модалку
+&lt;/button&gt;
+
+&lt;div class="modal" id="demoModal" aria-hidden="true"&gt;
+  &lt;div class="modal-dialog"&gt;
+    &lt;div class="modal-header"&gt;
+      &lt;h2 class="card-header"&gt;Заголовок&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-body"&gt;
+      Тело модального окна.
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+      &lt;button class="btn btn-secondary" data-rg-dismiss="modal"&gt;Закрыть&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          JS-API
+        </div>
+        <p class="text-muted">
+          Помимо Data-API, каждую сущность можно управлять программно через JS-API:
+        </p>
+<pre><code>const trigger = document.querySelector("[data-rg-toggle='dropdown']");
+const dropdown = Rarog.Dropdown.getOrCreate(trigger);
+dropdown.show();
+
+const panelTrigger = document.querySelector("[data-rg-toggle='collapse']");
+const collapse = Rarog.Collapse.getOrCreate(panelTrigger);
+collapse.toggle();
+
+const modalEl = document.getElementById("demoModal");
+const modal = Rarog.Modal.getOrCreate(modalEl);
+modal.show();</code></pre>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          Доступность (a11y)
+        </div>
+        <p class="text-muted">
+          JS Core автоматически выставляет базовые ARIA-атрибуты:
+        </p>
+        <ul class="text-muted mt-2">
+          <li>Dropdown: <code>aria-haspopup="menu"</code>, <code>aria-expanded</code>, <code>role="menu"</code>.</li>
+          <li>Collapse: <code>aria-expanded</code> на триггере, <code>role="region"</code> и <code>aria-hidden</code> на панели.</li>
+          <li>Modal: <code>role="dialog"</code>, <code>aria-modal="true"</code>, <code>aria-hidden</code>, фокус-ловушка и закрытие по ESC.</li>
+        </ul>
+        <p class="text-muted mt-2">
+          Клавиатурная навигация:
+        </p>
+        <ul class="text-muted">
+          <li><strong>Dropdown</strong>: стрелки вверх/вниз перемещают фокус по пунктам меню, ESC закрывает меню.</li>
+          <li><strong>Modal</strong>: TAB циклически перемещает фокус внутри модального окна, ESC закрывает модалку.</li>
+        </ul>
+      </div>
+    </section>
+
 
     <section id="responsive" class="mb-4">
       <h2>Responsive</h2>

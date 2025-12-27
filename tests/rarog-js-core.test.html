@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rarog JS Core v1.5.0 — Tests</title>
+  <link rel="stylesheet" href="../packages/core/src/rarog-core.css">
+  <link rel="stylesheet" href="../packages/utilities/src/rarog-utilities.css">
+  <link rel="stylesheet" href="../packages/components/src/rarog-components.css">
+  <script src="../packages/js/dist/rarog.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 1rem; }
+    .test-pass { color: #16a34a; }
+    .test-fail { color: #dc2626; }
+  </style>
+</head>
+<body>
+  <h1>Rarog JS Core v1.5.0 — Tests</h1>
+  <ul id="test-output"></ul>
+
+  <div style="margin-top: 2rem;">
+    <div class="dropdown" id="test-dropdown">
+      <button id="dropdownToggle" class="btn btn-secondary dropdown-toggle" data-rg-toggle="dropdown" data-rg-target="#dropdownMenu">
+        Dropdown
+      </button>
+      <div id="dropdownMenu" class="dropdown-menu" hidden>
+        <button class="dropdown-item">Item 1</button>
+        <button class="dropdown-item">Item 2</button>
+      </div>
+    </div>
+
+    <button id="collapseToggle" class="btn btn-outline mt-3" data-rg-toggle="collapse" data-rg-target="#collapsePanel">
+      Toggle collapse
+    </button>
+    <div id="collapsePanel" class="collapse mt-2" hidden>
+      Collapse content
+    </div>
+
+    <button id="modalToggle" class="btn btn-primary mt-3" data-rg-toggle="modal" data-rg-target="#testModal">
+      Open modal
+    </button>
+    <div class="modal" id="testModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 class="card-header">Modal title</h2>
+        </div>
+        <div class="modal-body">
+          <p>Modal body</p>
+          <button class="btn btn-secondary" data-rg-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function logResult(name, pass, message) {
+      var li = document.createElement("li");
+      li.textContent = (pass ? "✓ " : "✗ ") + name + (message ? ": " + message : "");
+      li.className = pass ? "test-pass" : "test-fail";
+      document.getElementById("test-output").appendChild(li);
+    }
+
+    window.addEventListener("load", function () {
+      try {
+        // Dropdown test
+        var dropdownToggle = document.getElementById("dropdownToggle");
+        var dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownToggle.click();
+        var expanded = dropdownToggle.getAttribute("aria-expanded") === "true";
+        var visible = !dropdownMenu.hasAttribute("hidden");
+        logResult("Dropdown opens on click", expanded && visible);
+
+        dropdownToggle.click();
+        expanded = dropdownToggle.getAttribute("aria-expanded") === "false";
+        visible = dropdownMenu.hasAttribute("hidden");
+        logResult("Dropdown closes on second click", expanded && visible);
+
+        // Collapse test
+        var collapseToggle = document.getElementById("collapseToggle");
+        var collapsePanel = document.getElementById("collapsePanel");
+        collapseToggle.click();
+        var collapseOpen = !collapsePanel.hasAttribute("hidden");
+        logResult("Collapse opens on click", collapseOpen);
+
+        collapseToggle.click();
+        var collapseClosed = collapsePanel.hasAttribute("hidden");
+        logResult("Collapse closes on second click", collapseClosed);
+
+        // Modal test
+        var modalToggle = document.getElementById("modalToggle");
+        var modal = document.getElementById("testModal");
+        modalToggle.click();
+        var modalOpen = modal.classList.contains("rg-modal-open");
+        logResult("Modal opens on click", modalOpen);
+
+        var dismissBtn = modal.querySelector("[data-rg-dismiss='modal']");
+        dismissBtn.click();
+        var modalClosed = !modal.classList.contains("rg-modal-open") && modal.getAttribute("aria-hidden") === "true";
+        logResult("Modal closes on [data-rg-dismiss='modal'] click", modalClosed);
+      } catch (e) {
+        logResult("Unexpected error", false, e.message || String(e));
+      }
+    });
+  </script>
+</body>
+</html>
