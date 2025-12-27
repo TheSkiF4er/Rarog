@@ -6,6 +6,24 @@
 
 
 
+## [2.7.0] - 2025-12-27
+
+### Добавлено
+- Components v3 & JS Core v3:
+  - Carousel / Slider: `.carousel`, `.carousel-item`, `.carousel-control-prev/next`, `.carousel-indicators` + JS-API `Rarog.Carousel.getOrCreate(el)`, autoplay и swipes (MVP);
+  - Stepper / Wizard: `.stepper`, `.stepper-step`, `.stepper-content` + JS-API `Rarog.Stepper.getOrCreate(el)` и события `rg:stepper:*`;
+  - Advanced Navbar & Offcanvas: sticky navbar-паттерн, улучшенные position-варианты для offcanvas;
+  - Data-heavy patterns: `table-toolbar` и admin-таблицы.
+- JS Core v3:
+  - единый EventBus (`Rarog.Events`) для всех `rg:*` событий;
+  - lifecycle-API: `Rarog.init`, `Rarog.dispose`, `Rarog.reinit` для SPA/SSR-сценариев;
+  - debug-режим через глобальные флаги `window.RAROG_DEBUG` / `RAROG_DEV`.
+
+### Изменено
+- Обновлён разделы **Components**, **JavaScript** и **Cookbook**:
+  - примеры carousel/landing, stepper-wizard, data-heavy admin layout.
+- Версия фреймворка обновлена до `2.7.0`.
+
 ## [2.6.0] - 2025-12-27
 
 ### Добавлено

@@ -34,4 +34,16 @@
 
 .navbar-link:hover {
   color: var(--rarog-color-text);
+}\n\n
+.navbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
 }
+
+.navbar-scrolled {
+  background-color: var(--rarog-color-bg-elevated, #020617);
+  box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.25),
+              0 4px 6px -4px rgb(15 23 42 / 0.2);
+}
+\n

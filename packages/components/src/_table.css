@@ -44,4 +44,23 @@
 .table-responsive {
   width: 100%;
   overflow-x: auto;
+}\n\n
+/* Data-heavy patterns */
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rarog-space-3);
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: var(--rarog-space-3);
 }
+
+.table-toolbar-left,
+.table-toolbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rarog-space-2);
+  align-items: center;
+}
+\n

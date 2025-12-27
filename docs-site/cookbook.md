@@ -151,7 +151,7 @@ Layout в стиле dashboard: сайдбар слева, основной ко
         <div class="card p-5 h-full">
           <h3 class="text-lg font-semibold mb-2">JS Core</h3>
           <p class="text-slate-300">
-            Dropdown, Modal, Offcanvas, Toasts — на ванильном JS.
+            Dropdown, Modal, Offcanvas, Toasts, Carousel, Stepper — на ванильном JS.
           </p>
         </div>
       </div>
@@ -183,6 +183,58 @@ Layout в стиле dashboard: сайдбар слева, основной ко
       <a href="/guide-react" class="btn btn-outline">React Guide</a>
     </div>
   </section>
+</div>
+```
+
+### Data-heavy admin / таблицы с фильтрами
+
+```html
+<div class="rg-container-lg py-8">
+  <header class="d-flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-semibold">Users</h1>
+    <button class="btn btn-primary">New user</button>
+  </header>
+
+  <div class="table-toolbar">
+    <div class="table-toolbar-left">
+      <button class="btn btn-outline">Bulk actions</button>
+      <select class="form-control">
+        <option>All</option>
+        <option>Active</option>
+        <option>Blocked</option>
+      </select>
+    </div>
+    <div class="table-toolbar-right">
+      <input type="search" class="form-control" placeholder="Search users..." />
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th scope="col">
+            <input type="checkbox" />
+          </th>
+          <th scope="col">User</th>
+          <th scope="col">Role</th>
+          <th scope="col">Status</th>
+          <th scope="col" class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>Jane Doe</td>
+          <td>Admin</td>
+          <td><span class="badge badge-success">Active</span></td>
+          <td class="text-right">
+            <button class="btn btn-ghost btn-sm">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 ```
 

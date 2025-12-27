@@ -14,6 +14,8 @@ JS-ядро Rarog v2 поставляется в виде:
 - `Toast`
 - `Tooltip`
 - `Popover`
+- `Carousel`
+- `Stepper`
 
 ---
 
@@ -65,13 +67,22 @@ Dismiss-атрибуты:
 <button data-rg-dismiss="toast">Закрыть toast</button>
 ```
 
-Инициализация выполняется автоматически при загрузке документа. При необходимости
-можно переинициализировать Data-API вручную:
+Инициализация выполняется автоматически при загрузке документа. Для SPA/SSR
+и сложных сценариев можно использовать lifecycle-API JS Core v3:
 
 ```js
-import { initDataApi } from "../packages/js/dist/rarog.esm.js";
+import { Rarog } from "../packages/js/dist/rarog.esm.js";
 
-initDataApi(document);
+// базовая инициализация Data-API и tooltip/popover для всего документа
+Rarog.init();
+
+// инициализация внутри конкретного контейнера (например, после рендера React/Vue)
+const root = document.getElementById("app-root");
+Rarog.init(root);
+
+// dispose / reinit
+Rarog.dispose(root); // удалить tooltip/popover внутри контейнера
+Rarog.reinit(root);  // пересобрать Data-API и всплывающие компоненты
 ```
 
 ---
@@ -130,3 +141,57 @@ modalEl.addEventListener("rg:modal:hide", event => {
 Если вам нужно явно удалить обработчики, можно реализовать свою обёртку, сохраняя
 инстансы и вызывая `hide()` перед удалением элементов. В будущих версиях может
 появиться `dispose()`-API.
+
+## Carousel & Stepper JS-API
+
+```js
+import { Rarog } from "../packages/js/dist/rarog.esm.js";
+
+const carouselEl = document.getElementById("heroCarousel");
+const carousel = Rarog.Carousel.getOrCreate(carouselEl);
+
+carousel.next();
+carousel.prev();
+carousel.goTo(2);
+carousel.play();
+carousel.pause();
+
+const stepperEl = document.getElementById("signupStepper");
+const stepper = Rarog.Stepper.getOrCreate(stepperEl);
+
+stepper.next();
+stepper.prev();
+stepper.goTo(1);
+stepper.reset();
+
+stepperEl.addEventListener("rg:stepper:goto", event => {
+  console.log("Текущий шаг:", event.detail.index);
+});
+```
+
+---
+
+## EventBus / Events
+
+JS Core v3 добавляет простой event-bus, доступный через `Rarog.Events`:
+
+```js
+import { Rarog } from "../packages/js/dist/rarog.esm.js";
+
+Rarog.Events.on("rg:carousel:next", payload => {
+  console.log("Слайд переключился", payload);
+});
+
+// Любое событие `rg:*` пробрасывается в bus через `Events.emit`:
+Rarog.Events.on("rg:modal:show", ({ element, detail }) => {
+  console.log("Открылся modal", element, detail.instance);
+});
+```
+
+Для включения debug-режима (логирование в консоль) достаточно выставить глобальный флаг:
+
+```html
+<script>
+  window.RAROG_DEBUG = true;
+</script>
+```

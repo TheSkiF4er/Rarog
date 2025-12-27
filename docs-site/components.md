@@ -19,6 +19,8 @@
 - Offcanvas / Drawer (`.offcanvas`, `.offcanvas-end`, `.offcanvas-bottom`)
 - Toasts (`.toast`, `.toast-header`, `.toast-body`)
 - Tooltips & Popovers (`.tooltip`, `.popover`)
+- Carousel (`.carousel`, `.carousel-item`, `.carousel-indicators`)
+- Stepper / Wizard (`.stepper`, `.stepper-step`, `.stepper-content`)
 
 ---
 
@@ -180,5 +182,107 @@
 </button>
 ```
 
+---
+
+## Carousel / Slider
+
+Простейший slider/hero-карусель на базе `.carousel`:
+
+```html
+<div class="carousel" id="heroCarousel" data-rg-autoplay="true" data-rg-interval="6000">
+  <div class="carousel-inner">
+    <section class="carousel-item is-active">
+      <div class="card p-6 text-center">
+        <h2 class="h3 mb-2">Rarog = tokens + utilities + components</h2>
+        <p class="text-muted">Быстрый старт без ручного CSS.</p>
+      </div>
+    </section>
+    <section class="carousel-item">
+      <div class="card p-6 text-center">
+        <h2 class="h3 mb-2">Tailwind-подобные утилиты</h2>
+        <p class="text-muted">Layout, типографика, эффекты, scroll-snap и др.</p>
+      </div>
+    </section>
+  </div>
+
+  <button class="carousel-control-prev" type="button" id="heroPrev">
+    ‹
+  </button>
+  <button class="carousel-control-next" type="button" id="heroNext">
+    ›
+  </button>
+
+  <div class="carousel-indicators">
+    <button class="carousel-indicator is-active" data-rg-target="#heroCarousel" data-rg-slide-to="0"></button>
+    <button class="carousel-indicator" data-rg-target="#heroCarousel" data-rg-slide-to="1"></button>
+  </div>
+</div>
+
+<script type="module">
+  import { Rarog } from "./dist/rarog.esm.js";
+
+  const el = document.getElementById("heroCarousel");
+  const carousel = Rarog.Carousel.getOrCreate(el);
+
+  document.getElementById("heroPrev")?.addEventListener("click", () => carousel.prev());
+  document.getElementById("heroNext")?.addEventListener("click", () => carousel.next());
+</script>
+```
+
+---
+
+## Stepper / Wizard
+
+Компонент для пошаговых форм и wizard-сценариев:
+
+```html
+<div class="stepper" id="signupStepper">
+  <div class="stepper-header">
+    <button class="stepper-step is-active" type="button" data-rg-step-to="0">
+      <span class="stepper-step-index">1</span>
+      <span class="stepper-label">Профиль</span>
+    </button>
+    <button class="stepper-step" type="button" data-rg-step-to="1">
+      <span class="stepper-step-index">2</span>
+      <span class="stepper-label">Компания</span>
+    </button>
+    <button class="stepper-step" type="button" data-rg-step-to="2">
+      <span class="stepper-step-index">3</span>
+      <span class="stepper-label">Подтверждение</span>
+    </button>
+  </div>
+
+  <div class="stepper-body mt-4">
+    <section class="stepper-content is-active">
+      <!-- Поля шага 1 -->
+    </section>
+    <section class="stepper-content">
+      <!-- Поля шага 2 -->
+    </section>
+    <section class="stepper-content">
+      <!-- Поля шага 3 -->
+    </section>
+  </div>
+
+  <div class="d-flex justify-between mt-4">
+    <button type="button" class="btn btn-secondary" id="stepperPrev">Назад</button>
+    <button type="button" class="btn btn-primary" id="stepperNext">Далее</button>
+  </div>
+</div>
+
+<script type="module">
+  import { Rarog } from "./dist/rarog.esm.js";
+
+  const el = document.getElementById("signupStepper");
+  const stepper = Rarog.Stepper.getOrCreate(el);
+
+  document.getElementById("stepperPrev")?.addEventListener("click", () => stepper.prev());
+  document.getElementById("stepperNext")?.addEventListener("click", () => stepper.next());
+
+  el.addEventListener("rg:stepper:goto", event => {
+    console.log("Stepper changed to step", event.detail.index);
+  });
+</script>
+```
 Вся интерактивность обеспечивается подключением одного бандла `rarog.js` и
 инициализацией Data-API (по умолчанию выполняется автоматически).

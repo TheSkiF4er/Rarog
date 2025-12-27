@@ -88,4 +88,29 @@
 
 body.rg-offcanvas-open {
   overflow: hidden;
+}\n\n
+/* Position variants */
+
+.offcanvas-right {
+  left: auto;
+  right: 0;
+  transform: translateX(100%);
 }
+
+.offcanvas-right.is-open {
+  transform: translateX(0);
+}
+
+.offcanvas-bottom {
+  inset-inline: 0;
+  inset-block-start: auto;
+  inset-block-end: 0;
+  width: 100%;
+  height: 320px;
+  transform: translateY(100%);
+}
+
+.offcanvas-bottom.is-open {
+  transform: translateY(0);
+}
+\n

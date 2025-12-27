@@ -1,0 +1,58 @@
+/* Stepper / Wizard */
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rarog-space-4);
+}
+
+.stepper-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rarog-space-3);
+}
+
+.stepper-step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rarog-space-2);
+  padding: var(--rarog-space-2) var(--rarog-space-3);
+  border-radius: var(--rarog-radius-full, 999px);
+  background-color: var(--rarog-color-bg-soft, #020617);
+  color: var(--rarog-color-text-muted, #9ca3af);
+  font-size: 0.85rem;
+  cursor: default;
+}
+
+.stepper-step-index {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--rarog-color-border-subtle, rgba(148, 163, 184, 0.3));
+  font-size: 0.75rem;
+}
+
+.stepper-step.is-active {
+  background-color: var(--rarog-color-primary-soft, rgba(59, 130, 246, 0.12));
+  color: var(--rarog-color-primary-200, #bfdbfe);
+}
+
+.stepper-step.is-active .stepper-step-index {
+  background-color: var(--rarog-color-primary, #3b82f6);
+  color: #0b1120;
+}
+
+.stepper-body {
+  position: relative;
+}
+
+.stepper-content {
+  display: none;
+}
+
+.stepper-content.is-active {
+  display: block;
+}

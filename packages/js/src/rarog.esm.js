@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v1.5.0
+ * Rarog JS Core v3.0.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
@@ -12,6 +12,60 @@ const _offcanvasInstances = new WeakMap();
 const _toastInstances = new WeakMap();
 const _tooltipInstances = new WeakMap();
 const _popoverInstances = new WeakMap();
+const _eventBusListeners = new Map();
+
+const RarogConfig = {
+  debug:
+    typeof window !== "undefined" &&
+    !!(window.RAROG_DEBUG || window.RAROG_DEV || window.RAROG_DEBUG_MODE)
+};
+
+function _debugLog(...args) {
+  if (!RarogConfig.debug || typeof console === "undefined") return;
+  console.log("[Rarog]", ...args);
+}
+
+function _debugWarn(...args) {
+  if (!RarogConfig.debug || typeof console === "undefined") return;
+  console.warn("[Rarog]", ...args);
+}
+
+function _emitOnBus(type, payload) {
+  const set = _eventBusListeners.get(type);
+  if (!set || set.size === 0) return;
+  set.forEach(handler => {
+    try {
+      handler(payload);
+    } catch (error) {
+      if (RarogConfig.debug && typeof console !== "undefined") {
+        console.error("[Rarog Events]", error);
+      }
+    }
+  });
+}
+
+const Events = {
+  on(type, handler) {
+    if (!type || typeof handler !== "function") return;
+    let set = _eventBusListeners.get(type);
+    if (!set) {
+      set = new Set();
+      _eventBusListeners.set(type, set);
+    }
+    set.add(handler);
+  },
+  off(type, handler) {
+    const set = _eventBusListeners.get(type);
+    if (!set) return;
+    set.delete(handler);
+    if (set.size === 0) {
+      _eventBusListeners.delete(type);
+    }
+  },
+  emit(type, payload = {}) {
+    _emitOnBus(type, payload);
+  }
+};
 
 function _dispatchEvent(element, name, detail = {}) {
   if (!element || typeof CustomEvent === "undefined") return;
@@ -21,10 +75,9 @@ function _dispatchEvent(element, name, detail = {}) {
     detail
   });
   element.dispatchEvent(evt);
+  _emitOnBus(name, { element, detail });
 }
-
-
-function _resolveTarget(trigger, explicitTarget) {
+olveTarget(trigger, explicitTarget) {
   if (explicitTarget) return explicitTarget;
   if (!trigger || typeof document === "undefined") return null;
 
@@ -906,6 +959,298 @@ function _attachEventsForClass(klass, getElement, name) {
 _attachEventsForClass(Dropdown, inst => inst._menu || inst._trigger, "dropdown");
 _attachEventsForClass(Collapse, inst => inst._target, "collapse");
 _attachEventsForClass(Modal, inst => inst._element, "modal");
+/* -------------------------------------------------------------------------- */
+/* Carousel                                                                   */
+/* -------------------------------------------------------------------------- */
+
+const _carouselInstances = new WeakMap();
+
+class Carousel {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Carousel: element is required");
+    }
+
+    this._element = element;
+    this._options = Object.assign(
+      {
+        interval: Number(element.getAttribute("data-rg-interval")) || 5000,
+        autoplay: element.getAttribute("data-rg-autoplay") === "true",
+        pauseOnHover: true
+      },
+      options
+    );
+
+    this._inner = element.querySelector(".carousel-inner");
+    this._items = this._inner ? Array.from(this._inner.children) : [];
+    this._indicators = Array.from(
+      element.querySelectorAll("[data-rg-target='" + (element.id ? "#" + element.id : "") + "'][data-rg-slide-to]")
+    );
+    this._currentIndex = this._items.findIndex(item => item.classList.contains("is-active"));
+    if (this._currentIndex < 0) this._currentIndex = 0;
+
+    this._intervalId = null;
+
+    if (!this._inner || this._items.length === 0) {
+      _debugWarn("Rarog.Carousel: .carousel-inner with items not found", element);
+    }
+
+    this._onMouseEnter = () => {
+      if (this._options.pauseOnHover) {
+        this.pause();
+      }
+    };
+    this._onMouseLeave = () => {
+      if (this._options.autoplay) {
+        this.play();
+      }
+    };
+
+    this._onTouchStart = event => {
+      this._touchStartX = event.touches ? event.touches[0].clientX : event.clientX;
+    };
+    this._onTouchEnd = event => {
+      const endX = event.changedTouches ? event.changedTouches[0].clientX : event.clientX;
+      const deltaX = endX - (this._touchStartX || 0);
+      const threshold = 40;
+      if (deltaX > threshold) {
+        this.prev();
+      } else if (deltaX < -threshold) {
+        this.next();
+      }
+    };
+
+    element.addEventListener("mouseenter", this._onMouseEnter);
+    element.addEventListener("mouseleave", this._onMouseLeave);
+    element.addEventListener("touchstart", this._onTouchStart, { passive: true });
+    element.addEventListener("touchend", this._onTouchEnd);
+
+    if (this._options.autoplay) {
+      this.play();
+    }
+
+    _carouselInstances.set(element, this);
+  }
+
+  _updateIndicators() {
+    if (!this._indicators.length || !this._element.id) return;
+    this._indicators.forEach((indicator, index) => {
+      if (index === this._currentIndex) {
+        indicator.classList.add("is-active");
+        indicator.setAttribute("aria-current", "true");
+      } else {
+        indicator.classList.remove("is-active");
+        indicator.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  _updateSlides() {
+    if (!this._items.length) return;
+
+    this._items.forEach((item, index) => {
+      if (index === this._currentIndex) {
+        item.classList.add("is-active");
+        item.removeAttribute("aria-hidden");
+      } else {
+        item.classList.remove("is-active");
+        item.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    this._updateIndicators();
+  }
+
+  next() {
+    if (!this._items.length) return;
+    this._currentIndex = (this._currentIndex + 1) % this._items.length;
+    this._updateSlides();
+    _dispatchEvent(this._element, "rg:carousel:next", { instance: this, index: this._currentIndex });
+  }
+
+  prev() {
+    if (!this._items.length) return;
+    this._currentIndex = (this._currentIndex - 1 + this._items.length) % this._items.length;
+    this._updateSlides();
+    _dispatchEvent(this._element, "rg:carousel:prev", { instance: this, index: this._currentIndex });
+  }
+
+  goTo(index) {
+    if (!this._items.length) return;
+    const normalized = Math.max(0, Math.min(this._items.length - 1, index));
+    this._currentIndex = normalized;
+    this._updateSlides();
+    _dispatchEvent(this._element, "rg:carousel:goto", { instance: this, index: this._currentIndex });
+  }
+
+  play() {
+    if (!this._options.interval || this._intervalId) return;
+    this._intervalId = window.setInterval(() => this.next(), this._options.interval);
+    _dispatchEvent(this._element, "rg:carousel:play", { instance: this });
+  }
+
+  pause() {
+    if (this._intervalId) {
+      window.clearInterval(this._intervalId);
+      this._intervalId = null;
+      _dispatchEvent(this._element, "rg:carousel:pause", { instance: this });
+    }
+  }
+
+  destroy() {
+    this.pause();
+    this._element.removeEventListener("mouseenter", this._onMouseEnter);
+    this._element.removeEventListener("mouseleave", this._onMouseLeave);
+    this._element.removeEventListener("touchstart", this._onTouchStart);
+    this._element.removeEventListener("touchend", this._onTouchEnd);
+    _carouselInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _carouselInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Carousel(element, options);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Stepper / Wizard                                                           */
+/* -------------------------------------------------------------------------- */
+
+const _stepperInstances = new WeakMap();
+
+class Stepper {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Stepper: element is required");
+    }
+
+    this._element = element;
+    this._options = Object.assign(
+      {
+        activeIndex: 0
+      },
+      options
+    );
+
+    this._steps = Array.from(element.querySelectorAll(".stepper-step"));
+    this._contents = Array.from(element.querySelectorAll(".stepper-content"));
+    this._currentIndex = this._options.activeIndex || 0;
+
+    if (!this._steps.length) {
+      _debugWarn("Rarog.Stepper: no .stepper-step elements found", element);
+    }
+
+    this._onClick = event => {
+      const trigger = event.target.closest("[data-rg-step-to]");
+      if (!trigger || !element.contains(trigger)) return;
+      const value = trigger.getAttribute("data-rg-step-to");
+      if (value == null) return;
+      const index = parseInt(value, 10);
+      if (!Number.isNaN(index)) {
+        this.goTo(index);
+      }
+    };
+
+    element.addEventListener("click", this._onClick);
+
+    this._update();
+
+    _stepperInstances.set(element, this);
+  }
+
+  _update() {
+    this._steps.forEach((step, index) => {
+      if (index === this._currentIndex) {
+        step.classList.add("is-active");
+        step.setAttribute("aria-current", "step");
+      } else {
+        step.classList.remove("is-active");
+        step.removeAttribute("aria-current");
+      }
+    });
+
+    this._contents.forEach((content, index) => {
+      if (index === this._currentIndex) {
+        content.classList.add("is-active");
+        content.removeAttribute("hidden");
+        content.setAttribute("aria-hidden", "false");
+      } else {
+        content.classList.remove("is-active");
+        content.setAttribute("hidden", "");
+        content.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
+
+  next() {
+    const nextIndex = Math.min(this._steps.length - 1, this._currentIndex + 1);
+    if (nextIndex === this._currentIndex) return;
+    this._currentIndex = nextIndex;
+    this._update();
+    _dispatchEvent(this._element, "rg:stepper:next", { instance: this, index: this._currentIndex });
+  }
+
+  prev() {
+    const prevIndex = Math.max(0, this._currentIndex - 1);
+    if (prevIndex === this._currentIndex) return;
+    this._currentIndex = prevIndex;
+    this._update();
+    _dispatchEvent(this._element, "rg:stepper:prev", { instance: this, index: this._currentIndex });
+  }
+
+  goTo(index) {
+    const normalized = Math.max(0, Math.min(this._steps.length - 1, index));
+    if (normalized === this._currentIndex) return;
+    this._currentIndex = normalized;
+    this._update();
+    _dispatchEvent(this._element, "rg:stepper:goto", { instance: this, index: this._currentIndex });
+  }
+
+  reset() {
+    this._currentIndex = 0;
+    this._update();
+    _dispatchEvent(this._element, "rg:stepper:reset", { instance: this, index: this._currentIndex });
+  }
+
+  destroy() {
+    this._element.removeEventListener("click", this._onClick);
+    _stepperInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _stepperInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Stepper(element, options);
+  }
+}
+
+/* Lifecycle helpers                                                          */
+/* -------------------------------------------------------------------------- */
+
+function init(root = document) {
+  initDataApi(root || document);
+}
+
+function dispose(root = document) {
+  if (typeof document === "undefined") return;
+  const container = root || document;
+  const tooltips = container.querySelectorAll(".tooltip");
+  const popovers = container.querySelectorAll(".popover");
+  tooltips.forEach(el => el.parentNode && el.parentNode.removeChild(el));
+  popovers.forEach(el => el.parentNode && el.parentNode.removeChild(el));
+  _emitOnBus("rg:core:dispose", { root: container });
+}
+
+function reinit(root = document) {
+  dispose(root);
+  init(root);
+}
+
 /* Data API                                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -913,11 +1258,12 @@ let _dataApiInitialized = false;
 
 function initDataApi(root = document) {
   if (typeof document === "undefined") return;
-  if (!root || _dataApiInitialized) return;
+  if (!root) return;
 
-  _dataApiInitialized = true;
+  if (!_dataApiInitialized) {
+    _dataApiInitialized = true;
 
-  document.addEventListener("click", event => {
+    document.addEventListener("click", event => {
     const toggle = event.target.closest("[data-rg-toggle]");
     const dismiss = event.target.closest("[data-rg-dismiss]");
 
@@ -986,6 +1332,7 @@ function initDataApi(root = document) {
       }
     }
   });
+  }
 
   // Инициализация tooltip/popover по data-атрибутам
   const tooltipTriggers = root.querySelectorAll("[data-rg-toggle='tooltip']");
@@ -1015,8 +1362,31 @@ const Rarog = {
   Toast,
   Tooltip,
   Popover,
-  initDataApi
+  Carousel,
+  Stepper,
+  Events,
+  config: RarogConfig,
+  initDataApi,
+  init,
+  dispose,
+  reinit
 };
 
-export { Dropdown, Collapse, Modal, Offcanvas, Toast, Tooltip, Popover, initDataApi, Rarog };
+export {
+  Dropdown,
+  Collapse,
+  Modal,
+  Offcanvas,
+  Toast,
+  Tooltip,
+  Popover,
+  Carousel,
+  Stepper,
+  Events,
+  initDataApi,
+  init,
+  dispose,
+  reinit,
+  Rarog
+};
 export default Rarog;

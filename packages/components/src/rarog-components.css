@@ -1,4 +1,4 @@
-/* Rarog Components 2.6.0 */
+/* Rarog Components 2.7.0 */
 @import "./_button.css";
 @import "./_card.css";
 @import "./_form.css";
@@ -10,8 +10,8 @@
 @import "./_nav.css";
 @import "./_pagination.css";
 @import "./_progress.css";
-@import "./_table.css";
-@import "./_offcanvas.css";
+@import "./_table.css";\n@import "./_carousel.css";
+@import "./_stepper.css";\n@import "./_offcanvas.css";
 @import "./_toast.css";
 @import "./_tooltip.css";
 @import "./_dropdown.css";
