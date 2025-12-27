@@ -1,0 +1,1297 @@
+[
+  {
+    "className": "btn",
+    "description": "Базовая кнопка Rarog",
+    "category": "component"
+  },
+  {
+    "className": "btn-primary",
+    "description": "Основная акцентная кнопка",
+    "category": "component"
+  },
+  {
+    "className": "btn-secondary",
+    "description": "Вторичная кнопка",
+    "category": "component"
+  },
+  {
+    "className": "alert",
+    "description": "Базовый алерт",
+    "category": "component"
+  },
+  {
+    "className": "alert-success",
+    "description": "Успешный алерт",
+    "category": "component"
+  },
+  {
+    "className": "card",
+    "description": "Карточка контента",
+    "category": "component"
+  },
+  {
+    "className": "navbar",
+    "description": "Навигационная панель (Navbar)",
+    "category": "component"
+  },
+  {
+    "className": "offcanvas",
+    "description": "Offcanvas / Drawer панель",
+    "category": "component"
+  },
+  {
+    "className": "modal",
+    "description": "Модальное окно",
+    "category": "component"
+  },
+  {
+    "className": "toast",
+    "description": "Toast-уведомление",
+    "category": "component"
+  },
+  {
+    "className": "rg-container",
+    "description": "Контейнер сетки Rarog",
+    "category": "layout"
+  },
+  {
+    "className": "rg-row",
+    "description": "Строка сетки Rarog",
+    "category": "layout"
+  },
+  {
+    "className": "rg-col-6",
+    "description": "Колонка сетки (6/12)",
+    "category": "layout"
+  },
+  {
+    "className": "prose",
+    "description": "Контентный блок типографики (@rarog/plugin-typography)",
+    "category": "plugin"
+  },
+  {
+    "className": "bg-primary-50",
+    "description": "Фоновый цвет primary-50 (#eff6ff)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-50",
+    "description": "Цвет текста primary-50 (#eff6ff)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-50",
+    "description": "Цвет границы primary-50 (#eff6ff)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-100",
+    "description": "Фоновый цвет primary-100 (#dbeafe)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-100",
+    "description": "Цвет текста primary-100 (#dbeafe)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-100",
+    "description": "Цвет границы primary-100 (#dbeafe)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-200",
+    "description": "Фоновый цвет primary-200 (#bfdbfe)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-200",
+    "description": "Цвет текста primary-200 (#bfdbfe)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-200",
+    "description": "Цвет границы primary-200 (#bfdbfe)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-300",
+    "description": "Фоновый цвет primary-300 (#93c5fd)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-300",
+    "description": "Цвет текста primary-300 (#93c5fd)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-300",
+    "description": "Цвет границы primary-300 (#93c5fd)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-400",
+    "description": "Фоновый цвет primary-400 (#60a5fa)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-400",
+    "description": "Цвет текста primary-400 (#60a5fa)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-400",
+    "description": "Цвет границы primary-400 (#60a5fa)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-500",
+    "description": "Фоновый цвет primary-500 (#3b82f6)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-500",
+    "description": "Цвет текста primary-500 (#3b82f6)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-500",
+    "description": "Цвет границы primary-500 (#3b82f6)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-600",
+    "description": "Фоновый цвет primary-600 (#2563eb)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-600",
+    "description": "Цвет текста primary-600 (#2563eb)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-600",
+    "description": "Цвет границы primary-600 (#2563eb)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-700",
+    "description": "Фоновый цвет primary-700 (#1d4ed8)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-700",
+    "description": "Цвет текста primary-700 (#1d4ed8)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-700",
+    "description": "Цвет границы primary-700 (#1d4ed8)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-800",
+    "description": "Фоновый цвет primary-800 (#1e40af)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-800",
+    "description": "Цвет текста primary-800 (#1e40af)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-800",
+    "description": "Цвет границы primary-800 (#1e40af)",
+    "category": "color"
+  },
+  {
+    "className": "bg-primary-900",
+    "description": "Фоновый цвет primary-900 (#1e3a8a)",
+    "category": "color"
+  },
+  {
+    "className": "text-primary-900",
+    "description": "Цвет текста primary-900 (#1e3a8a)",
+    "category": "color"
+  },
+  {
+    "className": "border-primary-900",
+    "description": "Цвет границы primary-900 (#1e3a8a)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-50",
+    "description": "Фоновый цвет secondary-50 (#f8fafc)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-50",
+    "description": "Цвет текста secondary-50 (#f8fafc)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-50",
+    "description": "Цвет границы secondary-50 (#f8fafc)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-100",
+    "description": "Фоновый цвет secondary-100 (#f1f5f9)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-100",
+    "description": "Цвет текста secondary-100 (#f1f5f9)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-100",
+    "description": "Цвет границы secondary-100 (#f1f5f9)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-200",
+    "description": "Фоновый цвет secondary-200 (#e2e8f0)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-200",
+    "description": "Цвет текста secondary-200 (#e2e8f0)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-200",
+    "description": "Цвет границы secondary-200 (#e2e8f0)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-300",
+    "description": "Фоновый цвет secondary-300 (#cbd5e1)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-300",
+    "description": "Цвет текста secondary-300 (#cbd5e1)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-300",
+    "description": "Цвет границы secondary-300 (#cbd5e1)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-400",
+    "description": "Фоновый цвет secondary-400 (#94a3b8)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-400",
+    "description": "Цвет текста secondary-400 (#94a3b8)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-400",
+    "description": "Цвет границы secondary-400 (#94a3b8)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-500",
+    "description": "Фоновый цвет secondary-500 (#64748b)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-500",
+    "description": "Цвет текста secondary-500 (#64748b)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-500",
+    "description": "Цвет границы secondary-500 (#64748b)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-600",
+    "description": "Фоновый цвет secondary-600 (#475569)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-600",
+    "description": "Цвет текста secondary-600 (#475569)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-600",
+    "description": "Цвет границы secondary-600 (#475569)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-700",
+    "description": "Фоновый цвет secondary-700 (#334155)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-700",
+    "description": "Цвет текста secondary-700 (#334155)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-700",
+    "description": "Цвет границы secondary-700 (#334155)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-800",
+    "description": "Фоновый цвет secondary-800 (#1e293b)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-800",
+    "description": "Цвет текста secondary-800 (#1e293b)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-800",
+    "description": "Цвет границы secondary-800 (#1e293b)",
+    "category": "color"
+  },
+  {
+    "className": "bg-secondary-900",
+    "description": "Фоновый цвет secondary-900 (#0f172a)",
+    "category": "color"
+  },
+  {
+    "className": "text-secondary-900",
+    "description": "Цвет текста secondary-900 (#0f172a)",
+    "category": "color"
+  },
+  {
+    "className": "border-secondary-900",
+    "description": "Цвет границы secondary-900 (#0f172a)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-50",
+    "description": "Фоновый цвет success-50 (#ecfdf3)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-50",
+    "description": "Цвет текста success-50 (#ecfdf3)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-50",
+    "description": "Цвет границы success-50 (#ecfdf3)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-100",
+    "description": "Фоновый цвет success-100 (#dcfce7)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-100",
+    "description": "Цвет текста success-100 (#dcfce7)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-100",
+    "description": "Цвет границы success-100 (#dcfce7)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-200",
+    "description": "Фоновый цвет success-200 (#bbf7d0)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-200",
+    "description": "Цвет текста success-200 (#bbf7d0)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-200",
+    "description": "Цвет границы success-200 (#bbf7d0)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-300",
+    "description": "Фоновый цвет success-300 (#86efac)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-300",
+    "description": "Цвет текста success-300 (#86efac)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-300",
+    "description": "Цвет границы success-300 (#86efac)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-400",
+    "description": "Фоновый цвет success-400 (#4ade80)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-400",
+    "description": "Цвет текста success-400 (#4ade80)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-400",
+    "description": "Цвет границы success-400 (#4ade80)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-500",
+    "description": "Фоновый цвет success-500 (#22c55e)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-500",
+    "description": "Цвет текста success-500 (#22c55e)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-500",
+    "description": "Цвет границы success-500 (#22c55e)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-600",
+    "description": "Фоновый цвет success-600 (#16a34a)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-600",
+    "description": "Цвет текста success-600 (#16a34a)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-600",
+    "description": "Цвет границы success-600 (#16a34a)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-700",
+    "description": "Фоновый цвет success-700 (#15803d)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-700",
+    "description": "Цвет текста success-700 (#15803d)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-700",
+    "description": "Цвет границы success-700 (#15803d)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-800",
+    "description": "Фоновый цвет success-800 (#166534)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-800",
+    "description": "Цвет текста success-800 (#166534)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-800",
+    "description": "Цвет границы success-800 (#166534)",
+    "category": "color"
+  },
+  {
+    "className": "bg-success-900",
+    "description": "Фоновый цвет success-900 (#14532d)",
+    "category": "color"
+  },
+  {
+    "className": "text-success-900",
+    "description": "Цвет текста success-900 (#14532d)",
+    "category": "color"
+  },
+  {
+    "className": "border-success-900",
+    "description": "Цвет границы success-900 (#14532d)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-50",
+    "description": "Фоновый цвет danger-50 (#fef2f2)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-50",
+    "description": "Цвет текста danger-50 (#fef2f2)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-50",
+    "description": "Цвет границы danger-50 (#fef2f2)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-100",
+    "description": "Фоновый цвет danger-100 (#fee2e2)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-100",
+    "description": "Цвет текста danger-100 (#fee2e2)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-100",
+    "description": "Цвет границы danger-100 (#fee2e2)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-200",
+    "description": "Фоновый цвет danger-200 (#fecaca)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-200",
+    "description": "Цвет текста danger-200 (#fecaca)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-200",
+    "description": "Цвет границы danger-200 (#fecaca)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-300",
+    "description": "Фоновый цвет danger-300 (#fca5a5)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-300",
+    "description": "Цвет текста danger-300 (#fca5a5)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-300",
+    "description": "Цвет границы danger-300 (#fca5a5)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-400",
+    "description": "Фоновый цвет danger-400 (#f87171)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-400",
+    "description": "Цвет текста danger-400 (#f87171)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-400",
+    "description": "Цвет границы danger-400 (#f87171)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-500",
+    "description": "Фоновый цвет danger-500 (#ef4444)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-500",
+    "description": "Цвет текста danger-500 (#ef4444)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-500",
+    "description": "Цвет границы danger-500 (#ef4444)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-600",
+    "description": "Фоновый цвет danger-600 (#dc2626)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-600",
+    "description": "Цвет текста danger-600 (#dc2626)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-600",
+    "description": "Цвет границы danger-600 (#dc2626)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-700",
+    "description": "Фоновый цвет danger-700 (#b91c1c)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-700",
+    "description": "Цвет текста danger-700 (#b91c1c)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-700",
+    "description": "Цвет границы danger-700 (#b91c1c)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-800",
+    "description": "Фоновый цвет danger-800 (#991b1b)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-800",
+    "description": "Цвет текста danger-800 (#991b1b)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-800",
+    "description": "Цвет границы danger-800 (#991b1b)",
+    "category": "color"
+  },
+  {
+    "className": "bg-danger-900",
+    "description": "Фоновый цвет danger-900 (#7f1d1d)",
+    "category": "color"
+  },
+  {
+    "className": "text-danger-900",
+    "description": "Цвет текста danger-900 (#7f1d1d)",
+    "category": "color"
+  },
+  {
+    "className": "border-danger-900",
+    "description": "Цвет границы danger-900 (#7f1d1d)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-50",
+    "description": "Фоновый цвет warning-50 (#fff7ed)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-50",
+    "description": "Цвет текста warning-50 (#fff7ed)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-50",
+    "description": "Цвет границы warning-50 (#fff7ed)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-100",
+    "description": "Фоновый цвет warning-100 (#ffedd5)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-100",
+    "description": "Цвет текста warning-100 (#ffedd5)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-100",
+    "description": "Цвет границы warning-100 (#ffedd5)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-200",
+    "description": "Фоновый цвет warning-200 (#fed7aa)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-200",
+    "description": "Цвет текста warning-200 (#fed7aa)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-200",
+    "description": "Цвет границы warning-200 (#fed7aa)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-300",
+    "description": "Фоновый цвет warning-300 (#fdba74)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-300",
+    "description": "Цвет текста warning-300 (#fdba74)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-300",
+    "description": "Цвет границы warning-300 (#fdba74)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-400",
+    "description": "Фоновый цвет warning-400 (#fb923c)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-400",
+    "description": "Цвет текста warning-400 (#fb923c)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-400",
+    "description": "Цвет границы warning-400 (#fb923c)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-500",
+    "description": "Фоновый цвет warning-500 (#f97316)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-500",
+    "description": "Цвет текста warning-500 (#f97316)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-500",
+    "description": "Цвет границы warning-500 (#f97316)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-600",
+    "description": "Фоновый цвет warning-600 (#ea580c)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-600",
+    "description": "Цвет текста warning-600 (#ea580c)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-600",
+    "description": "Цвет границы warning-600 (#ea580c)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-700",
+    "description": "Фоновый цвет warning-700 (#c2410c)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-700",
+    "description": "Цвет текста warning-700 (#c2410c)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-700",
+    "description": "Цвет границы warning-700 (#c2410c)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-800",
+    "description": "Фоновый цвет warning-800 (#9a3412)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-800",
+    "description": "Цвет текста warning-800 (#9a3412)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-800",
+    "description": "Цвет границы warning-800 (#9a3412)",
+    "category": "color"
+  },
+  {
+    "className": "bg-warning-900",
+    "description": "Фоновый цвет warning-900 (#7c2d12)",
+    "category": "color"
+  },
+  {
+    "className": "text-warning-900",
+    "description": "Цвет текста warning-900 (#7c2d12)",
+    "category": "color"
+  },
+  {
+    "className": "border-warning-900",
+    "description": "Цвет границы warning-900 (#7c2d12)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-50",
+    "description": "Фоновый цвет info-50 (#f0f9ff)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-50",
+    "description": "Цвет текста info-50 (#f0f9ff)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-50",
+    "description": "Цвет границы info-50 (#f0f9ff)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-100",
+    "description": "Фоновый цвет info-100 (#e0f2fe)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-100",
+    "description": "Цвет текста info-100 (#e0f2fe)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-100",
+    "description": "Цвет границы info-100 (#e0f2fe)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-200",
+    "description": "Фоновый цвет info-200 (#bae6fd)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-200",
+    "description": "Цвет текста info-200 (#bae6fd)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-200",
+    "description": "Цвет границы info-200 (#bae6fd)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-300",
+    "description": "Фоновый цвет info-300 (#7dd3fc)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-300",
+    "description": "Цвет текста info-300 (#7dd3fc)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-300",
+    "description": "Цвет границы info-300 (#7dd3fc)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-400",
+    "description": "Фоновый цвет info-400 (#38bdf8)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-400",
+    "description": "Цвет текста info-400 (#38bdf8)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-400",
+    "description": "Цвет границы info-400 (#38bdf8)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-500",
+    "description": "Фоновый цвет info-500 (#0ea5e9)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-500",
+    "description": "Цвет текста info-500 (#0ea5e9)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-500",
+    "description": "Цвет границы info-500 (#0ea5e9)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-600",
+    "description": "Фоновый цвет info-600 (#0284c7)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-600",
+    "description": "Цвет текста info-600 (#0284c7)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-600",
+    "description": "Цвет границы info-600 (#0284c7)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-700",
+    "description": "Фоновый цвет info-700 (#0369a1)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-700",
+    "description": "Цвет текста info-700 (#0369a1)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-700",
+    "description": "Цвет границы info-700 (#0369a1)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-800",
+    "description": "Фоновый цвет info-800 (#075985)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-800",
+    "description": "Цвет текста info-800 (#075985)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-800",
+    "description": "Цвет границы info-800 (#075985)",
+    "category": "color"
+  },
+  {
+    "className": "bg-info-900",
+    "description": "Фоновый цвет info-900 (#0c4a6e)",
+    "category": "color"
+  },
+  {
+    "className": "text-info-900",
+    "description": "Цвет текста info-900 (#0c4a6e)",
+    "category": "color"
+  },
+  {
+    "className": "border-info-900",
+    "description": "Цвет границы info-900 (#0c4a6e)",
+    "category": "color"
+  },
+  {
+    "className": "mt-0",
+    "description": "Внешний отступ сверху (0)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-0",
+    "description": "Внешний отступ снизу (0)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-0",
+    "description": "Внешний отступ слева (0)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-0",
+    "description": "Внешний отступ справа (0)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-0",
+    "description": "Внутренний отступ (0)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-0",
+    "description": "Интервал между элементами (0)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-1",
+    "description": "Внешний отступ сверху (0.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-1",
+    "description": "Внешний отступ снизу (0.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-1",
+    "description": "Внешний отступ слева (0.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-1",
+    "description": "Внешний отступ справа (0.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-1",
+    "description": "Внутренний отступ (0.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-1",
+    "description": "Интервал между элементами (0.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-2",
+    "description": "Внешний отступ сверху (0.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-2",
+    "description": "Внешний отступ снизу (0.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-2",
+    "description": "Внешний отступ слева (0.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-2",
+    "description": "Внешний отступ справа (0.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-2",
+    "description": "Внутренний отступ (0.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-2",
+    "description": "Интервал между элементами (0.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-3",
+    "description": "Внешний отступ сверху (0.75rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-3",
+    "description": "Внешний отступ снизу (0.75rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-3",
+    "description": "Внешний отступ слева (0.75rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-3",
+    "description": "Внешний отступ справа (0.75rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-3",
+    "description": "Внутренний отступ (0.75rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-3",
+    "description": "Интервал между элементами (0.75rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-4",
+    "description": "Внешний отступ сверху (1rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-4",
+    "description": "Внешний отступ снизу (1rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-4",
+    "description": "Внешний отступ слева (1rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-4",
+    "description": "Внешний отступ справа (1rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-4",
+    "description": "Внутренний отступ (1rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-4",
+    "description": "Интервал между элементами (1rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-5",
+    "description": "Внешний отступ сверху (1.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-5",
+    "description": "Внешний отступ снизу (1.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-5",
+    "description": "Внешний отступ слева (1.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-5",
+    "description": "Внешний отступ справа (1.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-5",
+    "description": "Внутренний отступ (1.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-5",
+    "description": "Интервал между элементами (1.25rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-6",
+    "description": "Внешний отступ сверху (1.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-6",
+    "description": "Внешний отступ снизу (1.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-6",
+    "description": "Внешний отступ слева (1.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-6",
+    "description": "Внешний отступ справа (1.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-6",
+    "description": "Внутренний отступ (1.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-6",
+    "description": "Интервал между элементами (1.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-8",
+    "description": "Внешний отступ сверху (2rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-8",
+    "description": "Внешний отступ снизу (2rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-8",
+    "description": "Внешний отступ слева (2rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-8",
+    "description": "Внешний отступ справа (2rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-8",
+    "description": "Внутренний отступ (2rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-8",
+    "description": "Интервал между элементами (2rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-10",
+    "description": "Внешний отступ сверху (2.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-10",
+    "description": "Внешний отступ снизу (2.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-10",
+    "description": "Внешний отступ слева (2.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-10",
+    "description": "Внешний отступ справа (2.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-10",
+    "description": "Внутренний отступ (2.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-10",
+    "description": "Интервал между элементами (2.5rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mt-12",
+    "description": "Внешний отступ сверху (3rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mb-12",
+    "description": "Внешний отступ снизу (3rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "ml-12",
+    "description": "Внешний отступ слева (3rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "mr-12",
+    "description": "Внешний отступ справа (3rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "p-12",
+    "description": "Внутренний отступ (3rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "gap-12",
+    "description": "Интервал между элементами (3rem)",
+    "category": "spacing"
+  },
+  {
+    "className": "hover:bg-primary",
+    "description": "Фон primary при наведении",
+    "category": "state"
+  },
+  {
+    "className": "focus:border-primary",
+    "description": "Граница primary при фокусе",
+    "category": "state"
+  },
+  {
+    "className": "group-hover:bg-primary",
+    "description": "Фон primary при hover на .group",
+    "category": "variant"
+  },
+  {
+    "className": "peer-checked:bg-primary",
+    "description": "Фон primary, если peer чекнут",
+    "category": "variant"
+  },
+  {
+    "className": "data-[state=open]:bg-primary",
+    "description": "Фон primary при data-state=\"open\"",
+    "category": "variant"
+  }
+]

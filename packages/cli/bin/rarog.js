@@ -904,6 +904,56 @@ function filterCssByUsedClasses(css, usedClasses) {
 /* -------------------------------------------------------------------------- */
 
 
+function runPlugins(effectiveConfig) {
+  const plugins = effectiveConfig.plugins || [];
+  let utilitiesCssExtra = "";
+  let componentsCssExtra = "";
+
+  if (!Array.isArray(plugins) || plugins.length === 0) {
+    return { utilitiesCssExtra, componentsCssExtra };
+  }
+
+  const ctx = {
+    config: effectiveConfig
+  };
+
+  for (const plugin of plugins) {
+    let fn = plugin;
+
+    // Строка → путь до модуля
+    if (typeof plugin === "string") {
+      const resolved = path.isAbsolute(plugin)
+        ? plugin
+        : pathFromRoot(plugin);
+
+      try {
+        const mod = require(resolved);
+        fn = mod.default || mod.plugin || mod;
+      } catch (err) {
+        console.warn("[rarog] Не удалось загрузить плагин:", plugin, "-", err.message);
+        continue;
+      }
+    }
+
+    if (typeof fn !== "function") continue;
+
+    try {
+      const result = fn(ctx) || {};
+      if (result.utilitiesCss) {
+        utilitiesCssExtra += "\n" + String(result.utilitiesCss) + "\n";
+      }
+      if (result.componentsCss) {
+        componentsCssExtra += "\n" + String(result.componentsCss) + "\n";
+      }
+    } catch (err) {
+      console.warn("[rarog] Ошибка в плагине:", err.message);
+    }
+  }
+
+  return { utilitiesCssExtra, componentsCssExtra };
+}
+
+
 function cmdBuild() {
   const cfgJson = readJSON("rarog.config.json");
   const effective = getEffectiveConfig();
@@ -959,6 +1009,8 @@ function cmdBuild() {
   const componentsJit = filterCssByUsedClasses(componentsCssFull, usedClasses);
   const arbitraryCss = generateArbitraryCss(usedClasses);
 
+  const { utilitiesCssExtra, componentsCssExtra } = runPlugins(effective);
+
   let jitCss = "";
   jitCss += "/* Rarog CSS Framework - JIT build */\n";
   jitCss += "/* Сгенерировано rarog build (mode=jit) на основе контента проекта. */\n\n";
@@ -973,8 +1025,14 @@ function cmdBuild() {
   // Включаем урезанные utilities/components + произвольные значения.
   jitCss += "\n/* Rarog Utilities (JIT) */\n";
   jitCss += utilitiesJit + "\n";
+  if (utilitiesCssExtra) {
+    jitCss += "/* Rarog plugin utilities */\n" + utilitiesCssExtra + "\n";
+  }
   jitCss += "\n/* Rarog Components (JIT) */\n";
   jitCss += componentsJit + "\n";
+  if (componentsCssExtra) {
+    jitCss += "/* Rarog plugin components */\n" + componentsCssExtra + "\n";
+  }
   jitCss += arbitraryCss;
 
   writeFile("dist/rarog.jit.css", jitCss);

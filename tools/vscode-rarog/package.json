@@ -1,0 +1,35 @@
+{
+  "name": "rarog-css",
+  "displayName": "Rarog CSS",
+  "description": "Autocomplete и hover-доки для Rarog CSS Framework.",
+  "version": "0.1.0",
+  "publisher": "cajeer",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:html",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:vue"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "Rarog CSS",
+      "properties": {
+        "rarogCss.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Включить поддержку автодополнения Rarog CSS."
+        }
+      }
+    }
+  }
+}

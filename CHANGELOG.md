@@ -6,6 +6,29 @@
 
 
 
+## [2.4.0] - 2025-12-27
+
+### Добавлено
+- VSCode extension (alpha) в `tools/vscode-rarog`:
+  - автодополнение классов Rarog на основе словаря;
+  - hover-доки по классам.
+- Скрипт генерации словаря классов:
+  - `tools/generate-class-dictionary.mjs` → `tools/vscode-rarog/rarog-classmap.json`.
+- Plugin API v1:
+  - `plugins` в `rarog.config.*` теперь принимает RarogPlugin (функция или строка-путь);
+  - CLI вызывает плагины в JIT-режиме и подключает их CSS к `dist/rarog.jit.css`.
+- Официальные плагины:
+  - `packages/plugin-forms` — утилиты и улучшения для форм;
+  - `packages/plugin-typography` — `.prose` и расширенный типографический слой.
+- Экспорт токенов для Figma:
+  - `design/figma.tokens.json` — JSON-формат, совместимый с Tokens Studio / Design Tokens tooling.
+
+### Изменено
+- Документация:
+  - добавлена страница **IDE & Plugins**;
+  - в разделе **Tokens** добавлена секция про Figma-интеграцию.
+- Версия фреймворка обновлена до `2.4.0`.
+
 ## [2.3.0] - 2025-12-27
 
 ### Добавлено

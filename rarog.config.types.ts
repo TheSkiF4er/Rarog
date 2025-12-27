@@ -52,5 +52,16 @@ export interface RarogConfig {
     radius?: Record<string, string>;
     shadow?: Record<string, string>;
   };
-  plugins?: Array<(config: RarogConfig) => void>;
+  plugins?: RarogPlugin[];
 }
+
+export interface RarogPluginContext {
+  config: RarogConfig;
+}
+
+export interface RarogPluginResult {
+  utilitiesCss?: string;
+  componentsCss?: string;
+}
+
+export type RarogPlugin = ((ctx: RarogPluginContext) => void | RarogPluginResult) | string;

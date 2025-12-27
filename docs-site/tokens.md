@@ -18,3 +18,10 @@ npx rarog build
 
 на основе `rarog.config.js` / `rarog.config.ts`.
 
+## Интеграция с Figma
+
+Для использования тех же токенов в дизайн-системе доступен экспорт:
+
+- файл `design/figma.tokens.json` — совместим с Tokens Studio / Design Tokens tooling.
+
+Подробнее про импорт в Figma и Tokens Studio см. раздел **IDE & Plugins**.

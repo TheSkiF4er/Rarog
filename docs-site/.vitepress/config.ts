@@ -18,6 +18,7 @@ export default defineConfig({
       { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
       { text: 'Versioning & Support', link: '/versioning' },
       { text: 'Integration Guides', link: '/integration-guides' },
+      { text: 'IDE & Plugins', link: '/ide-plugins' },
       { text: 'Playground', link: '/playground' }
     ],
     sidebar: {
@@ -41,6 +42,7 @@ export default defineConfig({
           text: 'Интеграция',
           items: [
             { text: 'Integration Guides', link: '/integration-guides' },
+      { text: 'IDE & Plugins', link: '/ide-plugins' },
             { text: 'Playground', link: '/playground' }
           ]
         }
