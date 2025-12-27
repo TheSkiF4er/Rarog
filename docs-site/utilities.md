@@ -60,6 +60,94 @@
 - Выравнивание:
   - `text-left`, `text-center`, `text-right`
 
+## Effects & Filters
+
+- Blur:
+  - `blur-none`, `blur-sm`, `blur-md`, `blur-lg`
+- Brightness:
+  - `brightness-90`, `brightness-100`, `brightness-110`, `brightness-125`, `brightness-150`
+- Contrast:
+  - `contrast-75`, `contrast-100`, `contrast-125`, `contrast-150`
+- Цветовые эффекты:
+  - `grayscale`, `invert`, `sepia`
+- Backdrop-фильтры (там, где поддерживаются браузером):
+  - `backdrop-blur-none`, `backdrop-blur-sm`, `backdrop-blur-md`, `backdrop-blur-lg`
+- Blend-режимы:
+  - `mix-blend-normal/multiply/screen/overlay/darken/lighten/difference`
+  - `bg-blend-normal/multiply/screen/overlay`
+
+## Scroll & Overscroll
+
+- Overscroll:
+  - `overscroll-auto`, `overscroll-contain`, `overscroll-none`
+- Поведение скролла:
+  - `scroll-auto`, `scroll-smooth`
+- Anchor-offset для заголовков:
+  - `scroll-mt-0/1/2/3/4/5/6/8/10/12`
+- Дополнительный отступ снизу при прокрутке:
+  - `scroll-pb-0/1/2/3/4/5/6/8/10/12`
+
+## Scroll Snap
+
+- Ось:
+  - `snap-none`, `snap-x`, `snap-y`, `snap-both`
+- Выравнивание элементов:
+  - `snap-start`, `snap-center`, `snap-end`
+
+Пример:
+
+```html
+<div class="d-flex overflow-x-auto snap-x">
+  <div class="snap-start w-64">Card 1</div>
+  <div class="snap-start w-64">Card 2</div>
+  <div class="snap-start w-64">Card 3</div>
+</div>
+```
+
+## Multi-column / Columns
+
+- `columns-2`, `columns-3`, `columns-4` — базовый многоколоночный layout для текста/списков.
+
+Пример:
+
+```html
+<div class="columns-3 gap-4">
+  <p>Длинный текст 1...</p>
+  <p>Длинный текст 2...</p>
+  <p>Длинный текст 3...</p>
+</div>
+```
+
+## Print utilities
+
+Утилиты для управления видимостью при печати (используются как обычные классы):
+
+- `print:hidden` — скрыть элемент на печати;
+- `print:block` — показать как `block`;
+- `print:inline` — показать как `inline`;
+- `print:flex` — показать как `flex`.
+
+Пример:
+
+```html
+<div class="alert alert-info print:hidden">
+  Это уведомление видно в браузере, но скрыто на печати.
+</div>
+```
+
+## RTL / Logical spacing
+
+Первый слой RTL/логических утилит (работают через `margin-inline-*` / `padding-inline-*`):
+
+- Отступы по “логическому началу/концу”:
+  - `ms-0/1/2/3/4/5/6/8/10/12` — `margin-inline-start`
+  - `me-0/1/2/3/4/5/6/8/10/12` — `margin-inline-end`
+- Внутренние отступы:
+  - `ps-0/1/2/3/4/5/6/8/10/12` — `padding-inline-start`
+  - `pe-0/1/2/3/4/5/6/8/10/12` — `padding-inline-end`
+
+Используются совместно с `dir="rtl"` на `html` или контейнере.
+
 ## Visibility & Accessibility
 
 - `d-none`, `overflow-hidden`, `overflow-auto`, `overflow-x-auto`, `overflow-y-auto`

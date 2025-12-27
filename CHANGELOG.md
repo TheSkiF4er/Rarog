@@ -6,6 +6,34 @@
 
 
 
+## [2.6.0] - 2025-12-27
+
+### Добавлено
+- Utilities v3 & Advanced Effects:
+  - filter-утилиты: `blur-*`, `brightness-*`, `contrast-*`, `grayscale`, `invert`, `sepia`;
+  - backdrop-фильтры: `backdrop-blur-*`;
+  - blend-режимы: `mix-blend-*`, `bg-blend-*`.
+- Scroll & overscroll:
+  - `overscroll-auto/contain/none`;
+  - `scroll-auto`, `scroll-smooth`;
+  - anchor-offset-утилиты: `scroll-mt-*`, `scroll-pb-*`.
+- Scroll snap:
+  - `snap-x`, `snap-y`, `snap-both`, `snap-none`;
+  - `snap-start`, `snap-center`, `snap-end`.
+- Multi-column helpers:
+  - `columns-2`, `columns-3`, `columns-4` для текстового layout.
+- Print utilities:
+  - `print:hidden`, `print:block`, `print:inline`, `print:flex`.
+- RTL / logical spacing:
+  - `ms-*`, `me-*` на `margin-inline-*`;
+  - `ps-*`, `pe-*` на `padding-inline-*`.
+
+### Изменено
+- Обновлён раздел **Utilities** в документации:
+  - отдельные секции Effects & Filters, Scroll & Overscroll, Scroll Snap, Multi-column, Print, RTL.
+- Версия фреймворка обновлена до `2.6.0`.
+
+
 ## [2.5.0] - 2025-12-27
 
 ### Добавлено
