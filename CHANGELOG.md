@@ -5,6 +5,37 @@
 
 
 
+
+## [2.1.0] - 2025-12-27
+
+### Добавлено
+- Новый partial `_position.css` с утилитами позиционирования и z-слоя:
+  - `relative`, `absolute`, `fixed`, `sticky`;
+  - `top-0/1/2/full`, `right-*`, `bottom-*`, `left-*`;
+  - `z-0/10/20/30/40/50`, `z-auto`.
+- Расширенный `_sizing.css`:
+  - фракции ширины и высоты (`w-1/2`, `w-1/3`, `w-2/3`, `h-1/2`, `h-1/3`, `h-2/3`);
+  - `w-full`, `w-screen`, `h-full`, `h-screen`;
+  - min/max-утилиты (`min-w-full`, `max-w-full`, `min-h-full`, `max-h-full`);
+  - aspect ratio (`aspect-video`, `aspect-square`).
+- Новый partial `_effects.css`:
+  - скругления (`rounded-none/sm/md/lg/full`);
+  - тени (`shadow-none/xs/sm/md/lg/xl/2xl`);
+  - границы (`border`, `border-0`, `border-t/b/l/r`, `border-*` по semantic-цветам);
+  - transitions (`transition*`, `duration-*`, `ease-*`) и анимации (`animate-spin`, `animate-pulse`).
+- Расширен `_typography.css`:
+  - размеры текста (`text-xs` … `text-4xl`);
+  - веса (`font-normal`, `font-medium`, `font-semibold`, `font-bold`);
+  - line-height (`leading-none` … `leading-loose`).
+- Обновлён раздел **Utilities** в VitePress-документации и добавлен примерный блок в `docs/index.html`.
+
+### Изменено
+- Расширен JIT-фильтр `isRarogClass`:
+  - добавлена поддержка новых префиксов (`relative/absolute`, `top-*`, `z-*`, `aspect-*`, `rounded*`, `shadow-*`,
+    `border*`, `transition*`, `duration-*`, `ease-*`, `animate-*`, `font-*`, `leading-*`), чтобы новые утилиты
+    корректно попадали в JIT-сборку.
+- Версии пакетов и токенов обновлены до `2.1.0`.
+
 ## [2.0.0] - 2025-12-27
 
 ### Добавлено

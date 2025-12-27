@@ -646,6 +646,27 @@ function extractClassesFromContent(files) {
         name.startsWith("min-w-") || name.startsWith("max-w-") ||
         name.startsWith("min-h-") || name.startsWith("max-h-")) return true;
 
+    // позиционирование и z-слой
+    if (name === "relative" || name === "absolute" || name === "fixed" || name === "sticky") return true;
+    if (name.startsWith("top-") || name.startsWith("right-") ||
+        name.startsWith("bottom-") || name.startsWith("left-")) return true;
+    if (name.startsWith("z-")) return true;
+
+    // sizing / aspect
+    if (name.startsWith("aspect-")) return true;
+
+    // эффекты и границы
+    if (name.startsWith("rounded") || name.startsWith("shadow-") ||
+        name === "border" || name.startsWith("border-")) return true;
+
+    // transitions / animations
+    if (name === "transition" || name.startsWith("transition-") ||
+        name.startsWith("duration-") || name.startsWith("ease-") ||
+        name.startsWith("animate-")) return true;
+
+    // advanced typography
+    if (name.startsWith("font-") || name.startsWith("leading-")) return true;
+
     // spacing / layout
     const utilPrefixes = [
       "mt-", "mb-", "ml-", "mr-", "mx-", "my-",
@@ -668,8 +689,7 @@ function extractClassesFromContent(files) {
 
     return false;
   };
-
-  for (const file of files) {
+r (const file of files) {
     let content;
     try {
       content = fs.readFileSync(file, "utf8");
