@@ -3,7 +3,7 @@
  * Простейшие behavior-тесты Carousel (MVP).
  */
 
-import { Rarog } from "../../packages/js/dist/rarog.esm.js";
+import { Rarog } from "../../packages/js/src/rarog.esm.js";
 
 describe("Rarog.Carousel", () => {
   test("getOrCreate возвращает один и тот же инстанс", () => {

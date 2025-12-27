@@ -287,6 +287,80 @@ function getEffectiveConfig() {
   merged.plugins = user.plugins || defaultConfig.plugins || [];
   return merged;
 }
+
+function validateConfig(config) {
+  const result = {
+    errors: [],
+    warnings: []
+  };
+
+  if (!config) {
+    result.warnings.push({
+      code: "CONFIG_MISSING",
+      message: "Файл rarog.config.* не найден. Используется встроенный defaultConfig."
+    });
+    return result;
+  }
+
+  // Проверка screens (брейкпоинты)
+  if (config.screens && typeof config.screens === "object") {
+    const entries = Object.entries(config.screens);
+    const numeric = entries
+      .map(([name, value]) => {
+        if (typeof value !== "string") {
+          result.errors.push({
+            code: "SCREEN_VALUE_TYPE",
+            message: `Значение screens.${name} должно быть строкой (например, \"640px\"), получено: ${typeof value}`
+          });
+          return null;
+        }
+        const match = value.match(/^(\\d+)(px)?$/);
+        if (!match) {
+          result.warnings.push({
+            code: "SCREEN_VALUE_FORMAT",
+            message: `Значение screens.${name} имеет нестандартный формат: \"${value}\". Рекомендуется использовать значения в px (например, 640px).`
+          });
+          return null;
+        }
+        return { name, px: Number(match[1]) };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.px - b.px);
+
+    for (let i = 1; i < numeric.length; i++) {
+      if (numeric[i].px === numeric[i - 1].px) {
+        result.warnings.push({
+          code: "SCREEN_DUPLICATE",
+          message: `Брейкпоинты screens.${numeric[i - 1].name} и screens.${numeric[i].name} имеют одинаковую ширину ${numeric[i].px}px.`
+        });
+      }
+      if (numeric[i].px < numeric[i - 1].px) {
+        result.errors.push({
+          code: "SCREEN_ORDER",
+          message: `Брейкпоинты screens не отсортированы по возрастанию: ${numeric[i].name} (${numeric[i].px}px) меньше, чем ${numeric[i - 1].name} (${numeric[i - 1].px}px).`
+        });
+      }
+    }
+  }
+
+  // Проверка plugins
+  if (config.plugins && !Array.isArray(config.plugins)) {
+    result.errors.push({
+      code: "PLUGINS_TYPE",
+      message: "Поле plugins в rarog.config.* должно быть массивом (Array)."
+    });
+  }
+
+  // Базовая проверка theme.colors
+  if (config.theme && config.theme.colors && typeof config.theme.colors !== "object") {
+    result.errors.push({
+      code: "THEME_COLORS_TYPE",
+      message: "theme.colors должен быть объектом с цветовыми палитрами."
+    });
+  }
+
+  return result;
+}
 /* -------------------------------------------------------------------------- */
 /* Генерация токенов из конфига                                               */
 /* -------------------------------------------------------------------------- */
@@ -1184,6 +1258,40 @@ function cmdDocs() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Валидация конфига                                                            */
+/* -------------------------------------------------------------------------- */
+
+function cmdValidate() {
+  const userConfig = loadUserConfig();
+  const result = validateConfig(userConfig);
+
+  const hasErrors = result.errors.length > 0;
+  const hasWarnings = result.warnings.length > 0;
+
+  if (!hasErrors && !hasWarnings) {
+    console.log("\x1b[32m[rarog] Конфиг rarog.config.* выглядит корректным.\x1b[0m");
+    return;
+  }
+
+  if (hasWarnings) {
+    console.log("\x1b[33m[rarog] Предупреждения конфига:\x1b[0m");
+    result.warnings.forEach(w => {
+      console.log("  [warn]", w.code + ":", w.message);
+    });
+    console.log("");
+  }
+
+  if (hasErrors) {
+    console.log("\x1b[31m[rarog] Ошибки конфига:\x1b[0m");
+    result.errors.forEach(e => {
+      console.log("  [error]", e.code + ":", e.message);
+    });
+    console.log("\nПодробнее о конфиге: https://rarog.css.cajeer.ru/guide/config");
+    process.exitCode = 1;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /* Точка входа                                                                */
 /* -------------------------------------------------------------------------- */
 
@@ -1194,6 +1302,7 @@ function printHelp() {
   console.log("  rarog build   Сгенерировать CSS-токены и rarog.tokens.json из rarog.config.js");
   console.log("  rarog init    Создать стартовый rarog.config.js/ts и пример проекта");
   console.log("  rarog docs    Запустить dev-документацию (tools/docs-dev.mjs)");
+  console.log("  rarog validate Проверить rarog.config.* и вывести предупреждения/ошибки");
   console.log("");
 }
 
@@ -1229,6 +1338,7 @@ if (require.main === module) {
 module.exports = {
   defaultConfig,
   getEffectiveConfig,
+  validateConfig,
   generateColorCss,
   generateSpacingCss,
   generateRadiusCss,

@@ -3,7 +3,7 @@
  * Минимальные тесты поведения Stepper.
  */
 
-import { Rarog } from "../../packages/js/dist/rarog.esm.js";
+import { Rarog } from "../../packages/js/src/rarog.esm.js";
 
 describe("Rarog.Stepper", () => {
   test("goTo() меняет активный шаг", () => {

@@ -3,7 +3,7 @@
  * Smoke-тест навигации + offcanvas (ранее реализованный компонент).
  */
 
-import { Rarog } from "../../packages/js/dist/rarog.esm.js";
+import { Rarog } from "../../packages/js/src/rarog.esm.js";
 
 describe("Navbar + Offcanvas", () => {
   test("Offcanvas getOrCreate работает", () => {

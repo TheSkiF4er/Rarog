@@ -1,6 +1,6 @@
 {
   "name": "rarog-css",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Rarog CSS Framework — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
@@ -14,7 +14,8 @@
     "docs": "node tools/docs-dev.mjs",
     "docs:dev": "vitepress dev docs-site",
     "docs:build": "vitepress build docs-site",
-    "docs:preview": "vitepress preview docs-site"
+    "docs:preview": "vitepress preview docs-site",
+    "test": "vitest --run"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,9 @@
     "postcss-cli": "^11.0.0",
     "autoprefixer": "^10.4.0",
     "cssnano": "^6.0.0",
-    "vitepress": "latest"
+    "vitepress": "latest",
+    "vitest": "^1.0.0",
+    "vscode-languageserver": "^9.0.0"
   },
   "bin": {
     "rarog": "packages/cli/bin/rarog.js"
