@@ -28,3 +28,56 @@
   border-color: var(--rarog-color-primary);
   box-shadow: 0 0 0 1px var(--rarog-color-primary);
 }
+
+/* Group / Peer / Data variants
+ * Минимальная реализация:
+ *   group-hover:bg-primary
+ *   peer-checked:bg-primary / peer-focus:border-primary
+ *   data-[state=open]:bg-primary
+ */
+
+/* group-hover: на основе контейнера .group */
+
+.group {
+  position: relative;
+}
+
+.group:hover .group-hover\:bg-primary {
+  background-color: var(--rarog-color-primary);
+  color: var(--rarog-color-primary-foreground);
+}
+
+.group:hover .group-hover\:text-primary {
+  color: var(--rarog-color-primary);
+}
+
+.group:hover .group-hover\:border-primary {
+  border-color: var(--rarog-color-primary);
+}
+
+/* peer-*: управляем состоянием соседних элементов */
+
+.peer:checked ~ .peer-checked\:bg-primary {
+  background-color: var(--rarog-color-primary);
+  color: var(--rarog-color-primary-foreground);
+}
+
+.peer:checked ~ .peer-checked\:text-primary {
+  color: var(--rarog-color-primary);
+}
+
+.peer:focus ~ .peer-focus\:border-primary {
+  border-color: var(--rarog-color-primary);
+  box-shadow: 0 0 0 1px var(--rarog-color-primary);
+}
+
+/* data-[state=open]:* — условная стилизация по data-state */
+
+.data-\[state\=open\]\:bg-primary[data-state="open"] {
+  background-color: var(--rarog-color-primary);
+  color: var(--rarog-color-primary-foreground);
+}
+
+.data-\[state\=open\]\:border-primary[data-state="open"] {
+  border-color: var(--rarog-color-primary);
+}

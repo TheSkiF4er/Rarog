@@ -40,6 +40,12 @@ export interface RarogConfig {
   screens: Record<string, string>;
   mode?: "full" | "jit";
   content?: string[];
+  variants?: {
+    group?: string[];
+    peer?: string[];
+    data?: string[];
+    [key: string]: string[] | undefined;
+  };
   extend?: {
     colors?: Partial<RarogThemeColors>;
     spacing?: Record<string, string>;

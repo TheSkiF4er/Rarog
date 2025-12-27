@@ -6,6 +6,28 @@
 
 
 
+## [2.3.0] - 2025-12-27
+
+### Добавлено
+- Variant-префиксы:
+  - `group-hover:*` (через контейнер `.group` + дочерние классы `group-hover:...`);
+  - `peer-checked:*` / `peer-focus:*` (на базе `.peer` + соседние элементы);
+  - `data-[state=open]:*` для простых data-состояний.
+- JIT arbitrary values v2:
+  - поддержка `rounded-[...]`, `shadow-[...]`, `gap-[...]`, `border-[...]`;
+  - простая валидация значений для защиты от CSS-инъекций.
+- JIT v2:
+  - поиск классов не только в `class="..."`, но и в `className`, `element.classList.add(...)`,
+    а также в вызовах `clsx(...)` / `cx(...)` / `classnames(...)`.
+- Официальный Vite-плагин (`tools/vite-plugin-rarog.js`), интегрированный в starter
+  `examples/starters/vite-react`.
+
+### Изменено
+- Обновлена документация:
+  - новый раздел **Variants & JIT**;
+  - расширен раздел **Integration Guides** (Vite-плагин, рекомендации для Webpack).
+- Версии пакета и токенов обновлены до `2.3.0`.
+
 ## [2.2.0] - 2025-12-27
 
 ### Добавлено

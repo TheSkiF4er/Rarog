@@ -139,6 +139,11 @@ const config = {
     "radius": {},
     "shadow": {}
   },
+  "variants": {
+    "group": ["hover"],
+    "peer": ["checked", "focus"],
+    "data": ["state"]
+  },
   "plugins": [],
   "mode": "full",
   "content": [

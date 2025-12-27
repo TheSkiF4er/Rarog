@@ -135,6 +135,11 @@ const config: RarogConfig = {
     "radius": {},
     "shadow": {}
   },
+  "variants": {
+    "group": ["hover"],
+    "peer": ["checked", "focus"],
+    "data": ["state"]
+  },
   "plugins": [],
   "mode": "full",
   "content": [

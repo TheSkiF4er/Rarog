@@ -14,3 +14,42 @@ Rarog не привязан к конкретному фреймворку и х
 - `examples/starters/vite-react` — Vite + React + Rarog
 
 Каждый starter содержит отдельный `README` и пример минимального проекта.
+
+## Vite + Rarog (официальный плагин)
+
+Для Vite-проектов рекомендуется использовать плагин:
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { rarogPlugin } from '../tools/vite-plugin-rarog'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    rarogPlugin()
+  ]
+})
+```
+
+Плагин автоматически вызывает `rarog build` в JIT-режиме при старте dev-сервера и при изменении файлов в `resources/`.
+
+## Webpack / другие сборщики
+
+Для Webpack и других bundler'ов можно:
+
+- либо вызывать `rarog build` из npm-скриптов перед `webpack build`;
+- либо написать лёгкий плагин на базе `child_process.spawn('rarog', ['build'])`.
+
+Простой сценарий через npm-скрипты:
+
+```json
+{
+  "scripts": {
+    "build:css": "rarog build",
+    "build:app": "webpack --mode production",
+    "build": "npm run build:css && npm run build:app"
+  }
+}
+```

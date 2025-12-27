@@ -159,6 +159,11 @@ const defaultConfig = {
     "radius": {},
     "shadow": {}
   },
+  "variants": {
+    "group": ["hover"],
+    "peer": ["checked", "focus"],
+    "data": ["state"]
+  },
   "plugins": [],
   "mode": "full",
   "content": [
@@ -265,6 +270,13 @@ function getEffectiveConfig() {
       );
     }
   }
+
+  // Variants (group/peer/data)
+  merged.variants = Object.assign(
+    {},
+    defaultConfig.variants || {},
+    user.variants || {}
+  );
 
   // Режим сборки и источники контента
   merged.mode = user.mode || defaultConfig.mode || "full";
@@ -635,6 +647,8 @@ function scanContentFiles(patterns) {
 function extractClassesFromContent(files) {
   const classSet = new Set();
   const classAttrRe = /(class|className)\s*=\s*["'`]([^"'`]+)["'`]/g;
+  const classListRe = /\.classList\.add\(([^)]+)\)/g;
+  const fnCallRe = /\b(?:clsx|cx|classnames)\(([^)]+)\)/g;
 
   const isRarogClass = name => {
     if (!name) return false;
@@ -678,7 +692,7 @@ function extractClassesFromContent(files) {
     ];
     if (utilPrefixes.some(p => name === p || name.startsWith(p))) return true;
 
-    // responsive / state вариации: sm:d-flex, hover:bg-primary и т.п.
+    // responsive / state / variant вариации: sm:d-flex, hover:bg-primary, group-hover:bg-primary и т.п.
     if (name.includes(":")) {
       const base = name.split(":").pop();
       return isRarogClass(base);
@@ -689,7 +703,20 @@ function extractClassesFromContent(files) {
 
     return false;
   };
-r (const file of files) {
+
+  const collectFromRaw = raw => {
+    raw
+      .split(/\s+/)
+      .map(x => x.trim())
+      .filter(Boolean)
+      .forEach(cls => {
+        if (isRarogClass(cls)) {
+          classSet.add(cls);
+        }
+      });
+  };
+
+  for (const file of files) {
     let content;
     try {
       content = fs.readFileSync(file, "utf8");
@@ -698,22 +725,37 @@ r (const file of files) {
     }
 
     let m;
+
+    // 1) class / className в разметке (HTML/JSX/TSX)
     while ((m = classAttrRe.exec(content)) !== null) {
       const raw = m[2];
-      raw
-        .split(/\s+/)
-        .map(x => x.trim())
-        .filter(Boolean)
-        .forEach(cls => {
-          if (isRarogClass(cls)) {
-            classSet.add(cls);
-          }
-        });
+      collectFromRaw(raw);
+    }
+
+    // 2) classList.add('foo', "bar baz")
+    while ((m = classListRe.exec(content)) !== null) {
+      const args = m[1];
+      const strRe = /["'`]([^"'`]+)["'`]/g;
+      let sm;
+      while ((sm = strRe.exec(args)) !== null) {
+        collectFromRaw(sm[1]);
+      }
+    }
+
+    // 3) clsx()/cx()/classnames() — берём только строковые литералы
+    while ((m = fnCallRe.exec(content)) !== null) {
+      const args = m[1];
+      const strRe = /["'`]([^"'`]+)["'`]/g;
+      let sm;
+      while ((sm = strRe.exec(args)) !== null) {
+        collectFromRaw(sm[1]);
+      }
     }
   }
 
   return Array.from(classSet);
 }
+
 
 /**
  * Генерация CSS для произвольных значений:
@@ -721,6 +763,13 @@ r (const file of files) {
  */
 function generateArbitraryCss(usedClasses) {
   const lines = [];
+
+  const sanitize = (value) => {
+    if (!value) return null;
+    // Примитивная защита от инъекций: не допускаем ';' и '}'
+    if (/[;}]/.test(value)) return null;
+    return value;
+  };
 
   usedClasses
     .filter(cls => cls.includes("[") && cls.includes("]"))
@@ -730,22 +779,42 @@ function generateArbitraryCss(usedClasses) {
       const mBg = cls.match(/^bg-\[(.+)\]$/);
       const mText = cls.match(/^text-\[(.+)\]$/);
 
+      const mRadius = cls.match(/^rounded-\[(.+)\]$/);
+      const mShadow = cls.match(/^shadow-\[(.+)\]$/);
+      const mGap = cls.match(/^gap-\[(.+)\]$/);
+      const mBorderWidth = cls.match(/^border-\[(.+)\]$/);
+
       const selector = "." + escapeClassForSelector(cls);
 
+      const pushDecl = (prop, raw) => {
+        const v = sanitize(raw);
+        if (!v) return;
+        lines.push(`${selector} { ${prop}: ${v}; }`);
+      };
+
       if (mWidth) {
-        lines.push(`${selector} { width: ${mWidth[1]}; }`);
+        pushDecl("width", mWidth[1]);
       } else if (mHeight) {
-        lines.push(`${selector} { height: ${mHeight[1]}; }`);
+        pushDecl("height", mHeight[1]);
       } else if (mBg) {
-        lines.push(`${selector} { background-color: ${mBg[1]}; }`);
+        pushDecl("background-color", mBg[1]);
       } else if (mText) {
-        lines.push(`${selector} { color: ${mText[1]}; }`);
+        pushDecl("color", mText[1]);
+      } else if (mRadius) {
+        pushDecl("border-radius", mRadius[1]);
+      } else if (mShadow) {
+        pushDecl("box-shadow", mShadow[1]);
+      } else if (mGap) {
+        pushDecl("gap", mGap[1]);
+      } else if (mBorderWidth) {
+        pushDecl("border-width", mBorderWidth[1]);
       }
     });
 
   if (lines.length === 0) return "";
   return "/* Rarog JIT arbitrary values */\n" + lines.join("\n") + "\n";
 }
+
 
 /**
  * Грубый, но практичный фильтр CSS по используемым классам.
