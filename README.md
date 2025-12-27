@@ -4,17 +4,17 @@
 > Альтернатива связке **Tailwind CSS + Bootstrap**, заточенная под продуктовую разработку и Cajeer‑экосистему — но не только.
 
 <p align="left">
-  <a href="https://github.com/TheSkiF4er/rarog-css/actions/workflows/ci.yml">
-    <img src="https://github.com/TheSkiF4er/rarog-css/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
+    <img src="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
-  <a href="https://www.npmjs.com/package/rarog-css">
-    <img src="https://img.shields.io/npm/v/rarog-css.svg?logo=npm" alt="npm" />
+  <a href="https://www.npmjs.com/package/rarog">
+    <img src="https://img.shields.io/npm/v/rarog.svg?logo=npm" alt="npm" />
   </a>
-  <a href="https://github.com/TheSkiF4er/rarog-css/releases">
-    <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog-css?logo=github" alt="GitHub release" />
+  <a href="https://github.com/TheSkiF4er/rarog/releases">
+    <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub release" />
   </a>
-  <a href="https://rarog.css.cajeer.ru">
-    <img src="https://img.shields.io/badge/docs-rarog.css.cajeer.ru-blue?logo=readthedocs" alt="Docs" />
+  <a href="https://rarog.cajeer.ru">
+    <img src="https://img.shields.io/badge/docs-rarog.cajeer.ru-blue?logo=readthedocs" alt="Docs" />
   </a>
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License" />
