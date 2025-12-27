@@ -14,6 +14,7 @@ export default defineConfig({
       { text: 'Variants & JIT', link: '/variants-jit' },
       { text: 'Components', link: '/components' },
       { text: 'JavaScript', link: '/javascript' },
+      { text: 'Accessibility', link: '/accessibility' },
       { text: 'Theming', link: '/theming' },
       { text: 'Cookbook', link: '/cookbook' },
       {
@@ -25,6 +26,10 @@ export default defineConfig({
           { text: 'Next.js Guide', link: '/guide-nextjs' },
           { text: 'Cajeer Stack Guide', link: '/guide-cajeer-stack' }
         ]
+      },
+      {
+        text: 'EN',
+        link: '/en/'
       },
       {
         text: 'More',
@@ -52,6 +57,7 @@ export default defineConfig({
       { text: 'Variants & JIT', link: '/variants-jit' },
             { text: 'Components', link: '/components' },
             { text: 'JavaScript', link: '/javascript' },
+      { text: 'Accessibility', link: '/accessibility' },
             { text: 'Theming', link: '/theming' },
             { text: 'API Reference', link: '/api-reference' },
             { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },

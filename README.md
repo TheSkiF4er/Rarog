@@ -132,3 +132,14 @@ Rarog можно использовать в любых проектах (Larave
 - Breaking changes возможны только при переходе на 3.x и сопровождаются миграционным гайдом.
 
 Подробнее см. разделы **API Reference** и **Versioning & Support** на docs-сайте.
+
+## English documentation (MVP)
+
+An early English documentation entry-point is available at:
+
+- Getting Started (EN): `/en/`
+- Why Rarog (EN): `/en/why-rarog`
+- Tokens (EN): `/en/tokens`
+- Utilities overview (EN): `/en/utilities`
+- Guides: `/en/guide-react`, `/en/guide-laravel`
+

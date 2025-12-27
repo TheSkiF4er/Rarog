@@ -6,6 +6,22 @@
 
 
 
+## [2.8.0] - 2025-12-27
+
+### Добавлено
+- Accessibility & Internationalization:
+  - новая страница **Accessibility** с чек-листом по ключевым компонентам и примерами доступных форм;
+  - расширенные a11y-утилиты: `not-sr-only`, `focus-ring`, `focus-outline-none`, `motion-safe:animate-*`;
+  - обновлённые рекомендации по доступности компонентов в разделе **Components**.
+- EN-документация (MVP):
+  - базовые страницы `/en/` (Getting Started, Why Rarog, Tokens, Utilities);
+  - англоязычные React и Laravel guides (`/en/guide-react`, `/en/guide-laravel`);
+  - переключатель языка (RU → EN) в навигации docs-сайта.
+
+### Изменено
+- Версия фреймворка обновлена до `2.8.0`.
+- README дополнен ссылками на английскую документацию.
+
 ## [2.7.0] - 2025-12-27
 
 ### Добавлено
