@@ -11,14 +11,14 @@ For most projects migration is straightforward.
 ## 1. Upgrade the package
 
 ```bash
-npm install rarog-css@^3.0.0
+npm install rarog@^3.0.0
 # or
-pnpm add rarog-css@^3.0.0
+pnpm add rarog@^3.0.0
 ```
 
 Make sure:
 
-- `package.json` contains `"rarog-css": "^3.0.0"`;
+- `package.json` contains `"rarog": "^3.0.0"`;
 - you ship the new `rarog.css` / `rarog-*.css` and `rarog.js`.
 
 ## 2. Config & CLI
@@ -92,7 +92,7 @@ Docs versioning:
 
 ## 6. Migration checklist
 
-1. Upgrade to `rarog-css@^3.0.0`.
+1. Upgrade to `rarog@^3.0.0`.
 2. Remove usages of any internal/undocumented APIs if present.
 3. Verify custom Rarog plugins work against the documented Plugin API.
 4. Optionally start using container queries (`.rg-cq`, `cq-md:*`) in critical layouts.

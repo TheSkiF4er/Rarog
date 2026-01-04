@@ -338,7 +338,7 @@ connection.onHover(params => {
   const entry = classMap.find(e => e.className === prefix);
   if (!entry) return null;
 
-  const docsUrl = "https://rarog.css.cajeer.ru";
+  const docsUrl = "https://cajeer.ru/rarog";
 
   const contents = [
     { language: "text", value: entry.className },

@@ -81,7 +81,7 @@ export default defineConfig({
       ]
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/TheSkiF4er/rarog-css' }
+      { icon: 'github', link: 'https://github.com/TheSkiF4er/rarog' }
     ]
   }
 })

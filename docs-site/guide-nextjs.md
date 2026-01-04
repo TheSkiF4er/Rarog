@@ -5,7 +5,7 @@ Rarog можно использовать и в приложениях на Next
 ## 1. Установка
 
 ```bash
-npm install rarog-css --save-dev
+npm install rarog --save-dev
 ```
 
 ## 2. rarog.config.*
@@ -13,7 +13,7 @@ npm install rarog-css --save-dev
 В корне Next‑проекта:
 
 ```ts
-import type { RarogConfig } from "rarog-css/rarog.config.types";
+import type { RarogConfig } from "rarog/rarog.config.types";
 
 const config: RarogConfig = {
   mode: "jit",

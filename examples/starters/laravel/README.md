@@ -6,7 +6,7 @@
 
 1. В вашем Laravel-проекте установите Rarog:
    ```bash
-   npm install rarog-css --save-dev
+   npm install rarog --save-dev
    ```
 
 2. Добавьте скрипт сборки в `package.json` Laravel-проекта:

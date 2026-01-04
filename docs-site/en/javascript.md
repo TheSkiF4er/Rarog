@@ -61,7 +61,7 @@ How to enable:
 - via JS API at runtime:
 
   ```js
-  import Rarog from "rarog-css/dist/rarog.esm.js";
+  import Rarog from "rarog/dist/rarog.esm.js";
 
   Rarog.setDebug(true);
   console.log(Rarog.isDebugEnabled()); // true

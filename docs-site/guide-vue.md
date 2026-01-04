@@ -6,13 +6,13 @@ React/Vite сценарий.
 ## 1. Установка
 
 ```bash
-npm install rarog-css --save-dev
+npm install rarog --save-dev
 ```
 
 ## 2. rarog.config.*
 
 ```ts
-import type { RarogConfig } from "rarog-css/rarog.config.types";
+import type { RarogConfig } from "rarog/rarog.config.types";
 
 const config: RarogConfig = {
   mode: "jit",
@@ -33,7 +33,7 @@ export default config;
 ```ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { rarogPlugin } from 'rarog-css/tools/vite-plugin-rarog'
+import { rarogPlugin } from 'rarog/tools/vite-plugin-rarog'
 
 export default defineConfig({
   plugins: [
@@ -84,7 +84,7 @@ JIT будет анализировать все `.vue` файлы, поэтом
 Установка (в отдельном проекте):
 
 ```bash
-npm install rarog-css @rarog/vue
+npm install rarog @rarog/vue
 ```
 
 Пример базовой интеграции в Nuxt 3 (упрощённо):
@@ -93,10 +93,10 @@ npm install rarog-css @rarog/vue
 // nuxt.config.ts
 export default defineNuxtConfig({
   css: [
-    "rarog-css/dist/rarog-core.min.css",
-    "rarog-css/dist/rarog-utilities.min.css",
-    "rarog-css/dist/rarog-components.min.css",
-    "rarog-css/dist/rarog.jit.css"
+    "rarog/dist/rarog-core.min.css",
+    "rarog/dist/rarog-utilities.min.css",
+    "rarog/dist/rarog-components.min.css",
+    "rarog/dist/rarog.jit.css"
   ]
 });
 ```

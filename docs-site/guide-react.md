@@ -24,7 +24,7 @@ npm run dev
 ### Установка
 
 ```bash
-npm install rarog-css --save-dev
+npm install rarog --save-dev
 ```
 
 ### rarog.config.ts
@@ -32,7 +32,7 @@ npm install rarog-css --save-dev
 В корне проекта:
 
 ```ts
-import type { RarogConfig } from "rarog-css/rarog.config.types";
+import type { RarogConfig } from "rarog/rarog.config.types";
 
 const config: RarogConfig = {
   mode: "jit",
@@ -55,7 +55,7 @@ export default config;
 ```ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { rarogPlugin } from 'rarog-css/tools/vite-plugin-rarog'
+import { rarogPlugin } from 'rarog/tools/vite-plugin-rarog'
 
 export default defineConfig({
   plugins: [
@@ -139,7 +139,7 @@ JS‑ядром Rarog.
 Установка (в реальном проекте):
 
 ```bash
-npm install rarog-css @rarog/react
+npm install rarog @rarog/react
 ```
 
 Базовый пример с `<RarogProvider>` и модалкой:
@@ -147,10 +147,10 @@ npm install rarog-css @rarog/react
 ```tsx
 import React from "react";
 import { RarogProvider, RarogModal } from "@rarog/react";
-import "rarog-css/dist/rarog-core.min.css";
-import "rarog-css/dist/rarog-utilities.min.css";
-import "rarog-css/dist/rarog-components.min.css";
-import "rarog-css/dist/rarog.jit.css";
+import "rarog/dist/rarog-core.min.css";
+import "rarog/dist/rarog-utilities.min.css";
+import "rarog/dist/rarog-components.min.css";
+import "rarog/dist/rarog.jit.css";
 
 export function App() {
   return (

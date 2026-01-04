@@ -1286,7 +1286,7 @@ function cmdValidate() {
     result.errors.forEach(e => {
       console.log("  [error]", e.code + ":", e.message);
     });
-    console.log("\nПодробнее о конфиге: https://rarog.css.cajeer.ru/guide/config");
+    console.log("\nПодробнее о конфиге: https://cajeer.ru/rarog");
     process.exitCode = 1;
   }
 }

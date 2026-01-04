@@ -9,7 +9,7 @@ Farog, Warog и др.), но не привязан к ней жёстко.
 
 Рекомендуемый вариант:
 
-- отдельный репозиторий/пакет `rarog-css` (как сейчас);
+- отдельный репозиторий/пакет `rarog` (как сейчас);
 - все Cajeer‑проекты (CMS, панели, админки, лендинги) подключают готовый CSS/JS:
 
   - `dist/rarog.css` или `dist/rarog.jit.css`,
@@ -21,7 +21,7 @@ Farog, Warog и др.), но не привязан к ней жёстко.
 
 ```ts
 // rarog.config.cajeer.ts
-import type { RarogConfig } from "rarog-css/rarog.config.types";
+import type { RarogConfig } from "rarog/rarog.config.types";
 
 const config: RarogConfig = {
   mode: "jit",

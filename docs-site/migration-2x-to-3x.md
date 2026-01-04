@@ -13,14 +13,14 @@ Rarog 3.0.0 — это эволюция 2.x без агрессивных пер
 - Если вы используете npm/pnpm/yarn:
 
 ```bash
-npm install rarog-css@^3.0.0
+npm install rarog@^3.0.0
 # или
-pnpm add rarog-css@^3.0.0
+pnpm add rarog@^3.0.0
 ```
 
 - Убедитесь, что:
 
-  - `package.json` содержит `"rarog-css": "^3.0.0"`;
+  - `package.json` содержит `"rarog": "^3.0.0"`;
   - в сборке подключается актуальный `rarog.css`/`rarog-*.css` и `rarog.js`.
 
 ## 2. Проверка config & CLI

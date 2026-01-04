@@ -5,7 +5,7 @@ Rarog plays well with Laravel + Vite (or Mix) setups.
 ## Install
 
 ```bash
-npm install rarog-css --save-dev
+npm install rarog --save-dev
 ```
 
 ## Configure Vite
@@ -13,8 +13,8 @@ npm install rarog-css --save-dev
 In your `resources/js/app.js`:
 
 ```js
-import 'rarog-css/dist/rarog.css'
-import { Rarog } from 'rarog-css/dist/rarog.esm.js'
+import 'rarog/dist/rarog.css'
+import { Rarog } from 'rarog/dist/rarog.esm.js'
 
 Rarog.init()
 ```
@@ -22,7 +22,7 @@ Rarog.init()
 In `vite.config.js` make sure your content paths for JIT include Blade templates:
 
 ```js
-import rarog from 'rarog-css/vite-plugin';
+import rarog from 'rarog/vite-plugin';
 
 export default defineConfig({
   plugins: [

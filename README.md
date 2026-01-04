@@ -13,8 +13,8 @@
   <a href="https://github.com/TheSkiF4er/rarog/releases">
     <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub release" />
   </a>
-  <a href="https://rarog.cajeer.ru">
-    <img src="https://img.shields.io/badge/docs-rarog.cajeer.ru-blue?logo=readthedocs" alt="Docs" />
+  <a href="https://cajeer.ru/rarog">
+    <img src="https://img.shields.io/badge/docs-cajeer.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
   </a>
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License" />
@@ -26,6 +26,9 @@
 - Контакты: `support@cajeer.ru`
 - Текущая стабильная ветка: **3.x**
 - Текущая версия: **3.5.0 (Reliability, Observability & Ecosystem)**
+- Документация: `https://cajeer.ru/rarog`
+- CDN: `https://cdn.cajeer.ru/rarog`
+
 
 ---
 
@@ -48,7 +51,31 @@ Rarog хорошо ложится и на **Cajeer‑экосистему**, и 
 
 ## Быстрый старт
 
-### CDN / статическое подключение
+### CDN (официальный эндпоинт cdn.cajeer.ru)
+
+Быстрее всего начать с подключении Rarog через официальное CDN.  
+Версионированный пример (рекомендуется для продакшена):
+
+```html
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/3.5.0/rarog.min.css">
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/3.5.0/themes/default.css">
+
+<!-- JavaScript-ядро (опционально, только если вы используете JS-компоненты) -->
+<script src="https://cdn.cajeer.ru/rarog/3.5.0/rarog.umd.js" defer></script>
+```
+
+Для экспериментов можно использовать алиас `latest` (если он настроен на стороне CDN):
+
+```html
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/latest/rarog.min.css">
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/latest/themes/default.css">
+<script src="https://cdn.cajeer.ru/rarog/latest/rarog.umd.js" defer></script>
+```
+
+### Локальное статическое подключение
+
+Если вы собираете статические файлы у себя (например, из `dist/` релиза), структура может выглядеть так:
 
 ```html
 <link rel="stylesheet" href="/css/rarog-core.min.css">
@@ -80,12 +107,12 @@ Rarog хорошо ложится и на **Cajeer‑экосистему**, и 
 ### npm + CLI + JIT
 
 ```bash
-npm install rarog-css
+npm install rarog
 ```
 
 ```js
 // rarog.config.ts
-import { defineConfig } from "rarog-css/rarog.config.types";
+import { defineConfig } from "rarog/rarog.config.types";
 
 export default defineConfig({
   mode: "jit",
@@ -171,7 +198,7 @@ npx rarog build
 
 ## Документация и поддержка
 
-- Docs: `https://rarog.css.cajeer.ru` (RU + EN, с версионированием `/v2` и `/v3`).
+- Docs: `https://cajeer.ru/rarog` (RU + EN, с версионированием `/v2` и `/v3`).
 - Основные разделы:
   - Getting Started, Tokens, Utilities, Components, JavaScript,
   - Theming, Guides (Laravel, React, Vue, Next.js, Cajeer‑Stack),

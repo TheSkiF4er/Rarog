@@ -4,6 +4,32 @@
 
 ## Установка
 
+### Вариант 0. Официальное CDN cdn.cajeer.ru
+
+Если нужен максимально быстрый старт без сборки и конфигурации, можно подключить Rarog
+напрямую через официальный CDN.
+
+Версионированный пример (рекомендуется для продакшена):
+
+```html
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/3.5.0/rarog.min.css">
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/3.5.0/themes/default.css">
+
+<!-- JavaScript-ядро (опционально, только если вы используете JS-компоненты) -->
+<script src="https://cdn.cajeer.ru/rarog/3.5.0/rarog.umd.js" defer></script>
+```
+
+Для экспериментов можно использовать алиас `latest` (если он настроен на стороне CDN):
+
+```html
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/latest/rarog.min.css">
+<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/latest/themes/default.css">
+<script src="https://cdn.cajeer.ru/rarog/latest/rarog.umd.js" defer></script>
+```
+
+После этого можно сразу использовать utility-классы, компоненты и JS‑поведение.
+
 ### Вариант 1. Подключение готовых CSS-файлов
 
 Самый быстрый путь — использовать уже собранные файлы из `dist/`:
@@ -17,7 +43,7 @@
 ### Вариант 2. NPM + сборка
 
 ```bash
-npm install rarog-css --save-dev
+npm install rarog --save-dev
 ```
 
 В `package.json` вашего проекта:

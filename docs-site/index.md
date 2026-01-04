@@ -11,7 +11,7 @@ hero:
       link: /getting-started
     - theme: alt
       text: GitHub
-      link: https://github.com/TheSkiF4er/rarog-css
+      link: https://github.com/TheSkiF4er/rarog
 
 features:
   - title: Дизайн-токены

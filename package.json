@@ -1,5 +1,5 @@
 {
-  "name": "rarog-css",
+  "name": "rarog",
   "version": "3.5.0",
   "description": "Rarog CSS Framework — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
@@ -22,12 +22,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheSkiF4er/rarog-css.git"
+    "url": "git+https://github.com/TheSkiF4er/rarog.git"
   },
   "bugs": {
-    "url": "https://github.com/TheSkiF4er/rarog-css/issues"
+    "url": "https://github.com/TheSkiF4er/rarog/issues"
   },
-  "homepage": "https://rarog.css.cajeer.ru",
+  "homepage": "https://cajeer.ru/rarog",
   "devDependencies": {
     "postcss": "^8.4.0",
     "postcss-cli": "^11.0.0",

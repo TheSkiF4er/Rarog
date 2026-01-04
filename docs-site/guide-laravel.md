@@ -10,7 +10,7 @@
 В уже существующем Laravel‑приложении:
 
 ```bash
-npm install rarog-css --save-dev
+npm install rarog --save-dev
 ```
 
 (Если ты используешь монорепу с самим Rarog, можно линковать пакет локально.)
@@ -20,7 +20,7 @@ npm install rarog-css --save-dev
 Создай `rarog.config.js` в корне Laravel‑проекта (не в монорепе):
 
 ```js
-/** @type {import('rarog-css/rarog.config.types').RarogConfig} */
+/** @type {import('rarog/rarog.config.types').RarogConfig} */
 module.exports = {
   mode: "jit",
   content: [

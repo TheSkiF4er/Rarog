@@ -17,6 +17,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "rarog-css": "^3.4.0"
+    "rarog": "^3.4.0"
   }
 }

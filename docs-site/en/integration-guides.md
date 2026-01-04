@@ -35,7 +35,7 @@ They demonstrate:
 
 For microfrontends with a shared design system:
 
-- keep tokens and themes in a shared package (`rarog-css` + theme packs);
+- keep tokens and themes in a shared package (`rarog` + theme packs);
 - share the main CSS bundle (or per‑theme bundles) across microfrontends;
 - expose Rarog JS Core as a singleton module (Webpack Module Federation, Vite, etc.).
 

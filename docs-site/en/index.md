@@ -10,16 +10,16 @@ can be used in any stack.
 ### Via npm
 
 ```bash
-npm install rarog-css
+npm install rarog
 # or
-yarn add rarog-css
+yarn add rarog
 ```
 
 ### Include in your build
 
 ```js
-import 'rarog-css/dist/rarog.css'
-import { Rarog } from 'rarog-css/dist/rarog.esm.js'
+import 'rarog/dist/rarog.css'
+import { Rarog } from 'rarog/dist/rarog.esm.js'
 
 Rarog.init()
 ```
@@ -29,8 +29,8 @@ Rarog.init()
 If you just want to play with Rarog in a prototype:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/rarog-css/dist/rarog.css" />
-<script type="module" src="https://unpkg.com/rarog-css/dist/rarog.esm.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/rarog/dist/rarog.css" />
+<script type="module" src="https://unpkg.com/rarog/dist/rarog.esm.js"></script>
 ```
 
 ## Next steps

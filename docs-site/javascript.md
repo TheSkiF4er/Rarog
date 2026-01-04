@@ -215,7 +215,7 @@ Rarog.Events.on("rg:modal:show", ({ element, detail }) => {
 - через JS-API в рантайме:
 
   ```js
-  import Rarog from "rarog-css/dist/rarog.esm.js";
+  import Rarog from "rarog/dist/rarog.esm.js";
 
   Rarog.setDebug(true);
   console.log(Rarog.isDebugEnabled()); // true

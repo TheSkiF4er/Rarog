@@ -5,7 +5,7 @@ This is a minimal entry-point for using Rarog with React (Vite, CRA, Next).
 ## Install
 
 ```bash
-npm install rarog-css
+npm install rarog
 ```
 
 ## Import CSS
@@ -13,8 +13,8 @@ npm install rarog-css
 In your main entry file:
 
 ```ts
-import 'rarog-css/dist/rarog.css'
-import { Rarog } from 'rarog-css/dist/rarog.esm.js'
+import 'rarog/dist/rarog.css'
+import { Rarog } from 'rarog/dist/rarog.esm.js'
 
 Rarog.init()
 ```
@@ -51,7 +51,7 @@ around the Rarog JS Core.
 Install:
 
 ```bash
-npm install rarog-css @rarog/react
+npm install rarog @rarog/react
 ```
 
 Basic example with `<RarogProvider>` and a modal:
@@ -59,10 +59,10 @@ Basic example with `<RarogProvider>` and a modal:
 ```tsx
 import React from "react";
 import { RarogProvider, RarogModal } from "@rarog/react";
-import "rarog-css/dist/rarog-core.min.css";
-import "rarog-css/dist/rarog-utilities.min.css";
-import "rarog-css/dist/rarog-components.min.css";
-import "rarog-css/dist/rarog.jit.css";
+import "rarog/dist/rarog-core.min.css";
+import "rarog/dist/rarog-utilities.min.css";
+import "rarog/dist/rarog-components.min.css";
+import "rarog/dist/rarog.jit.css";
 
 export function App() {
   return (

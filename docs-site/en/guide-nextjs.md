@@ -2,7 +2,7 @@
 
 How to plug Rarog into a Next.js app:
 
-- add `rarog-css` as a dependency;
+- add `rarog` as a dependency;
 - import base CSS in `_app` or root layout;
 - configure `rarog.config.*` to scan `app/` or `pages/` directories;
 - run `rarog build` as part of your Next.js build.

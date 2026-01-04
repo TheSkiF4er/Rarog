@@ -3,7 +3,7 @@
 This is the English entry point for Rarog 3.x.
 
 - What Rarog is (Tailwind + Bootstrap–style hybrid framework).
-- How to install (`npm install rarog-css`).
+- How to install (`npm install rarog`).
 - How to include CSS and JS.
 - First example with utilities + components.
 

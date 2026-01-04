@@ -104,7 +104,7 @@ Rarog — это не только CSS‑фреймворк, но и визуа�
 
 - Ссылки:
 
-  - GitHub: `https://github.com/TheSkiF4er/rarog-css`
+  - GitHub: `https://github.com/TheSkiF4er/rarog`
   - docs: `https://docs.cajeer.ru/rarog` (условный URL / рекомендуемый паттерн)
 
 ---

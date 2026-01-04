@@ -2,7 +2,7 @@
 
 How to use Rarog with Vue (Vite-based setup):
 
-- install `rarog-css`,
+- install `rarog`,
 - import CSS/JS in your entry file,
 - let JIT watch your `.vue` files via `rarog.config.*`,
 - build production CSS via `rarog build`.
@@ -19,7 +19,7 @@ For Vue 3 there is an `@rarog/vue` package with `RarogProvider`, `RarogModal`,
 Install:
 
 ```bash
-npm install rarog-css @rarog/vue
+npm install rarog @rarog/vue
 ```
 
 Basic Nuxt 3 example:
@@ -28,10 +28,10 @@ Basic Nuxt 3 example:
 // nuxt.config.ts
 export default defineNuxtConfig({
   css: [
-    "rarog-css/dist/rarog-core.min.css",
-    "rarog-css/dist/rarog-utilities.min.css",
-    "rarog-css/dist/rarog-components.min.css",
-    "rarog-css/dist/rarog.jit.css"
+    "rarog/dist/rarog-core.min.css",
+    "rarog/dist/rarog-utilities.min.css",
+    "rarog/dist/rarog-components.min.css",
+    "rarog/dist/rarog.jit.css"
   ]
 });
 ```
