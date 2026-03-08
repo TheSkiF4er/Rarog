@@ -666,7 +666,7 @@ function walkDir(dir, exts, acc) {
 
 /**
  * Простейшая поддержка паттернов вида:
- *   ./resources/**/*.{html,php,js,jsx,ts,tsx,vue}
+ *   ./resources/(recursive)/*.{html,php,js,jsx,ts,tsx,vue}
  *
  * Мы разбираем:
  *   - базовую директорию до '**'
@@ -1318,6 +1318,9 @@ function main() {
       break;
     case "docs":
       cmdDocs();
+      break;
+    case "validate":
+      cmdValidate();
       break;
     case "-h":
     case "--help":
