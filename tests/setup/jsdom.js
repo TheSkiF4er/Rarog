@@ -1,8 +1,4 @@
-import { afterEach, beforeEach } from "vitest";
-
-beforeEach(() => {
-  document.body.innerHTML = "";
-});
+import { afterEach } from "vitest";
 
 afterEach(() => {
   document.body.innerHTML = "";
