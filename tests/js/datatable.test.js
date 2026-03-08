@@ -25,13 +25,15 @@ describe("Rarog.DataTable", () => {
     `;
 
     const root = document.querySelector("[data-rg-table]");
-    const table = Rarog.DataTable.getOrCreate(root);
+    Rarog.DataTable.getOrCreate(root);
 
     const header = root.querySelector("[data-rg-sort=\"name\"]");
     header.click();
+    header.click();
 
     const cells = Array.from(root.querySelectorAll("tbody tr td")).map(td => td.textContent);
-    expect(cells[0]).not.toBe("");
+    expect(cells).toEqual(["Bob", "Alice"]);
+    expect(header.classList.contains("is-sorted-desc")).toBe(true);
   });
 
   test("поиск фильтрует строки", () => {
@@ -53,13 +55,14 @@ describe("Rarog.DataTable", () => {
     `;
 
     const root = document.querySelector("[data-rg-table]");
-    const table = Rarog.DataTable.getOrCreate(root);
+    Rarog.DataTable.getOrCreate(root);
     const search = root.querySelector("[data-rg-table-search]");
 
     search.value = "Alice";
     search.dispatchEvent(new Event("input", { bubbles: true }));
 
     const visibleRows = Array.from(root.querySelectorAll("tbody tr")).filter(tr => tr.style.display !== "none");
-    expect(visibleRows.length).toBe(1);
+    expect(visibleRows).toHaveLength(1);
+    expect(visibleRows[0].textContent).toContain("Alice");
   });
 });

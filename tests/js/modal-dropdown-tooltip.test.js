@@ -6,7 +6,7 @@
 import { Rarog } from "../../packages/js/src/rarog.esm.js";
 
 describe("Rarog.Modal", () => {
-  test("getOrCreate кэширует инстанс и управляет классами is-open", () => {
+  test("getOrCreate кэширует инстанс и управляет классами rg-modal-open", () => {
     document.body.innerHTML = `
       <button type="button" data-rg-toggle="modal" data-rg-target="#testModal"></button>
       <div class="modal" id="testModal" aria-hidden="true">
@@ -24,33 +24,35 @@ describe("Rarog.Modal", () => {
     expect(modalA).toBe(modalB);
 
     modalA.show();
-    expect(el.classList.contains("is-open")).toBe(true);
+    expect(el.classList.contains("rg-modal-open")).toBe(true);
 
     modalA.hide();
-    expect(el.classList.contains("is-open")).toBe(false);
+    expect(el.classList.contains("rg-modal-open")).toBe(false);
   });
 });
 
 describe("Rarog.Dropdown", () => {
-  test("click по toggle переключает класс is-open на меню", () => {
+  test("show/hide обновляет состояние меню и aria-атрибуты", () => {
     document.body.innerHTML = `
       <div class="dropdown" id="dd">
-        <button type="button" data-rg-toggle="dropdown">Toggle</button>
-        <div class="dropdown-menu">Menu</div>
+        <button type="button" id="dd-toggle" data-rg-toggle="dropdown" data-rg-target="#dd-menu">Toggle</button>
+        <div class="dropdown-menu" id="dd-menu" hidden>Menu</div>
       </div>
     `;
 
-    const root = document.getElementById("dd");
-    const dropdown = Rarog.Dropdown.getOrCreate(root);
-    const toggle = root.querySelector("[data-rg-toggle=\"dropdown\"]");
-    const menu = root.querySelector(".dropdown-menu");
+    const toggle = document.getElementById("dd-toggle");
+    const menu = document.getElementById("dd-menu");
+    const dropdown = Rarog.Dropdown.getOrCreate(toggle);
 
-    // имитируем клик
-    toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    expect(menu.classList.contains("is-open")).toBe(true);
+    dropdown.show();
+    expect(menu.classList.contains("rg-open")).toBe(true);
+    expect(menu.hasAttribute("hidden")).toBe(false);
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
 
-    toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    expect(menu.classList.contains("is-open")).toBe(false);
+    dropdown.hide();
+    expect(menu.classList.contains("rg-open")).toBe(false);
+    expect(menu.hasAttribute("hidden")).toBe(true);
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
   });
 });
 
