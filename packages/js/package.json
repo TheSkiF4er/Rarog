@@ -1,0 +1,34 @@
+{
+  "name": "@rarog/js",
+  "version": "3.5.0",
+  "description": "Vanilla JavaScript runtime for Rarog interactive components and Data API.",
+  "author": "TheSkiF4er <dev@cajeer.ru>",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/rarog.cjs",
+  "module": "./dist/rarog.esm.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/rarog.iife.js",
+  "jsdelivr": "./dist/rarog.iife.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/rarog.esm.js",
+      "require": "./dist/rarog.cjs",
+      "default": "./dist/rarog.esm.js"
+    },
+    "./iife": "./dist/rarog.iife.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "./dist/rarog.esm.js",
+    "./dist/rarog.cjs",
+    "./dist/rarog.iife.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
