@@ -1,12 +1,14 @@
 {
   "name": "@rarog/react",
-  "version": "3.4.0",
-  "description": "React bindings and wrapper components for Rarog CSS/JS core",
+  "version": "3.5.0",
+  "private": true,
+  "description": "Experimental React bindings placeholder for Rarog. Do not publish until dist/, source, and types are implemented.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./README.md",
+  "exports": {
+    ".": "./README.md"
+  },
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
