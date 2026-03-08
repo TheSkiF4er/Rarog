@@ -32,5 +32,8 @@ jobs:
       - name: Package adapters
         run: npm run pack:react && npm run pack:vue
 
+      - name: Smoke test adapters
+        run: npm run test:adapters:smoke
+
       - name: Run tests (unit + e2e)
         run: npm test
