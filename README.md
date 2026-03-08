@@ -1,7 +1,6 @@
 # Rarog CSS Framework 3.5.0
 
-> **Rarog** — гибридный CSS‑фреймворк и дизайн‑система: design‑tokens + utilities + компоненты + JS‑ядро.  
-> Альтернатива связке **Tailwind CSS + Bootstrap**, заточенная под продуктовую разработку и Cajeer‑экосистему — но не только.
+> **Rarog** — CSS-фреймворк и дизайн-система на базе design-tokens, utilities, компонентов и экспериментального JS-ядра.
 
 <p align="left">
   <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
@@ -25,65 +24,68 @@
 - Лицензия: **Apache 2.0**
 - Контакты: `support@cajeer.ru`
 - Текущая стабильная ветка: **3.x**
-- Текущая версия: **3.5.0 (Reliability, Observability & Ecosystem)**
+- Текущая версия: **3.5.0**
 - Документация: `https://cajeer.ru/rarog`
-- CDN: `https://cdn.cajeer.ru/rarog`
-
 
 ---
 
-## Зачем нужен Rarog
+## Что реально есть в репозитории сейчас
 
-Rarog решает типичную проблему продуктовых команд:
+Rarog уже включает:
+- дизайн-токены: `rarog.tokens.json` и `design/figma.tokens.json`;
+- CSS-слои: `packages/core/src`, `packages/utilities/src`, `packages/components/src`, `packages/themes/src`;
+- CLI: `packages/cli/bin/rarog.js`;
+- vanilla JS-ядро в исходниках: `packages/js/src/rarog.esm.js`;
+- плагины CommonJS: `packages/plugin-forms/index.cjs`, `packages/plugin-typography/index.cjs`;
+- документацию в `docs-site/`.
 
-- **Tailwind** даёт гибкий utility‑слой, но не даёт готовой дизайн‑системы «из коробки».
-- **Bootstrap** даёт компоненты, но слабо управляется через tokens/JIT и быстро устаревает для сложных фронтов.
-
-**Rarog совмещает оба подхода**:
-
-- как Tailwind — даёт богатый набор utility‑классов, responsive/state‑префиксы, JIT‑сборку и произвольные значения;
-- как Bootstrap — даёт готовые компоненты, сетку, JS‑ядро и UI‑киты (Admin, Landing, SaaS);
-- как дизайн‑система — даёт tokens (`rarog.tokens.json`), theme‑packs и Figma Design Kit.
-
-Rarog хорошо ложится и на **Cajeer‑экосистему**, и на «обычные» стеки: Laravel, React, Vue, Next.js, SvelteKit, статические сайты и др.
+Что пока **не стоит считать production-ready API**:
+- React/Vue-адаптеры в `packages/react` и `packages/vue` — это заготовки под будущие пакеты;
+- отдельный публикуемый JS-бандл в репозитории пока не собирается автоматически;
+- часть UI-kit и ecosystem-заявлений в старых docs описывает целевое состояние, а не полностью поставляемый артефакт.
 
 ---
 
 ## Быстрый старт
 
-### CDN (официальный эндпоинт cdn.cajeer.ru)
+### 1. Установка
 
-Быстрее всего начать с подключении Rarog через официальное CDN.  
-Версионированный пример (рекомендуется для продакшена):
-
-```html
-<!-- CSS -->
-<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/3.5.0/rarog.min.css">
-<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/3.5.0/themes/default.css">
-
-<!-- JavaScript-ядро (опционально, только если вы используете JS-компоненты) -->
-<script src="https://cdn.cajeer.ru/rarog/3.5.0/rarog.umd.js" defer></script>
+```bash
+npm install
 ```
 
-Для экспериментов можно использовать алиас `latest` (если он настроен на стороне CDN):
+### 2. Сборка CSS-слоёв
 
-```html
-<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/latest/rarog.min.css">
-<link rel="stylesheet" href="https://cdn.cajeer.ru/rarog/latest/themes/default.css">
-<script src="https://cdn.cajeer.ru/rarog/latest/rarog.umd.js" defer></script>
+```bash
+npm run build
 ```
 
-### Локальное статическое подключение
+После сборки создаются CSS-артефакты в:
+- `packages/core/dist/`
+- `packages/utilities/dist/`
+- `packages/components/dist/`
+- `packages/themes/dist/`
 
-Если вы собираете статические файлы у себя (например, из `dist/` релиза), структура может выглядеть так:
+### 3. Базовое подключение собранных файлов
 
 ```html
 <link rel="stylesheet" href="/css/rarog-core.min.css">
 <link rel="stylesheet" href="/css/rarog-utilities.min.css">
 <link rel="stylesheet" href="/css/rarog-components.min.css">
 <link rel="stylesheet" href="/css/rarog-theme-default.min.css">
-<script src="/js/rarog.umd.js" defer></script>
 ```
+
+### 4. Опционально: CLI
+
+```bash
+node packages/cli/bin/rarog.js --help
+node packages/cli/bin/rarog.js build
+node packages/cli/bin/rarog.js validate
+```
+
+---
+
+## Минимальный пример разметки
 
 ```html
 <div class="rg-container-lg mt-6">
@@ -94,129 +96,79 @@ Rarog хорошо ложится и на **Cajeer‑экосистему**, и 
     </div>
     <div class="card-body">
       <p class="text-muted mb-4">
-        Design‑tokens, utilities, компоненты и JS‑ядро — всё в одном фреймворке.
+        Design-tokens, utilities и компоненты подключены как отдельные CSS-слои.
       </p>
-      <button class="btn btn-primary btn-lg">
-        Начать
-      </button>
+      <button class="btn btn-primary btn-lg">Начать</button>
     </div>
   </div>
 </div>
 ```
 
-### npm + CLI + JIT
+---
+
+## Структура проекта
+
+```text
+packages/
+  cli/
+  components/
+  core/
+  js/
+  plugin-forms/
+  plugin-typography/
+  react/
+  themes/
+  utilities/
+  vue/
+```
+
+Коротко по пакетам:
+- `core` — reset, globals, typography, tokens;
+- `utilities` — utility-классы;
+- `components` — компонентный CSS;
+- `themes` — готовые темы;
+- `js` — vanilla JS core;
+- `react`, `vue` — экспериментальные placeholders;
+- `plugin-*` — первые runtime-плагины.
+
+---
+
+## Разработка
+
+Полезные команды:
 
 ```bash
-npm install rarog
+npm run build
+npm run test:unit
+npm run docs:check
 ```
 
-```js
-// rarog.config.ts
-import { defineConfig } from "rarog/rarog.config.types";
-
-export default defineConfig({
-  mode: "jit",
-  content: ["./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"],
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          500: "#0f172a"
-        }
-      }
-    }
-  }
-});
-```
+Если нужно проверить CLI без глобальной установки:
 
 ```bash
-# Сборка с учётом JIT и конфига
-npx rarog build
+node packages/cli/bin/rarog.js --help
 ```
 
 ---
 
-## Что входит в Rarog 3.x
+## Документация
 
-### Design‑tokens и темы
-
-- `rarog.tokens.json` — единый источник truth для цветов, типографики, spacing, radius, shadow.
-- Темы:
-  - `default`, `dark`, `contrast`, `enterprise`, `creative` и др.
-- Экспорт токенов в Figma / design‑инструменты (см. `design/` и раздел **Design System Suite** в docs).
-
-### Utilities
-
-- Layout, flex/grid, spacing, sizing, typography, эффекты, фильтры, scroll/overscroll, scroll‑snap, print, RTL‑утилиты.
-- Responsive‑префиксы: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`.
-- State/variants:
-  - `hover:`, `focus:`, `group-hover:`, `peer-*`, `data-[state=*]:*` и др.
-- Arbitrary values (ограниченный, но полезный набор): `w-[320px]`, `bg-[#0f172a]`, `rounded-[12px]`, `gap-[3.5rem]`…
-
-### Components & JS Core
-
-- Компоненты без JS: alerts, badges, list group, breadcrumbs, nav/tabs, pagination, progress, forms, grid/layout‑паттерны.
-- JS‑компоненты (vanilla, без jQuery):
-  - modal, dropdown, offcanvas, collapse/accordion, toast, tooltip, popover;
-  - navbar/header, carousel, stepper/wizard;
-  - advanced forms (`datepicker`, `select/combobox`, `tags-input`, маски ввода);
-  - data‑table (MVP) с сортировкой, поиском и пагинацией.
-- JS Core v3:
-  - единый event‑bus `rg:*`, data‑API (`data-rg-toggle`, `data-rg-target`),
-  - `Rarog.init/reinit/dispose` для SPA/SSR,
-  - debug‑режим (`Rarog.setDebug`, `Rarog.isDebugEnabled`).
-
-### DX, LSP и плагины
-
-- CLI: `rarog build`, `rarog init`, `rarog docs`, `rarog validate`.
-- JIT/Tree‑shaking: анализ `content`, режимы `full` / `jit` / split‑build.
-- LSP + VSCode‑extension: автодополнение классов, переход к docs, подсветка ошибок `rarog.config.*`.
-- Plugin API + registry:
-  - `plugins/registry.json` + docs `plugins-registry.md`,
-  - официальные плагины (`@rarog/plugin-forms`, `@rarog/plugin-typography`) и место для community‑экосистемы.
-
-### UI‑киты и примеры
-
-В каталоге `examples/` и `design/`:
-
-- **Rarog UI Admin** — admin‑dashboard (sidebar + navbar + таблицы + формы + toasts).
-- **Rarog Landing Kit** — hero, features, pricing, FAQ, blog, CTA.
-- **Rarog SaaS Starter** — auth layout, dashboard, settings/billing.
-- Starters под стеки:
-  - Laravel, Vite + React, Vue/Nuxt, Next.js, SvelteKit, Cajeer‑стек.
-
----
-
-## Для кого Rarog
-
-- **Продуктовые команды** — нужен единый дизайн‑язык и компонентная библиотека поверх разных сервисов.
-- **CTO/Team Lead** — нужен устойчивый foundation (tokens + CSS + JS) с понятной политикой версионирования.
-- **Дизайнеры** — нужен Figma‑kit и связка «макет → токены → код» без лишнего glue‑кода.
-- **Фулл‑стек разработчики** — нужен стек «подключил, собрал, верстаю 80–90% макета без кастомного CSS».
-
----
-
-## Документация и поддержка
-
-- Docs: `https://cajeer.ru/rarog` (RU + EN, с версионированием `/v2` и `/v3`).
-- Основные разделы:
-  - Getting Started, Tokens, Utilities, Components, JavaScript,
-  - Theming, Guides (Laravel, React, Vue, Next.js, Cajeer‑Stack),
-  - Cookbook & Patterns, Accessibility, Performance, Why Rarog, Versioning & Support.
-
-Подробный контракт API и политика поддержки описаны в `docs-site/versioning.md` и разделе **Rarog 3.x API Contract**.
+Основные документы в репозитории:
+- `docs-site/getting-started.md`
+- `docs-site/javascript.md`
+- `docs-site/components.md`
+- `docs-site/tokens.md`
+- `docs-site/versioning.md`
+- `CONTRIBUTING.md`
+- `RELEASE.md`
 
 ---
 
 ## Contributing
 
-Pull‑request’ы, issues и plugin‑идеи приветствуются.
+Перед PR:
+- прогоните `npm run build`;
+- прогоните `npm run test:unit`;
+- прогоните `npm run docs:check`, если меняли README или docs.
 
-- Перед PR:
-  - прогоните `npm run build` и `npm test`;
-  - обновите docs, если меняете публичный API или добавляете фичу.
-- Для плагинов:
-  - оформляйте отдельные npm‑пакеты,
-  - добавляйте их в `plugins/registry.json` через PR (с описанием и ссылкой на репо).
-
-Подробнее см. `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` и `SECURITY.md`.
+Подробности — в `CONTRIBUTING.md`.
