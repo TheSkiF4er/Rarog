@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v3.0.0
+ * Rarog JS Core v3.5.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
