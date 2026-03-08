@@ -51,10 +51,14 @@
     "docs:dev": "vitepress dev docs-site",
     "docs:build": "vitepress build docs-site",
     "docs:preview": "vitepress preview docs-site",
-    "test": "npm run test:unit && npm run test:e2e",
+    "test": "npm run test:unit && npm run test:smoke && npm run test:e2e",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "changeset": "changeset",
+    "version:packages": "changeset version",
+    "release:check": "node tools/check-release.mjs",
+    "test:smoke": "node tests/rarog-build-regress.test.mjs && node tests/rarog-release-sync.test.mjs"
   },
   "repository": {
     "type": "git",
@@ -65,6 +69,7 @@
   },
   "homepage": "https://cajeer.ru/rarog",
   "devDependencies": {
+    "@changesets/cli": "^2.29.6",
     "@playwright/test": "^1.49.0",
     "autoprefixer": "^10.4.0",
     "cssnano": "^6.0.0",
@@ -73,9 +78,11 @@
     "vitepress": "latest",
     "vitest": "^1.0.0",
     "vscode-languageserver": "^9.0.0",
-    "vscode-languageserver-textdocument": "^1.0.11"
+    "vscode-languageserver-textdocument": "^1.0.11",
+    "jsdom": "^26.0.0"
   },
   "bin": {
     "rarog": "packages/cli/bin/rarog.js"
-  }
+  },
+  "packageManager": "npm@10"
 }
