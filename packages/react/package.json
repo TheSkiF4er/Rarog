@@ -1,15 +1,26 @@
 {
   "name": "@rarog/react",
   "version": "3.5.0",
-  "private": true,
-  "description": "Experimental React bindings placeholder for Rarog. Do not publish until dist/, source, and types are implemented.",
+  "description": "react bindings for rarog js core and component primitives",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
-  "main": "./README.md",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./README.md"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    }
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "peerDependencies": {
+    "@rarog/js": ">=3.5.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   }
