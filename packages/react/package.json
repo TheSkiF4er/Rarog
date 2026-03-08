@@ -17,11 +17,16 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "src"
   ],
   "peerDependencies": {
     "@rarog/js": ">=3.5.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
+  },
+  "source": "src/index.js",
+  "scripts": {
+    "build": "node ../../tools/build-adapters.mjs"
   }
 }
