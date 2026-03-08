@@ -1,6 +1,14 @@
 # @rarog/vue
 
-Experimental placeholder package.
+Minimal Vue 3 bindings for Rarog JS Core.
 
-This package is intentionally marked `private` and is not ready for publication yet.
-Before making it public, add real source files, build output, and type declarations.
+Exports:
+- `RarogPlugin`
+- `RarogProvider`
+- `RarogModal`
+- `RarogOffcanvas`
+- `RarogDropdown`
+- `useRarogInit`
+- `useModal`
+- `useOffcanvas`
+- `useDropdown`
