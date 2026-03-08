@@ -1,169 +1,107 @@
-# SprintNova Control
+# Rarog CSS Framework 3.5.0
 
-**SprintNova Control** — продуктовая платформа для управления спринтами, задачами, блокерами, зависимостями и загрузкой команды в одном рабочем пространстве.
+> **Rarog** — CSS-фреймворк и дизайн-система на базе design-tokens, utilities, компонентов и экспериментального JS-ядра.
 
-Решение помогает delivery-, product- и engineering-командам держать под контролем ход спринта, видеть операционные риски заранее и быстрее принимать управленческие решения без тяжёлой серверной инфраструктуры.
+<p align="left">
+  <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
+    <img src="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://www.npmjs.com/package/rarog">
+    <img src="https://img.shields.io/npm/v/rarog.svg?logo=npm" alt="npm" />
+  </a>
+  <a href="https://github.com/TheSkiF4er/rarog/releases">
+    <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub release" />
+  </a>
+  <a href="https://cajeer.ru/rarog">
+    <img src="https://img.shields.io/badge/docs-cajeer.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License" />
+  </a>
+</p>
 
----
-
-## Что это за продукт
-
-SprintNova Control — это web-приложение для командной операционной работы вокруг спринта. Продукт объединяет ключевые контуры исполнения:
-
-- управление задачами и статусами;
-- контроль блокеров и зависимостей;
-- обзор здоровья спринта;
-- мониторинг загрузки участников;
-- быстрый поиск зон риска и узких мест delivery-потока;
-- локальное хранение и перенос данных без обязательного backend-слоя.
-
-Продукт подходит для небольших и средних команд, которым нужен быстрый, понятный и автономный инструмент для операционного контроля delivery-процесса.
-
----
-
-## Ключевая ценность
-
-SprintNova Control помогает команде отвечать на главные вопросы спринта в одном интерфейсе:
-
-- что сейчас в работе;
-- что заблокировано;
-- какие задачи критичны для результата;
-- где есть зависимость от других задач;
-- кто перегружен;
-- какие элементы спринта требуют внимания прямо сейчас.
-
-За счёт этого продукт снижает управленческую неопределённость, ускоряет ежедневную координацию и делает статус спринта прозрачным для delivery- и product-ролей.
+- Автор: **TheSkiF4er**
+- Лицензия: **Apache 2.0**
+- Контакты: `support@cajeer.ru`
+- Текущая стабильная ветка: **3.x**
+- Текущая версия: **3.5.0**
+- Документация: `https://cajeer.ru/rarog`
 
 ---
 
-## Основные возможности
+## Что реально есть в репозитории сейчас
 
-### Executive Dashboard
-Главная страница для быстрого управленческого обзора спринта.
+Rarog уже включает:
+- дизайн-токены: `rarog.tokens.json` и `design/figma.tokens.json`;
+- CSS-слои: `packages/core/src`, `packages/utilities/src`, `packages/components/src`, `packages/themes/src`;
+- CLI: `packages/cli/bin/rarog.js`;
+- vanilla JS-ядро в исходниках: `packages/js/src/rarog.esm.js`;
+- плагины CommonJS: `packages/plugin-forms/index.cjs`, `packages/plugin-typography/index.cjs`;
+- документацию в `docs-site/`.
 
-Включает:
-- delivery health score;
-- risk center;
-- focus queue;
-- сводку по приоритетам и категориям задач;
-- blocked tasks и dependency risk;
-- capacity view по участникам команды;
-- recent activity и recent tasks.
-
-### Delivery Board
-Операционная доска исполнения задач по статусам.
-
-Поддерживает:
-- визуальный поток задач по колонкам;
-- фильтрацию по статусу, приоритету, категории и рискам;
-- быстрые статус-переходы прямо из карточек;
-- контроль blocked-задач;
-- контроль задач, ожидающих зависимости.
-
-### Operations Studio
-Панель операционного управления данными продукта.
-
-Позволяет:
-- создавать и редактировать спринты;
-- управлять участниками команды;
-- создавать, редактировать и удалять задачи;
-- назначать исполнителей и наблюдателей;
-- задавать приоритеты, категории, блокеры и зависимости;
-- импортировать и экспортировать данные.
-
----
-
-## Контур управления задачами
-
-Каждая задача в системе может содержать:
-
-- уникальный идентификатор;
-- название и описание;
-- статус;
-- исполнителя;
-- наблюдателей;
-- оценку трудоёмкости;
-- приоритет;
-- категорию;
-- признак блокировки и причину блокировки;
-- ссылки на зависимости от других задач;
-- дату создания и дату последнего обновления.
-
-Это позволяет использовать продукт не только как простую kanban-доску, но и как инструмент координации delivery-рисков.
-
----
-
-## Для кого подходит
-
-SprintNova Control особенно полезен для:
-
-- product manager;
-- delivery manager;
-- engineering manager;
-- scrum master;
-- team lead;
-- кросс-функциональных продуктовых команд.
-
----
-
-## Сценарии использования
-
-### Ежедневный контроль спринта
-Руководитель команды открывает dashboard и сразу видит:
-- критичные задачи;
-- новые блокеры;
-- stale-элементы;
-- зависимые задачи;
-- перегруженных участников.
-
-### Операционное ведение delivery
-Во время daily sync команда обновляет статусы, фиксирует блокеры и быстро переводит задачи между этапами исполнения.
-
-### Анализ рисков перед релизом
-Product или delivery-роль оценивает, какие задачи ещё не завершены, что зависит от внешних элементов и где есть риск сорвать результат спринта.
-
-### Локальное прототипирование процесса
-Команда может использовать продукт без сервера, развернуть его локально и быстро адаптировать под свои внутренние workflow.
-
----
-
-## Технологический стек
-
-- React
-- TypeScript
-- CSS
-- localStorage для local-first хранения
-
-Архитектура проекта ориентирована на простоту поддержки, быстрый запуск и удобное развитие без избыточной инфраструктурной сложности.
+Что пока **не стоит считать production-ready API**:
+- React/Vue-адаптеры в `packages/react` и `packages/vue` — это заготовки под будущие пакеты;
+- отдельный публикуемый JS-бандл в репозитории пока не собирается автоматически;
+- часть UI-kit и ecosystem-заявлений в старых docs описывает целевое состояние, а не полностью поставляемый артефакт.
 
 ---
 
 ## Быстрый старт
 
-### Установка зависимостей
+### 1. Установка
+
 ```bash
 npm install
 ```
 
-### Запуск в режиме разработки
+### 2. Сборка CSS-слоёв
+
 ```bash
-npm start
+npm run build
 ```
 
-После запуска приложение будет доступно в браузере в стандартном dev-режиме React.
+После сборки создаются CSS-артефакты в:
+- `packages/core/dist/`
+- `packages/utilities/dist/`
+- `packages/components/dist/`
+- `packages/themes/dist/`
+
+### 3. Базовое подключение собранных файлов
+
+```html
+<link rel="stylesheet" href="/css/rarog-core.min.css">
+<link rel="stylesheet" href="/css/rarog-utilities.min.css">
+<link rel="stylesheet" href="/css/rarog-components.min.css">
+<link rel="stylesheet" href="/css/rarog-theme-default.min.css">
+```
+
+### 4. Опционально: CLI
+
+```bash
+node packages/cli/bin/rarog.js --help
+node packages/cli/bin/rarog.js build
+node packages/cli/bin/rarog.js validate
+```
 
 ---
 
-## Проверка качества и production-сборка
+## Минимальный пример разметки
 
-### Проверка TypeScript
-```bash
-npm run typecheck
-```
-
-### Production build
-```bash
-npm run build
+```html
+<div class="rg-container-lg mt-6">
+  <div class="card shadow-md">
+    <div class="card-header flex items-center justify-between">
+      <h1 class="h5 mb-0">Добро пожаловать в Rarog 3.5.0</h1>
+      <span class="badge badge-primary">3.x stable</span>
+    </div>
+    <div class="card-body">
+      <p class="text-muted mb-4">
+        Design-tokens, utilities и компоненты подключены как отдельные CSS-слои.
+      </p>
+      <button class="btn btn-primary btn-lg">Начать</button>
+    </div>
+  </div>
+</div>
 ```
 
 ---
@@ -171,68 +109,66 @@ npm run build
 ## Структура проекта
 
 ```text
-public/                статические файлы приложения
-src/
-  components/          переиспользуемые UI-компоненты
-  context/             глобальное состояние приложения
-  pages/               страницы продукта
-  styles/              глобальные стили
-  utils/               типы, helper-функции и mock-данные
+packages/
+  cli/
+  components/
+  core/
+  js/
+  plugin-forms/
+  plugin-typography/
+  react/
+  themes/
+  utilities/
+  vue/
+```
+
+Коротко по пакетам:
+- `core` — reset, globals, typography, tokens;
+- `utilities` — utility-классы;
+- `components` — компонентный CSS;
+- `themes` — готовые темы;
+- `js` — vanilla JS core;
+- `react`, `vue` — экспериментальные placeholders;
+- `plugin-*` — первые runtime-плагины.
+
+---
+
+## Разработка
+
+Полезные команды:
+
+```bash
+npm run build
+npm run test:unit
+npm run docs:check
+```
+
+Если нужно проверить CLI без глобальной установки:
+
+```bash
+node packages/cli/bin/rarog.js --help
 ```
 
 ---
 
-## Документация репозитория
+## Документация
 
-В репозитории предусмотрен базовый комплект сопровождающей документации:
-
-- `CHANGELOG.md` — история заметных изменений по релизам;
-- `CONTRIBUTING.md` — правила и рекомендации по внесению изменений;
-- `CODE_OF_CONDUCT.md` — правила уважительного взаимодействия в проекте;
-- `SECURITY.md` — порядок сообщения о проблемах безопасности;
-- `.gitignore` — список служебных файлов и директорий, исключённых из Git.
-
----
-
-## Сильные стороны продукта
-
-- быстрый старт без backend-разработки;
-- прозрачность состояния спринта;
-- единая точка контроля задач, блокеров и зависимостей;
-- понятная структура для дальнейшего масштабирования;
-- пригодность как для демо, так и для внутреннего production-пилота.
+Основные документы в репозитории:
+- `docs-site/getting-started.md`
+- `docs-site/javascript.md`
+- `docs-site/components.md`
+- `docs-site/tokens.md`
+- `docs-site/versioning.md`
+- `CONTRIBUTING.md`
+- `RELEASE.md`
 
 ---
 
-## Ограничения текущей версии
+## Contributing
 
-Текущая версия является local-first решением и не включает:
+Перед PR:
+- прогоните `npm run build`;
+- прогоните `npm run test:unit`;
+- прогоните `npm run docs:check`, если меняли README или docs.
 
-- серверную синхронизацию;
-- многопользовательскую совместную работу в реальном времени;
-- разграничение ролей и прав доступа;
-- внешний API;
-- централизованную авторизацию.
-
-Эти возможности могут быть добавлены в следующих релизах как этап развития продукта.
-
----
-
-## Направления дальнейшего развития
-
-Потенциальные улучшения следующего уровня:
-
-- drag-and-drop для доски;
-- роли и права доступа;
-- интеграция с backend/API;
-- журнал аудита изменений;
-- уведомления по блокерам и рискам;
-- расширенная аналитика по velocity и throughput;
-- экспорт отчётов для product и delivery review.
-
----
-
-## Позиционирование
-
-**SprintNova Control** — это внутренний продуктовый инструмент для команд, которым нужен ясный операционный контроль спринта, прозрачность исполнения и управляемость delivery-потока без лишней сложности.
-
+Подробности — в `CONTRIBUTING.md`.
