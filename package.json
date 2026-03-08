@@ -4,13 +4,49 @@
   "description": "Rarog CSS Framework — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
-  "main": "packages/core/dist/rarog-core.min.css",
+  "private": false,
+  "type": "module",
+  "main": "./packages/js/src/rarog.esm.js",
+  "module": "./packages/js/src/rarog.esm.js",
+  "style": "./packages/core/dist/rarog-core.css",
+  "workspaces": [
+    "packages/*"
+  ],
+  "files": [
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "packages/core/dist",
+    "packages/utilities/dist",
+    "packages/components/dist",
+    "packages/themes/dist",
+    "packages/js/src",
+    "packages/cli/bin"
+  ],
+  "exports": {
+    ".": {
+      "import": "./packages/js/src/rarog.esm.js",
+      "default": "./packages/js/src/rarog.esm.js"
+    },
+    "./core.css": "./packages/core/dist/rarog-core.css",
+    "./core.min.css": "./packages/core/dist/rarog-core.min.css",
+    "./utilities.css": "./packages/utilities/dist/rarog-utilities.css",
+    "./utilities.min.css": "./packages/utilities/dist/rarog-utilities.min.css",
+    "./components.css": "./packages/components/dist/rarog-components.css",
+    "./components.min.css": "./packages/components/dist/rarog-components.min.css",
+    "./themes/default.css": "./packages/themes/dist/rarog-theme-default.css",
+    "./themes/default.min.css": "./packages/themes/dist/rarog-theme-default.min.css",
+    "./themes/dark.css": "./packages/themes/dist/rarog-theme-dark.css",
+    "./themes/dark.min.css": "./packages/themes/dist/rarog-theme-dark.min.css",
+    "./cli": "./packages/cli/bin/rarog.js"
+  },
   "scripts": {
     "build": "node tools/build.mjs",
     "build:core": "node tools/build.mjs core",
     "build:utilities": "node tools/build.mjs utilities",
     "build:components": "node tools/build.mjs components",
     "build:themes": "node tools/build.mjs themes",
+    "build:check": "node tools/build.mjs --check",
     "docs": "node tools/docs-dev.mjs",
     "docs:dev": "vitepress dev docs-site",
     "docs:build": "vitepress build docs-site",
@@ -29,14 +65,15 @@
   },
   "homepage": "https://cajeer.ru/rarog",
   "devDependencies": {
-    "postcss": "^8.4.0",
-    "postcss-cli": "^11.0.0",
+    "@playwright/test": "^1.49.0",
     "autoprefixer": "^10.4.0",
     "cssnano": "^6.0.0",
+    "postcss": "^8.4.0",
+    "postcss-cli": "^11.0.0",
     "vitepress": "latest",
     "vitest": "^1.0.0",
     "vscode-languageserver": "^9.0.0",
-    "@playwright/test": "^1.49.0"
+    "vscode-languageserver-textdocument": "^1.0.11"
   },
   "bin": {
     "rarog": "packages/cli/bin/rarog.js"
