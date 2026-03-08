@@ -17,10 +17,15 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "src"
   ],
   "peerDependencies": {
     "@rarog/js": ">=3.5.0",
     "vue": ">=3.3.0"
+  },
+  "source": "src/index.js",
+  "scripts": {
+    "build": "node ../../tools/build-adapters.mjs"
   }
 }
