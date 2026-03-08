@@ -21,7 +21,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Check entrypoint syntax
         run: |
@@ -36,8 +36,8 @@ jobs:
       - name: Check component CSS parses
         run: node -e "const fs=require('fs');const postcss=require('postcss');postcss.parse(fs.readFileSync('packages/components/src/rarog-components.css','utf8'));console.log('CSS parse OK')"
 
-      - name: Build CSS & JS
-        run: npm run build
+      - name: Build CSS bundles
+        run: npm run build && npm run build:check
 
       - name: Run tests (unit + e2e)
         run: npm test
