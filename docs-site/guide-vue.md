@@ -78,8 +78,7 @@ JIT будет анализировать все `.vue` файлы, поэтом
 
 ## 4. @rarog/vue и Nuxt‑starter
 
-Для Vue 3 доступен пакет `@rarog/vue` с компонентами `RarogProvider`, `RarogModal`,
-`RarogOffcanvas`, `RarogDropdown`.
+Для Vue 3 пакет `@rarog/vue` даёт минимально рабочий набор: `RarogProvider`, `RarogModal`, `RarogOffcanvas`, `RarogDropdown`, composables `useModal/useOffcanvas/useDropdown` и плагин `RarogPlugin`.
 
 Установка (в отдельном проекте):
 
