@@ -24,7 +24,7 @@
     "build:vue": "node tools/build-adapters.mjs vue",
     "pack:react": "npm pack ./packages/react",
     "pack:vue": "npm pack ./packages/vue",
-    "test:adapters:smoke": "npm run build:adapters && npm run pack:react && npm run pack:vue"
+    "test:adapters:smoke": "npm run build:adapters && vitest run tests/adapters/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -43,7 +43,11 @@
     "vitest": "^1.0.0",
     "vscode-languageserver": "^9.0.0",
     "@playwright/test": "^1.49.0",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "jsdom": "^24.1.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vue": "^3.5.13"
   },
   "bin": {
     "rarog": "packages/cli/bin/rarog.js"
