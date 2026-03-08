@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
 
 jobs:
-  build-and-package:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,50 +16,26 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: https://registry.npmjs.org
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build distributables
-        run: npm run build:all
+      - name: Build core assets
+        run: npm run build
 
-      - name: Pack JS package
-        run: npm run pack:js
+      - name: Build adapters
+        run: npm run build:adapters
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: rarog-dist
-          path: |
-            packages/core/dist
-            packages/utilities/dist
-            packages/components/dist
-            packages/themes/dist
-            packages/js/dist
-            rarog-js-*.tgz
+      - name: Pack adapters
+        run: npm pack ./packages/react && npm pack ./packages/vue
 
-  publish-js:
-    needs: build-and-package
-    if: ${{ secrets.NPM_TOKEN != '' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          registry-url: https://registry.npmjs.org
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build JS package
-        run: npm run build:js
-
-      - name: Publish @rarog/js
+      - name: Publish @rarog/react
+        run: npm publish ./packages/react --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm run publish:js
+
+      - name: Publish @rarog/vue
+        run: npm publish ./packages/vue --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

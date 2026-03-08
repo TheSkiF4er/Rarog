@@ -23,11 +23,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build CSS & JS
-        run: npm run build:all
+      - name: Build CSS
+        run: npm run build
 
-      - name: Smoke check JS package tarball
-        run: npm run pack:js
+      - name: Build adapters
+        run: npm run build:adapters
+
+      - name: Package adapters
+        run: npm run pack:react && npm run pack:vue
 
       - name: Run tests (unit + e2e)
         run: npm test
