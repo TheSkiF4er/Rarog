@@ -23,6 +23,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check entrypoint syntax
+        run: |
+          node --check packages/js/src/rarog.esm.js
+          node --check packages/cli/bin/rarog.js
+
+      - name: Smoke test CLI
+        run: |
+          node packages/cli/bin/rarog.js --help
+          node packages/cli/bin/rarog.js validate
+
+      - name: Check component CSS parses
+        run: node -e "const fs=require('fs');const postcss=require('postcss');postcss.parse(fs.readFileSync('packages/components/src/rarog-components.css','utf8'));console.log('CSS parse OK')"
+
       - name: Build CSS & JS
         run: npm run build
 
