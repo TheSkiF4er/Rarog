@@ -1,39 +1,123 @@
 /*!
- * Rarog JS Core v3.5.0
+ * Rarog JS Core v3.0.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
  */
 
-import {
-  registries,
-  maskHandlers as _maskHandlers,
-  RarogConfig,
-  debugLog as _debugLog,
-  debugWarn as _debugWarn,
-  Events,
-  dispatchEvent as _dispatchEvent,
-  resolveTarget as _resolveTarget,
-  getFocusableElements as _getFocusableElements
-} from "./internal/runtime.js";
+const _dropdownInstances = new WeakMap();
+const _collapseInstances = new WeakMap();
+const _modalInstances = new WeakMap();
+const _offcanvasInstances = new WeakMap();
+const _toastInstances = new WeakMap();
+const _tooltipInstances = new WeakMap();
+const _popoverInstances = new WeakMap();
+const _datepickerInstances = new WeakMap();
+const _datetimePickerInstances = new WeakMap();
+const _selectInstances = new WeakMap();
+const _comboboxInstances = new WeakMap();
+const _tagsInputInstances = new WeakMap();
+const _dataTableInstances = new WeakMap();
+const _maskHandlers = Object.create(null);
 
-const {
-  dropdownInstances: _dropdownInstances,
-  collapseInstances: _collapseInstances,
-  modalInstances: _modalInstances,
-  offcanvasInstances: _offcanvasInstances,
-  toastInstances: _toastInstances,
-  tooltipInstances: _tooltipInstances,
-  popoverInstances: _popoverInstances,
-  datepickerInstances: _datepickerInstances,
-  datetimePickerInstances: _datetimePickerInstances,
-  selectInstances: _selectInstances,
-  comboboxInstances: _comboboxInstances,
-  tagsInputInstances: _tagsInputInstances,
-  dataTableInstances: _dataTableInstances,
-  carouselInstances: _carouselInstances,
-  stepperInstances: _stepperInstances
-} = registries;
+const _eventBusListeners = new Map();
+
+const RarogConfig = {
+  debug:
+    typeof window !== "undefined" &&
+    !!(window.RAROG_DEBUG || window.RAROG_DEV || window.RAROG_DEBUG_MODE)
+};
+
+function _debugLog(...args) {
+  if (!RarogConfig.debug || typeof console === "undefined") return;
+  console.log("[Rarog]", ...args);
+}
+
+function _debugWarn(...args) {
+  if (!RarogConfig.debug || typeof console === "undefined") return;
+  console.warn("[Rarog]", ...args);
+}
+
+function _emitOnBus(type, payload) {
+  const set = _eventBusListeners.get(type);
+  if (!set || set.size === 0) return;
+  set.forEach(handler => {
+    try {
+      handler(payload);
+    } catch (error) {
+      if (RarogConfig.debug && typeof console !== "undefined") {
+        console.error("[Rarog Events]", error);
+      }
+    }
+  });
+}
+
+const Events = {
+  on(type, handler) {
+    if (!type || typeof handler !== "function") return;
+    let set = _eventBusListeners.get(type);
+    if (!set) {
+      set = new Set();
+      _eventBusListeners.set(type, set);
+    }
+    set.add(handler);
+  },
+  off(type, handler) {
+    const set = _eventBusListeners.get(type);
+    if (!set) return;
+    set.delete(handler);
+    if (set.size === 0) {
+      _eventBusListeners.delete(type);
+    }
+  },
+  emit(type, payload = {}) {
+    _debugLog("event", type, payload);
+    _emitOnBus(type, payload);
+  }
+};
+
+function _dispatchEvent(element, name, detail = {}) {
+  if (!element || typeof CustomEvent === "undefined") return;
+  const evt = new CustomEvent(name, {
+    bubbles: true,
+    cancelable: false,
+    detail
+  });
+  element.dispatchEvent(evt);
+  _emitOnBus(name, { element, detail });
+}
+
+function _resolveTarget(trigger, explicitTarget) {
+  if (explicitTarget) return explicitTarget;
+  if (!trigger || typeof document === "undefined") return null;
+
+  const selector =
+    trigger.getAttribute("data-rg-target") ||
+    trigger.getAttribute("href");
+
+  if (!selector || selector === "#" || selector === "") return null;
+
+  try {
+    return document.querySelector(selector);
+  } catch (e) {
+    return null;
+  }
+}
+
+function _getFocusableElements(container) {
+  if (!container) return [];
+  const selectors = [
+    "a[href]",
+    "button:not([disabled])",
+    "input:not([disabled]):not([type='hidden'])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])"
+  ];
+  return Array.from(container.querySelectorAll(selectors.join(","))).filter(
+    el => el.offsetParent !== null || el === document.activeElement
+  );
+}
 
 /* -------------------------------------------------------------------------- */
 /* Dropdown                                                                   */
@@ -889,6 +973,7 @@ _attachEventsForClass(Modal, inst => inst._element, "modal");
 /* Carousel                                                                   */
 /* -------------------------------------------------------------------------- */
 
+const _carouselInstances = new WeakMap();
 
 class Carousel {
   constructor(element, options = {}) {
@@ -1044,6 +1129,7 @@ class Carousel {
 /* Stepper / Wizard                                                           */
 /* -------------------------------------------------------------------------- */
 
+const _stepperInstances = new WeakMap();
 
 class Stepper {
   constructor(element, options = {}) {
