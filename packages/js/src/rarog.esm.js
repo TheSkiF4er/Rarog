@@ -86,7 +86,7 @@ function _dispatchEvent(element, name, detail = {}) {
   element.dispatchEvent(evt);
   _emitOnBus(name, { element, detail });
 }
-olveTarget(trigger, explicitTarget) {
+function _resolveTarget(trigger, explicitTarget) {
   if (explicitTarget) return explicitTarget;
   if (!trigger || typeof document === "undefined") return null;
 
