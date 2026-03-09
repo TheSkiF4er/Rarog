@@ -1,107 +1,142 @@
-import fs from "node:fs";
-import path from "node:path";
-import url from "node:url";
+import fs from 'node:fs'
+import path from 'node:path'
+import url from 'node:url'
 
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-const ROOT_DIR = path.join(__dirname, "..");
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+const ROOT_DIR = path.join(__dirname, '..')
 
 function readJson(rel) {
-  return JSON.parse(fs.readFileSync(path.join(ROOT_DIR, rel), "utf8"));
+  return JSON.parse(fs.readFileSync(path.join(ROOT_DIR, rel), 'utf8'))
 }
 
 function readText(rel) {
-  return fs.readFileSync(path.join(ROOT_DIR, rel), "utf8");
+  return fs.readFileSync(path.join(ROOT_DIR, rel), 'utf8')
 }
 
 function hasFile(rel) {
-  return fs.existsSync(path.join(ROOT_DIR, rel));
+  return fs.existsSync(path.join(ROOT_DIR, rel))
 }
 
 function includesAll(text, fragments) {
-  return fragments.every((fragment) => text.includes(fragment));
+  return fragments.every((fragment) => text.includes(fragment))
 }
 
-const rootPkg = readJson("package.json");
-const jsPkg = readJson("packages/js/package.json");
-const reactPkg = readJson("packages/react/package.json");
-const vuePkg = readJson("packages/vue/package.json");
-const releaseWorkflow = readText(".github/workflows/release.yml");
-const ciWorkflow = readText(".github/workflows/ci.yml");
-const version = rootPkg.version;
+function check(rel, label, predicate) {
+  return { rel, label, predicate }
+}
 
-const docsConfigPath = "docs/.vitepress/config.ts";
-const lockfilePath = "package-lock.json";
+const rootPkg = readJson('package.json')
+const jsPkg = readJson('packages/js/package.json')
+const reactPkg = readJson('packages/react/package.json')
+const vuePkg = readJson('packages/vue/package.json')
+const releaseWorkflow = readText('.github/workflows/release.yml')
+const ciWorkflow = readText('.github/workflows/ci.yml')
+const docsWorkflow = readText('.github/workflows/docs.yml')
+const version = rootPkg.version
+
+const docsConfigPath = 'docs/.vitepress/config.ts'
+const lockfilePath = 'package-lock.json'
 
 const checks = [
-  ["packages/js/package.json", () => jsPkg.version === version, `js package version matches ${version}`],
-  ["packages/react/package.json", () => reactPkg.version === version, `react package version matches ${version}`],
-  ["packages/vue/package.json", () => vuePkg.version === version, `vue package version matches ${version}`],
-  ["package.json", () => rootPkg.scripts?.build, "root build script exists"],
-  ["package.json", () => rootPkg.scripts?.["build:css"], "root build:css script exists"],
-  ["package.json", () => rootPkg.scripts?.["build:js"], "root build:js script exists"],
-  ["package.json", () => rootPkg.scripts?.["build:adapters"], "root build:adapters script exists"],
-  ["package.json", () => rootPkg.scripts?.["build:all"], "root build:all script exists"],
-  ["package.json", () => rootPkg.scripts?.build === "npm run build:all", "root build delegates to build:all"],
-  ["package.json", () => rootPkg.scripts?.["pack:packages"], "root pack:packages script exists"],
-  ["package.json", () => rootPkg.scripts?.["release:check"], "root release:check script exists"],
-  ["package.json", () => rootPkg.scripts?.["release:verify"], "root release:verify script exists"],
-  ["package.json", () => rootPkg.scripts?.["release:verify"]?.includes("docs:check"), "root release:verify includes docs:check"],
-  ["package.json", () => rootPkg.scripts?.["test:adapters"], "root test:adapters script exists"],
-  ["package.json", () => rootPkg.scripts?.["test:contracts"], "root test:contracts script exists"],
-  ["package.json", () => rootPkg.scripts?.storybook, "root storybook script exists"],
-  [lockfilePath, () => hasFile(lockfilePath), "root package-lock.json exists for npm ci reproducibility"],
-  [docsConfigPath, () => hasFile(docsConfigPath), "vitepress config exists at docs/.vitepress/config.ts"],
-  ["package.json", () => rootPkg.scripts?.["storybook:build"], "root storybook:build script exists"],
-  ["package.json", () => rootPkg.devDependencies?.esbuild, "esbuild is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.react, "react is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.["react-dom"], "react-dom is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.vue, "vue is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.jsdom, "jsdom is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.storybook, "storybook is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.vite, "vite is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.["@storybook/html-vite"], "@storybook/html-vite is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.["@storybook/addon-docs"], "@storybook/addon-docs is declared in devDependencies"],
-  ["package.json", () => rootPkg.devDependencies?.["@storybook/addon-a11y"], "@storybook/addon-a11y is declared in devDependencies"],
-  ["packages/js/package.json", () => jsPkg.exports?.["."]?.import === "./dist/index.mjs", "js import export points to dist/index.mjs"],
-  ["packages/js/package.json", () => jsPkg.exports?.["."]?.require === "./dist/index.cjs", "js require export points to dist/index.cjs"],
-  ["packages/js/package.json", () => jsPkg.exports?.["./runtime"]?.import === "./dist/rarog.esm.js", "js runtime import export points to dist/rarog.esm.js"],
-  ["packages/js/package.json", () => jsPkg.exports?.["./runtime"]?.require === "./dist/rarog.cjs", "js runtime require export points to dist/rarog.cjs"],
-  ["packages/js/package.json", () => Array.isArray(jsPkg.files) && jsPkg.files.includes("dist"), "js package publishes dist via files"],
-  ["packages/js/package.json", () => jsPkg.types === "dist/index.d.ts", "js types points to dist/index.d.ts"],
-  ["packages/react/package.json", () => reactPkg.main === "dist/index.mjs", "react main points to dist"],
-  ["packages/react/package.json", () => reactPkg.types === "dist/index.d.ts", "react types points to dist/index.d.ts"],
-  ["packages/react/package.json", () => Array.isArray(reactPkg.files) && reactPkg.files.includes("dist"), "react package publishes dist via files"],
-  ["packages/react/package.json", () => reactPkg.peerDependencies?.react && reactPkg.peerDependencies?.["react-dom"], "react package declares peer dependencies"],
-  ["packages/vue/package.json", () => vuePkg.main === "dist/index.mjs", "vue main points to dist"],
-  ["packages/vue/package.json", () => vuePkg.types === "dist/index.d.ts", "vue types points to dist/index.d.ts"],
-  ["packages/vue/package.json", () => Array.isArray(vuePkg.files) && vuePkg.files.includes("dist"), "vue package publishes dist via files"],
-  ["packages/vue/package.json", () => vuePkg.peerDependencies?.vue, "vue package declares peer dependency"],
-  ["tools/pack-packages.mjs", () => hasFile("tools/pack-packages.mjs"), "pack packages tool exists"],
-  ["packages/core/src/rarog-core.css", () => readText("packages/core/src/rarog-core.css").includes(`Rarog Core ${version}`), "core banner version is synced"],
-  ["packages/components/src/rarog-components.css", () => readText("packages/components/src/rarog-components.css").includes(`Rarog Components ${version}`), "components banner version is synced"],
-  ["packages/utilities/src/rarog-utilities.css", () => readText("packages/utilities/src/rarog-utilities.css").includes(`Rarog Utilities ${version}`), "utilities banner version is synced"],
-  ["packages/js/src/rarog.esm.js", () => readText("packages/js/src/rarog.esm.js").includes(`Rarog JS Core v${version}`), "js banner version is synced"],
-  ["tests/rarog-js-core.test.html", () => readText("tests/rarog-js-core.test.html").includes(`Rarog JS Core v${version}`), "html smoke banner version is synced"],
-  [".github/workflows/ci.yml", () => ciWorkflow.includes("npm run docs:check"), "CI runs docs:check"],
-  ["package.json", () => rootPkg.scripts?.["test:release"], "root test:release script exists"],
-  [".github/workflows/release.yml", () => releaseWorkflow.includes("npm run test:release") || includesAll(releaseWorkflow, ["npm run test:unit", "npm run test:adapters", "npm run test:contracts"]), "release workflow runs canonical release tests before publish"],
-  [".github/workflows/release.yml", () => releaseWorkflow.includes("npm run pack:packages"), "release workflow packs publishable packages before publish"],
-  [".github/workflows/release.yml", () => releaseWorkflow.includes("npm ci"), "release workflow uses npm ci"],
-  [".github/workflows/ci.yml", () => ciWorkflow.includes("npm ci"), "CI workflow uses npm ci"],
-  [".github/workflows/docs.yml", () => readText(".github/workflows/docs.yml").includes("npm run docs:check"), "docs workflow runs docs:check"],
-  ["tools/check-docs-output.mjs", () => hasFile("tools/check-docs-output.mjs"), "docs build output checker exists"]
-];
+  {
+    title: 'Scripts and dependencies',
+    items: [
+      check('package.json', 'root build script exists', () => rootPkg.scripts?.build),
+      check('package.json', 'root build delegates to build:all', () => rootPkg.scripts?.build === 'npm run build:all'),
+      check('package.json', 'root build:css script exists', () => rootPkg.scripts?.['build:css']),
+      check('package.json', 'root build:js script exists', () => rootPkg.scripts?.['build:js']),
+      check('package.json', 'root build:adapters script exists', () => rootPkg.scripts?.['build:adapters']),
+      check('package.json', 'root build:all script exists', () => rootPkg.scripts?.['build:all']),
+      check('package.json', 'root docs:lint script exists', () => rootPkg.scripts?.['docs:lint']),
+      check('package.json', 'root docs:check script exists', () => rootPkg.scripts?.['docs:check']),
+      check('package.json', 'root docs:check composes lint + build + output validation', () => rootPkg.scripts?.['docs:check'] === 'npm run docs:lint && npm run docs:build && node tools/check-docs-output.mjs'),
+      check('package.json', 'root verify:artifacts script exists', () => rootPkg.scripts?.['verify:artifacts']),
+      check('package.json', 'root pack:packages script exists', () => rootPkg.scripts?.['pack:packages']),
+      check('package.json', 'root release:check script exists', () => rootPkg.scripts?.['release:check']),
+      check('package.json', 'root release:verify script exists', () => rootPkg.scripts?.['release:verify']),
+      check('package.json', 'root release:verify includes docs:check', () => rootPkg.scripts?.['release:verify']?.includes('docs:check')),
+      check('package.json', 'root test:adapters script exists', () => rootPkg.scripts?.['test:adapters']),
+      check('package.json', 'root test:contracts script exists', () => rootPkg.scripts?.['test:contracts']),
+      check('package.json', 'root test:release script exists', () => rootPkg.scripts?.['test:release']),
+      check('package.json', 'root storybook script exists', () => rootPkg.scripts?.storybook),
+      check('package.json', 'root storybook:build script exists', () => rootPkg.scripts?.['storybook:build']),
+      check(lockfilePath, 'root package-lock.json exists for npm ci reproducibility', () => hasFile(lockfilePath)),
+      check(docsConfigPath, 'vitepress config exists at docs/.vitepress/config.ts', () => hasFile(docsConfigPath)),
+      check('package.json', 'esbuild is declared in devDependencies', () => rootPkg.devDependencies?.esbuild),
+      check('package.json', 'react is declared in devDependencies', () => rootPkg.devDependencies?.react),
+      check('package.json', 'react-dom is declared in devDependencies', () => rootPkg.devDependencies?.['react-dom']),
+      check('package.json', 'vue is declared in devDependencies', () => rootPkg.devDependencies?.vue),
+      check('package.json', 'jsdom is declared in devDependencies', () => rootPkg.devDependencies?.jsdom),
+      check('package.json', 'storybook is declared in devDependencies', () => rootPkg.devDependencies?.storybook),
+      check('package.json', 'vite is declared in devDependencies', () => rootPkg.devDependencies?.vite),
+      check('package.json', '@storybook/html-vite is declared in devDependencies', () => rootPkg.devDependencies?.['@storybook/html-vite']),
+      check('package.json', '@storybook/addon-docs is declared in devDependencies', () => rootPkg.devDependencies?.['@storybook/addon-docs']),
+      check('package.json', '@storybook/addon-a11y is declared in devDependencies', () => rootPkg.devDependencies?.['@storybook/addon-a11y'])
+    ]
+  },
+  {
+    title: 'Package manifests and version sync',
+    items: [
+      check('packages/js/package.json', `js package version matches ${version}`, () => jsPkg.version === version),
+      check('packages/react/package.json', `react package version matches ${version}`, () => reactPkg.version === version),
+      check('packages/vue/package.json', `vue package version matches ${version}`, () => vuePkg.version === version),
+      check('packages/js/package.json', 'js import export points to dist/index.mjs', () => jsPkg.exports?.['.']?.import === './dist/index.mjs'),
+      check('packages/js/package.json', 'js require export points to dist/index.cjs', () => jsPkg.exports?.['.']?.require === './dist/index.cjs'),
+      check('packages/js/package.json', 'js runtime import export points to dist/rarog.esm.js', () => jsPkg.exports?.['./runtime']?.import === './dist/rarog.esm.js'),
+      check('packages/js/package.json', 'js runtime require export points to dist/rarog.cjs', () => jsPkg.exports?.['./runtime']?.require === './dist/rarog.cjs'),
+      check('packages/js/package.json', 'js package publishes dist via files', () => Array.isArray(jsPkg.files) && jsPkg.files.includes('dist')),
+      check('packages/js/package.json', 'js types points to dist/index.d.ts', () => jsPkg.types === 'dist/index.d.ts'),
+      check('packages/react/package.json', 'react main points to dist', () => reactPkg.main === 'dist/index.mjs'),
+      check('packages/react/package.json', 'react types points to dist/index.d.ts', () => reactPkg.types === 'dist/index.d.ts'),
+      check('packages/react/package.json', 'react package publishes dist via files', () => Array.isArray(reactPkg.files) && reactPkg.files.includes('dist')),
+      check('packages/react/package.json', 'react package declares peer dependencies', () => reactPkg.peerDependencies?.react && reactPkg.peerDependencies?.['react-dom']),
+      check('packages/vue/package.json', 'vue main points to dist', () => vuePkg.main === 'dist/index.mjs'),
+      check('packages/vue/package.json', 'vue types points to dist/index.d.ts', () => vuePkg.types === 'dist/index.d.ts'),
+      check('packages/vue/package.json', 'vue package publishes dist via files', () => Array.isArray(vuePkg.files) && vuePkg.files.includes('dist')),
+      check('packages/vue/package.json', 'vue package declares peer dependency', () => vuePkg.peerDependencies?.vue)
+    ]
+  },
+  {
+    title: 'Banners and tooling',
+    items: [
+      check('tools/pack-packages.mjs', 'pack packages tool exists', () => hasFile('tools/pack-packages.mjs')),
+      check('tools/check-package-artifacts.mjs', 'artifact verification tool exists', () => hasFile('tools/check-package-artifacts.mjs')),
+      check('tools/check-docs-output.mjs', 'docs build output checker exists', () => hasFile('tools/check-docs-output.mjs')),
+      check('packages/core/src/rarog-core.css', 'core banner version is synced', () => readText('packages/core/src/rarog-core.css').includes(`Rarog Core ${version}`)),
+      check('packages/components/src/rarog-components.css', 'components banner version is synced', () => readText('packages/components/src/rarog-components.css').includes(`Rarog Components ${version}`)),
+      check('packages/utilities/src/rarog-utilities.css', 'utilities banner version is synced', () => readText('packages/utilities/src/rarog-utilities.css').includes(`Rarog Utilities ${version}`)),
+      check('packages/js/src/rarog.esm.js', 'js banner version is synced', () => readText('packages/js/src/rarog.esm.js').includes(`Rarog JS Core v${version}`)),
+      check('tests/rarog-js-core.test.html', 'html smoke banner version is synced', () => readText('tests/rarog-js-core.test.html').includes(`Rarog JS Core v${version}`))
+    ]
+  },
+  {
+    title: 'Workflow contracts',
+    items: [
+      check('.github/workflows/ci.yml', 'CI workflow uses npm ci', () => ciWorkflow.includes('npm ci')),
+      check('.github/workflows/ci.yml', 'CI runs docs:lint', () => ciWorkflow.includes('npm run docs:lint')),
+      check('.github/workflows/ci.yml', 'CI runs verify:artifacts after build', () => ciWorkflow.includes('npm run verify:artifacts')),
+      check('.github/workflows/release.yml', 'release workflow uses npm ci', () => releaseWorkflow.includes('npm ci')),
+      check('.github/workflows/release.yml', 'release workflow runs canonical release tests before publish', () => releaseWorkflow.includes('npm run test:release') || includesAll(releaseWorkflow, ['npm run test:unit', 'npm run test:adapters', 'npm run test:contracts'])),
+      check('.github/workflows/release.yml', 'release workflow verifies artifacts before packing', () => releaseWorkflow.includes('npm run verify:artifacts')),
+      check('.github/workflows/release.yml', 'release workflow packs publishable packages before publish', () => releaseWorkflow.includes('npm run pack:packages')),
+      check('.github/workflows/docs.yml', 'docs workflow runs docs:check', () => docsWorkflow.includes('npm run docs:check'))
+    ]
+  }
+]
 
-let failed = false;
-for (const [rel, predicate, label] of checks) {
-  if (!predicate()) {
-    failed = true;
-    console.error(`[FAIL] ${label} (${rel})`);
-  } else {
-    console.log(`[OK] ${label}`);
+let failed = false
+for (const section of checks) {
+  console.log(`\n# ${section.title}`)
+  for (const item of section.items) {
+    if (!item.predicate()) {
+      failed = true
+      console.error(`[FAIL] ${item.label} (${item.rel})`)
+    } else {
+      console.log(`[OK] ${item.label}`)
+    }
   }
 }
 
 if (failed) {
-  process.exit(1);
+  process.exit(1)
 }
