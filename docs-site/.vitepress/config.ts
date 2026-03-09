@@ -44,6 +44,7 @@ export default defineConfig({
           { text: 'API Reference', link: '/api-reference' },
             { text: 'API Contract', link: '/api-contract' },
           { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
+          { text: 'Storybook', link: '/storybook' },
           { text: 'Playground', link: '/playground' }
         ]
       }
@@ -74,6 +75,8 @@ export default defineConfig({
           items: [
             { text: 'Integration Guides', link: '/integration-guides' },
       { text: 'IDE & Plugins', link: '/ide-plugins' },
+            { text: 'Storybook', link: '/storybook' },
+          { text: 'Storybook', link: '/storybook' },
             { text: 'Playground', link: '/playground' },
             { text: 'Showcase', link: '/showcase' }
           ]
