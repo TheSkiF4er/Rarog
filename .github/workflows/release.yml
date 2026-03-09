@@ -22,9 +22,9 @@ jobs:
         run: npm install
 
       - name: Verify release metadata
-        run: npm run release:verify
+        run: npm run release:check
 
-      - name: Build all distributables
+      - name: Build all packages
         run: npm run build:all
 
       - name: Pack publishable packages
