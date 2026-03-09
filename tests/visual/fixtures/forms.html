@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rarog Visual Regression — Forms</title>
+  <link rel="stylesheet" href="../../../packages/core/src/rarog-core.css" />
+  <link rel="stylesheet" href="../../../packages/utilities/src/rarog-utilities.css" />
+  <link rel="stylesheet" href="../../../packages/components/src/rarog-components.css" />
+  <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-default.css" />
+  <style>
+    :root { color-scheme: dark; }
+    * { animation: none !important; transition: none !important; caret-color: transparent !important; }
+    body { margin: 0; background: #0b1020; color: #e5e7eb; font-family: Inter, system-ui, sans-serif; }
+    .frame { max-width: 1280px; margin: 0 auto; padding: 32px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .card { min-height: 320px; }
+    .select-menu, .combobox-list, .datepicker-panel { display: block; position: static; opacity: 1; visibility: visible; margin-top: 12px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: rgba(59,130,246,.18); }
+    .stepper { display: flex; gap: 8px; flex-wrap: wrap; }
+    .step { padding: 10px 14px; border: 1px solid rgba(148,163,184,.35); border-radius: 999px; }
+    .step.is-active { background: rgba(59,130,246,.18); border-color: rgba(59,130,246,.5); }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="mb-4">
+      <div class="text-primary mb-1" style="font-weight:700; font-size: 1.5rem;">Rarog forms</div>
+      <div class="text-muted">Static visual baseline for form and selection components</div>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <div class="card-header">Inputs + Select</div>
+        <div class="card-body">
+          <label class="form-label">Project name</label>
+          <input class="form-input mb-3" value="Rarog design system" />
+          <label class="form-label">Plan</label>
+          <button class="form-input d-flex justify-between items-center" aria-expanded="true"><span>Enterprise</span><span>▾</span></button>
+          <div class="select-menu card">
+            <div class="dropdown-item">Starter</div>
+            <div class="dropdown-item">Growth</div>
+            <div class="dropdown-item active">Enterprise</div>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-header">Combobox + Tags</div>
+        <div class="card-body">
+          <label class="form-label">Assignee</label>
+          <input class="form-input" value="Dim" aria-expanded="true" />
+          <div class="combobox-list card mb-4">
+            <div class="dropdown-item active">Dmitry Efimov</div>
+            <div class="dropdown-item">Diana K.</div>
+            <div class="dropdown-item">Dima S.</div>
+          </div>
+          <label class="form-label">Tags</label>
+          <div class="tags">
+            <span class="tag">ui <button class="btn btn-ghost btn-sm">×</button></span>
+            <span class="tag">a11y <button class="btn btn-ghost btn-sm">×</button></span>
+            <span class="tag">release <button class="btn btn-ghost btn-sm">×</button></span>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-header">Datepicker</div>
+        <div class="card-body">
+          <label class="form-label">Due date</label>
+          <input class="form-input" value="2026-03-09" aria-expanded="true" />
+          <div class="datepicker-panel card">
+            <div class="card-header d-flex justify-between items-center"><span>March 2026</span><span class="text-muted">Mon start</span></div>
+            <div class="card-body">
+              <div class="rg-row rg-gap-y-2 text-center">
+                <div class="rg-col-1">Mo</div><div class="rg-col-1">Tu</div><div class="rg-col-1">We</div><div class="rg-col-1">Th</div><div class="rg-col-1">Fr</div><div class="rg-col-1">Sa</div><div class="rg-col-1">Su</div>
+              </div>
+              <div class="rg-row rg-gap-y-2 text-center mt-2">
+                <div class="rg-col-1"><button class="btn btn-ghost btn-sm">2</button></div>
+                <div class="rg-col-1"><button class="btn btn-ghost btn-sm">3</button></div>
+                <div class="rg-col-1"><button class="btn btn-ghost btn-sm">4</button></div>
+                <div class="rg-col-1"><button class="btn btn-ghost btn-sm">5</button></div>
+                <div class="rg-col-1"><button class="btn btn-ghost btn-sm">6</button></div>
+                <div class="rg-col-1"><button class="btn btn-ghost btn-sm">7</button></div>
+                <div class="rg-col-1"><button class="btn btn-primary btn-sm">9</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-header">Stepper</div>
+        <div class="card-body">
+          <div class="stepper mb-3">
+            <div class="step is-active">1. Project</div>
+            <div class="step">2. Billing</div>
+            <div class="step">3. Review</div>
+          </div>
+          <div class="alert alert-info">Current step panel content with helper text and actions.</div>
+          <div class="d-flex gap-2 mt-3"><button class="btn btn-secondary">Back</button><button class="btn btn-primary">Continue</button></div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
