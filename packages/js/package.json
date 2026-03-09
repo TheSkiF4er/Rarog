@@ -8,23 +8,26 @@
   "main": "dist/rarog.cjs",
   "module": "dist/rarog.esm.js",
   "types": "dist/index.d.ts",
+  "unpkg": "dist/rarog.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/rarog.esm.js",
       "require": "./dist/rarog.cjs",
       "default": "./dist/rarog.esm.js"
+    },
+    "./browser": {
+      "default": "./dist/rarog.js"
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
+  "scripts": {
+    "build": "node ../../tools/build-js.mjs",
+    "prepack": "node ../../tools/build-js.mjs"
+  },
   "publishConfig": {
     "access": "public"
-  },
-  "unpkg": "dist/rarog.iife.js",
-  "scripts": {
-    "build": "node ../../tools/build-js.mjs"
   }
 }
