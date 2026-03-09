@@ -2,19 +2,19 @@ name: CI
 
 on:
   push:
-    branches: [main, master, develop]
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [main, master, develop]
+    branches: [ main, master, develop ]
 
 jobs:
-  build-test-pack:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -23,26 +23,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+      - name: Build CSS
+        run: npm run build
 
-      - name: Verify release metadata
-        run: npm run release:check
+      - name: Build adapters
+        run: npm run build:adapters
 
-      - name: Build all packages
-        run: npm run build:all
+      - name: Package adapters
+        run: npm run pack:react && npm run pack:vue
 
-      - name: Smoke regression checks
-        run: npm run test:smoke
-
-      - name: Unit tests
-        run: npm run test:unit
-
-      - name: Adapter smoke tests
+      - name: Smoke test adapters
         run: npm run test:adapters:smoke
 
-      - name: End-to-end tests
-        run: npm run test:e2e
+      - name: Contract sweep
+        run: npm run test:contracts
 
-      - name: Pack publishable packages
-        run: npm run pack:packages
+      - name: Run tests (unit + e2e)
+        run: npm test
