@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v3.0.0
+ * Rarog JS Core v3.5.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
@@ -77,7 +77,7 @@ const Events = {
 };
 
 function _dispatchEvent(element, name, detail = {}) {
-  if (!element || typeof CustomEvent === "undefined") return;
+  if (!element || typeof CustomEvent === "undefined") return null;
   const evt = new CustomEvent(name, {
     bubbles: true,
     cancelable: false,
@@ -85,6 +85,7 @@ function _dispatchEvent(element, name, detail = {}) {
   });
   element.dispatchEvent(evt);
   _emitOnBus(name, { element, detail });
+  return evt;
 }
 
 function _dispatchCancelableEvent(element, name, detail = {}) {
@@ -295,11 +296,6 @@ class Collapse {
 
   show() {
     if (this._isOpen) return;
-
-    const host = this._target || this._trigger;
-    const detail = { instance: this, trigger: this._trigger, target: this._target || null };
-    if (!_dispatchCancelableEvent(host, "rg:collapse:show", detail)) return;
-
     this._isOpen = true;
 
     if (this._target) {
@@ -308,17 +304,10 @@ class Collapse {
       this._target.classList.add("rg-collapse-open");
     }
     this._trigger.setAttribute("aria-expanded", "true");
-
-    _dispatchEvent(host, "rg:collapse:shown", detail);
   }
 
   hide() {
     if (!this._isOpen) return;
-
-    const host = this._target || this._trigger;
-    const detail = { instance: this, trigger: this._trigger, target: this._target || null };
-    if (!_dispatchCancelableEvent(host, "rg:collapse:hide", detail)) return;
-
     this._isOpen = false;
 
     if (this._target) {
@@ -327,8 +316,6 @@ class Collapse {
       this._target.classList.remove("rg-collapse-open");
     }
     this._trigger.setAttribute("aria-expanded", "false");
-
-    _dispatchEvent(host, "rg:collapse:hidden", detail);
   }
 
   toggle() {
@@ -684,16 +671,12 @@ class Toast {
   show() {
     if (this._isVisible) return;
 
-    const detail = { instance: this, target: this._element, trigger: null };
-    if (!_dispatchCancelableEvent(this._element, "rg:toast:show", detail)) return;
-
     this._isVisible = true;
     this._element.classList.add("is-visible");
     this._element.setAttribute("role", "status");
     this._element.setAttribute("aria-live", "polite");
-    this._element.setAttribute("aria-hidden", "false");
 
-    _dispatchEvent(this._element, "rg:toast:shown", detail);
+    _dispatchEvent(this._element, "rg:toast:show", { instance: this });
 
     if (this._options.autoHide) {
       this._clearTimer();
@@ -706,16 +689,12 @@ class Toast {
   hide() {
     if (!this._isVisible) return;
 
-    const detail = { instance: this, target: this._element, trigger: null };
-    if (!_dispatchCancelableEvent(this._element, "rg:toast:hide", detail)) return;
-
     this._isVisible = false;
     this._element.classList.remove("is-visible");
     this._element.removeAttribute("aria-live");
-    this._element.setAttribute("aria-hidden", "true");
 
     this._clearTimer();
-    _dispatchEvent(this._element, "rg:toast:hidden", detail);
+    _dispatchEvent(this._element, "rg:toast:hide", { instance: this });
   }
 
   _clearTimer() {
@@ -783,11 +762,6 @@ class Tooltip {
     const el = document.createElement("div");
     el.className = "tooltip";
     el.dataset.rgPlacement = this._options.placement;
-    if (!el.id) {
-      el.id = `rg-tooltip-${Math.random().toString(36).slice(2, 8)}`;
-    }
-    el.setAttribute("role", "tooltip");
-    el.setAttribute("aria-hidden", "true");
 
     const inner = document.createElement("div");
     inner.className = "tooltip-inner";
@@ -804,41 +778,23 @@ class Tooltip {
     this._createTooltip();
     if (!this._tooltip) return;
 
-    const detail = {
-      instance: this,
-      trigger: this._trigger,
-      target: this._tooltip,
-      placement: this._options.placement
-    };
-    if (!_dispatchCancelableEvent(this._tooltip, "rg:tooltip:show", detail)) return;
-
     this._position();
     this._tooltip.classList.add("is-visible");
-    this._tooltip.setAttribute("aria-hidden", "false");
     this._trigger.setAttribute("aria-describedby", this._tooltip.id || "");
     this._isVisible = true;
 
-    _dispatchEvent(this._tooltip, "rg:tooltip:shown", detail);
+    _dispatchEvent(this._tooltip, "rg:tooltip:show", { instance: this });
   }
 
   hide() {
     if (!this._isVisible) return;
     if (!this._tooltip) return;
 
-    const detail = {
-      instance: this,
-      trigger: this._trigger,
-      target: this._tooltip,
-      placement: this._options.placement
-    };
-    if (!_dispatchCancelableEvent(this._tooltip, "rg:tooltip:hide", detail)) return;
-
     this._tooltip.classList.remove("is-visible");
-    this._tooltip.setAttribute("aria-hidden", "true");
     this._trigger.removeAttribute("aria-describedby");
     this._isVisible = false;
 
-    _dispatchEvent(this._tooltip, "rg:tooltip:hidden", detail);
+    _dispatchEvent(this._tooltip, "rg:tooltip:hide", { instance: this });
   }
 
   _position() {
@@ -912,19 +868,12 @@ class Popover {
     const el = document.createElement("div");
     el.className = "popover";
     el.dataset.rgPlacement = this._options.placement;
-    if (!el.id) {
-      el.id = `rg-popover-${Math.random().toString(36).slice(2, 8)}`;
-    }
-    el.setAttribute("role", "dialog");
-    el.setAttribute("aria-hidden", "true");
 
     if (this._options.title) {
       const header = document.createElement("div");
       header.className = "popover-header";
-      header.id = `${el.id}-title`;
       header.textContent = this._options.title;
       el.appendChild(header);
-      el.setAttribute("aria-labelledby", header.id);
     }
 
     const body = document.createElement("div");
@@ -942,41 +891,22 @@ class Popover {
     this._createPopover();
     if (!this._popover) return;
 
-    const detail = {
-      instance: this,
-      trigger: this._trigger,
-      target: this._popover,
-      placement: this._options.placement
-    };
-    if (!_dispatchCancelableEvent(this._popover, "rg:popover:show", detail)) return;
-
     this._position();
     this._popover.classList.add("is-visible");
-    this._popover.setAttribute("aria-hidden", "false");
     this._trigger.setAttribute("aria-expanded", "true");
-    this._trigger.setAttribute("aria-controls", this._popover.id);
 
     this._isVisible = true;
-    _dispatchEvent(this._popover, "rg:popover:shown", detail);
+    _dispatchEvent(this._popover, "rg:popover:show", { instance: this });
   }
 
   hide() {
     if (!this._isVisible || !this._popover) return;
 
-    const detail = {
-      instance: this,
-      trigger: this._trigger,
-      target: this._popover,
-      placement: this._options.placement
-    };
-    if (!_dispatchCancelableEvent(this._popover, "rg:popover:hide", detail)) return;
-
     this._popover.classList.remove("is-visible");
-    this._popover.setAttribute("aria-hidden", "true");
     this._trigger.setAttribute("aria-expanded", "false");
 
     this._isVisible = false;
-    _dispatchEvent(this._popover, "rg:popover:hidden", detail);
+    _dispatchEvent(this._popover, "rg:popover:hide", { instance: this });
   }
 
   toggle() {
@@ -1050,6 +980,7 @@ function _attachEventsForClass(klass, getElement, name) {
 
 // Подвязываем события для Dropdown/Collapse/Modal
 _attachEventsForClass(Dropdown, inst => inst._menu || inst._trigger, "dropdown");
+_attachEventsForClass(Collapse, inst => inst._target, "collapse");
 _attachEventsForClass(Modal, inst => inst._element, "modal");
 /* -------------------------------------------------------------------------- */
 /* Carousel                                                                   */
@@ -1242,7 +1173,7 @@ class Stepper {
       if (value == null) return;
       const index = parseInt(value, 10);
       if (!Number.isNaN(index)) {
-        this.goTo(index);
+        this.goTo(index, { trigger, legacyEvent: "rg:stepper:goto" });
       }
     };
 
@@ -1255,7 +1186,8 @@ class Stepper {
 
   _update() {
     this._steps.forEach((step, index) => {
-      if (index === this._currentIndex) {
+      const active = index === this._currentIndex;
+      if (active) {
         step.classList.add("is-active");
         step.setAttribute("aria-current", "step");
       } else {
@@ -1265,7 +1197,8 @@ class Stepper {
     });
 
     this._contents.forEach((content, index) => {
-      if (index === this._currentIndex) {
+      const active = index === this._currentIndex;
+      if (active) {
         content.classList.add("is-active");
         content.removeAttribute("hidden");
         content.setAttribute("aria-hidden", "false");
@@ -1277,34 +1210,53 @@ class Stepper {
     });
   }
 
-  next() {
-    const nextIndex = Math.min(this._steps.length - 1, this._currentIndex + 1);
-    if (nextIndex === this._currentIndex) return;
-    this._currentIndex = nextIndex;
+  _transitionTo(nextIndex, meta = {}) {
+    if (!this._steps.length) return false;
+    const normalized = Math.max(0, Math.min(this._steps.length - 1, nextIndex));
+    if (normalized === this._currentIndex) return false;
+
+    const detail = {
+      instance: this,
+      trigger: meta.trigger || null,
+      target: this._element,
+      fromIndex: this._currentIndex,
+      toIndex: normalized,
+      index: normalized,
+      action: meta.action || "goto"
+    };
+
+    if (!_dispatchCancelableEvent(this._element, "rg:stepper:change", detail)) {
+      return false;
+    }
+
+    this._currentIndex = normalized;
     this._update();
-    _dispatchEvent(this._element, "rg:stepper:next", { instance: this, index: this._currentIndex });
+
+    _dispatchEvent(this._element, "rg:stepper:changed", detail);
+    if (meta.legacyEvent) {
+      _dispatchEvent(this._element, meta.legacyEvent, { instance: this, index: this._currentIndex });
+    }
+    return true;
+  }
+
+  next() {
+    return this._transitionTo(this._currentIndex + 1, { action: "next", legacyEvent: "rg:stepper:next" });
   }
 
   prev() {
-    const prevIndex = Math.max(0, this._currentIndex - 1);
-    if (prevIndex === this._currentIndex) return;
-    this._currentIndex = prevIndex;
-    this._update();
-    _dispatchEvent(this._element, "rg:stepper:prev", { instance: this, index: this._currentIndex });
+    return this._transitionTo(this._currentIndex - 1, { action: "prev", legacyEvent: "rg:stepper:prev" });
   }
 
-  goTo(index) {
-    const normalized = Math.max(0, Math.min(this._steps.length - 1, index));
-    if (normalized === this._currentIndex) return;
-    this._currentIndex = normalized;
-    this._update();
-    _dispatchEvent(this._element, "rg:stepper:goto", { instance: this, index: this._currentIndex });
+  goTo(index, meta = {}) {
+    return this._transitionTo(index, Object.assign({ action: "goto", legacyEvent: "rg:stepper:goto" }, meta));
   }
 
   reset() {
-    this._currentIndex = 0;
-    this._update();
-    _dispatchEvent(this._element, "rg:stepper:reset", { instance: this, index: this._currentIndex });
+    const changed = this._transitionTo(0, { action: "reset", legacyEvent: "rg:stepper:reset" });
+    if (!changed && this._currentIndex === 0) {
+      _dispatchEvent(this._element, "rg:stepper:reset", { instance: this, index: this._currentIndex });
+    }
+    return changed;
   }
 
   destroy() {
@@ -1374,13 +1326,13 @@ class Datepicker {
 
     this._onInputClick = event => {
       event.preventDefault();
-      this.toggle();
+      this.toggle({ trigger: event.currentTarget || event.target || null });
     };
 
     this._onDocumentClick = event => {
       if (!this._isOpen) return;
       if (!this._element.contains(event.target)) {
-        this.hide();
+        this.hide({ trigger: event.target || null });
       }
     };
 
@@ -1402,14 +1354,15 @@ class Datepicker {
       const value = target.getAttribute("data-rg-date");
       if (!value) return;
       const date = new Date(value);
-      if (isNaN(date.getTime())) {
-        this._selectedDate = value;
-      } else {
-        this._selectedDate = date;
-      }
+      this._selectedDate = isNaN(date.getTime()) ? value : date;
       this._updateInputFromSelected();
-      this.hide();
-      _dispatchEvent(this._element, "rg:datepicker:select", { value: this._input ? this._input.value : null });
+      this.hide({ trigger: target });
+      _dispatchEvent(this._element, "rg:datepicker:select", {
+        instance: this,
+        trigger: target,
+        target: this._element,
+        value: this._input ? this._input.value : null
+      });
     };
 
     if (this._input) {
@@ -1438,7 +1391,6 @@ class Datepicker {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    // Пока поддерживаем только yyyy-MM-dd
     return `${year}-${month}-${day}`;
   }
 
@@ -1457,7 +1409,7 @@ class Datepicker {
     const year = this._currentDate.getFullYear();
     const month = this._currentDate.getMonth();
     const firstDay = new Date(year, month, 1);
-    const firstWeekday = (firstDay.getDay() + 6) % 7; // 0 = Monday
+    const firstWeekday = (firstDay.getDay() + 6) % 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     this._title.textContent = this._currentDate.toLocaleDateString(undefined, {
@@ -1486,11 +1438,7 @@ class Datepicker {
       button.textContent = String(day);
       button.setAttribute("data-rg-date", this._formatDate(cellDate));
 
-      if (
-        year === todayY &&
-        month === todayM &&
-        day === todayD
-      ) {
+      if (year === todayY && month === todayM && day === todayD) {
         button.classList.add("is-today");
       }
 
@@ -1506,28 +1454,30 @@ class Datepicker {
     }
   }
 
-  show() {
-    if (!this._popup) return;
+  show(meta = {}) {
+    if (!this._popup || this._isOpen) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element };
+    if (!_dispatchCancelableEvent(this._element, "rg:datepicker:show", detail)) return false;
     this._popup.removeAttribute("hidden");
     this._popup.classList.add("is-open");
     this._isOpen = true;
-    _dispatchEvent(this._element, "rg:datepicker:show", {});
+    _dispatchEvent(this._element, "rg:datepicker:shown", detail);
+    return true;
   }
 
-  hide() {
-    if (!this._popup) return;
+  hide(meta = {}) {
+    if (!this._popup || !this._isOpen) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element };
+    if (!_dispatchCancelableEvent(this._element, "rg:datepicker:hide", detail)) return false;
     this._popup.setAttribute("hidden", "true");
     this._popup.classList.remove("is-open");
     this._isOpen = false;
-    _dispatchEvent(this._element, "rg:datepicker:hide", {});
+    _dispatchEvent(this._element, "rg:datepicker:hidden", detail);
+    return true;
   }
 
-  toggle() {
-    if (this._isOpen) {
-      this.hide();
-    } else {
-      this.show();
-    }
+  toggle(meta = {}) {
+    return this._isOpen ? this.hide(meta) : this.show(meta);
   }
 
   dispose() {
@@ -1605,24 +1555,24 @@ class Select {
     this._onDocumentClick = event => {
       if (!this._isOpen) return;
       if (!this._element.contains(event.target)) {
-        this.hide();
+        this.hide({ trigger: event.target || null });
       }
     };
 
     this._onToggleClick = event => {
       event.preventDefault();
-      this.toggle();
+      this.toggle({ trigger: event.currentTarget || event.target || null });
     };
 
     this._onItemClick = event => {
       const item = event.currentTarget;
-      this._selectItem(item);
+      this._selectItem(item, { trigger: item });
     };
 
     this._onKeyDown = event => {
       if (!this._isOpen && (event.key === "ArrowDown" || event.key === "ArrowUp" || event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        this.show();
+        this.show({ trigger: event.currentTarget || event.target || null });
         return;
       }
 
@@ -1634,9 +1584,9 @@ class Select {
       } else if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         const current = this._items[this._activeIndex];
-        if (current) this._selectItem(current);
+        if (current) this._selectItem(current, { trigger: current });
       } else if (event.key === "Escape") {
-        this.hide();
+        this.hide({ trigger: event.currentTarget || event.target || null });
       }
     };
 
@@ -1648,6 +1598,7 @@ class Select {
     }
     if (this._menu) {
       this._menu.setAttribute("role", "listbox");
+      this._menu.setAttribute("hidden", "true");
     }
 
     this._items.forEach((item, index) => {
@@ -1744,7 +1695,7 @@ class Select {
     this._activeIndex = index;
   }
 
-  _selectItem(item) {
+  _selectItem(item, meta = {}) {
     const value = this._getItemValue(item);
 
     if (this._options.multiple) {
@@ -1769,43 +1720,43 @@ class Select {
           it.setAttribute("aria-selected", "false");
         }
       });
-      this.hide();
+      this.hide({ trigger: meta.trigger || item });
     }
 
     this._syncHidden();
     this._updateToggleLabel();
-    _dispatchEvent(this._element, "rg:select:change", { value: this._value });
+    _dispatchEvent(this._element, "rg:select:change", { instance: this, trigger: meta.trigger || item, target: this._element, value: this._value });
   }
 
-  show() {
-    if (!this._menu) return;
+  show(meta = {}) {
+    if (!this._menu || this._isOpen) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element };
+    if (!_dispatchCancelableEvent(this._element, "rg:select:show", detail)) return false;
     this._menu.removeAttribute("hidden");
     this._menu.classList.add("is-open");
-    if (this._toggle) {
-      this._toggle.setAttribute("aria-expanded", "true");
-    }
+    if (this._toggle) this._toggle.setAttribute("aria-expanded", "true");
     this._isOpen = true;
-    if (this._activeIndex === -1 && this._items.length) {
-      this._setActiveIndex(0);
-    }
+    if (this._activeIndex === -1 && this._items.length) this._setActiveIndex(0);
+    _dispatchEvent(this._element, "rg:select:shown", detail);
+    _dispatchEvent(this._element, "rg:select:open", detail);
+    return true;
   }
 
-  hide() {
-    if (!this._menu) return;
+  hide(meta = {}) {
+    if (!this._menu || !this._isOpen) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element };
+    if (!_dispatchCancelableEvent(this._element, "rg:select:hide", detail)) return false;
     this._menu.setAttribute("hidden", "true");
     this._menu.classList.remove("is-open");
-    if (this._toggle) {
-      this._toggle.setAttribute("aria-expanded", "false");
-    }
+    if (this._toggle) this._toggle.setAttribute("aria-expanded", "false");
     this._isOpen = false;
+    _dispatchEvent(this._element, "rg:select:hidden", detail);
+    _dispatchEvent(this._element, "rg:select:close", detail);
+    return true;
   }
 
-  toggle() {
-    if (this._isOpen) {
-      this.hide();
-    } else {
-      this.show();
-    }
+  toggle(meta = {}) {
+    return this._isOpen ? this.hide(meta) : this.show(meta);
   }
 
   dispose() {
@@ -1857,26 +1808,28 @@ class Combobox {
     this._onInput = event => {
       const query = event.target.value.toLowerCase();
       this._filter(query);
-      if (!this._isOpen) this.show();
+      if (!this._isOpen) this.show({ trigger: event.currentTarget || event.target || null });
     };
 
     this._onKeyDown = event => {
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
-        const delta = event.key === "ArrowDown" ? 1 : -1;
-        this._moveActive(delta);
+        if (!this._isOpen) {
+          this.show({ trigger: event.currentTarget || event.target || null });
+        }
+        this._moveActive(event.key === "ArrowDown" ? 1 : -1);
       } else if (event.key === "Enter") {
         event.preventDefault();
         const current = this._items[this._activeIndex];
-        if (current) this._selectItem(current);
+        if (current) this._selectItem(current, { trigger: current });
       } else if (event.key === "Escape") {
-        this.hide();
+        this.hide({ trigger: event.currentTarget || event.target || null });
       }
     };
 
     this._onToggleClick = event => {
       event.preventDefault();
-      this.toggle();
+      this.toggle({ trigger: event.currentTarget || event.target || null });
       if (this._isOpen && this._input) {
         this._input.focus();
       }
@@ -1884,13 +1837,13 @@ class Combobox {
 
     this._onItemClick = event => {
       const item = event.currentTarget;
-      this._selectItem(item);
+      this._selectItem(item, { trigger: item });
     };
 
     this._onDocumentClick = event => {
       if (!this._isOpen) return;
       if (!this._element.contains(event.target)) {
-        this.hide();
+        this.hide({ trigger: event.target || null });
       }
     };
 
@@ -1899,12 +1852,14 @@ class Combobox {
       this._input.addEventListener("keydown", this._onKeyDown);
       this._input.setAttribute("role", "combobox");
       this._input.setAttribute("aria-autocomplete", "list");
+      this._input.setAttribute("aria-expanded", "false");
     }
     if (this._toggle) {
       this._toggle.addEventListener("click", this._onToggleClick);
     }
     if (this._list) {
       this._list.setAttribute("role", "listbox");
+      this._list.setAttribute("hidden", "true");
     }
     this._items.forEach(item => {
       item.setAttribute("role", "option");
@@ -1971,7 +1926,7 @@ class Combobox {
     return explicit != null ? explicit : item.textContent.trim();
   }
 
-  _selectItem(item) {
+  _selectItem(item, meta = {}) {
     const value = this._getItemValue(item);
     if (this._input) {
       this._input.value = item.textContent.trim();
@@ -1988,32 +1943,38 @@ class Combobox {
         it.setAttribute("aria-selected", "false");
       }
     });
-    this.hide();
-    _dispatchEvent(this._element, "rg:combobox:change", { value });
+    this.hide({ trigger: meta.trigger || item });
+    _dispatchEvent(this._element, "rg:combobox:change", { instance: this, trigger: meta.trigger || item, target: this._element, value });
   }
 
-  show() {
-    if (!this._list) return;
+  show(meta = {}) {
+    if (!this._list || this._isOpen) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element };
+    if (!_dispatchCancelableEvent(this._element, "rg:combobox:show", detail)) return false;
     this._list.removeAttribute("hidden");
     this._list.classList.add("is-open");
     this._isOpen = true;
-    _dispatchEvent(this._element, "rg:combobox:open", {});
+    if (this._input) this._input.setAttribute("aria-expanded", "true");
+    _dispatchEvent(this._element, "rg:combobox:shown", detail);
+    _dispatchEvent(this._element, "rg:combobox:open", detail);
+    return true;
   }
 
-  hide() {
-    if (!this._list) return;
+  hide(meta = {}) {
+    if (!this._list || !this._isOpen) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element };
+    if (!_dispatchCancelableEvent(this._element, "rg:combobox:hide", detail)) return false;
     this._list.setAttribute("hidden", "true");
     this._list.classList.remove("is-open");
     this._isOpen = false;
-    _dispatchEvent(this._element, "rg:combobox:close", {});
+    if (this._input) this._input.setAttribute("aria-expanded", "false");
+    _dispatchEvent(this._element, "rg:combobox:hidden", detail);
+    _dispatchEvent(this._element, "rg:combobox:close", detail);
+    return true;
   }
 
-  toggle() {
-    if (this._isOpen) {
-      this.hide();
-    } else {
-      this.show();
-    }
+  toggle(meta = {}) {
+    return this._isOpen ? this.hide(meta) : this.show(meta);
   }
 
   dispose() {
@@ -2065,18 +2026,18 @@ class TagsInput {
         event.preventDefault();
         const value = (this._input ? this._input.value : "").trim();
         if (value) {
-          this.addTag(value);
+          this.addTag(value, { trigger: this._input });
           this._input.value = "";
         }
       } else if (event.key === "Backspace" && this._input && this._input.value === "") {
         const last = this._tags[this._tags.length - 1];
         if (last) {
-          this.removeTag(last.value);
+          this.removeTag(last.value, { trigger: this._input });
         }
       }
     };
 
-    this._onClick = event => {
+    this._onClick = () => {
       if (this._input) {
         this._input.focus();
       }
@@ -2087,7 +2048,7 @@ class TagsInput {
       const tagEl = button.closest("[data-rg-tag-value]");
       if (!tagEl) return;
       const value = tagEl.getAttribute("data-rg-tag-value");
-      this.removeTag(value);
+      this.removeTag(value, { trigger: button });
     };
 
     if (this._input) {
@@ -2141,28 +2102,29 @@ class TagsInput {
     this._hiddenInput.value = this._tags.map(t => t.value).join(",");
   }
 
-  addTag(value) {
-    if (!value) return;
-    if (this._tags.some(t => t.value === value)) return;
+  addTag(value, meta = {}) {
+    if (!value || this._tags.some(t => t.value === value)) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element, value, values: this._tags.map(t => t.value) };
+    if (!_dispatchCancelableEvent(this._element, "rg:tags-input:add", detail)) return false;
     this._createTagElement(value);
     this._syncHidden();
-    _dispatchEvent(this._element, "rg:tags-input:change", {
-      values: this._tags.map(t => t.value)
-    });
+    _dispatchEvent(this._element, "rg:tags-input:change", { instance: this, trigger: meta.trigger || null, target: this._element, value, values: this._tags.map(t => t.value) });
+    return true;
   }
 
-  removeTag(value) {
+  removeTag(value, meta = {}) {
     const idx = this._tags.findIndex(t => t.value === value);
-    if (idx === -1) return;
+    if (idx === -1) return false;
+    const detail = { instance: this, trigger: meta.trigger || null, target: this._element, value, values: this._tags.map(t => t.value) };
+    if (!_dispatchCancelableEvent(this._element, "rg:tags-input:remove", detail)) return false;
     const tag = this._tags[idx];
     if (tag.element && tag.element.parentNode) {
       tag.element.parentNode.removeChild(tag.element);
     }
     this._tags.splice(idx, 1);
     this._syncHidden();
-    _dispatchEvent(this._element, "rg:tags-input:change", {
-      values: this._tags.map(t => t.value)
-    });
+    _dispatchEvent(this._element, "rg:tags-input:change", { instance: this, trigger: meta.trigger || null, target: this._element, value, values: this._tags.map(t => t.value) });
+    return true;
   }
 
   clear() {
@@ -2230,7 +2192,10 @@ class DataTable {
     };
 
     this._onSearchInput = event => {
-      this._state.search = (event.target.value || "").toLowerCase();
+      const nextSearch = (event.target.value || "").toLowerCase();
+      const detail = { instance: this, trigger: event.currentTarget || event.target || null, target: this._element, search: nextSearch };
+      if (!_dispatchCancelableEvent(this._element, "rg:table:search", detail)) return;
+      this._state.search = nextSearch;
       this._state.page = 1;
       this._apply();
     };
@@ -2239,14 +2204,14 @@ class DataTable {
       const th = event.currentTarget;
       const key = th.getAttribute("data-rg-sort");
       if (!key) return;
-
+      let nextDir = "asc";
       if (this._state.sortKey === key) {
-        this._state.sortDir = this._state.sortDir === "asc" ? "desc" : "asc";
-      } else {
-        this._state.sortKey = key;
-        this._state.sortDir = "asc";
+        nextDir = this._state.sortDir === "asc" ? "desc" : "asc";
       }
-
+      const detail = { instance: this, trigger: th, target: this._element, sortKey: key, sortDir: nextDir };
+      if (!_dispatchCancelableEvent(this._element, "rg:table:sort", detail)) return;
+      this._state.sortKey = key;
+      this._state.sortDir = nextDir;
       this._apply();
     };
 
@@ -2254,6 +2219,8 @@ class DataTable {
       event.preventDefault();
       const page = Number(event.currentTarget.getAttribute("data-rg-page"));
       if (!Number.isNaN(page)) {
+        const detail = { instance: this, trigger: event.currentTarget, target: this._element, page };
+        if (!_dispatchCancelableEvent(this._element, "rg:table:page", detail)) return;
         this._state.page = page;
         this._apply({ focusPagination: true });
       }
@@ -2278,7 +2245,6 @@ class DataTable {
   _filterRows() {
     const search = this._state.search;
     if (!search) return this._rows.slice();
-
     return this._rows.filter(row => {
       const text = row.textContent || "";
       return text.toLowerCase().indexOf(search) !== -1;
@@ -2288,21 +2254,16 @@ class DataTable {
   _sortRows(rows) {
     const key = this._state.sortKey;
     if (!key) return rows;
-
     const dir = this._state.sortDir === "desc" ? -1 : 1;
-
     const header = this._table.querySelector("thead th[data-rg-sort='" + key + "']");
     const index = header ? Array.from(header.parentNode.children).indexOf(header) : -1;
     if (index === -1) return rows;
-
     const type = header.getAttribute("data-rg-sort-type") || "string";
-
     return rows.slice().sort((a, b) => {
       const aCell = a.cells[index];
       const bCell = b.cells[index];
       const aText = aCell ? (aCell.textContent || "").trim() : "";
       const bText = bCell ? (bCell.textContent || "").trim() : "";
-
       if (type === "number") {
         const aNum = parseFloat(aText.replace(/\s+/g, "").replace(",", "."));
         const bNum = parseFloat(bText.replace(/\s+/g, "").replace(",", "."));
@@ -2312,7 +2273,6 @@ class DataTable {
         if (aNum === bNum) return 0;
         return aNum > bNum ? dir : -dir;
       }
-
       return dir * aText.localeCompare(bText, undefined, { numeric: true });
     });
   }
@@ -2321,80 +2281,65 @@ class DataTable {
     if (!this._paginationContainer || !this._options.pageSize) {
       return { rows, page: 1, pages: 1 };
     }
-
     const total = rows.length;
     const pages = Math.max(1, Math.ceil(total / this._options.pageSize));
     let page = this._state.page;
     if (page < 1) page = 1;
     if (page > pages) page = pages;
-
     const start = (page - 1) * this._options.pageSize;
     const end = start + this._options.pageSize;
-
     return { rows: rows.slice(start, end), page, pages };
   }
 
   _renderPagination(page, pages) {
     if (!this._paginationContainer) return;
-
     this._paginationContainer.innerHTML = "";
     if (pages <= 1) return;
-
     const list = document.createElement("ul");
     list.className = "pagination";
-
     for (let i = 1; i <= pages; i++) {
       const li = document.createElement("li");
       li.className = "page-item" + (i === page ? " is-active" : "");
-
       const link = document.createElement("a");
       link.href = "#";
       link.className = "page-link";
       link.textContent = String(i);
       link.setAttribute("data-rg-page", String(i));
       link.addEventListener("click", this._onPageClick);
-
       li.appendChild(link);
       list.appendChild(li);
     }
-
     this._paginationContainer.appendChild(list);
   }
 
   _apply(options = {}) {
     if (!this._tbody) return;
-
     let rows = this._filterRows();
     rows = this._sortRows(rows);
     const paginated = this._paginateRows(rows);
-
     this._tbody.innerHTML = "";
     paginated.rows.forEach(row => {
       this._tbody.appendChild(row);
     });
-
     this._renderPagination(paginated.page, paginated.pages);
-
     const header = this._state.sortKey
       ? this._table.querySelector("thead th[data-rg-sort='" + this._state.sortKey + "']")
       : null;
-    if (header) {
-      this._table
-        .querySelectorAll("thead th[data-rg-sort]")
-        .forEach(th => th.classList.remove("is-sorted-asc", "is-sorted-desc"));
-      header.classList.add(
-        this._state.sortDir === "desc" ? "is-sorted-desc" : "is-sorted-asc"
-      );
+    if (this._table) {
+      this._table.querySelectorAll("thead th[data-rg-sort]").forEach(th => th.classList.remove("is-sorted-asc", "is-sorted-desc"));
     }
-
+    if (header) {
+      header.classList.add(this._state.sortDir === "desc" ? "is-sorted-desc" : "is-sorted-asc");
+    }
     _dispatchEvent(this._element, "rg:table:update", {
+      instance: this,
+      target: this._element,
       search: this._state.search,
       sortKey: this._state.sortKey,
       sortDir: this._state.sortDir,
       page: paginated.page,
       pages: paginated.pages
     });
-
     if (options.focusPagination && this._paginationContainer) {
       const activeLink = this._paginationContainer.querySelector(".page-item.is-active .page-link");
       if (activeLink) activeLink.focus();
