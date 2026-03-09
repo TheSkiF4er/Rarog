@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v3.5.0
+ * Rarog JS Core v3.0.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
@@ -85,6 +85,18 @@ function _dispatchEvent(element, name, detail = {}) {
   });
   element.dispatchEvent(evt);
   _emitOnBus(name, { element, detail });
+}
+
+function _dispatchCancelableEvent(element, name, detail = {}) {
+  if (!element || typeof CustomEvent === "undefined") return true;
+  const evt = new CustomEvent(name, {
+    bubbles: true,
+    cancelable: true,
+    detail
+  });
+  const allowed = element.dispatchEvent(evt);
+  _emitOnBus(name, { element, detail, defaultPrevented: evt.defaultPrevented });
+  return allowed && !evt.defaultPrevented;
 }
 
 function _resolveTarget(trigger, explicitTarget) {
@@ -283,6 +295,11 @@ class Collapse {
 
   show() {
     if (this._isOpen) return;
+
+    const host = this._target || this._trigger;
+    const detail = { instance: this, trigger: this._trigger, target: this._target || null };
+    if (!_dispatchCancelableEvent(host, "rg:collapse:show", detail)) return;
+
     this._isOpen = true;
 
     if (this._target) {
@@ -291,10 +308,17 @@ class Collapse {
       this._target.classList.add("rg-collapse-open");
     }
     this._trigger.setAttribute("aria-expanded", "true");
+
+    _dispatchEvent(host, "rg:collapse:shown", detail);
   }
 
   hide() {
     if (!this._isOpen) return;
+
+    const host = this._target || this._trigger;
+    const detail = { instance: this, trigger: this._trigger, target: this._target || null };
+    if (!_dispatchCancelableEvent(host, "rg:collapse:hide", detail)) return;
+
     this._isOpen = false;
 
     if (this._target) {
@@ -303,6 +327,8 @@ class Collapse {
       this._target.classList.remove("rg-collapse-open");
     }
     this._trigger.setAttribute("aria-expanded", "false");
+
+    _dispatchEvent(host, "rg:collapse:hidden", detail);
   }
 
   toggle() {
@@ -658,12 +684,16 @@ class Toast {
   show() {
     if (this._isVisible) return;
 
+    const detail = { instance: this, target: this._element, trigger: null };
+    if (!_dispatchCancelableEvent(this._element, "rg:toast:show", detail)) return;
+
     this._isVisible = true;
     this._element.classList.add("is-visible");
     this._element.setAttribute("role", "status");
     this._element.setAttribute("aria-live", "polite");
+    this._element.setAttribute("aria-hidden", "false");
 
-    _dispatchEvent(this._element, "rg:toast:show", { instance: this });
+    _dispatchEvent(this._element, "rg:toast:shown", detail);
 
     if (this._options.autoHide) {
       this._clearTimer();
@@ -676,12 +706,16 @@ class Toast {
   hide() {
     if (!this._isVisible) return;
 
+    const detail = { instance: this, target: this._element, trigger: null };
+    if (!_dispatchCancelableEvent(this._element, "rg:toast:hide", detail)) return;
+
     this._isVisible = false;
     this._element.classList.remove("is-visible");
     this._element.removeAttribute("aria-live");
+    this._element.setAttribute("aria-hidden", "true");
 
     this._clearTimer();
-    _dispatchEvent(this._element, "rg:toast:hide", { instance: this });
+    _dispatchEvent(this._element, "rg:toast:hidden", detail);
   }
 
   _clearTimer() {
@@ -749,6 +783,11 @@ class Tooltip {
     const el = document.createElement("div");
     el.className = "tooltip";
     el.dataset.rgPlacement = this._options.placement;
+    if (!el.id) {
+      el.id = `rg-tooltip-${Math.random().toString(36).slice(2, 8)}`;
+    }
+    el.setAttribute("role", "tooltip");
+    el.setAttribute("aria-hidden", "true");
 
     const inner = document.createElement("div");
     inner.className = "tooltip-inner";
@@ -765,23 +804,41 @@ class Tooltip {
     this._createTooltip();
     if (!this._tooltip) return;
 
+    const detail = {
+      instance: this,
+      trigger: this._trigger,
+      target: this._tooltip,
+      placement: this._options.placement
+    };
+    if (!_dispatchCancelableEvent(this._tooltip, "rg:tooltip:show", detail)) return;
+
     this._position();
     this._tooltip.classList.add("is-visible");
+    this._tooltip.setAttribute("aria-hidden", "false");
     this._trigger.setAttribute("aria-describedby", this._tooltip.id || "");
     this._isVisible = true;
 
-    _dispatchEvent(this._tooltip, "rg:tooltip:show", { instance: this });
+    _dispatchEvent(this._tooltip, "rg:tooltip:shown", detail);
   }
 
   hide() {
     if (!this._isVisible) return;
     if (!this._tooltip) return;
 
+    const detail = {
+      instance: this,
+      trigger: this._trigger,
+      target: this._tooltip,
+      placement: this._options.placement
+    };
+    if (!_dispatchCancelableEvent(this._tooltip, "rg:tooltip:hide", detail)) return;
+
     this._tooltip.classList.remove("is-visible");
+    this._tooltip.setAttribute("aria-hidden", "true");
     this._trigger.removeAttribute("aria-describedby");
     this._isVisible = false;
 
-    _dispatchEvent(this._tooltip, "rg:tooltip:hide", { instance: this });
+    _dispatchEvent(this._tooltip, "rg:tooltip:hidden", detail);
   }
 
   _position() {
@@ -855,12 +912,19 @@ class Popover {
     const el = document.createElement("div");
     el.className = "popover";
     el.dataset.rgPlacement = this._options.placement;
+    if (!el.id) {
+      el.id = `rg-popover-${Math.random().toString(36).slice(2, 8)}`;
+    }
+    el.setAttribute("role", "dialog");
+    el.setAttribute("aria-hidden", "true");
 
     if (this._options.title) {
       const header = document.createElement("div");
       header.className = "popover-header";
+      header.id = `${el.id}-title`;
       header.textContent = this._options.title;
       el.appendChild(header);
+      el.setAttribute("aria-labelledby", header.id);
     }
 
     const body = document.createElement("div");
@@ -878,22 +942,41 @@ class Popover {
     this._createPopover();
     if (!this._popover) return;
 
+    const detail = {
+      instance: this,
+      trigger: this._trigger,
+      target: this._popover,
+      placement: this._options.placement
+    };
+    if (!_dispatchCancelableEvent(this._popover, "rg:popover:show", detail)) return;
+
     this._position();
     this._popover.classList.add("is-visible");
+    this._popover.setAttribute("aria-hidden", "false");
     this._trigger.setAttribute("aria-expanded", "true");
+    this._trigger.setAttribute("aria-controls", this._popover.id);
 
     this._isVisible = true;
-    _dispatchEvent(this._popover, "rg:popover:show", { instance: this });
+    _dispatchEvent(this._popover, "rg:popover:shown", detail);
   }
 
   hide() {
     if (!this._isVisible || !this._popover) return;
 
+    const detail = {
+      instance: this,
+      trigger: this._trigger,
+      target: this._popover,
+      placement: this._options.placement
+    };
+    if (!_dispatchCancelableEvent(this._popover, "rg:popover:hide", detail)) return;
+
     this._popover.classList.remove("is-visible");
+    this._popover.setAttribute("aria-hidden", "true");
     this._trigger.setAttribute("aria-expanded", "false");
 
     this._isVisible = false;
-    _dispatchEvent(this._popover, "rg:popover:hide", { instance: this });
+    _dispatchEvent(this._popover, "rg:popover:hidden", detail);
   }
 
   toggle() {
@@ -967,7 +1050,6 @@ function _attachEventsForClass(klass, getElement, name) {
 
 // Подвязываем события для Dropdown/Collapse/Modal
 _attachEventsForClass(Dropdown, inst => inst._menu || inst._trigger, "dropdown");
-_attachEventsForClass(Collapse, inst => inst._target, "collapse");
 _attachEventsForClass(Modal, inst => inst._element, "modal");
 /* -------------------------------------------------------------------------- */
 /* Carousel                                                                   */
@@ -2580,191 +2662,6 @@ if (typeof document !== "undefined") {
     initDataApi(document);
   }
 }
-
-function _rgEnsureId(element, prefix) {
-  if (!element) return "";
-  if (!element.id) {
-    element.id = `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
-  }
-  return element.id;
-}
-
-function _rgDispatchCancelable(element, name, detail = {}) {
-  if (!element || typeof CustomEvent === "undefined") return true;
-  const evt = new CustomEvent(name, { bubbles: true, cancelable: true, detail });
-  return element.dispatchEvent(evt) && !evt.defaultPrevented;
-}
-
-function _rgDispatch(element, name, detail = {}) {
-  if (!element || typeof CustomEvent === "undefined") return;
-  element.dispatchEvent(new CustomEvent(name, { bubbles: true, cancelable: false, detail }));
-}
-
-function _rgWrapShowHideLifecycle(klass, componentName, getElement, getDetail) {
-  if (!klass || klass.__rgLifecycleWrapped) return;
-  klass.__rgLifecycleWrapped = true;
-
-  const origShow = klass.prototype.show;
-  const origHide = klass.prototype.hide;
-
-  if (typeof origShow === "function") {
-    klass.prototype.show = function (...args) {
-      const element = getElement(this);
-      const detail = getDetail(this);
-      if (!_rgDispatchCancelable(element, `rg:${componentName}:show`, detail)) return false;
-      const result = origShow.apply(this, args);
-      _rgDispatch(getElement(this) || element, `rg:${componentName}:shown`, getDetail(this));
-      return result;
-    };
-  }
-
-  if (typeof origHide === "function") {
-    klass.prototype.hide = function (...args) {
-      const element = getElement(this);
-      const detail = getDetail(this);
-      if (!_rgDispatchCancelable(element, `rg:${componentName}:hide`, detail)) return false;
-      const result = origHide.apply(this, args);
-      _rgDispatch(getElement(this) || element, `rg:${componentName}:hidden`, getDetail(this));
-      return result;
-    };
-  }
-}
-
-function _rgWrapMethodLifecycle(klass, methodName, beforeEventName, afterEventName, getElement, getDetail) {
-  if (!klass || typeof klass.prototype[methodName] !== "function") return;
-  const marker = `__rgWrapped_${methodName}`;
-  if (klass[marker]) return;
-  klass[marker] = true;
-  const original = klass.prototype[methodName];
-  klass.prototype[methodName] = function (...args) {
-    const element = getElement(this);
-    const detail = getDetail(this, args);
-    if (beforeEventName && !_rgDispatchCancelable(element, beforeEventName, detail)) return false;
-    const result = original.apply(this, args);
-    if (afterEventName) _rgDispatch(getElement(this) || element, afterEventName, getDetail(this, args));
-    return result;
-  };
-}
-
-function _rgWrapGetOrCreate(klass, syncFn) {
-  if (!klass || typeof klass.getOrCreate !== "function" || klass.__rgGetOrCreateWrapped) return;
-  klass.__rgGetOrCreateWrapped = true;
-  const original = klass.getOrCreate.bind(klass);
-  klass.getOrCreate = function (...args) {
-    const instance = original(...args);
-    if (instance) syncFn(instance);
-    return instance;
-  };
-}
-
-function _rgSyncStepperA11y(instance) {
-  if (!instance || !instance._element) return;
-  const header = instance._element.querySelector('.stepper-header');
-  if (header) header.setAttribute('role', 'tablist');
-  (instance._steps || []).forEach((step, index) => {
-    const panel = (instance._contents || [])[index];
-    step.setAttribute('role', 'tab');
-    step.setAttribute('tabindex', index === instance._currentIndex ? '0' : '-1');
-    step.setAttribute('aria-selected', index === instance._currentIndex ? 'true' : 'false');
-    const stepId = _rgEnsureId(step, 'rg-step');
-    if (panel) {
-      const panelId = _rgEnsureId(panel, 'rg-step-panel');
-      step.setAttribute('aria-controls', panelId);
-      panel.setAttribute('role', 'tabpanel');
-      panel.setAttribute('aria-labelledby', stepId);
-      panel.setAttribute('aria-hidden', index === instance._currentIndex ? 'false' : 'true');
-      if (index !== instance._currentIndex) panel.setAttribute('hidden', '');
-      else panel.removeAttribute('hidden');
-    }
-  });
-}
-
-function _rgSyncDatepickerA11y(instance) {
-  if (!instance || !instance._input || !instance._popup) return;
-  const popupId = _rgEnsureId(instance._popup, 'rg-datepicker');
-  instance._input.setAttribute('aria-haspopup', 'dialog');
-  instance._input.setAttribute('aria-controls', popupId);
-  instance._input.setAttribute('aria-expanded', instance._isOpen ? 'true' : 'false');
-  instance._popup.setAttribute('role', 'dialog');
-  instance._popup.setAttribute('aria-hidden', instance._isOpen ? 'false' : 'true');
-  if (instance._grid) {
-    instance._grid.setAttribute('role', 'grid');
-    instance._grid.querySelectorAll('button, [data-rg-day]').forEach(day => {
-      day.setAttribute('role', 'gridcell');
-      if (!day.hasAttribute('aria-label')) day.setAttribute('aria-label', day.textContent?.trim() || 'Day');
-      day.setAttribute('aria-selected', day.classList.contains('is-selected') ? 'true' : 'false');
-    });
-  }
-}
-
-function _rgSyncListboxA11y(instance, isCombobox = false) {
-  if (!instance) return;
-  const trigger = isCombobox ? instance._input : instance._toggle;
-  const menu = instance._menu || instance._listbox;
-  const items = instance._items || (menu ? Array.from(menu.querySelectorAll('[data-rg-option], li, button, [role=option]')) : []);
-  if (!trigger || !menu) return;
-  const menuId = _rgEnsureId(menu, isCombobox ? 'rg-combobox' : 'rg-select');
-  trigger.setAttribute('aria-controls', menuId);
-  trigger.setAttribute('aria-expanded', instance._isOpen ? 'true' : 'false');
-  trigger.setAttribute('aria-haspopup', 'listbox');
-  if (isCombobox) trigger.setAttribute('role', 'combobox');
-  menu.setAttribute('role', 'listbox');
-  items.forEach((item, index) => {
-    item.setAttribute('role', 'option');
-    const itemId = _rgEnsureId(item, isCombobox ? 'rg-combobox-option' : 'rg-select-option');
-    const selected = item.classList.contains('is-selected') || index === instance._selectedIndex;
-    item.setAttribute('aria-selected', selected ? 'true' : 'false');
-    if (selected) trigger.setAttribute('aria-activedescendant', itemId);
-  });
-}
-
-function _rgSyncTagsInputA11y(instance) {
-  if (!instance || !instance._element) return;
-  instance._element.setAttribute('role', 'group');
-  if (!instance._element.hasAttribute('aria-label')) instance._element.setAttribute('aria-label', 'Tags input');
-  if (instance._input && !instance._input.hasAttribute('aria-label')) instance._input.setAttribute('aria-label', 'Add tag');
-  (instance._tags || []).forEach(tag => {
-    const btn = tag.element && tag.element.querySelector('.rg-tag-remove');
-    if (btn && !btn.hasAttribute('aria-label')) btn.setAttribute('aria-label', `Remove tag ${tag.value}`);
-  });
-}
-
-function _rgSyncDataTableA11y(instance) {
-  if (!instance || !instance._element) return;
-  if (instance._searchInput && !instance._searchInput.hasAttribute('aria-label')) instance._searchInput.setAttribute('aria-label', 'Search table');
-  if (instance._table) {
-    instance._table.querySelectorAll('thead th[data-rg-sort]').forEach(th => {
-      if (!th.hasAttribute('aria-sort')) th.setAttribute('aria-sort', 'none');
-      if (!th.hasAttribute('tabindex')) th.setAttribute('tabindex', '0');
-    });
-  }
-  if (instance._paginationContainer) {
-    instance._paginationContainer.querySelectorAll('button').forEach(btn => {
-      if (!btn.hasAttribute('aria-label')) btn.setAttribute('aria-label', `Go to page ${btn.textContent?.trim() || ''}`.trim());
-      if (btn.classList.contains('is-active') || btn.getAttribute('data-rg-page') == String(instance._currentPage)) btn.setAttribute('aria-current', 'page');
-      else btn.removeAttribute('aria-current');
-    });
-  }
-}
-
-_rgWrapGetOrCreate(Stepper, _rgSyncStepperA11y);
-_rgWrapMethodLifecycle(Stepper, 'goTo', 'rg:stepper:change', 'rg:stepper:changed', inst => inst._element, (inst, args) => ({ instance: inst, trigger: null, target: inst._element, index: args[0] }));
-_rgWrapGetOrCreate(Datepicker, _rgSyncDatepickerA11y);
-_rgWrapShowHideLifecycle(Datepicker, 'datepicker', inst => inst._popup || inst._input, inst => ({ instance: inst, trigger: inst._input || null, target: inst._popup || null }));
-_rgWrapMethodLifecycle(Datepicker, '_selectDate', 'rg:datepicker:change', 'rg:datepicker:changed', inst => inst._popup || inst._input, (inst, args) => ({ instance: inst, trigger: inst._input || null, target: inst._popup || null, value: args[0] || null }));
-_rgWrapGetOrCreate(Select, inst => _rgSyncListboxA11y(inst, false));
-_rgWrapShowHideLifecycle(Select, 'select', inst => inst._menu || inst._element, inst => ({ instance: inst, trigger: inst._toggle || null, target: inst._menu || inst._element }));
-_rgWrapMethodLifecycle(Select, 'selectIndex', 'rg:select:change', 'rg:select:changed', inst => inst._menu || inst._element, (inst, args) => ({ instance: inst, trigger: inst._toggle || null, target: inst._menu || inst._element, index: args[0] }));
-_rgWrapGetOrCreate(Combobox, inst => _rgSyncListboxA11y(inst, true));
-_rgWrapShowHideLifecycle(Combobox, 'combobox', inst => inst._menu || inst._element, inst => ({ instance: inst, trigger: inst._input || inst._toggle || null, target: inst._menu || inst._element }));
-_rgWrapMethodLifecycle(Combobox, 'selectIndex', 'rg:combobox:change', 'rg:combobox:changed', inst => inst._menu || inst._element, (inst, args) => ({ instance: inst, trigger: inst._input || inst._toggle || null, target: inst._menu || inst._element, index: args[0] }));
-_rgWrapGetOrCreate(TagsInput, _rgSyncTagsInputA11y);
-_rgWrapMethodLifecycle(TagsInput, 'addTag', 'rg:tagsinput:add', 'rg:tagsinput:added', inst => inst._element, (inst, args) => ({ instance: inst, trigger: inst._input || null, target: inst._element, value: args[0] || null }));
-_rgWrapMethodLifecycle(TagsInput, 'removeTag', 'rg:tagsinput:remove', 'rg:tagsinput:removed', inst => inst._element, (inst, args) => ({ instance: inst, trigger: inst._input || null, target: inst._element, value: args[0] || null }));
-_rgWrapMethodLifecycle(TagsInput, 'clear', null, 'rg:tagsinput:cleared', inst => inst._element, inst => ({ instance: inst, trigger: inst._input || null, target: inst._element }));
-_rgWrapGetOrCreate(DataTable, _rgSyncDataTableA11y);
-_rgWrapMethodLifecycle(DataTable, 'goToPage', 'rg:datatable:pagechange', 'rg:datatable:pagechanged', inst => inst._element, (inst, args) => ({ instance: inst, trigger: null, target: inst._element, index: args[0] }));
-_rgWrapMethodLifecycle(DataTable, 'sortBy', 'rg:datatable:sortchange', 'rg:datatable:sortchanged', inst => inst._element, (inst, args) => ({ instance: inst, trigger: null, target: inst._element, key: args[0] || null }));
 
 const Rarog = {
   Dropdown,
