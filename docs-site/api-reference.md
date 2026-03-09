@@ -133,45 +133,61 @@
 
 ## JavaScript API
 
-Набор JS-компонентов в 3.x:
+Набор JS-компонентов в 2.x:
 
 - `Dropdown`
 - `Collapse`
 - `Modal`
-- `Offcanvas`
-- `Toast`
-- `Tooltip`
-- `Popover`
-- `Carousel`
-- `Stepper`
 
 Каждый компонент имеет:
 
 - Data-API (атрибуты `data-rg-toggle`, `data-rg-target`, `data-rg-dismiss`).
 - JS-API (например, `Rarog.Modal.getOrCreate(element)`).
-- Event API с единым lifecycle-контрактом.
 
-Стабильный lifecycle для `Collapse`, `Toast`, `Tooltip`, `Popover`:
-
-- `rg:<component>:show` — cancelable pre-event
-- `rg:<component>:shown` — post-event
-- `rg:<component>:hide` — cancelable pre-event
-- `rg:<component>:hidden` — post-event
-
-Дополнительные гарантии:
-
-- `event.detail.instance` содержит JS-инстанс;
-- `event.detail.trigger` содержит исходный trigger, если он применим;
-- `event.detail.target` содержит управляемый DOM-элемент;
-- `Tooltip` / `Popover` могут передавать `event.detail.placement`.
-
-Подробности см. разделы «JavaScript» и «API Contract».
+Подробности см. раздел «JavaScript», здесь зафиксирован именно список поддерживаемых сущностей.
 
 ## Гарантии стабильности
 
-- Все перечисленные утилиты, компоненты и JS-API считаются стабильными в ветке **3.x**.
-- В минорных релизах 3.x (`3.1.0`, `3.2.0` и т.д.):
+- Все перечисленные утилиты, компоненты и JS-API считаются стабильными в ветке **2.x**.
+- В минорных релизах 2.x (`2.1.0`, `2.2.0` и т.д.):
   - **допускается добавление** новых утилит/компонентов;
   - **не допускается** изменение или удаление уже описанных здесь API без миграционного гайда и мажорного релиза.
-- В patch-релизах (`3.0.1`, `3.0.2`):
+- В patch-релизах (`2.0.1`, `2.0.2`):
   - только исправления багов и улучшения без изменения публичного API.
+
+
+## JS lifecycle reference
+
+### Shared lifecycle names
+
+Для компонентов `Dropdown`, `Collapse`, `Modal`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`:
+
+- `rg:<component>:show` — cancelable pre-open
+- `rg:<component>:shown` — post-open
+- `rg:<component>:hide` — cancelable pre-close
+- `rg:<component>:hidden` — post-close
+
+### Shared event.detail payload
+
+```ts
+{
+  instance: object;
+  trigger: Element | null;
+  target: Element | null;
+  placement?: string;
+}
+```
+
+### Carousel transition payload
+
+```ts
+{
+  instance: object;
+  trigger: null;
+  target: Element;
+  index: number;
+  fromIndex: number;
+  toIndex: number;
+  direction: "next" | "prev" | "goto";
+}
+```
