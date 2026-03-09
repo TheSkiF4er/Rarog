@@ -3,8 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   lang: 'ru-RU',
   title: 'Rarog CSS',
-  description:
-    'Современный CSS-фреймворк на базе дизайн-токенов, утилит, компонентов и собственного JS-ядра.',
+  description: 'Современный CSS-фреймворк на базе дизайн-токенов, утилит, компонентов и собственного JS-ядра.',
   base: '/rarog/',
   themeConfig: {
     nav: [
@@ -30,7 +29,10 @@ export default defineConfig({
           { text: 'Cajeer Stack Guide', link: '/guide-cajeer-stack' }
         ]
       },
-      { text: 'EN', link: '/en/' },
+      {
+        text: 'EN',
+        link: '/en/'
+      },
       {
         text: 'More',
         items: [
@@ -40,13 +42,14 @@ export default defineConfig({
           { text: 'Branding', link: '/branding' },
           { text: 'Versioning & Support', link: '/versioning' },
           { text: 'API Reference', link: '/api-reference' },
-          { text: 'API Contract', link: '/api-contract' },
+            { text: 'API Contract', link: '/api-contract' },
           { text: 'Migration 1.x → 2.x', link: '/migration-1x-to-2x' },
           { text: 'Storybook', link: '/storybook' },
           { text: 'Playground', link: '/playground' }
         ]
       }
     ],
+
     sidebar: {
       '/': [
         {
@@ -54,12 +57,12 @@ export default defineConfig({
           items: [
             { text: 'Getting Started', link: '/getting-started' },
             { text: 'Tokens', link: '/tokens' },
-            { text: 'Design System', link: '/design-system' },
+      { text: 'Design System', link: '/design-system' },
             { text: 'Utilities', link: '/utilities' },
-            { text: 'Variants & JIT', link: '/variants-jit' },
+      { text: 'Variants & JIT', link: '/variants-jit' },
             { text: 'Components', link: '/components' },
             { text: 'JavaScript', link: '/javascript' },
-            { text: 'Accessibility', link: '/accessibility' },
+      { text: 'Accessibility', link: '/accessibility' },
             { text: 'Theming', link: '/theming' },
             { text: 'API Reference', link: '/api-reference' },
             { text: 'API Contract', link: '/api-contract' },
@@ -71,8 +74,9 @@ export default defineConfig({
           text: 'Интеграция',
           items: [
             { text: 'Integration Guides', link: '/integration-guides' },
-            { text: 'IDE & Plugins', link: '/ide-plugins' },
+      { text: 'IDE & Plugins', link: '/ide-plugins' },
             { text: 'Storybook', link: '/storybook' },
+          { text: 'Storybook', link: '/storybook' },
             { text: 'Playground', link: '/playground' },
             { text: 'Showcase', link: '/showcase' }
           ]
