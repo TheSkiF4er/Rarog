@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v3.5.0
+ * Rarog JS Core v3.0.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
@@ -76,15 +76,20 @@ const Events = {
   }
 };
 
-function _dispatchEvent(element, name, detail = {}) {
-  if (!element || typeof CustomEvent === "undefined") return;
+function _dispatchEvent(element, name, detail = {}, options = {}) {
+  if (!element || typeof CustomEvent === "undefined") return null;
   const evt = new CustomEvent(name, {
-    bubbles: true,
-    cancelable: false,
+    bubbles: options.bubbles !== false,
+    cancelable: !!options.cancelable,
     detail
   });
   element.dispatchEvent(evt);
-  _emitOnBus(name, { element, detail });
+  _emitOnBus(name, { element, detail, defaultPrevented: evt.defaultPrevented });
+  return evt;
+}
+
+function _dispatchLifecycleEvent(element, component, phase, detail = {}, options = {}) {
+  return _dispatchEvent(element, `rg:${component}:${phase}`, detail, options);
 }
 
 function _resolveTarget(trigger, explicitTarget) {
@@ -195,12 +200,22 @@ class Dropdown {
   }
 
   show() {
-    if (this._isOpen) return;
+    if (this._isOpen) return false;
+
+    const host = this._menu || this._trigger;
+    const beforeEvent = _dispatchLifecycleEvent(host, "dropdown", "show", {
+      instance: this,
+      trigger: this._trigger,
+      menu: this._menu
+    }, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
+
     this._isOpen = true;
 
     if (this._menu) {
       this._menu.removeAttribute("hidden");
       this._menu.classList.add("rg-open");
+      this._menu.setAttribute("aria-hidden", "false");
     }
     this._trigger.setAttribute("aria-expanded", "true");
 
@@ -208,15 +223,33 @@ class Dropdown {
       document.addEventListener("click", this._onDocumentClick);
       document.addEventListener("keydown", this._onKeydown);
     }
+
+    _dispatchLifecycleEvent(host, "dropdown", "shown", {
+      instance: this,
+      trigger: this._trigger,
+      menu: this._menu
+    });
+
+    return true;
   }
 
   hide() {
-    if (!this._isOpen) return;
+    if (!this._isOpen) return false;
+
+    const host = this._menu || this._trigger;
+    const beforeEvent = _dispatchLifecycleEvent(host, "dropdown", "hide", {
+      instance: this,
+      trigger: this._trigger,
+      menu: this._menu
+    }, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
+
     this._isOpen = false;
 
     if (this._menu) {
       this._menu.setAttribute("hidden", "");
       this._menu.classList.remove("rg-open");
+      this._menu.setAttribute("aria-hidden", "true");
     }
     this._trigger.setAttribute("aria-expanded", "false");
 
@@ -224,6 +257,14 @@ class Dropdown {
       document.removeEventListener("click", this._onDocumentClick);
       document.removeEventListener("keydown", this._onKeydown);
     }
+
+    _dispatchLifecycleEvent(host, "dropdown", "hidden", {
+      instance: this,
+      trigger: this._trigger,
+      menu: this._menu
+    });
+
+    return true;
   }
 
   toggle() {
@@ -438,7 +479,13 @@ class Modal {
   }
 
   show() {
-    if (this._isOpen) return;
+    if (this._isOpen) return false;
+
+    const beforeEvent = _dispatchLifecycleEvent(this._element, "modal", "show", {
+      instance: this,
+      relatedTarget: typeof document !== "undefined" ? document.activeElement : null
+    }, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
 
     if (_openModal && _openModal !== this) {
       _openModal.hide();
@@ -453,12 +500,11 @@ class Modal {
       document.addEventListener("click", this._onClick);
     }
 
-    this._element.removeAttribute("aria-hidden");
+    this._element.setAttribute("aria-hidden", "false");
     this._element.classList.add("rg-modal-open");
 
     this._lockScroll();
 
-    // focus trap start
     const focusables = _getFocusableElements(this._element);
     if (focusables.length) {
       focusables[0].focus();
@@ -466,10 +512,23 @@ class Modal {
       this._element.setAttribute("tabindex", "-1");
       this._element.focus();
     }
+
+    _dispatchLifecycleEvent(this._element, "modal", "shown", {
+      instance: this,
+      relatedTarget: this._previouslyFocused || null
+    });
+
+    return true;
   }
 
   hide() {
-    if (!this._isOpen) return;
+    if (!this._isOpen) return false;
+
+    const beforeEvent = _dispatchLifecycleEvent(this._element, "modal", "hide", {
+      instance: this,
+      relatedTarget: this._previouslyFocused || null
+    }, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
 
     this._isOpen = false;
     _openModal = null;
@@ -487,6 +546,13 @@ class Modal {
     if (this._previouslyFocused && typeof this._previouslyFocused.focus === "function") {
       this._previouslyFocused.focus();
     }
+
+    _dispatchLifecycleEvent(this._element, "modal", "hidden", {
+      instance: this,
+      relatedTarget: this._previouslyFocused || null
+    });
+
+    return true;
   }
 
   toggle() {
@@ -533,8 +599,14 @@ class Offcanvas {
   }
 
   show() {
-    if (typeof document === "undefined") return;
-    if (this._isOpen) return;
+    if (typeof document === "undefined") return false;
+    if (this._isOpen) return false;
+
+    const beforeEvent = _dispatchLifecycleEvent(this._element, "offcanvas", "show", {
+      instance: this,
+      relatedTarget: document.activeElement || null
+    }, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
 
     this._isOpen = true;
 
@@ -547,17 +619,27 @@ class Offcanvas {
     }
 
     this._element.classList.add("is-open");
-    this._element.removeAttribute("aria-hidden");
+    this._element.setAttribute("aria-hidden", "false");
     this._element.setAttribute("aria-modal", "true");
     this._element.setAttribute("role", "dialog");
 
     document.addEventListener("keydown", this._onKeydown);
-    _dispatchEvent(this._element, "rg:offcanvas:show", { instance: this });
+    _dispatchLifecycleEvent(this._element, "offcanvas", "shown", {
+      instance: this,
+      relatedTarget: document.activeElement || null
+    });
+
+    return true;
   }
 
   hide() {
-    if (typeof document === "undefined") return;
-    if (!this._isOpen) return;
+    if (typeof document === "undefined") return false;
+    if (!this._isOpen) return false;
+
+    const beforeEvent = _dispatchLifecycleEvent(this._element, "offcanvas", "hide", {
+      instance: this
+    }, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
 
     this._isOpen = false;
 
@@ -572,7 +654,11 @@ class Offcanvas {
     }
 
     this._removeBackdrop();
-    _dispatchEvent(this._element, "rg:offcanvas:hide", { instance: this });
+    _dispatchLifecycleEvent(this._element, "offcanvas", "hidden", {
+      instance: this
+    });
+
+    return true;
   }
 
   toggle() {
@@ -938,38 +1024,6 @@ class Popover {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Event wrappers for existing components                                     */
-/* -------------------------------------------------------------------------- */
-
-function _attachEventsForClass(klass, getElement, name) {
-  if (!klass || typeof klass.prototype !== "object") return;
-
-  ["show", "hide"].forEach(methodName => {
-    const original = klass.prototype[methodName];
-    if (typeof original !== "function") return;
-
-    klass.prototype[methodName] = function (...args) {
-      const el = getElement(this);
-      if (methodName === "show") {
-        _dispatchEvent(el, `rg:${name}:show`, { instance: this });
-      }
-
-      const result = original.apply(this, args);
-
-      if (methodName === "hide") {
-        _dispatchEvent(el, `rg:${name}:hide`, { instance: this });
-      }
-
-      return result;
-    };
-  });
-}
-
-// Подвязываем события для Dropdown/Collapse/Modal
-_attachEventsForClass(Dropdown, inst => inst._menu || inst._trigger, "dropdown");
-_attachEventsForClass(Collapse, inst => inst._target, "collapse");
-_attachEventsForClass(Modal, inst => inst._element, "modal");
-/* -------------------------------------------------------------------------- */
 /* Carousel                                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -1071,26 +1125,47 @@ class Carousel {
     this._updateIndicators();
   }
 
-  next() {
-    if (!this._items.length) return;
-    this._currentIndex = (this._currentIndex + 1) % this._items.length;
+  _transitionTo(targetIndex, action) {
+    if (!this._items.length) return false;
+    const fromIndex = this._currentIndex;
+    const toIndex = ((targetIndex % this._items.length) + this._items.length) % this._items.length;
+    if (fromIndex === toIndex) return false;
+
+    const detail = {
+      instance: this,
+      fromIndex,
+      toIndex,
+      action,
+      direction: action === "prev" ? "right" : "left"
+    };
+
+    const beforeEvent = _dispatchLifecycleEvent(this._element, "carousel", "slide", detail, { cancelable: true });
+    if (beforeEvent && beforeEvent.defaultPrevented) return false;
+
+    this._currentIndex = toIndex;
     this._updateSlides();
-    _dispatchEvent(this._element, "rg:carousel:next", { instance: this, index: this._currentIndex });
+
+    const afterDetail = Object.assign({}, detail, { index: this._currentIndex });
+    _dispatchLifecycleEvent(this._element, "carousel", "slid", afterDetail);
+    _dispatchEvent(this._element, `rg:carousel:${action}`, afterDetail);
+
+    return true;
+  }
+
+  next() {
+    if (!this._items.length) return false;
+    return this._transitionTo(this._currentIndex + 1, "next");
   }
 
   prev() {
-    if (!this._items.length) return;
-    this._currentIndex = (this._currentIndex - 1 + this._items.length) % this._items.length;
-    this._updateSlides();
-    _dispatchEvent(this._element, "rg:carousel:prev", { instance: this, index: this._currentIndex });
+    if (!this._items.length) return false;
+    return this._transitionTo(this._currentIndex - 1, "prev");
   }
 
   goTo(index) {
-    if (!this._items.length) return;
+    if (!this._items.length) return false;
     const normalized = Math.max(0, Math.min(this._items.length - 1, index));
-    this._currentIndex = normalized;
-    this._updateSlides();
-    _dispatchEvent(this._element, "rg:carousel:goto", { instance: this, index: this._currentIndex });
+    return this._transitionTo(normalized, "goto");
   }
 
   play() {
@@ -2581,8 +2656,6 @@ if (typeof document !== "undefined") {
   }
 }
 
-const VERSION = "3.5.0";
-
 const Rarog = {
   Dropdown,
   Collapse,
@@ -2601,7 +2674,6 @@ const Rarog = {
   DataTable,
   InputMask,
   Events,
-  VERSION,
   config: RarogConfig,
   /**
    * Включить/выключить debug-режим в рантайме.
@@ -2640,7 +2712,6 @@ export {
   DataTable,
   InputMask,
   Events,
-  VERSION,
   initDataApi,
   init,
   dispose,
