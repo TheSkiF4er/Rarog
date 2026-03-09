@@ -6,10 +6,11 @@ import { build } from "esbuild";
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const pkgDir = path.join(root, "packages", "js");
-const srcFile = path.join(pkgDir, "src", "rarog.esm.js");
+const srcFile = path.join(pkgDir, "src", "index.js");
+const runtimeFile = path.join(pkgDir, "src", "rarog.esm.js");
 const typesFile = path.join(pkgDir, "src", "index.d.ts");
 const distDir = path.join(pkgDir, "dist");
-const banner = fs.readFileSync(srcFile, "utf8").match(/\/\*![\s\S]*?\*\//)?.[0] ?? "";
+const banner = fs.readFileSync(runtimeFile, "utf8").match(/\/\*![\s\S]*?\*\//)?.[0] ?? "";
 
 function cleanDist() {
   fs.rmSync(distDir, { recursive: true, force: true });
@@ -31,28 +32,17 @@ async function main() {
   cleanDist();
 
   await bundle({
-    outfile: path.join(distDir, "rarog.esm.js"),
+    outfile: path.join(distDir, "index.mjs"),
     format: "esm",
     platform: "browser",
     target: ["es2019"]
   });
 
   await bundle({
-    outfile: path.join(distDir, "rarog.cjs"),
+    outfile: path.join(distDir, "index.cjs"),
     format: "cjs",
     platform: "browser",
     target: ["es2019"]
-  });
-
-  await bundle({
-    outfile: path.join(distDir, "rarog.js"),
-    format: "iife",
-    globalName: "Rarog",
-    platform: "browser",
-    target: ["es2019"],
-    footer: {
-      js: "window.Rarog = window.Rarog && window.Rarog.default ? window.Rarog.default : window.Rarog;"
-    }
   });
 
   await bundle({
@@ -68,6 +58,18 @@ async function main() {
   });
 
   fs.copyFileSync(typesFile, path.join(distDir, "index.d.ts"));
+
+  fs.copyFileSync(path.join(distDir, "index.mjs"), path.join(distDir, "rarog.esm.js"));
+  fs.copyFileSync(path.join(distDir, "index.cjs"), path.join(distDir, "rarog.cjs"));
+  fs.copyFileSync(path.join(distDir, "rarog.iife.js"), path.join(distDir, "rarog.js"));
+  for (const mapName of ["index.mjs.map", "index.cjs.map", "rarog.iife.js.map"]) {
+    const full = path.join(distDir, mapName);
+    if (fs.existsSync(full)) {
+      if (mapName === "index.mjs.map") fs.copyFileSync(full, path.join(distDir, "rarog.esm.js.map"));
+      if (mapName === "index.cjs.map") fs.copyFileSync(full, path.join(distDir, "rarog.cjs.map"));
+      if (mapName === "rarog.iife.js.map") fs.copyFileSync(full, path.join(distDir, "rarog.js.map"));
+    }
+  }
 
   const distPkg = {
     type: "commonjs"
