@@ -1,169 +1,186 @@
-# API Reference (Rarog 2.x)
+# API Reference (Rarog 3.x)
 
-Этот раздел фиксирует публичное API ветки **2.x**: какие утилиты и компоненты
-считаются стабильными и поддерживаются с гарантиями семантического версионирования.
+Этот раздел фиксирует **стабильный публичный API 3.x** для CSS, компонентов и JS Core. Используйте его как быстрый справочник по именам классов, конструкторам, методам и событиям.
 
-## Utilities (утилиты)
+## JS Core
 
-### Layout & Display
+Канонический пакетный surface:
 
-- `d-block`, `d-inline`, `d-inline-block`
-- `d-flex`, `d-inline-flex`, `d-grid`, `d-none`
-- `flex-row`, `flex-column`, `flex-wrap`, `flex-nowrap`
-- Выравнивание:
-  - `justify-start`, `justify-center`, `justify-between`, `justify-end`
-  - `items-start`, `items-center`, `items-baseline`, `items-end`
-- Gap:
-  - `gap-1`, `gap-2`, `gap-3`, `gap-4`, `gap-6`
-- Overflow:
-  - `overflow-hidden`, `overflow-auto`, `overflow-x-auto`, `overflow-y-auto`
+- `@rarog/js`
+- default export: `Rarog`
+- именованные экспорты: `Dropdown`, `Collapse`, `Modal`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`, `Carousel`, `Stepper`, `Datepicker`, `DatetimePicker`, `Select`, `Combobox`, `TagsInput`, `DataTable`, `InputMask`, `Events`
+- type exports: `RarogEventMap`, `RarogEventName`, `RarogEventDetail<TName>`, `RarogCustomEvent<TName>`
 
-### Spacing
+### Общий lifecycle contract
 
-На основе токенов `--rarog-space-*`:
+Для компонентов с открытием/закрытием Rarog 3.x использует единый контракт:
 
-- Margin:
-  - `mt-0..6`, `mb-0..6`, `ml-0..6`, `mr-0..6`
-  - `mx-0..6`, `my-0..6`
-- Padding:
-  - `pt-0..6`, `pb-0..6`, `pl-0..6`, `pr-0..6`
-  - `px-0..6`, `py-0..6`
+- pre-event: `rg:<component>:show`
+- post-event: `rg:<component>:shown`
+- pre-hide: `rg:<component>:hide`
+- post-hide: `rg:<component>:hidden`
 
-### Typography
+Где runtime уже поддерживает lifecycle-контракт, pre-events считаются **cancelable** и могут использоваться с `preventDefault()` перед изменением состояния.
 
-- Выравнивание: `text-left`, `text-center`, `text-right`
-- Состояния текста: `text-muted`, `text-primary`, `text-secondary`, `text-success`, `text-danger`, `text-warning`, `text-info`
-- Размер/вес (если определены в вашей теме) — через кастомные классы или utility-слой проекта.
+`event.detail` в lifecycle-событиях может содержать:
 
-### Color utilities
+- `instance` — инстанс компонента
+- `trigger` — DOM-элемент, инициировавший действие, если применимо
+- `target` — основной DOM-target компонента, если применимо
+- `placement` — для `Tooltip` / `Popover`
+- `index`, `fromIndex`, `toIndex`, `direction` — для `Carousel`
+- `value` — для `Datepicker`, `Select`, `Combobox`, `Stepper`
 
-- `bg-primary`, `bg-secondary`, `bg-success`, `bg-danger`, `bg-warning`, `bg-info`
-- `border-primary`, `border-secondary`, `border-success`, `border-danger`, `border-warning`, `border-info`
+### Constructors / methods
 
-Привязаны к токенам из `theme.colors` и `theme.colors.semantic`.
+#### Overlay & disclosure
 
-### Responsive / State
+- `Dropdown.getInstance(element)` / `Dropdown.getOrCreate(element, options)`
+- `Collapse.getInstance(element)` / `Collapse.getOrCreate(element, options)`
+- `Modal.getInstance(element)` / `Modal.getOrCreate(element, options)`
+- `Offcanvas.getInstance(element)` / `Offcanvas.getOrCreate(element, options)`
+- `Toast.getInstance(element)` / `Toast.getOrCreate(element, options)`
+- `Tooltip.getInstance(element)` / `Tooltip.getOrCreate(element, options)`
+- `Popover.getInstance(element)` / `Popover.getOrCreate(element, options)`
 
-- Responsive-префиксы:
-  - `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
-- State-префиксы:
-  - `hover:`, `focus:`
-- Поддерживаемые комбинации:
-  - `sm:d-flex`, `md:d-none`, `lg:text-center`, `xl:mt-4` и аналогичные для других утилит.
-  - `hover:bg-primary`, `hover:text-primary`, `hover:underline`
-  - `focus:border-primary`, `focus:outline-none` (с учётом требований доступности).
+Методы:
 
-### Accessibility & Helpers
+- `show()`
+- `hide()`
+- `toggle()` — где применимо
 
-- `sr-only` — скрытый для глаз, доступный для screen reader.
-- Вспомогательные классы для layout/spacing типового использования.
+#### Flow & selection
 
-## Components (компоненты)
+- `Carousel.getInstance(element)` / `Carousel.getOrCreate(element, options)`
+  - `next()`
+  - `prev()`
+  - `goTo(index)`
+  - `play()`
+  - `pause()`
+  - `destroy()`
+- `Stepper.getInstance(element)` / `Stepper.getOrCreate(element, options)`
+  - `next()`
+  - `prev()`
+  - `goTo(index)`
+  - `reset()`
+  - `destroy()`
+- `Datepicker.getInstance(element)` / `Datepicker.getOrCreate(element, options)`
+  - `show()` / `hide()` / `toggle()`
+  - `dispose()`
+- `DatetimePicker.getInstance(element)` / `DatetimePicker.getOrCreate(element, options)`
+- `Select.getInstance(element)` / `Select.getOrCreate(element, options)`
+  - `show()` / `hide()` / `toggle()`
+  - `dispose()`
+- `Combobox.getInstance(element)` / `Combobox.getOrCreate(element, options)`
+  - `show()` / `hide()` / `toggle()`
+  - `dispose()`
+- `TagsInput.getInstance(element)` / `TagsInput.getOrCreate(element, options)`
+  - `addTag(value)`
+  - `removeTag(value)`
+  - `clear()`
+  - `dispose()`
+- `DataTable.getInstance(element)` / `DataTable.getOrCreate(element, options)`
+  - `dispose()`
+- `InputMask.apply(element, pattern)`
+- `InputMask.remove(element)`
 
-Компоненты Rarog 2.x считаются стабильными при условии соблюдения базовой структуры
-разметки и классов.
+### Stable event names
 
-### Buttons
+#### Dropdown / Collapse / Modal / Offcanvas / Toast
 
-- Базовые классы:
-  - `.btn`
-- Варианты:
-  - `.btn-primary`, `.btn-secondary`, `.btn-success`, `.btn-danger`, `.btn-warning`, `.btn-info`
-  - `.btn-outline`, `.btn-ghost`
-  - `.btn-sm`, `.btn-lg` (если включены в вашей сборке)
+- `rg:dropdown:show|shown|hide|hidden`
+- `rg:collapse:show|shown|hide|hidden`
+- `rg:modal:show|shown|hide|hidden`
+- `rg:offcanvas:show|shown|hide|hidden`
+- `rg:toast:show|shown|hide|hidden`
 
-### Alerts
+#### Tooltip / Popover
 
-- `.alert`
-- Варианты:
-  - `.alert-success`, `.alert-danger`, `.alert-warning`, `.alert-info`
+- `rg:tooltip:show|shown|hide|hidden`
+- `rg:popover:show|shown|hide|hidden`
 
-### Badges
+Дополнительно `event.detail.placement` содержит placement popup-элемента.
 
-- `.badge`
-- Варианты:
-  - `.badge-primary`, `.badge-secondary`, `.badge-outline`
+#### Carousel
 
-### List Group
+Lifecycle:
 
-- `.list-group`
-- `.list-group-item`
+- `rg:carousel:slide`
+- `rg:carousel:slid`
 
-### Breadcrumbs
+Legacy-compatible события навигации:
 
-- `.breadcrumb`
-- `.breadcrumb-item`
+- `rg:carousel:next`
+- `rg:carousel:prev`
+- `rg:carousel:goto`
+- `rg:carousel:play`
+- `rg:carousel:pause`
 
-### Nav & Tabs
+#### Stepper
 
-- `.nav`
-- `.nav-link`, `.nav-link-active`
-- `.nav-tabs` (CSS-реализация табов)
+- `rg:stepper:change`
+- `rg:stepper:changed`
+- `rg:stepper:next`
+- `rg:stepper:prev`
+- `rg:stepper:goto`
+- `rg:stepper:reset`
 
-### Pagination
+#### Datepicker / Select / Combobox
 
-- `.pagination`
-- `.page-item`
-- `.page-link`
+- `rg:datepicker:show|shown|hide|hidden`
+- `rg:datepicker:select`
+- `rg:select:show|shown|hide|hidden`
+- `rg:select:change`
+- `rg:combobox:show|shown|hide|hidden`
+- `rg:combobox:change`
 
-### Progress
+Legacy-compatible для combobox:
 
-- `.progress`
-- `.progress-bar`
+- `rg:combobox:open`
+- `rg:combobox:close`
 
-### Forms
+#### TagsInput / DataTable / Core
 
-- `.form-group`
-- `.form-row`
-- Inline-form классы и утилиты выравнивания.
+- `rg:tags-input:add`
+- `rg:tags-input:remove`
+- `rg:tags-input:change`
+- `rg:table:search`
+- `rg:table:sort`
+- `rg:table:page`
+- `rg:table:update`
+- `rg:core:dispose`
 
-### Grid & Layout
+### Typed events in TypeScript
 
-- Контейнеры:
-  - `.rg-container-sm`, `.rg-container-lg`
-- Ряды и колонки:
-  - `.rg-row`
-  - `.rg-col-1` … `.rg-col-12`
-  - Responsive-варианты: `.rg-col-sm-*`, `.rg-col-md-*`, `.rg-col-lg-*`, `.rg-col-xl-*`, `.rg-col-2xl-*`
-- Order/offset:
-  - `.rg-order-1` … `.rg-order-12`
-  - `.rg-offset-1` … `.rg-offset-11` (+ responsive-варианты)
-- Gutter:
-  - переменные `--rarog-grid-gap-x`, `--rarog-grid-gap-y` и соответствующие утилиты, если включены.
+В `packages/js/src/index.d.ts` экспортируются:
 
-## JavaScript API
+- `RarogEventMap`
+- `RarogEventName`
+- `RarogEventDetail<TName>`
+- `RarogCustomEvent<TName>`
 
-Набор JS-компонентов в 2.x:
+Пример:
 
-- `Dropdown`
-- `Collapse`
-- `Modal`
+```ts
+import type { RarogCustomEvent, RarogEventDetail } from "@rarog/js";
 
-Каждый компонент имеет:
+function onShown(event: RarogCustomEvent<"rg:modal:shown">) {
+  const detail: RarogEventDetail<"rg:modal:shown"> = event.detail;
+  console.log(detail.instance);
+}
+```
 
-- Data-API (атрибуты `data-rg-toggle`, `data-rg-target`, `data-rg-dismiss`).
-- JS-API (например, `Rarog.Modal.getOrCreate(element)`).
+### Namespace helpers
 
-Подробности см. раздел «JavaScript», здесь зафиксирован именно список поддерживаемых сущностей.
+- `Rarog.config`
+- `Rarog.setDebug(value)`
+- `Rarog.isDebugEnabled()`
+- `Rarog.initDataApi(root?)`
+- `Rarog.init(root?)`
+- `Rarog.dispose(root?)`
+- `Rarog.reinit(root?)`
+- `Rarog.Events.on/off/emit(...)`
 
-### Destroy / Dispose
+## CSS / Components
 
-Для стабильных JS-компонентов поддерживаются оба метода teardown:
-- `dispose()`
-- `destroy()`
-
-Это относится к `Dropdown`, `Collapse`, `Modal`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`, `Carousel`, `Stepper`, `Datepicker`, `DatetimePicker`, `Select`, `Combobox`, `TagsInput`, `DataTable`.
-
-Гарантии:
-- повторный вызов не должен ломать приложение;
-- после teardown `getInstance(element)` возвращает `null`;
-- `Rarog.dispose(root)` выполняет массовый teardown уже созданных инстансов внутри subtree.
-
-## Гарантии стабильности
-
-- Все перечисленные утилиты, компоненты и JS-API считаются стабильными в ветке **2.x**.
-- В минорных релизах 2.x (`2.1.0`, `2.2.0` и т.д.):
-  - **допускается добавление** новых утилит/компонентов;
-  - **не допускается** изменение или удаление уже описанных здесь API без миграционного гайда и мажорного релиза.
-- В patch-релизах (`2.0.1`, `2.0.2`):
-  - только исправления багов и улучшения без изменения публичного API.
+Остальные группы API — utilities, токены, компоненты и модификаторы — описаны в профильных разделах docs. Ветка 3.x считает стабильными только те классы и варианты, которые явно перечислены в документации и migration guides.
