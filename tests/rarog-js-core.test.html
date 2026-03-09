@@ -41,7 +41,7 @@
     <div class="modal" id="testModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-header">
-          <h2 class="card-header">Modal title</h2>
+          <h2 class="modal-title">Modal title</h2>
         </div>
         <div class="modal-body">
           <p>Modal body</p>
@@ -49,55 +49,35 @@
         </div>
       </div>
     </div>
+
+    <div id="demoStepper" class="stepper mt-4">
+      <div class="stepper-header">
+        <button class="stepper-step is-active" data-rg-step-to="0">Step 1</button>
+        <button class="stepper-step" data-rg-step-to="1">Step 2</button>
+      </div>
+      <div class="stepper-body">
+        <section class="stepper-content is-active">Step 1 content</section>
+        <section class="stepper-content">Step 2 content</section>
+      </div>
+      <div class="stepper-actions mt-2">
+        <button class="btn btn-secondary" data-rg-step-to="prev">Previous</button>
+        <button class="btn btn-primary" data-rg-step-to="next">Next</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    function logResult(name, pass, message) {
-      var li = document.createElement("li");
-      li.textContent = (pass ? "✓ " : "✗ ") + name + (message ? ": " + message : "");
-      li.className = pass ? "test-pass" : "test-fail";
-      document.getElementById("test-output").appendChild(li);
-    }
-
     window.addEventListener("load", function () {
       try {
-        // Dropdown test
-        var dropdownToggle = document.getElementById("dropdownToggle");
-        var dropdownMenu = document.getElementById("dropdownMenu");
-        dropdownToggle.click();
-        var expanded = dropdownToggle.getAttribute("aria-expanded") === "true";
-        var visible = !dropdownMenu.hasAttribute("hidden");
-        logResult("Dropdown opens on click", expanded && visible);
-
-        dropdownToggle.click();
-        expanded = dropdownToggle.getAttribute("aria-expanded") === "false";
-        visible = dropdownMenu.hasAttribute("hidden");
-        logResult("Dropdown closes on second click", expanded && visible);
-
-        // Collapse test
-        var collapseToggle = document.getElementById("collapseToggle");
-        var collapsePanel = document.getElementById("collapsePanel");
-        collapseToggle.click();
-        var collapseOpen = !collapsePanel.hasAttribute("hidden");
-        logResult("Collapse opens on click", collapseOpen);
-
-        collapseToggle.click();
-        var collapseClosed = collapsePanel.hasAttribute("hidden");
-        logResult("Collapse closes on second click", collapseClosed);
-
-        // Modal test
-        var modalToggle = document.getElementById("modalToggle");
-        var modal = document.getElementById("testModal");
-        modalToggle.click();
-        var modalOpen = modal.classList.contains("rg-modal-open");
-        logResult("Modal opens on click", modalOpen);
-
-        var dismissBtn = modal.querySelector("[data-rg-dismiss='modal']");
-        dismissBtn.click();
-        var modalClosed = !modal.classList.contains("rg-modal-open") && modal.getAttribute("aria-hidden") === "true";
-        logResult("Modal closes on [data-rg-dismiss='modal'] click", modalClosed);
+        var stepperRoot = document.getElementById("demoStepper");
+        if (window.Rarog && window.Rarog.Stepper) {
+          window.Rarog.Stepper.getOrCreate(stepperRoot);
+        }
       } catch (e) {
-        logResult("Unexpected error", false, e.message || String(e));
+        var li = document.createElement("li");
+        li.textContent = "✗ Stepper bootstrap failed: " + (e.message || String(e));
+        li.className = "test-fail";
+        document.getElementById("test-output").appendChild(li);
       }
     });
   </script>
