@@ -1,0 +1,191 @@
+# React Guide
+
+Rarog хорошо сочетается с проектами на React. В репозитории есть starter:
+
+- `examples/starters/vite-react`
+
+## 1. Стартовый проект
+
+Быстрый запуск starter‑а из монорепы Rarog:
+
+```bash
+cd examples/starters/vite-react
+npm install
+cd ../../..
+npm run build     # каноническая полная сборка Rarog
+cd examples/starters/vite-react
+npm run dev
+```
+
+Открой `http://localhost:5173` — там уже используется ряд классов Rarog.
+
+## 2. Интеграция в свой React‑проект
+
+### Установка
+
+```bash
+npm install rarog --save-dev
+```
+
+### rarog.config.ts
+
+В корне проекта:
+
+```ts
+import type { RarogConfig } from "rarog/rarog.config.types";
+
+const config: RarogConfig = {
+  mode: "jit",
+  content: [
+    "./index.html",
+    "./src/**/*.{ts,tsx,js,jsx}"
+  ],
+  theme: {
+    // при необходимости — расширяем токены
+  }
+};
+
+export default config;
+```
+
+### Vite + React
+
+В `vite.config.ts`:
+
+```ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { rarogPlugin } from 'rarog/tools/vite-plugin-rarog'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    rarogPlugin()
+  ]
+})
+```
+
+`rarogPlugin()` будет дергать `rarog build` в JIT‑режиме при изменении файлов.
+
+### Подключение CSS
+
+Входной файл React‑приложения:
+
+```ts
+// src/main.tsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+
+// Подключаем собранный CSS Rarog
+import '../../dist/rarog.jit.css'
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+```
+
+## 3. Использование variants & plugins
+
+Классы Rarog хорошо ложатся на React‑компоненты:
+
+```tsx
+export function PrimaryButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...props}
+      className={[
+        'btn btn-primary',
+        'group-hover:bg-primary-600',
+        'disabled:opacity-50 disabled:pointer-events-none',
+        props.className
+      ].filter(Boolean).join(' ')}
+    />
+  );
+}
+```
+
+JIT найдёт классы в:
+
+- строковых литералах;
+- `className="..."`;
+- `classList.add(...)`;
+- `clsx(...)` / `cx(...)` / `classnames(...)`.
+
+Подробнее — в разделе [Variants & JIT](/variants-jit).
+
+## UI‑киты как React‑страницы
+
+UI‑киты из монорепы можно использовать как основу для React‑компонентов:
+
+- `examples/ui-kits/admin-dashboard/index.html` → страница `/admin`;
+- `examples/ui-kits/landing-kit/index.html` → публичный лендинг;
+- `examples/ui-kits/saas-starter/*.html` → auth/dashboard/settings.
+
+Типичный flow:
+
+1. Копируете HTML‑разметку в JSX/TSX.
+2. Заменяете статические тексты и списки на пропсы/стейт.
+3. Подключаете Rarog CSS/JS как описано выше (через Vite plugin/JIT).
+
+
+## 4. @rarog/react: обёртки над JS‑ядром
+
+Начиная с версии 3.4.0 доступен пакет `@rarog/react` с лёгкими обёртками над
+JS‑ядром Rarog.
+
+Установка (в реальном проекте):
+
+```bash
+npm install rarog @rarog/react
+```
+
+Базовый пример с `<RarogProvider>` и модалкой:
+
+```tsx
+import React from "react";
+import { RarogProvider, RarogModal } from "@rarog/react";
+import "rarog/dist/rarog-core.min.css";
+import "rarog/dist/rarog-utilities.min.css";
+import "rarog/dist/rarog-components.min.css";
+import "rarog/dist/rarog.jit.css";
+
+export function App() {
+  return (
+    <RarogProvider>
+      <main className="rg-container-lg py-10">
+        <button
+          type="button"
+          className="btn btn-primary"
+          data-rg-toggle="modal"
+          data-rg-target="#demoModal"
+        >
+          Открыть модалку
+        </button>
+
+        <RarogModal id="demoModal" title="Rarog Modal">
+          <p className="mb-0">
+            Содержимое модального окна. JS‑логика берётся из Rarog JS Core,
+            React‑компоненты отвечают за удобную разметку.
+          </p>
+        </RarogModal>
+      </main>
+    </RarogProvider>
+  );
+}
+```
+
+`RarogProvider` обеспечивает SPA/SSR‑friendly инициализацию: при монтировании
+дерева выполняется `Rarog.init(root)`, при размонтировании — `Rarog.dispose(root)`.
+
+
+## Accessibility in React wrappers
+
+При использовании `@rarog/react` сохраняйте доступную разметку на уровне JSX:
+
+- передавайте явный заголовок внутрь `RarogModal` / `RarogOffcanvas`, чтобы JS core мог связать `aria-labelledby`;
+- используйте настоящие `<button type="button">` для dismiss/open controls;
+- не удаляйте focus outline без альтернативного `:focus-visible`;
+- проверяйте keyboard flow после рендера React-компонента, а не только на уровне HTML-шаблона.
