@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
     paths:
-      - "docs-site/**"
       - "docs/**"
       - "design/**"
       - "README.md"
@@ -35,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: rarog-docs
-          path: docs-site/.vitepress/dist
+          path: docs/.vitepress/dist
