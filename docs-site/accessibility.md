@@ -21,7 +21,7 @@ Rarog стремится быть безопасным и предсказуем
 - блокировку скролла `body` при открытии;
 - фокус-ловушку: Tab/Shift+Tab остаются внутри модального окна;
 - возврат фокуса на исходный элемент при закрытии;
-- ARIA-атрибуты на контейнере (`role="dialog"`, `aria-modal="true"`, автоматическая привязка `aria-labelledby`/`aria-describedby`, если найдены заголовок и body).
+- ARIA-атрибуты на контейнере (`role="dialog"`, `aria-modal="true"`).
 
 Рекомендуется:
 
@@ -33,8 +33,7 @@ Rarog стремится быть безопасным и предсказуем
 Гарантирует:
 
 - переключение видимости по клику;
-- управление через `data-rg-toggle="dropdown"` и `data-rg-target`;
-- `aria-haspopup`, `aria-expanded`, `aria-controls`, `role="menu"` и keyboard-open через Enter/Space/Arrow keys.
+- управление через `data-rg-toggle="dropdown"` и `data-rg-target`.
 
 Рекомендуется:
 
@@ -46,8 +45,7 @@ Rarog стремится быть безопасным и предсказуем
 Гарантирует:
 
 - блокировку скролла `body` при открытии;
-- закрытие по клику на backdrop и по Escape;
-- focus trap и возврат фокуса к исходному триггеру после закрытия.
+- закрытие по клику на backdrop и по Escape.
 
 Рекомендуется:
 
@@ -59,8 +57,7 @@ Rarog стремится быть безопасным и предсказуем
 Гарантирует:
 
 - создание/удаление DOM-элементов tooltip/popover;
-- привязку к триггеру через data-атрибуты;
-- `role="tooltip"`/`role="dialog"`, `aria-hidden`, `aria-describedby`/`aria-controls` для триггеров.
+- привязку к триггеру через data-атрибуты.
 
 Рекомендуется:
 
@@ -91,8 +88,8 @@ Tabs (`.nav-tabs`):
 
 Рекомендуется:
 
+- добавить `role="region"` и `aria-roledescription="carousel"` на контейнер;
 - использовать `aria-label` для описания назначения карусели;
-- проверять навигацию стрелками Left/Right и Home/End;
 - помечать слайды `aria-hidden="true/false"` (Rarog делает это автоматически).
 
 ### Stepper / Wizard
@@ -105,7 +102,6 @@ Tabs (`.nav-tabs`):
 Рекомендуется:
 
 - использовать чёткие текстовые label’ы шагов;
-- проверять навигацию Arrow/Home/End между шагами;
 - озвучивать ошибки/валидацию внутри шагов через `aria-describedby`.
 
 ## A11y-утилиты
@@ -208,3 +204,35 @@ Tabs (`.nav-tabs`):
 В целом, новые форменные и табличные компоненты спроектированы так, чтобы
 не мешать WCAG-аудиту, но финальная ответственность за доступность остаётся
 на уровне продукта.
+
+
+## Остальные интерактивные компоненты
+
+### Stepper
+- `role="tablist"` на header;
+- `role="tab"` / `role="tabpanel"` на шагах и панелях;
+- `aria-selected`, `aria-controls`, `aria-labelledby`;
+- lifecycle-события: `rg:stepper:change`, `rg:stepper:changed`.
+
+### Datepicker
+- input получает `aria-haspopup="dialog"`, `aria-controls`, `aria-expanded`;
+- popup получает `role="dialog"`, `aria-hidden`;
+- grid получает `role="grid"`, day-кнопки — `role="gridcell"`, `aria-selected`;
+- lifecycle/interaction events: `rg:datepicker:show|shown|hide|hidden|change|changed`.
+
+### Select / Combobox
+- trigger/input получает `aria-haspopup="listbox"`, `aria-expanded`, `aria-controls`;
+- menu получает `role="listbox"`, items — `role="option"`, `aria-selected`;
+- combobox использует `role="combobox"` и `aria-activedescendant`;
+- events: `rg:select:*`, `rg:combobox:*`.
+
+### TagsInput
+- root получает `role="group"`;
+- input получает `aria-label`, remove buttons — `aria-label` на удаление тега;
+- events: `rg:tagsinput:add|added|remove|removed|cleared`.
+
+### DataTable
+- search input получает `aria-label`;
+- sortable headers получают `aria-sort` и keyboard focusability;
+- pagination buttons получают `aria-label`, `aria-current="page"`;
+- events: `rg:datatable:pagechange|pagechanged|sortchange|sortchanged`.
