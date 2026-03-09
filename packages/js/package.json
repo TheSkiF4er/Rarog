@@ -5,17 +5,26 @@
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
   "type": "module",
-  "main": "src/rarog.esm.js",
-  "module": "src/rarog.esm.js",
-  "types": "src/index.d.ts",
+  "main": "dist/rarog.cjs",
+  "module": "dist/rarog.esm.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.d.ts",
-      "import": "./src/rarog.esm.js",
-      "default": "./src/rarog.esm.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/rarog.esm.js",
+      "require": "./dist/rarog.cjs",
+      "default": "./dist/rarog.esm.js"
     }
   },
   "files": [
+    "dist",
     "src"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "unpkg": "dist/rarog.iife.js",
+  "scripts": {
+    "build": "node ../../tools/build-js.mjs"
+  }
 }
