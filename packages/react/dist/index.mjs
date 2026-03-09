@@ -2,11 +2,14 @@ import React, {
   createElement,
   forwardRef,
   useEffect,
+  useId,
   useImperativeHandle,
   useMemo,
   useRef
 } from "react";
 import Rarog, { Dropdown, Modal, Offcanvas, dispose, init, reinit } from "@rarog/js";
+
+const canUseDOM = typeof window !== "undefined" && typeof document !== "undefined";
 
 function setRef(ref, value) {
   if (!ref) return;
@@ -26,47 +29,137 @@ function useCombinedRef(forwardedRef) {
   }];
 }
 
-function useRarogInit(ComponentClass, options) {
+function useLatest(value) {
+  const ref = useRef(value);
+  ref.current = value;
+  return ref;
+}
+
+function useResolvedId(providedId, prefix) {
+  const reactId = useId();
+  return useMemo(() => providedId || `${prefix}-${reactId.replace(/[:]/g, "")}`, [providedId, prefix, reactId]);
+}
+
+function getInstanceMethods(instanceRef) {
+  return {
+    show: () => instanceRef.current && instanceRef.current.show && instanceRef.current.show(),
+    hide: () => instanceRef.current && instanceRef.current.hide && instanceRef.current.hide(),
+    toggle: () => instanceRef.current && instanceRef.current.toggle && instanceRef.current.toggle(),
+    dispose: () => {
+      if (!instanceRef.current) return;
+      if (typeof instanceRef.current.dispose === "function") instanceRef.current.dispose();
+      else if (typeof instanceRef.current.destroy === "function") instanceRef.current.destroy();
+    },
+    destroy: () => {
+      if (!instanceRef.current) return;
+      if (typeof instanceRef.current.destroy === "function") instanceRef.current.destroy();
+      else if (typeof instanceRef.current.dispose === "function") instanceRef.current.dispose();
+    }
+  };
+}
+
+function attachLifecycleListeners(target, eventPrefix, handlers) {
+  if (!target || !eventPrefix) return () => {};
+  const entries = [
+    ["show", handlers.onShow],
+    ["shown", handlers.onShown],
+    ["hide", handlers.onHide],
+    ["hidden", handlers.onHidden]
+  ].filter(([, fn]) => typeof fn === "function");
+
+  const listeners = entries.map(([name, fn]) => {
+    const eventName = `rg:${eventPrefix}:${name}`;
+    const listener = event => fn(event);
+    target.addEventListener(eventName, listener);
+    return [eventName, listener];
+  });
+
+  return () => {
+    listeners.forEach(([eventName, listener]) => target.removeEventListener(eventName, listener));
+  };
+}
+
+function useRarogController(ComponentClass, eventPrefix, options, lifecycle = {}) {
   const ref = useRef(null);
   const instanceRef = useRef(null);
+  const latest = useLatest(lifecycle);
+
   useEffect(() => {
-    if (!ref.current || !ComponentClass || typeof ComponentClass.getOrCreate !== "function") return;
-    instanceRef.current = ComponentClass.getOrCreate(ref.current, options || {});
-    return () => {
-      if (instanceRef.current && typeof instanceRef.current.hide === "function") {
-        instanceRef.current.hide();
+    if (!canUseDOM || !ref.current || !ComponentClass || typeof ComponentClass.getOrCreate !== "function") return undefined;
+    const element = ref.current;
+    instanceRef.current = ComponentClass.getOrCreate(element, options || {});
+    const detach = attachLifecycleListeners(element, eventPrefix, {
+      onShow: event => latest.current.onShow && latest.current.onShow(event),
+      onShown: event => {
+        if (latest.current.onShown) latest.current.onShown(event);
+        if (latest.current.onOpen) latest.current.onOpen(event);
+      },
+      onHide: event => latest.current.onHide && latest.current.onHide(event),
+      onHidden: event => {
+        if (latest.current.onHidden) latest.current.onHidden(event);
+        if (latest.current.onClose) latest.current.onClose(event);
       }
+    });
+
+    if (lifecycle.defaultOpen && typeof instanceRef.current.show === "function") {
+      instanceRef.current.show();
+    }
+
+    return () => {
+      detach();
+      if (!instanceRef.current) return;
+      if (typeof instanceRef.current.dispose === "function") instanceRef.current.dispose();
+      else if (typeof instanceRef.current.destroy === "function") instanceRef.current.destroy();
+      else if (typeof instanceRef.current.hide === "function") instanceRef.current.hide();
+      instanceRef.current = null;
     };
-  }, [ComponentClass, options]);
-  return { ref, instance: instanceRef };
+  }, [ComponentClass, eventPrefix]);
+
+  useEffect(() => {
+    if (!instanceRef.current || lifecycle.open == null) return;
+    if (lifecycle.open) {
+      if (typeof instanceRef.current.show === "function") instanceRef.current.show();
+    } else if (typeof instanceRef.current.hide === "function") {
+      instanceRef.current.hide();
+    }
+  }, [lifecycle.open]);
+
+  return { ref, instance: instanceRef, api: getInstanceMethods(instanceRef) };
 }
 
-function useModal(options) {
-  return useRarogInit(Modal, options);
+function useRarogInit(ComponentClass, options) {
+  return useRarogController(ComponentClass, "", options, {});
 }
 
-function useOffcanvas(options) {
-  return useRarogInit(Offcanvas, options);
+function useModal(options, lifecycle) {
+  return useRarogController(Modal, "modal", options, lifecycle || {});
 }
 
-function useDropdown(options) {
-  return useRarogInit(Dropdown, options);
+function useOffcanvas(options, lifecycle) {
+  return useRarogController(Offcanvas, "offcanvas", options, lifecycle || {});
+}
+
+function useDropdown(options, lifecycle) {
+  return useRarogController(Dropdown, "dropdown", options, lifecycle || {});
 }
 
 const RarogProvider = forwardRef(function RarogProvider(
-  { as = "div", children, ...props },
+  { as = "div", autoInit = true, reinitOnChildrenChange = true, children, ...props },
   forwardedRef
 ) {
   const [rootRef, attachRef] = useCombinedRef(forwardedRef);
+
   useEffect(() => {
-    if (!rootRef.current) return;
+    if (!canUseDOM || !autoInit || !rootRef.current) return undefined;
     init(rootRef.current);
     return () => dispose(rootRef.current);
-  }, []);
+  }, [autoInit]);
+
   useEffect(() => {
-    if (!rootRef.current) return;
+    if (!canUseDOM || !autoInit || !reinitOnChildrenChange || !rootRef.current) return;
     reinit(rootRef.current);
-  }, [children]);
+  }, [autoInit, reinitOnChildrenChange, children]);
+
   return createElement(as, { ...props, ref: attachRef }, children);
 });
 
@@ -82,28 +175,38 @@ const RarogModal = forwardRef(function RarogModal(
     headerClassName = "",
     bodyClassName = "",
     footerClassName = "",
-    ...props
+    open,
+    defaultOpen = false,
+    options,
+    onOpen,
+    onClose,
+    onShow,
+    onShown,
+    onHide,
+    onHidden,
+    ...domProps
   },
   forwardedRef
 ) {
-  const modalId = useMemo(() => id || `rg-modal-${Math.random().toString(36).slice(2, 10)}`, [id]);
-  const { ref, instance } = useModal(props.options);
-  useImperativeHandle(forwardedRef, () => ({
-    element: ref.current,
-    show: () => instance.current && instance.current.show && instance.current.show(),
-    hide: () => instance.current && instance.current.hide && instance.current.hide(),
-    toggle: () => instance.current && instance.current.toggle && instance.current.toggle()
-  }), []);
+  const modalId = useResolvedId(id, "rg-modal");
+  const titleId = `${modalId}-title`;
+  const bodyId = `${modalId}-body`;
+  const { ref, instance, api } = useModal(options, { open, defaultOpen, onOpen, onClose, onShow, onShown, onHide, onHidden });
+
+  useImperativeHandle(forwardedRef, () => ({ element: ref.current, instance: instance.current, ...api }), [api]);
+
   return createElement(
     "div",
     {
-      ...props,
+      ...domProps,
       id: modalId,
-      ref: ref,
+      ref,
       className: `modal ${className}`.trim(),
       role: "dialog",
       "aria-modal": "true",
-      "aria-hidden": "true"
+      "aria-hidden": "true",
+      "aria-labelledby": title ? titleId : undefined,
+      "aria-describedby": bodyId
     },
     createElement(
       "div",
@@ -112,7 +215,7 @@ const RarogModal = forwardRef(function RarogModal(
         ? createElement(
             "div",
             { className: `modal-header ${headerClassName}`.trim() },
-            createElement("h2", { className: "modal-title" }, title),
+            createElement("h2", { id: titleId, className: "modal-title" }, title),
             createElement(
               "button",
               { type: "button", className: "btn-close", "aria-label": closeLabel, "data-rg-dismiss": "modal" },
@@ -120,7 +223,7 @@ const RarogModal = forwardRef(function RarogModal(
             )
           )
         : null,
-      createElement("div", { className: `modal-body ${bodyClassName}`.trim() }, children),
+      createElement("div", { id: bodyId, className: `modal-body ${bodyClassName}`.trim() }, children),
       footer
         ? createElement("div", { className: `modal-footer ${footerClassName}`.trim() }, footer)
         : null
@@ -138,39 +241,51 @@ const RarogOffcanvas = forwardRef(function RarogOffcanvas(
     className = "",
     headerClassName = "",
     bodyClassName = "",
-    ...props
+    open,
+    defaultOpen = false,
+    options,
+    onOpen,
+    onClose,
+    onShow,
+    onShown,
+    onHide,
+    onHidden,
+    ...domProps
   },
   forwardedRef
 ) {
-  const panelId = useMemo(() => id || `rg-offcanvas-${Math.random().toString(36).slice(2, 10)}`, [id]);
-  const { ref, instance } = useOffcanvas(props.options);
+  const panelId = useResolvedId(id, "rg-offcanvas");
+  const titleId = `${panelId}-title`;
+  const bodyId = `${panelId}-body`;
+  const { ref, instance, api } = useOffcanvas(options, { open, defaultOpen, onOpen, onClose, onShow, onShown, onHide, onHidden });
   const placementClass = placement === "end" ? "offcanvas-end" : placement === "bottom" ? "offcanvas-bottom" : "";
-  useImperativeHandle(forwardedRef, () => ({
-    element: ref.current,
-    show: () => instance.current && instance.current.show && instance.current.show(),
-    hide: () => instance.current && instance.current.hide && instance.current.hide(),
-    toggle: () => instance.current && instance.current.toggle && instance.current.toggle()
-  }), []);
+
+  useImperativeHandle(forwardedRef, () => ({ element: ref.current, instance: instance.current, ...api }), [api]);
+
   return createElement(
     "aside",
     {
-      ...props,
+      ...domProps,
       id: panelId,
-      ref: ref,
+      ref,
       className: `offcanvas ${placementClass} ${className}`.trim(),
-      "aria-hidden": "true"
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-hidden": "true",
+      "aria-labelledby": title ? titleId : undefined,
+      "aria-describedby": bodyId
     },
     createElement(
       "div",
       { className: `offcanvas-header ${headerClassName}`.trim() },
-      title ? createElement("h2", { className: "offcanvas-title" }, title) : null,
+      title ? createElement("h2", { id: titleId, className: "offcanvas-title" }, title) : null,
       createElement(
         "button",
         { type: "button", className: "btn-close", "aria-label": closeLabel, "data-rg-dismiss": "offcanvas" },
         "×"
       )
     ),
-    createElement("div", { className: `offcanvas-body ${bodyClassName}`.trim() }, children)
+    createElement("div", { id: bodyId, className: `offcanvas-body ${bodyClassName}`.trim() }, children)
   );
 });
 
@@ -183,30 +298,80 @@ const RarogDropdown = forwardRef(function RarogDropdown(
     buttonClassName = "btn btn-secondary dropdown-toggle",
     menuClassName = "dropdown-menu",
     align = "start",
-    ...props
+    buttonProps,
+    open,
+    defaultOpen = false,
+    options,
+    onOpen,
+    onClose,
+    onShow,
+    onShown,
+    onHide,
+    onHidden,
+    ...domProps
   },
   forwardedRef
 ) {
   const buttonRef = useRef(null);
-  const [containerRef, attachRef] = useCombinedRef(forwardedRef);
-  const resolvedMenuId = useMemo(() => menuId || `rg-dropdown-${Math.random().toString(36).slice(2, 10)}`, [menuId]);
+  const [, attachRef] = useCombinedRef(forwardedRef);
+  const resolvedMenuId = useResolvedId(menuId, "rg-dropdown");
+  const instanceRef = useRef(null);
+  const latest = useLatest({ onOpen, onClose, onShow, onShown, onHide, onHidden });
+
   useEffect(() => {
-    if (!buttonRef.current) return;
-    const instance = Dropdown.getOrCreate(buttonRef.current);
+    if (!canUseDOM || !buttonRef.current) return undefined;
+    const button = buttonRef.current;
+    instanceRef.current = Dropdown.getOrCreate(button, options || {});
+    const detach = attachLifecycleListeners(button, "dropdown", {
+      onShow: event => latest.current.onShow && latest.current.onShow(event),
+      onShown: event => {
+        if (latest.current.onShown) latest.current.onShown(event);
+        if (latest.current.onOpen) latest.current.onOpen(event);
+      },
+      onHide: event => latest.current.onHide && latest.current.onHide(event),
+      onHidden: event => {
+        if (latest.current.onHidden) latest.current.onHidden(event);
+        if (latest.current.onClose) latest.current.onClose(event);
+      }
+    });
+    if (defaultOpen && instanceRef.current && typeof instanceRef.current.show === "function") {
+      instanceRef.current.show();
+    }
     return () => {
-      if (instance && typeof instance.hide === "function") instance.hide();
+      detach();
+      if (!instanceRef.current) return;
+      if (typeof instanceRef.current.dispose === "function") instanceRef.current.dispose();
+      else if (typeof instanceRef.current.destroy === "function") instanceRef.current.destroy();
+      else if (typeof instanceRef.current.hide === "function") instanceRef.current.hide();
+      instanceRef.current = null;
     };
-  }, []);
+  }, [defaultOpen, options]);
+
+  useEffect(() => {
+    if (!instanceRef.current || open == null) return;
+    if (open && typeof instanceRef.current.show === "function") instanceRef.current.show();
+    if (!open && typeof instanceRef.current.hide === "function") instanceRef.current.hide();
+  }, [open]);
+
+  useImperativeHandle(forwardedRef, () => ({
+    element: buttonRef.current,
+    instance: instanceRef.current,
+    ...getInstanceMethods(instanceRef)
+  }), []);
+
   return createElement(
     "div",
-    { ...props, className: `dropdown ${className}`.trim(), ref: attachRef },
+    { ...domProps, className: `dropdown ${className}`.trim(), ref: attachRef },
     createElement(
       "button",
       {
         type: "button",
+        ...buttonProps,
         ref: buttonRef,
-        className: buttonClassName,
-        "data-rg-target": `#${resolvedMenuId}`
+        className: `${buttonClassName}${buttonProps && buttonProps.className ? ` ${buttonProps.className}` : ""}`.trim(),
+        "data-rg-target": `#${resolvedMenuId}`,
+        "aria-controls": resolvedMenuId,
+        "aria-haspopup": "menu"
       },
       label
     ),
@@ -215,7 +380,9 @@ const RarogDropdown = forwardRef(function RarogDropdown(
       {
         id: resolvedMenuId,
         className: `${menuClassName}${align === "end" ? " dropdown-menu-end" : ""}`.trim(),
-        hidden: true
+        hidden: true,
+        role: "menu",
+        "aria-hidden": "true"
       },
       children
     )
