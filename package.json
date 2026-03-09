@@ -26,6 +26,7 @@
     "test:unit": "vitest run tests/js",
     "test:unit:watch": "vitest",
     "test:adapters": "npm run build:js && npm run build:adapters && vitest run tests/adapters",
+    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts",
     "test:contracts": "vitest run tests/js/component-contracts.test.js tests/js/contract-sweep.test.js tests/js/dispose-contract.test.js tests/js/event-contract.test.js tests/js/event-contract-core.test.js tests/js/event-contract-overlay-components.test.js",
     "test:e2e": "playwright test",
     "visual:serve": "node tools/visual-dev.mjs --port 4175",
