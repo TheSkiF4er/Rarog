@@ -109,47 +109,44 @@ toast.show();
 
 ### События (Event API)
 
-Rarog использует единый префикс `rg:` и общий lifecycle-контракт для overlay/interactive-компонентов.
+Rarog использует единый `rg:` namespace и общий lifecycle-контракт для overlay/interactive-компонентов.
 
-#### Базовый lifecycle
+#### Единый lifecycle для overlay/interactive-компонентов
 
 Для `Modal`, `Dropdown`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`, `Collapse` действуют одинаковые правила:
 
-- `rg:<component>:show` — до показа, **cancelable**;
-- `rg:<component>:shown` — после показа;
-- `rg:<component>:hide` — до скрытия, **cancelable**;
-- `rg:<component>:hidden` — после скрытия.
+- `rg:<component>:show` — до показа, **cancelable**
+- `rg:<component>:shown` — после показа
+- `rg:<component>:hide` — до скрытия, **cancelable**
+- `rg:<component>:hidden` — после скрытия
 
-Для `Carousel` lifecycle перехода отдельный:
+`Carousel` использует transition-lifecycle:
 
-- `rg:carousel:slide` — до смены слайда, **cancelable**;
-- `rg:carousel:slid` — после смены слайда.
+- `rg:carousel:slide` — до смены слайда, **cancelable**
+- `rg:carousel:slid` — после смены слайда
 
-Во всех событиях в `event.detail.instance` лежит JS-инстанс компонента.
+#### Event detail
+
+Во всех lifecycle-событиях:
+
+- `event.detail.instance` — JS-инстанс компонента
+- `event.detail.trigger` — исходный trigger, если он применим
+- `event.detail.target` — управляемый DOM-элемент
+- `event.detail.placement` — для `Tooltip` и `Popover`
 
 #### Компонентный контракт
 
-- `Collapse`
-  - события: `rg:collapse:show`, `rg:collapse:shown`, `rg:collapse:hide`, `rg:collapse:hidden`
-  - `event.detail` содержит `instance`, `trigger`, `target`
-- `Toast`
-  - события: `rg:toast:show`, `rg:toast:shown`, `rg:toast:hide`, `rg:toast:hidden`
-  - `event.detail` содержит `instance`, `trigger`, `target`
-- `Tooltip`
-  - события: `rg:tooltip:show`, `rg:tooltip:shown`, `rg:tooltip:hide`, `rg:tooltip:hidden`
-  - `event.detail` содержит `instance`, `trigger`, `target`, `placement`
-- `Popover`
-  - события: `rg:popover:show`, `rg:popover:shown`, `rg:popover:hide`, `rg:popover:hidden`
-  - `event.detail` содержит `instance`, `trigger`, `target`, `placement`
+- `Collapse`: `rg:collapse:show|shown|hide|hidden`
+- `Toast`: `rg:toast:show|shown|hide|hidden`
+- `Tooltip`: `rg:tooltip:show|shown|hide|hidden`
+- `Popover`: `rg:popover:show|shown|hide|hidden`
 
-#### Порядок событий
-
-Порядок всегда один и тот же:
+#### Порядок dispatch
 
 1. вызывается публичный метод (`show()`, `hide()`, `toggle()`, `goTo()`);
-2. dispatch pre-event (`show` / `hide` / `slide`);
+2. dispatch pre-event (`show`, `hide`, `slide`);
 3. если `event.preventDefault()` не был вызван — меняется DOM/состояние;
-4. dispatch post-event (`shown` / `hidden` / `slid`).
+4. dispatch post-event (`shown`, `hidden`, `slid`).
 
 ```js
 const toastEl = document.getElementById("demoToast");
@@ -167,25 +164,12 @@ toastEl.addEventListener("rg:toast:shown", event => {
 ```js
 const popoverTrigger = document.querySelector('[data-rg-toggle="popover"]');
 
-popoverTrigger.addEventListener("rg:popover:hide", event => {
-  console.log("Popover закрывается", event.detail.placement);
+popoverTrigger.addEventListener("rg:popover:hidden", event => {
+  console.log("Popover закрыт", event.detail.placement);
 });
 ```
 
-#### Гарантии стабильности
-
-В ветке 3.x следующие имена событий считаются частью стабильного публичного API:
-
-- `rg:collapse:*`
-- `rg:toast:*`
-- `rg:tooltip:*`
-- `rg:popover:*`
-- `rg:modal:*`
-- `rg:dropdown:*`
-- `rg:offcanvas:*`
-- `rg:carousel:slide`, `rg:carousel:slid`
-
-Legacy-события вроде `rg:carousel:next|prev|goto` могут продолжать приходить ради обратной совместимости, но для нового кода следует ориентироваться именно на lifecycle-события.
+Legacy-события `rg:carousel:next|prev|goto` могут продолжать приходить ради обратной совместимости, но для нового кода стоит ориентироваться на `slide/slid`.
 
 ---
 
