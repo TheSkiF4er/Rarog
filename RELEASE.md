@@ -1,10 +1,13 @@
 # RELEASE.md
 
-Этот документ описывает **ручной релизный чеклист**, соответствующий текущему состоянию репозитория.
+Этот документ описывает **канонический релизный путь** для текущего состояния репозитория.
 
-`npm run build` в текущем контракте — это каноническая полная сборка (`build:css + build:js + build:adapters`).
+## Канонические команды
 
-`npm run release:verify` теперь включает не только release metadata check, но и `npm run docs:check`, чтобы docs/release-поверхность не расходилась с root scripts.
+- `npm run build` — полная сборка репозитория (`build:css + build:js + build:adapters`).
+- `npm run docs:check` — проверка docs-контракта и сборка VitePress.
+- `npm run test:release` — минимальный обязательный тестовый gate перед публикацией (`test:unit + test:adapters + test:contracts`).
+- `npm run release:verify` — проверка release/docs-контракта перед сборкой и публикацией.
 
 ## Перед релизом
 
@@ -14,16 +17,9 @@
 npm ci
 npm run release:verify
 npm run build
-npm run test:unit
-npm run test:adapters
-npm run test:contracts
+npm run test:release
 npm run pack:packages
 ```
-
-В GitHub Actions release workflow дополнительно прогоняет unit, adapter smoke и contract tests перед `npm publish`, чтобы релизный tag не обходил тестовый gate.
-
-
-`npm run test:adapters` нужен отдельно даже после `npm run build`: эта команда принудительно пересобирает адаптерный `dist` перед smoke-тестами и снижает риск локального запуска по устаревшим артефактам.
 
 Дополнительно стоит проверить CLI smoke:
 
@@ -31,6 +27,17 @@ npm run pack:packages
 node packages/cli/bin/rarog.js --help
 node packages/cli/bin/rarog.js validate
 ```
+
+## Что проверяется в GitHub Actions
+
+Release workflow перед `npm publish` выполняет:
+
+- `npm run release:verify`
+- `npm run build:all`
+- `npm run test:release`
+- `npm run pack:packages`
+
+Это означает, что релизный tag не должен обходить docs/release-проверки и основной тестовый gate.
 
 ## Что проверить руками
 
@@ -42,7 +49,7 @@ node packages/cli/bin/rarog.js validate
 
 ## После изменения релизного контура
 
-Обязательно проверьте:
+Обязательно перепроверьте:
 - `README.md`
 - `docs/getting-started.md`
 - `docs/javascript.md`
@@ -51,7 +58,7 @@ node packages/cli/bin/rarog.js validate
 
 ## Что пока не стоит обещать в релиз-нотах без отдельной проверки
 
-Не анонсируйте как стабильные, пока нет полного контракта и сборки:
+Не анонсируйте как стабильные, пока нет отдельного подтверждения качества и упаковки:
 - React/Vue adapters;
 - внешние JS-бандлы, если они не были собраны и проверены;
 - UI kits или starters, если они не входят в опубликованный артефакт.

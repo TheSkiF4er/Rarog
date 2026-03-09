@@ -33,7 +33,7 @@
     "release:check": "node tools/check-release.mjs",
     "release:verify": "npm run release:check && npm run docs:check",
     "pack:packages": "node tools/pack-packages.mjs",
-    "docs:check": "node tools/check-docs.mjs && npm run docs:build",
+    "docs:check": "node tools/check-docs.mjs && npm run docs:build && node tools/check-docs-output.mjs",
     "test:release": "npm run test:unit && npm run test:adapters && npm run test:contracts"
   },
   "repository": {
