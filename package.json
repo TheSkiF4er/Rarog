@@ -4,7 +4,7 @@
   "description": "Rarog CSS Framework — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
-  "main": "packages/core/dist/rarog-core.min.css",
+  "main": "./packages/core/dist/rarog-core.min.css",
   "scripts": {
     "build": "npm run build:all",
     "build:css": "node tools/build.mjs",
@@ -69,5 +69,29 @@
   },
   "bin": {
     "rarog": "packages/cli/bin/rarog.js"
-  }
+  },
+  "style": "./packages/core/dist/rarog-core.min.css",
+  "exports": {
+    ".": "./packages/core/dist/rarog-core.min.css",
+    "./core": "./packages/core/dist/rarog-core.min.css",
+    "./utilities": "./packages/utilities/dist/rarog-utilities.min.css",
+    "./components": "./packages/components/dist/rarog-components.min.css",
+    "./themes/default": "./packages/themes/dist/rarog-theme-default.min.css",
+    "./themes/dark": "./packages/themes/dist/rarog-theme-dark.min.css",
+    "./themes/contrast": "./packages/themes/dist/rarog-theme-contrast.min.css",
+    "./cli": "./packages/cli/bin/rarog.js"
+  },
+  "files": [
+    "packages/cli/bin",
+    "packages/cli/lib",
+    "packages/core/dist",
+    "packages/utilities/dist",
+    "packages/components/dist",
+    "packages/themes/dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "workspaces": [
+    "packages/*"
+  ]
 }

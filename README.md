@@ -39,6 +39,20 @@ Rarog уже включает:
 - плагины CommonJS: `packages/plugin-forms/index.cjs`, `packages/plugin-typography/index.cjs`;
 - документацию в `docs/`.
 
+## Матрица стабильности surface
+
+| Surface | Status | Примечание |
+|---|---|---|
+| Core CSS | Stable | Основной CSS-слой и design tokens. |
+| Utilities | Stable | Utility API поддерживается как основной surface. |
+| Components CSS | Stable | Компонентные CSS-слои входят в основной релиз. |
+| Themes | Stable | Поставляемые темы публикуются как готовые CSS-артефакты. |
+| CLI | Beta | Основные команды поддерживаются, но DX ещё развивается. |
+| JS Runtime | Beta | Рабочий runtime, но контракт расширяется. |
+| React bindings | Experimental | Требуют отдельной smoke/compatibility-проверки перед релизом. |
+| Vue bindings | Experimental | Требуют отдельной smoke/compatibility-проверки перед релизом. |
+| Plugin API | Experimental | Публичный контракт описан отдельно и может эволюционировать. |
+
 Что пока **не стоит считать production-ready API**:
 - React/Vue-адаптеры в `packages/react` и `packages/vue` всё ещё требуют отдельной smoke/compatibility-проверки перед релизом;
 - часть UI-kit и ecosystem-заявлений в старых docs описывает целевое состояние, а не полностью поставляемый артефакт.
