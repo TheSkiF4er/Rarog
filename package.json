@@ -25,7 +25,7 @@
     "pack:react": "npm pack ./packages/react",
     "pack:vue": "npm pack ./packages/vue",
     "test:adapters:smoke": "npm run build:adapters && vitest run tests/adapters/**/*.test.js",
-    "test:contracts": "vitest run tests/js/contract-sweep.test.js"
+    "test:contracts": "vitest run tests/js/component-contracts.test.js"
   },
   "repository": {
     "type": "git",
