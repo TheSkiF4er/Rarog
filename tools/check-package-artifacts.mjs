@@ -17,32 +17,47 @@ const packageSpecs = [
       'dist/index.d.ts',
       'dist/rarog.esm.js',
       'dist/rarog.cjs'
-    ]
+    ],
+    allowedRoots: ['dist', 'package.json']
   },
   {
     name: '@rarog/react',
     dir: 'packages/react',
-    requiredFiles: ['package.json', 'dist/index.mjs', 'dist/index.d.ts']
+    requiredFiles: ['package.json', 'dist/index.mjs', 'dist/index.d.ts', 'README.md'],
+    allowedRoots: ['dist', 'package.json', 'README.md']
   },
   {
     name: '@rarog/vue',
     dir: 'packages/vue',
-    requiredFiles: ['package.json', 'dist/index.mjs', 'dist/index.d.ts']
+    requiredFiles: ['package.json', 'dist/index.mjs', 'dist/index.d.ts', 'README.md'],
+    allowedRoots: ['dist', 'package.json', 'README.md']
   }
 ]
 
-const forbiddenPatterns = [/^node_modules\//, /^\.artifacts\//, /^tests\//, /^stories\//]
+const forbiddenPatterns = [
+  /^node_modules\//,
+  /^\.artifacts\//,
+  /^tests\//,
+  /^stories\//,
+  /^docs\//,
+  /^src\//,
+  /^playwright\./,
+  /^vite(?:\.config)?/,
+  /^tsconfig(?:\.|$)/,
+  /^vitest(?:\.|$)/,
+  /^\.storybook\//,
+  /^\.github\//,
+  /^design\//,
+  /^examples\//,
+  /^plugins\//
+]
 
 function runPackDryRun(packageDir) {
-  const output = execFileSync(
-    'npm',
-    ['pack', '--dry-run', '--ignore-scripts', '--json'],
-    {
-      cwd: path.join(root, packageDir),
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe']
-    }
-  ).trim()
+  const output = execFileSync('npm', ['pack', '--dry-run', '--ignore-scripts', '--json'], {
+    cwd: path.join(root, packageDir),
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe']
+  }).trim()
 
   const parsed = JSON.parse(output)
   if (!Array.isArray(parsed) || parsed.length === 0 || !Array.isArray(parsed[0].files)) {
@@ -50,6 +65,16 @@ function runPackDryRun(packageDir) {
   }
 
   return parsed[0]
+}
+
+function hasAllowedRoot(file, allowedRoots) {
+  return allowedRoots.some((allowedRoot) => {
+    if (file === allowedRoot) {
+      return true
+    }
+
+    return file.startsWith(`${allowedRoot}/`)
+  })
 }
 
 let failed = false
@@ -94,14 +119,18 @@ for (const spec of packageSpecs) {
     }
     failed = true
   } else {
-    console.log(`[OK] ${spec.name}: tarball excludes obvious junk`)
+    console.log(`[OK] ${spec.name}: tarball excludes forbidden sources and tooling files`)
   }
 
-  const packageReadme = 'README.md'
-  if (files.has(packageReadme)) {
-    console.log(`[OK] ${spec.name}: tarball includes README.md`)
+  const unexpected = [...files].filter((file) => !hasAllowedRoot(file, spec.allowedRoots))
+  if (unexpected.length > 0) {
+    console.error(`[FAIL] ${spec.name}: tarball contains unexpected top-level content:`)
+    for (const file of unexpected) {
+      console.error(`  - ${file}`)
+    }
+    failed = true
   } else {
-    console.log(`[INFO] ${spec.name}: tarball does not include README.md`)
+    console.log(`[OK] ${spec.name}: tarball stays within the expected publish surface`)
   }
 
   console.log(`[OK] ${spec.name}: npm pack --dry-run produced ${packInfo.files.length} files (${packageSize} bytes)`)
