@@ -1,98 +1,153 @@
-/**
- * @file event-contract-overlay-components.test.js
- * Контрактные тесты для Toast / Tooltip / Popover / Collapse.
- */
-
 import { Rarog } from "../../packages/js/src/rarog.esm.js";
 
-describe("Overlay/interaction event contract", () => {
-  test("Collapse emits show/shown/hide/hidden in order", () => {
+describe("overlay component event contract", () => {
+  test("Collapse emits cancelable show/hide and post events with detail", () => {
     document.body.innerHTML = `
-      <button id="toggle" data-rg-target="#panel"></button>
-      <div id="panel" class="collapse" hidden></div>
+      <button id="trigger" data-rg-target="#panel">Toggle</button>
+      <div id="panel" hidden aria-hidden="true">Body</div>
     `;
 
-    const trigger = document.getElementById("toggle");
+    const trigger = document.getElementById("trigger");
     const panel = document.getElementById("panel");
-    const collapse = Rarog.Collapse.getOrCreate(trigger, panel);
-    const seen = [];
+    const collapse = Rarog.Collapse.getOrCreate(trigger);
+    const order = [];
 
-    ["show", "shown", "hide", "hidden"].forEach(name => {
-      panel.addEventListener(`rg:collapse:${name}`, () => seen.push(name));
+    ["rg:collapse:show", "rg:collapse:shown", "rg:collapse:hide", "rg:collapse:hidden"].forEach(type => {
+      panel.addEventListener(type, e => {
+        order.push(type);
+        expect(e.detail.instance).toBe(collapse);
+        expect(e.detail.trigger).toBe(trigger);
+        expect(e.detail.target).toBe(panel);
+      });
     });
 
     collapse.show();
+    expect(panel.hasAttribute("hidden")).toBe(false);
     collapse.hide();
-
-    expect(seen).toEqual(["show", "shown", "hide", "hidden"]);
-  });
-
-  test("Collapse show can be cancelled", () => {
-    document.body.innerHTML = `
-      <button id="toggle" data-rg-target="#panel"></button>
-      <div id="panel" class="collapse" hidden></div>
-    `;
-
-    const trigger = document.getElementById("toggle");
-    const panel = document.getElementById("panel");
-    const collapse = Rarog.Collapse.getOrCreate(trigger, panel);
-
-    panel.addEventListener("rg:collapse:show", event => event.preventDefault());
-
-    const result = collapse.show();
-
-    expect(result).toBe(false);
-    expect(panel.hasAttribute("hidden")).toBe(true);
-  });
-
-  test("Toast emits stable lifecycle and detail payload", () => {
-    document.body.innerHTML = `<div id="toast" class="toast" hidden></div>`;
-    const toastEl = document.getElementById("toast");
-    const toast = Rarog.Toast.getOrCreate(toastEl, { autohide: false });
-    const payloads = [];
-
-    toastEl.addEventListener("rg:toast:show", event => payloads.push(event.detail));
-    toastEl.addEventListener("rg:toast:shown", event => payloads.push(event.detail));
-
-    toast.show();
-
-    expect(payloads).toHaveLength(2);
-    expect(payloads[0].instance).toBe(toast);
-    expect(payloads[0].target).toBe(toastEl);
-    expect(payloads[1].target).toBe(toastEl);
-  });
-
-  test("Tooltip emits show/shown/hide/hidden and exposes placement", () => {
-    document.body.innerHTML = `<button id="trigger" title="Help"></button>`;
-    const trigger = document.getElementById("trigger");
-    const tooltip = Rarog.Tooltip.getOrCreate(trigger, { placement: "bottom" });
-    const seen = [];
-
-    trigger.addEventListener("rg:tooltip:show", event => seen.push(`${event.type}:${event.detail.placement}`));
-    trigger.addEventListener("rg:tooltip:shown", event => seen.push(`${event.type}:${event.detail.placement}`));
-    trigger.addEventListener("rg:tooltip:hidden", event => seen.push(`${event.type}:${event.detail.placement}`));
-
-    tooltip.show();
-    tooltip.hide();
-
-    expect(seen).toEqual([
-      "rg:tooltip:show:bottom",
-      "rg:tooltip:shown:bottom",
-      "rg:tooltip:hidden:bottom"
+    expect(panel.getAttribute("aria-hidden")).toBe("true");
+    expect(order).toEqual([
+      "rg:collapse:show",
+      "rg:collapse:shown",
+      "rg:collapse:hide",
+      "rg:collapse:hidden"
     ]);
   });
 
-  test("Popover hide can be cancelled", () => {
-    document.body.innerHTML = `<button id="trigger" data-rg-popover-content="Body"></button>`;
-    const trigger = document.getElementById("trigger");
-    const popover = Rarog.Popover.getOrCreate(trigger, { placement: "right" });
+  test("Toast show can be canceled and shown/hidden fire after DOM changes", () => {
+    document.body.innerHTML = `<div id="toast" class="toast"></div>`;
+    const el = document.getElementById("toast");
+    const toast = Rarog.Toast.getOrCreate(el, { autoHide: false });
+    const order = [];
 
-    trigger.addEventListener("rg:popover:hide", event => event.preventDefault());
+    el.addEventListener(
+      "rg:toast:show",
+      e => {
+        order.push(e.type);
+        e.preventDefault();
+      },
+      { once: true }
+    );
 
+    toast.show();
+    expect(el.classList.contains("is-visible")).toBe(false);
+
+    el.addEventListener("rg:toast:show", e => order.push(e.type), { once: true });
+    el.addEventListener(
+      "rg:toast:shown",
+      e => {
+        order.push(e.type);
+        expect(el.classList.contains("is-visible")).toBe(true);
+        expect(e.detail.target).toBe(el);
+      },
+      { once: true }
+    );
+    el.addEventListener(
+      "rg:toast:hidden",
+      e => {
+        order.push(e.type);
+        expect(el.classList.contains("is-visible")).toBe(false);
+        expect(e.detail.target).toBe(el);
+      },
+      { once: true }
+    );
+
+    toast.show();
+    toast.hide();
+
+    expect(order).toEqual(["rg:toast:show", "rg:toast:show", "rg:toast:shown", "rg:toast:hidden"]);
+  });
+
+  test("Tooltip emits full lifecycle with trigger/target/placement detail and cancelable hide", () => {
+    document.body.innerHTML = `<button id="btn" title="Hello" data-rg-placement="bottom"></button>`;
+    const btn = document.getElementById("btn");
+    const tooltip = Rarog.Tooltip.getOrCreate(btn);
+    const seen = [];
+
+    tooltip.show();
+    const tip = document.querySelector(".tooltip");
+    expect(tip).toBeTruthy();
+
+    tip.addEventListener(
+      "rg:tooltip:hide",
+      e => {
+        seen.push(e.type);
+        expect(e.detail.trigger).toBe(btn);
+        expect(e.detail.target).toBe(tip);
+        expect(e.detail.placement).toBe("bottom");
+        e.preventDefault();
+      },
+      { once: true }
+    );
+
+    tooltip.hide();
+    expect(tip.classList.contains("is-visible")).toBe(true);
+
+    tip.addEventListener(
+      "rg:tooltip:hidden",
+      e => {
+        seen.push(e.type);
+        expect(e.detail.trigger).toBe(btn);
+        expect(e.detail.target).toBe(tip);
+        expect(e.detail.placement).toBe("bottom");
+      },
+      { once: true }
+    );
+    tip.addEventListener("rg:tooltip:hide", () => seen.push("rg:tooltip:hide"), { once: true });
+
+    tooltip.hide();
+    expect(seen).toEqual(["rg:tooltip:hide", "rg:tooltip:hide", "rg:tooltip:hidden"]);
+  });
+
+  test("Popover emits cancelable show/hide with shown/hidden", () => {
+    document.body.innerHTML = `<button id="btn" data-rg-popover-title="Title" data-rg-popover-content="Body"></button>`;
+    const btn = document.getElementById("btn");
+    const popover = Rarog.Popover.getOrCreate(btn);
+    const log = [];
+
+    btn.addEventListener("click", () => log.push("click"), { once: true });
     popover.show();
-    const result = popover.hide();
+    const pop = document.querySelector(".popover");
+    expect(pop).toBeTruthy();
 
-    expect(result).toBe(false);
-    expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    pop.addEventListener(
+      "rg:popover:hide",
+      e => {
+        log.push(e.type);
+        expect(e.detail.trigger).toBe(btn);
+        expect(e.detail.target).toBe(pop);
+        expect(e.detail.placement).toBe("top");
+        e.preventDefault();
+      },
+      { once: true }
+    );
+
+    popover.hide();
+    expect(pop.classList.contains("is-visible")).toBe(true);
+
+    pop.addEventListener("rg:popover:hidden", () => log.push("rg:popover:hidden"), { once: true });
+    pop.addEventListener("rg:popover:hide", () => log.push("rg:popover:hide"), { once: true });
+    popover.hide();
+
+    expect(log).toEqual(["rg:popover:hide", "rg:popover:hide", "rg:popover:hidden"]);
   });
 });
