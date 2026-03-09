@@ -27,9 +27,10 @@
    ```bash
    npm run build
    npm run test:unit
-   npm run test:adapters
    npm run docs:check
    ```
+
+   Если изменение затрагивает React/Vue adapters или их `dist`-контур, дополнительно прогоните `npm run test:adapters`.
 
    `npm run build` — каноническая полная сборка. Если вы меняли только CSS-слои, можно дополнительно использовать `npm run build:css` для более точечной локальной проверки.
 
@@ -107,11 +108,12 @@ npm run build:css
 ```bash
 npm run test:unit
 npm run test:adapters
+npm run test:release
 node packages/cli/bin/rarog.js --help
 node packages/cli/bin/rarog.js validate
 ```
 
-`npm run test:unit` проверяет source/runtime-контур JS core. `npm run test:adapters` сначала пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, а затем гоняет adapter dist-smoke, чтобы локально не получать ложнозелёный результат на устаревшем `dist`.
+`npm run test:unit` проверяет source/runtime-контур JS core. `npm run test:adapters` сначала пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, а затем гоняет adapter dist-smoke, чтобы локально не получать ложнозелёный результат на устаревшем `dist`. `npm run test:release` — канонический релизный тестовый gate: он объединяет `test:unit`, `test:adapters` и `test:contracts`.
 
 Если меняете README или `docs/`, прогоняйте ещё и:
 
@@ -144,3 +146,19 @@ npm run docs:check
 ```
 
 И затем убедитесь, что обновлены все заметные пользовательские entrypoints.
+
+
+## Что обязательно для PR и что обязательно для релиза
+
+Для обычного PR минимальный путь такой:
+- `npm run build`
+- `npm run test:unit`
+- `npm run docs:check`, если менялись README или `docs/`
+
+Дополнительно запускайте `npm run test:adapters`, если затронуты adapters, adapter build или `dist`-артефакты.
+
+Для релиза используйте единый вход:
+- `npm run release:verify`
+- `npm run build`
+- `npm run test:release`
+- `npm run pack:packages`

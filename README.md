@@ -140,6 +140,7 @@ packages/
 npm run build
 npm run test:unit
 npm run test:adapters
+npm run test:release
 npm run docs:check
 ```
 
@@ -147,7 +148,8 @@ npm run docs:check
 - `npm run build` — каноническая полная сборка репозитория (`build:css + build:js + build:adapters`);
 - `npm run build:css` — только CSS-слои, если менялся только CSS surface;
 - `npm run test:unit` — source/runtime unit-контур для JS core и контрактных JS-поверхностей;
-- `npm run test:adapters` — dist-smoke для React/Vue adapters; перед прогоном команда пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, чтобы не опираться на устаревший `dist`.
+- `npm run test:adapters` — dist-smoke для React/Vue adapters; перед прогоном команда пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, чтобы не опираться на устаревший `dist`;
+- `npm run test:release` — минимальный обязательный release gate (`test:unit + test:adapters + test:contracts`).
 
 Если нужно проверить CLI без глобальной установки:
 
@@ -176,5 +178,7 @@ node packages/cli/bin/rarog.js --help
 - прогоните `npm run build`;
 - прогоните `npm run test:unit`;
 - прогоните `npm run docs:check`, если меняли README или docs.
+
+Перед релизом дополнительно используйте `npm run test:release` как единый обязательный тестовый gate.
 
 Подробности — в `CONTRIBUTING.md`.
