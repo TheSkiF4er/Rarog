@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v3.0.0
+ * Rarog JS Core v3.5.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
@@ -85,40 +85,6 @@ function _dispatchEvent(element, name, detail = {}) {
   });
   element.dispatchEvent(evt);
   _emitOnBus(name, { element, detail });
-}
-
-function _dispatchCancelableEvent(element, name, detail = {}) {
-  if (!element || typeof CustomEvent === "undefined") return true;
-  const evt = new CustomEvent(name, {
-    bubbles: true,
-    cancelable: true,
-    detail
-  });
-  const result = element.dispatchEvent(evt);
-  _emitOnBus(name, { element, detail, defaultPrevented: evt.defaultPrevented });
-  return result && !evt.defaultPrevented;
-}
-
-function _safeCall(fn) {
-  if (typeof fn !== "function") return;
-  try {
-    fn();
-  } catch (error) {
-    _debugWarn("cleanup error", error);
-  }
-}
-
-function _destroyInstance(instance) {
-  if (!instance) return false;
-  if (typeof instance.dispose === "function") {
-    instance.dispose();
-    return true;
-  }
-  if (typeof instance.destroy === "function") {
-    instance.destroy();
-    return true;
-  }
-  return false;
 }
 
 function _resolveTarget(trigger, explicitTarget) {
@@ -268,17 +234,6 @@ class Dropdown {
     }
   }
 
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    this._isDisposed = true;
-    _dropdownInstances.delete(this._trigger);
-  }
-
-  destroy() {
-    this.dispose();
-  }
-
   static getInstance(trigger) {
     return _dropdownInstances.get(trigger) || null;
   }
@@ -356,17 +311,6 @@ class Collapse {
     } else {
       this.show();
     }
-  }
-
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    _collapseInstances.delete(this._trigger);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(trigger) {
@@ -553,20 +497,6 @@ class Modal {
     }
   }
 
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    if (_openModal === this) {
-      _openModal = null;
-    }
-    _modalInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
-  }
-
   static getInstance(element) {
     return _modalInstances.get(element) || null;
   }
@@ -653,19 +583,6 @@ class Offcanvas {
     }
   }
 
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    document.removeEventListener("keydown", this._onKeydown);
-    this._removeBackdrop(true);
-    _offcanvasInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
-  }
-
   _createBackdrop() {
     if (this._backdrop || typeof document === "undefined") return;
 
@@ -684,22 +601,18 @@ class Offcanvas {
     this._backdrop = backdrop;
   }
 
-  _removeBackdrop(force = false) {
+  _removeBackdrop() {
     const backdrop = this._backdrop;
     if (!backdrop) return;
 
+    backdrop.classList.remove("is-visible");
     const remove = () => {
       if (backdrop.parentNode) {
         backdrop.parentNode.removeChild(backdrop);
       }
     };
 
-    backdrop.classList.remove("is-visible");
-    if (force) {
-      remove();
-    } else {
-      backdrop.addEventListener("transitionend", remove, { once: true });
-    }
+    backdrop.addEventListener("transitionend", remove, { once: true });
     this._backdrop = null;
   }
 
@@ -776,18 +689,6 @@ class Toast {
       clearTimeout(this._timeoutId);
       this._timeoutId = null;
     }
-  }
-
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    this._clearTimer();
-    _toastInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(element) {
@@ -905,29 +806,6 @@ class Tooltip {
 
     this._tooltip.style.top = `${Math.round(top)}px`;
     this._tooltip.style.left = `${Math.round(left)}px`;
-  }
-
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    this._trigger.removeEventListener("mouseenter", this._onMouseEnter);
-    this._trigger.removeEventListener("mouseleave", this._onMouseLeave);
-    this._trigger.removeEventListener("focus", this._onFocus);
-    this._trigger.removeEventListener("blur", this._onBlur);
-    if (this._tooltip && this._tooltip.parentNode) {
-      this._tooltip.parentNode.removeChild(this._tooltip);
-    }
-    this._tooltip = null;
-    if (this._originalTitle) {
-      this._trigger.setAttribute("title", this._originalTitle);
-    }
-    this._trigger.removeAttribute("data-rg-original-title");
-    _tooltipInstances.delete(this._trigger);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(trigger) {
@@ -1048,23 +926,6 @@ class Popover {
 
     this._popover.style.top = `${Math.round(top)}px`;
     this._popover.style.left = `${Math.round(left)}px`;
-  }
-
-  dispose() {
-    if (this._isDisposed) return;
-    this.hide();
-    this._trigger.removeEventListener("click", this._onClick);
-    this._trigger.removeAttribute("aria-expanded");
-    if (this._popover && this._popover.parentNode) {
-      this._popover.parentNode.removeChild(this._popover);
-    }
-    this._popover = null;
-    _popoverInstances.delete(this._trigger);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(trigger) {
@@ -1247,18 +1108,12 @@ class Carousel {
   }
 
   destroy() {
-    if (this._isDisposed) return;
     this.pause();
     this._element.removeEventListener("mouseenter", this._onMouseEnter);
     this._element.removeEventListener("mouseleave", this._onMouseLeave);
     this._element.removeEventListener("touchstart", this._onTouchStart);
     this._element.removeEventListener("touchend", this._onTouchEnd);
     _carouselInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  dispose() {
-    this.destroy();
   }
 
   static getInstance(element) {
@@ -1371,14 +1226,8 @@ class Stepper {
   }
 
   destroy() {
-    if (this._isDisposed) return;
     this._element.removeEventListener("click", this._onClick);
     _stepperInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  dispose() {
-    this.destroy();
   }
 
   static getInstance(element) {
@@ -1600,7 +1449,6 @@ class Datepicker {
   }
 
   dispose() {
-    if (this._isDisposed) return;
     if (this._input) {
       this._input.removeEventListener("focus", this._onInputClick);
       this._input.removeEventListener("click", this._onInputClick);
@@ -1616,11 +1464,6 @@ class Datepicker {
       if (nextBtn) nextBtn.removeEventListener("click", this._onNextClick);
     }
     _datepickerInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(element) {
@@ -1884,8 +1727,6 @@ class Select {
   }
 
   dispose() {
-    if (this._isDisposed) return;
-    this.hide();
     if (this._toggle) {
       this._toggle.removeEventListener("click", this._onToggleClick);
       this._toggle.removeEventListener("keydown", this._onKeyDown);
@@ -1897,11 +1738,6 @@ class Select {
       document.removeEventListener("click", this._onDocumentClick);
     }
     _selectInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(element) {
@@ -2099,8 +1935,6 @@ class Combobox {
   }
 
   dispose() {
-    if (this._isDisposed) return;
-    this.hide();
     if (this._input) {
       this._input.removeEventListener("input", this._onInput);
       this._input.removeEventListener("keydown", this._onKeyDown);
@@ -2115,11 +1949,6 @@ class Combobox {
       document.removeEventListener("click", this._onDocumentClick);
     }
     _comboboxInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(element) {
@@ -2265,7 +2094,6 @@ class TagsInput {
   }
 
   dispose() {
-    if (this._isDisposed) return;
     if (this._input) {
       this._input.removeEventListener("keydown", this._onKeyDown);
     }
@@ -2276,11 +2104,6 @@ class TagsInput {
     });
     this.clear();
     _tagsInputInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(element) {
@@ -2497,7 +2320,6 @@ class DataTable {
   }
 
   dispose() {
-    if (this._isDisposed) return;
     if (this._searchInput) {
       this._searchInput.removeEventListener("input", this._onSearchInput);
     }
@@ -2511,11 +2333,6 @@ class DataTable {
       this._paginationContainer.innerHTML = "";
     }
     _dataTableInstances.delete(this._element);
-    this._isDisposed = true;
-  }
-
-  destroy() {
-    this.dispose();
   }
 
   static getInstance(element) {
@@ -2613,34 +2430,8 @@ function init(root = document) {
 function dispose(root = document) {
   if (typeof document === "undefined") return;
   const container = root || document;
-
-  const selectors = [
-    ["[data-rg-toggle='dropdown']", Dropdown],
-    ["[data-rg-toggle='collapse']", Collapse],
-    [".modal, [data-rg-modal]", Modal],
-    [".offcanvas, [data-rg-offcanvas]", Offcanvas],
-    [".toast, [data-rg-toast]", Toast],
-    ["[data-rg-tooltip], [title], [data-rg-title]", Tooltip],
-    ["[data-rg-popover], [data-rg-popover-content]", Popover],
-    [".carousel, [data-rg-carousel]", Carousel],
-    [".stepper, [data-rg-stepper]", Stepper],
-    ["[data-rg-datepicker], .rg-datepicker", Datepicker],
-    ["[data-rg-select], .rg-select", Select],
-    ["[data-rg-combobox], .rg-combobox", Combobox],
-    ["[data-rg-tags-input], .rg-tags-input", TagsInput],
-    ["[data-rg-data-table], .rg-data-table", DataTable]
-  ];
-
-  selectors.forEach(([selector, Klass]) => {
-    if (!selector || !Klass || typeof Klass.getInstance !== "function") return;
-    container.querySelectorAll(selector).forEach(element => {
-      const instance = Klass.getInstance(element);
-      _safeCall(() => _destroyInstance(instance));
-    });
-  });
-
-  const tooltips = document.querySelectorAll('.tooltip');
-  const popovers = document.querySelectorAll('.popover');
+  const tooltips = container.querySelectorAll(".tooltip");
+  const popovers = container.querySelectorAll(".popover");
   tooltips.forEach(el => el.parentNode && el.parentNode.removeChild(el));
   popovers.forEach(el => el.parentNode && el.parentNode.removeChild(el));
   _emitOnBus("rg:core:dispose", { root: container });
@@ -2789,6 +2580,191 @@ if (typeof document !== "undefined") {
     initDataApi(document);
   }
 }
+
+function _rgEnsureId(element, prefix) {
+  if (!element) return "";
+  if (!element.id) {
+    element.id = `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+  return element.id;
+}
+
+function _rgDispatchCancelable(element, name, detail = {}) {
+  if (!element || typeof CustomEvent === "undefined") return true;
+  const evt = new CustomEvent(name, { bubbles: true, cancelable: true, detail });
+  return element.dispatchEvent(evt) && !evt.defaultPrevented;
+}
+
+function _rgDispatch(element, name, detail = {}) {
+  if (!element || typeof CustomEvent === "undefined") return;
+  element.dispatchEvent(new CustomEvent(name, { bubbles: true, cancelable: false, detail }));
+}
+
+function _rgWrapShowHideLifecycle(klass, componentName, getElement, getDetail) {
+  if (!klass || klass.__rgLifecycleWrapped) return;
+  klass.__rgLifecycleWrapped = true;
+
+  const origShow = klass.prototype.show;
+  const origHide = klass.prototype.hide;
+
+  if (typeof origShow === "function") {
+    klass.prototype.show = function (...args) {
+      const element = getElement(this);
+      const detail = getDetail(this);
+      if (!_rgDispatchCancelable(element, `rg:${componentName}:show`, detail)) return false;
+      const result = origShow.apply(this, args);
+      _rgDispatch(getElement(this) || element, `rg:${componentName}:shown`, getDetail(this));
+      return result;
+    };
+  }
+
+  if (typeof origHide === "function") {
+    klass.prototype.hide = function (...args) {
+      const element = getElement(this);
+      const detail = getDetail(this);
+      if (!_rgDispatchCancelable(element, `rg:${componentName}:hide`, detail)) return false;
+      const result = origHide.apply(this, args);
+      _rgDispatch(getElement(this) || element, `rg:${componentName}:hidden`, getDetail(this));
+      return result;
+    };
+  }
+}
+
+function _rgWrapMethodLifecycle(klass, methodName, beforeEventName, afterEventName, getElement, getDetail) {
+  if (!klass || typeof klass.prototype[methodName] !== "function") return;
+  const marker = `__rgWrapped_${methodName}`;
+  if (klass[marker]) return;
+  klass[marker] = true;
+  const original = klass.prototype[methodName];
+  klass.prototype[methodName] = function (...args) {
+    const element = getElement(this);
+    const detail = getDetail(this, args);
+    if (beforeEventName && !_rgDispatchCancelable(element, beforeEventName, detail)) return false;
+    const result = original.apply(this, args);
+    if (afterEventName) _rgDispatch(getElement(this) || element, afterEventName, getDetail(this, args));
+    return result;
+  };
+}
+
+function _rgWrapGetOrCreate(klass, syncFn) {
+  if (!klass || typeof klass.getOrCreate !== "function" || klass.__rgGetOrCreateWrapped) return;
+  klass.__rgGetOrCreateWrapped = true;
+  const original = klass.getOrCreate.bind(klass);
+  klass.getOrCreate = function (...args) {
+    const instance = original(...args);
+    if (instance) syncFn(instance);
+    return instance;
+  };
+}
+
+function _rgSyncStepperA11y(instance) {
+  if (!instance || !instance._element) return;
+  const header = instance._element.querySelector('.stepper-header');
+  if (header) header.setAttribute('role', 'tablist');
+  (instance._steps || []).forEach((step, index) => {
+    const panel = (instance._contents || [])[index];
+    step.setAttribute('role', 'tab');
+    step.setAttribute('tabindex', index === instance._currentIndex ? '0' : '-1');
+    step.setAttribute('aria-selected', index === instance._currentIndex ? 'true' : 'false');
+    const stepId = _rgEnsureId(step, 'rg-step');
+    if (panel) {
+      const panelId = _rgEnsureId(panel, 'rg-step-panel');
+      step.setAttribute('aria-controls', panelId);
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', stepId);
+      panel.setAttribute('aria-hidden', index === instance._currentIndex ? 'false' : 'true');
+      if (index !== instance._currentIndex) panel.setAttribute('hidden', '');
+      else panel.removeAttribute('hidden');
+    }
+  });
+}
+
+function _rgSyncDatepickerA11y(instance) {
+  if (!instance || !instance._input || !instance._popup) return;
+  const popupId = _rgEnsureId(instance._popup, 'rg-datepicker');
+  instance._input.setAttribute('aria-haspopup', 'dialog');
+  instance._input.setAttribute('aria-controls', popupId);
+  instance._input.setAttribute('aria-expanded', instance._isOpen ? 'true' : 'false');
+  instance._popup.setAttribute('role', 'dialog');
+  instance._popup.setAttribute('aria-hidden', instance._isOpen ? 'false' : 'true');
+  if (instance._grid) {
+    instance._grid.setAttribute('role', 'grid');
+    instance._grid.querySelectorAll('button, [data-rg-day]').forEach(day => {
+      day.setAttribute('role', 'gridcell');
+      if (!day.hasAttribute('aria-label')) day.setAttribute('aria-label', day.textContent?.trim() || 'Day');
+      day.setAttribute('aria-selected', day.classList.contains('is-selected') ? 'true' : 'false');
+    });
+  }
+}
+
+function _rgSyncListboxA11y(instance, isCombobox = false) {
+  if (!instance) return;
+  const trigger = isCombobox ? instance._input : instance._toggle;
+  const menu = instance._menu || instance._listbox;
+  const items = instance._items || (menu ? Array.from(menu.querySelectorAll('[data-rg-option], li, button, [role=option]')) : []);
+  if (!trigger || !menu) return;
+  const menuId = _rgEnsureId(menu, isCombobox ? 'rg-combobox' : 'rg-select');
+  trigger.setAttribute('aria-controls', menuId);
+  trigger.setAttribute('aria-expanded', instance._isOpen ? 'true' : 'false');
+  trigger.setAttribute('aria-haspopup', 'listbox');
+  if (isCombobox) trigger.setAttribute('role', 'combobox');
+  menu.setAttribute('role', 'listbox');
+  items.forEach((item, index) => {
+    item.setAttribute('role', 'option');
+    const itemId = _rgEnsureId(item, isCombobox ? 'rg-combobox-option' : 'rg-select-option');
+    const selected = item.classList.contains('is-selected') || index === instance._selectedIndex;
+    item.setAttribute('aria-selected', selected ? 'true' : 'false');
+    if (selected) trigger.setAttribute('aria-activedescendant', itemId);
+  });
+}
+
+function _rgSyncTagsInputA11y(instance) {
+  if (!instance || !instance._element) return;
+  instance._element.setAttribute('role', 'group');
+  if (!instance._element.hasAttribute('aria-label')) instance._element.setAttribute('aria-label', 'Tags input');
+  if (instance._input && !instance._input.hasAttribute('aria-label')) instance._input.setAttribute('aria-label', 'Add tag');
+  (instance._tags || []).forEach(tag => {
+    const btn = tag.element && tag.element.querySelector('.rg-tag-remove');
+    if (btn && !btn.hasAttribute('aria-label')) btn.setAttribute('aria-label', `Remove tag ${tag.value}`);
+  });
+}
+
+function _rgSyncDataTableA11y(instance) {
+  if (!instance || !instance._element) return;
+  if (instance._searchInput && !instance._searchInput.hasAttribute('aria-label')) instance._searchInput.setAttribute('aria-label', 'Search table');
+  if (instance._table) {
+    instance._table.querySelectorAll('thead th[data-rg-sort]').forEach(th => {
+      if (!th.hasAttribute('aria-sort')) th.setAttribute('aria-sort', 'none');
+      if (!th.hasAttribute('tabindex')) th.setAttribute('tabindex', '0');
+    });
+  }
+  if (instance._paginationContainer) {
+    instance._paginationContainer.querySelectorAll('button').forEach(btn => {
+      if (!btn.hasAttribute('aria-label')) btn.setAttribute('aria-label', `Go to page ${btn.textContent?.trim() || ''}`.trim());
+      if (btn.classList.contains('is-active') || btn.getAttribute('data-rg-page') == String(instance._currentPage)) btn.setAttribute('aria-current', 'page');
+      else btn.removeAttribute('aria-current');
+    });
+  }
+}
+
+_rgWrapGetOrCreate(Stepper, _rgSyncStepperA11y);
+_rgWrapMethodLifecycle(Stepper, 'goTo', 'rg:stepper:change', 'rg:stepper:changed', inst => inst._element, (inst, args) => ({ instance: inst, trigger: null, target: inst._element, index: args[0] }));
+_rgWrapGetOrCreate(Datepicker, _rgSyncDatepickerA11y);
+_rgWrapShowHideLifecycle(Datepicker, 'datepicker', inst => inst._popup || inst._input, inst => ({ instance: inst, trigger: inst._input || null, target: inst._popup || null }));
+_rgWrapMethodLifecycle(Datepicker, '_selectDate', 'rg:datepicker:change', 'rg:datepicker:changed', inst => inst._popup || inst._input, (inst, args) => ({ instance: inst, trigger: inst._input || null, target: inst._popup || null, value: args[0] || null }));
+_rgWrapGetOrCreate(Select, inst => _rgSyncListboxA11y(inst, false));
+_rgWrapShowHideLifecycle(Select, 'select', inst => inst._menu || inst._element, inst => ({ instance: inst, trigger: inst._toggle || null, target: inst._menu || inst._element }));
+_rgWrapMethodLifecycle(Select, 'selectIndex', 'rg:select:change', 'rg:select:changed', inst => inst._menu || inst._element, (inst, args) => ({ instance: inst, trigger: inst._toggle || null, target: inst._menu || inst._element, index: args[0] }));
+_rgWrapGetOrCreate(Combobox, inst => _rgSyncListboxA11y(inst, true));
+_rgWrapShowHideLifecycle(Combobox, 'combobox', inst => inst._menu || inst._element, inst => ({ instance: inst, trigger: inst._input || inst._toggle || null, target: inst._menu || inst._element }));
+_rgWrapMethodLifecycle(Combobox, 'selectIndex', 'rg:combobox:change', 'rg:combobox:changed', inst => inst._menu || inst._element, (inst, args) => ({ instance: inst, trigger: inst._input || inst._toggle || null, target: inst._menu || inst._element, index: args[0] }));
+_rgWrapGetOrCreate(TagsInput, _rgSyncTagsInputA11y);
+_rgWrapMethodLifecycle(TagsInput, 'addTag', 'rg:tagsinput:add', 'rg:tagsinput:added', inst => inst._element, (inst, args) => ({ instance: inst, trigger: inst._input || null, target: inst._element, value: args[0] || null }));
+_rgWrapMethodLifecycle(TagsInput, 'removeTag', 'rg:tagsinput:remove', 'rg:tagsinput:removed', inst => inst._element, (inst, args) => ({ instance: inst, trigger: inst._input || null, target: inst._element, value: args[0] || null }));
+_rgWrapMethodLifecycle(TagsInput, 'clear', null, 'rg:tagsinput:cleared', inst => inst._element, inst => ({ instance: inst, trigger: inst._input || null, target: inst._element }));
+_rgWrapGetOrCreate(DataTable, _rgSyncDataTableA11y);
+_rgWrapMethodLifecycle(DataTable, 'goToPage', 'rg:datatable:pagechange', 'rg:datatable:pagechanged', inst => inst._element, (inst, args) => ({ instance: inst, trigger: null, target: inst._element, index: args[0] }));
+_rgWrapMethodLifecycle(DataTable, 'sortBy', 'rg:datatable:sortchange', 'rg:datatable:sortchanged', inst => inst._element, (inst, args) => ({ instance: inst, trigger: null, target: inst._element, key: args[0] || null }));
 
 const Rarog = {
   Dropdown,
