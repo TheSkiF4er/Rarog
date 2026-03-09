@@ -1,1 +1,73 @@
-
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rarog Demo Playground</title>
+    <link rel="stylesheet" href="../../packages/core/src/rarog-core.css" />
+    <link rel="stylesheet" href="../../packages/utilities/src/rarog-utilities.css" />
+    <link rel="stylesheet" href="../../packages/components/src/rarog-components.css" />
+    <link id="rarog-theme-link" rel="stylesheet" href="../../packages/themes/src/rarog-theme-default.css" />
+    <style>
+      body { min-height: 100vh; background: var(--rg-color-surface, #f7f7fb); }
+      .playground-shell { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+      .playground-sidebar { border-right: 1px solid rgba(0,0,0,.08); background: #fff; padding: 1.25rem; }
+      .playground-preview { padding: 1.5rem; }
+      .playground-log { max-height: 240px; overflow: auto; font-size: 12px; background: #0f172a; color: #e2e8f0; padding: .75rem; border-radius: 12px; }
+      .playground-stage { min-height: 420px; background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 18px; padding: 1.5rem; }
+      @media (max-width: 960px) { .playground-shell { grid-template-columns: 1fr; } .playground-sidebar { border-right: 0; border-bottom: 1px solid rgba(0,0,0,.08); } }
+    </style>
+  </head>
+  <body>
+    <div class="playground-shell">
+      <aside class="playground-sidebar">
+        <h1 class="h4 mb-4">Rarog Playground</h1>
+        <div class="d-flex flex-column gap-3">
+          <label>
+            <span class="d-block mb-1">Сцена</span>
+            <select id="sceneSelect" class="input">
+              <option value="modal">Modal + Offcanvas</option>
+              <option value="dropdown">Dropdown + Popover</option>
+              <option value="forms">Select + Combobox + Tags</option>
+              <option value="table">DataTable</option>
+            </select>
+          </label>
+          <label>
+            <span class="d-block mb-1">Тема</span>
+            <select id="themeSelect" class="input">
+              <option value="default">Default</option>
+              <option value="dark">Dark</option>
+              <option value="creative">Creative</option>
+              <option value="contrast">Contrast</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+          </label>
+          <label class="d-flex align-items-center gap-2">
+            <input id="rtlToggle" type="checkbox" />
+            <span>RTL</span>
+          </label>
+          <label class="d-flex align-items-center gap-2">
+            <input id="debugToggle" type="checkbox" />
+            <span>Debug events</span>
+          </label>
+        </div>
+        <hr class="my-4" />
+        <p class="text-muted mb-2">События</p>
+        <div id="eventLog" class="playground-log" aria-live="polite"></div>
+      </aside>
+      <main class="playground-preview">
+        <div class="d-flex justify-content-between align-items-center mb-4 gap-3 flex-wrap">
+          <div>
+            <h2 class="h3 mb-1">Interactive canvas</h2>
+            <p class="text-muted mb-0">Переключай сцены, темы и проверяй JS Core без сборки.</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button id="rerenderBtn" class="btn btn-secondary" type="button">Перерисовать</button>
+          </div>
+        </div>
+        <section id="playgroundStage" class="playground-stage"></section>
+      </main>
+    </div>
+    <script type="module" src="./playground.js"></script>
+  </body>
+</html>
