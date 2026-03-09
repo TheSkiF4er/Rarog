@@ -23,17 +23,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build CSS
-        run: npm run build
+      - name: Verify release metadata
+        run: npm run release:verify
 
-      - name: Build adapters
-        run: npm run build:adapters
+      - name: Build all distributables
+        run: npm run build:all
 
-      - name: Package adapters
-        run: npm run pack:react && npm run pack:vue
+      - name: Package publishable packages
+        run: npm run pack:packages
 
       - name: Smoke test adapters
         run: npm run test:adapters:smoke
+
+      - name: Run release regression checks
+        run: node tests/rarog-build-regress.test.mjs && node tests/rarog-release-sync.test.mjs
 
       - name: Run tests (unit + e2e)
         run: npm test

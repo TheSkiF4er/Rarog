@@ -21,14 +21,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build core assets
-        run: npm run build
+      - name: Verify release metadata
+        run: npm run release:verify
 
-      - name: Build adapters
-        run: npm run build:adapters
+      - name: Build all distributables
+        run: npm run build:all
 
-      - name: Pack adapters
-        run: npm pack ./packages/react && npm pack ./packages/vue
+      - name: Pack publishable packages
+        run: npm run pack:packages
+
+      - name: Publish @rarog/js
+        run: npm publish ./packages/js --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @rarog/react
         run: npm publish ./packages/react --access public
