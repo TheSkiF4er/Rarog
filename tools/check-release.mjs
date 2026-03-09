@@ -23,6 +23,9 @@ const reactPkg = readJson("packages/react/package.json");
 const vuePkg = readJson("packages/vue/package.json");
 const version = rootPkg.version;
 
+const docsConfigPath = "docs/.vitepress/config.ts";
+const lockfilePath = "package-lock.json";
+
 const checks = [
   ["packages/js/package.json", () => jsPkg.version === version, `js package version matches ${version}`],
   ["packages/react/package.json", () => reactPkg.version === version, `react package version matches ${version}`],
@@ -39,6 +42,8 @@ const checks = [
   ["package.json", () => rootPkg.scripts?.["release:verify"]?.includes("docs:check"), "root release:verify includes docs:check"],
   ["package.json", () => rootPkg.scripts?.["test:adapters"], "root test:adapters script exists"],
   ["package.json", () => rootPkg.scripts?.storybook, "root storybook script exists"],
+  [lockfilePath, () => hasFile(lockfilePath), "root package-lock.json exists for npm ci reproducibility"],
+  [docsConfigPath, () => hasFile(docsConfigPath), "vitepress config exists at docs/.vitepress/config.ts"],
   ["package.json", () => rootPkg.scripts?.["storybook:build"], "root storybook:build script exists"],
   ["package.json", () => rootPkg.devDependencies?.esbuild, "esbuild is declared in devDependencies"],
   ["package.json", () => rootPkg.devDependencies?.react, "react is declared in devDependencies"],
