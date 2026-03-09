@@ -7,6 +7,19 @@ on:
       - "docs/**"
       - "design/**"
       - "README.md"
+      - "package.json"
+      - "tools/check-docs.mjs"
+      - "tools/check-docs-output.mjs"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - "docs/**"
+      - "design/**"
+      - "README.md"
+      - "package.json"
+      - "tools/check-docs.mjs"
+      - "tools/check-docs-output.mjs"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
@@ -27,8 +40,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build docs
-        run: npm run docs:build
+      - name: Verify docs contract and build output
+        run: npm run docs:check
 
       - name: Upload docs artifact
         uses: actions/upload-artifact@v4
