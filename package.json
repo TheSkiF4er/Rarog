@@ -24,7 +24,13 @@
     "build:vue": "node tools/build-adapters.mjs vue",
     "pack:react": "npm pack ./packages/react",
     "pack:vue": "npm pack ./packages/vue",
-    "test:adapters:smoke": "npm run build:adapters && vitest run tests/adapters/**/*.test.js"
+    "test:adapters:smoke": "npm run build:adapters && vitest run tests/adapters/**/*.test.js",
+    "build:js": "node tools/build-js.mjs",
+    "build:all": "npm run build && npm run build:js && npm run build:adapters",
+    "pack:js": "npm pack ./packages/js",
+    "pack:packages": "npm run pack:js && npm run pack:react && npm run pack:vue",
+    "test:smoke": "node tests/rarog-build-regress.test.mjs && node tests/rarog-release-sync.test.mjs && npm run test:adapters:smoke",
+    "release:verify": "node tools/check-release.mjs"
   },
   "repository": {
     "type": "git",
@@ -54,5 +60,6 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "packageManager": "npm@10.9.2"
 }
