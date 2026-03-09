@@ -34,12 +34,20 @@ const markdownFiles = [
 ];
 
 const scriptPattern = /npm run ([a-zA-Z0-9:_-]+)/g;
+const allowedExternalScriptsByFile = new Map([
+  ["docs-site/guide-laravel.md", new Set(["rarog:build"])],
+  ["docs-site/guide-nextjs.md", new Set(["rarog:build"])],
+  ["docs-site/guide-react.md", new Set(["dev"])],
+  ["docs-site/integration-guides.md", new Set(["build:app"])],
+  ["docs-site/playground.md", new Set(["playground"])]
+]);
 const missing = [];
 for (const relPath of markdownFiles) {
   const content = await readFile(path.join(root, relPath), 'utf8');
   for (const match of content.matchAll(scriptPattern)) {
     const scriptName = match[1];
-    if (!scripts.has(scriptName)) {
+    const allowedExternalScripts = allowedExternalScriptsByFile.get(relPath) || new Set();
+    if (!scripts.has(scriptName) && !allowedExternalScripts.has(scriptName)) {
       missing.push(`${relPath}: npm run ${scriptName}`);
     }
   }

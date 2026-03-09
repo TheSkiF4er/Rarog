@@ -1,10 +1,12 @@
 import { build } from "esbuild";
-import { mkdir, copyFile } from "node:fs/promises";
+import { mkdir, copyFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
+const rootPkg = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
+const version = rootPkg.version;
 
 const targetName = process.argv[2] || "all";
 
@@ -39,7 +41,7 @@ async function buildAdapter(pkg) {
     external: pkg.externals,
     logLevel: "info",
     legalComments: "none",
-    banner: { js: `/*! @rarog/${pkg.name} v3.5.0 */` }
+    banner: { js: `/*! @rarog/${pkg.name} v${version} */` }
   });
   await copyFile(path.join(path.dirname(pkg.entry), "index.d.ts"), path.join(pkg.outdir, "index.d.ts"));
 }
