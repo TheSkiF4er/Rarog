@@ -2,6 +2,20 @@
 
 Этот раздел помогает быстро запустить **текущую поставляемую версию репозитория**, без предположений о внешнем CDN или несуществующих артефактах.
 
+## Быстрый путь для нового проекта
+
+```bash
+npm install rarog
+npx rarog init
+npx rarog build
+```
+
+После этого у вас будут:
+- `rarog.config.js` и `rarog.config.ts` для theme-конфига;
+- `rarog.config.json` как build-manifest с путями вывода;
+- `dist/tokens/*.css` и, при `mode: "jit"`, `dist/rarog.jit.css`;
+- `examples/starter/index.html` как минимальная стартовая страница.
+
 ## Установка зависимостей
 
 ```bash
@@ -54,16 +68,16 @@ npx rarog build
 ## Конфиг
 
 Поддерживаются:
-- `rarog.config.js`
-- `rarog.config.ts`
-- `rarog.config.json`
+- `rarog.config.ts` — приоритетный theme-config;
+- `rarog.config.js` — fallback theme-config;
+- `rarog.config.json` — build-manifest, а не theme-config.
 
 Пример минимального `rarog.config.js`:
 
 ```js
 module.exports = {
   mode: "full",
-  content: ["./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"],
+  content: ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"],
   theme: {
     extend: {
       colors: {
@@ -108,4 +122,27 @@ Vanilla JS-ядро находится в `packages/js/src/rarog.esm.js`.
     </div>
   </div>
 </div>
+```
+
+
+## Build-manifest
+
+`rarog.config.json` используется для путей вывода, а не для описания темы.
+
+Пример:
+
+```json
+{
+  "version": 1,
+  "tokens": {
+    "colors": "dist/tokens/_color.css",
+    "spacing": "dist/tokens/_spacing.css",
+    "radius": "dist/tokens/_radius.css",
+    "shadow": "dist/tokens/_shadow.css",
+    "breakpoints": "dist/tokens/_breakpoints.css"
+  },
+  "outputs": {
+    "jitCss": "dist/rarog.jit.css"
+  }
+}
 ```
