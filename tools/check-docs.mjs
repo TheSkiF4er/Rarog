@@ -1,12 +1,21 @@
-import { readFile, readdir } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { access, readFile, readdir } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, "..");
 
 async function readJson(relPath) {
-  return JSON.parse(await readFile(path.join(root, relPath), 'utf8'));
+  return JSON.parse(await readFile(path.join(root, relPath), "utf8"));
+}
+
+async function exists(relPath) {
+  try {
+    await access(path.join(root, relPath));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function collectMarkdownFiles(dirRel) {
@@ -24,26 +33,27 @@ async function collectMarkdownFiles(dirRel) {
   return files;
 }
 
-const pkg = await readJson('package.json');
+const docsDir = await exists("docs") ? "docs" : "docs-site";
+const pkg = await readJson("package.json");
 const scripts = new Set(Object.keys(pkg.scripts || {}));
 const markdownFiles = [
-  'README.md',
-  'CONTRIBUTING.md',
-  'RELEASE.md',
-  ...await collectMarkdownFiles('docs-site')
+  "README.md",
+  "CONTRIBUTING.md",
+  "RELEASE.md",
+  ...await collectMarkdownFiles(docsDir)
 ];
 
 const scriptPattern = /npm run ([a-zA-Z0-9:_-]+)/g;
 const allowedExternalScriptsByFile = new Map([
-  ["docs-site/guide-laravel.md", new Set(["rarog:build"])],
-  ["docs-site/guide-nextjs.md", new Set(["rarog:build"])],
-  ["docs-site/guide-react.md", new Set(["dev"])],
-  ["docs-site/integration-guides.md", new Set(["build:app"])],
-  ["docs-site/playground.md", new Set(["playground"])]
+  [`${docsDir}/guide-laravel.md`, new Set(["rarog:build"])],
+  [`${docsDir}/guide-nextjs.md`, new Set(["rarog:build"])],
+  [`${docsDir}/guide-react.md`, new Set(["dev"])],
+  [`${docsDir}/integration-guides.md`, new Set(["build:app"])],
+  [`${docsDir}/playground.md`, new Set(["playground"])]
 ]);
 const missing = [];
 for (const relPath of markdownFiles) {
-  const content = await readFile(path.join(root, relPath), 'utf8');
+  const content = await readFile(path.join(root, relPath), "utf8");
   for (const match of content.matchAll(scriptPattern)) {
     const scriptName = match[1];
     const allowedExternalScripts = allowedExternalScriptsByFile.get(relPath) || new Set();
@@ -54,11 +64,11 @@ for (const relPath of markdownFiles) {
 }
 
 if (missing.length > 0) {
-  console.error('Found documentation references to missing npm scripts:');
+  console.error("Found documentation references to missing npm scripts:");
   for (const item of missing) {
     console.error(`- ${item}`);
   }
   process.exit(1);
 }
 
-console.log(`Documentation script references are in sync across ${markdownFiles.length} markdown files.`);
+console.log(`Documentation script references are in sync across ${markdownFiles.length} markdown files from ${docsDir}/.`);
