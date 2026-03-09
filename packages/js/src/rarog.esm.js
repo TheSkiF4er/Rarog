@@ -1,5 +1,5 @@
 /*!
- * Rarog JS Core v3.5.0
+ * Rarog JS Core v3.0.0
  * Vanilla JS utilities for interactive components (dropdown, collapse, modal).
  * Author: TheSkiF4er <dev@cajeer.ru>
  * License: Apache-2.0
@@ -104,6 +104,69 @@ function _resolveTarget(trigger, explicitTarget) {
   }
 }
 
+function _ensureId(element, prefix) {
+  if (!element) return "";
+  if (!element.id) {
+    element.id = `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+  return element.id;
+}
+
+function _findLabelElement(root, selectors) {
+  if (!root) return null;
+  for (const selector of selectors) {
+    const match = root.querySelector(selector);
+    if (match) return match;
+  }
+  return null;
+}
+
+function _bindDialogLabeling(element) {
+  if (!element) return;
+  const title = _findLabelElement(element, [
+    "[data-rg-title]",
+    "[data-rg-modal-title]",
+    "[data-rg-offcanvas-title]",
+    ".modal-title",
+    ".offcanvas-title",
+    "h1",
+    "h2",
+    "h3"
+  ]);
+  const description = _findLabelElement(element, [
+    "[data-rg-description]",
+    ".modal-body",
+    ".offcanvas-body",
+    "p"
+  ]);
+
+  if (title && !element.hasAttribute("aria-labelledby")) {
+    element.setAttribute("aria-labelledby", _ensureId(title, "rg-label"));
+  }
+  if (description && !element.hasAttribute("aria-describedby")) {
+    element.setAttribute("aria-describedby", _ensureId(description, "rg-desc"));
+  }
+}
+
+function _focusFirstDescendant(container) {
+  const focusables = _getFocusableElements(container);
+  if (focusables.length) {
+    focusables[0].focus();
+    return true;
+  }
+  return false;
+}
+
+function _getKeyboardFocusableItems(container, selector) {
+  if (!container) return [];
+  const items = Array.from(container.querySelectorAll(selector || "[role=menuitem], [role=option], button, a[href], [tabindex]:not([tabindex='-1'])"));
+  return items.filter(el => !el.hasAttribute("disabled") && !el.getAttribute("aria-disabled"));
+}
+
+function _getActiveElement(doc) {
+  return doc && doc.activeElement ? doc.activeElement : null;
+}
+
 function _getFocusableElements(container) {
   if (!container) return [];
   const selectors = [
@@ -134,8 +197,10 @@ class Dropdown {
     this._isOpen = false;
     this._onDocumentClick = this._handleDocumentClick.bind(this);
     this._onKeydown = this._handleKeydown.bind(this);
+    this._onTriggerKeydown = this._handleTriggerKeydown.bind(this);
 
     this._initA11y();
+    this._trigger.addEventListener("keydown", this._onTriggerKeydown);
 
     _dropdownInstances.set(trigger, this);
   }
@@ -145,11 +210,17 @@ class Dropdown {
     this._trigger.setAttribute("aria-haspopup", "menu");
     this._trigger.setAttribute("aria-expanded", "false");
 
-    if (this._menu && this._menu.id) {
-      this._trigger.setAttribute("aria-controls", this._menu.id);
-    }
-    if (this._menu && !this._menu.hasAttribute("role")) {
-      this._menu.setAttribute("role", "menu");
+    if (this._menu) {
+      this._trigger.setAttribute("aria-controls", _ensureId(this._menu, "rg-dropdown"));
+      if (!this._menu.hasAttribute("role")) {
+        this._menu.setAttribute("role", "menu");
+      }
+      this._menu.setAttribute("aria-hidden", "true");
+      this._menu.setAttribute("hidden", "");
+      const items = _getKeyboardFocusableItems(this._menu, "[data-rg-menu-item], a[href], button:not([disabled]), [role=menuitem], [tabindex]:not([tabindex='-1'])");
+      items.forEach(item => {
+        if (!item.hasAttribute("role")) item.setAttribute("role", "menuitem");
+      });
     }
   }
 
@@ -164,6 +235,21 @@ class Dropdown {
     }
   }
 
+  _handleTriggerKeydown(event) {
+    if (!this._menu) return;
+    if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (!this._isOpen) this.show();
+      const items = _getKeyboardFocusableItems(this._menu, "[role=menuitem], a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])");
+      if (items.length) items[0].focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!this._isOpen) this.show();
+      const items = _getKeyboardFocusableItems(this._menu, "[role=menuitem], a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])");
+      if (items.length) items[items.length - 1].focus();
+    }
+  }
+
   _handleKeydown(event) {
     if (!this._isOpen || !this._menu) return;
 
@@ -174,7 +260,7 @@ class Dropdown {
       return;
     }
 
-    const items = _getFocusableElements(this._menu);
+    const items = _getKeyboardFocusableItems(this._menu, "[role=menuitem], a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])");
     if (!items.length) return;
 
     let index = items.indexOf(document.activeElement);
@@ -201,6 +287,7 @@ class Dropdown {
     if (this._menu) {
       this._menu.removeAttribute("hidden");
       this._menu.classList.add("rg-open");
+      this._menu.setAttribute("aria-hidden", "false");
     }
     this._trigger.setAttribute("aria-expanded", "true");
 
@@ -217,6 +304,7 @@ class Dropdown {
     if (this._menu) {
       this._menu.setAttribute("hidden", "");
       this._menu.classList.remove("rg-open");
+      this._menu.setAttribute("aria-hidden", "true");
     }
     this._trigger.setAttribute("aria-expanded", "false");
 
@@ -360,6 +448,7 @@ class Modal {
     if (!this._element.hasAttribute("aria-hidden")) {
       this._element.setAttribute("aria-hidden", "true");
     }
+    _bindDialogLabeling(this._element);
   }
 
   _handleKeydown(event) {
@@ -453,16 +542,15 @@ class Modal {
       document.addEventListener("click", this._onClick);
     }
 
-    this._element.removeAttribute("aria-hidden");
+    this._element.setAttribute("aria-hidden", "false");
     this._element.classList.add("rg-modal-open");
 
     this._lockScroll();
 
-    // focus trap start
-    const focusables = _getFocusableElements(this._element);
-    if (focusables.length) {
-      focusables[0].focus();
-    } else {
+    const autofocusTarget = this._element.querySelector("[autofocus], [data-rg-autofocus]");
+    if (autofocusTarget && typeof autofocusTarget.focus === "function") {
+      autofocusTarget.focus();
+    } else if (!_focusFirstDescendant(this._element)) {
       this._element.setAttribute("tabindex", "-1");
       this._element.focus();
     }
@@ -527,9 +615,21 @@ class Offcanvas {
       },
       options
     );
+    this._previouslyFocused = null;
     this._onKeydown = this._handleKeydown.bind(this);
+    this._onClick = this._handleClick.bind(this);
 
+    this._initA11y();
     _offcanvasInstances.set(element, this);
+  }
+
+  _initA11y() {
+    this._element.setAttribute("role", "dialog");
+    this._element.setAttribute("aria-hidden", this._isOpen ? "false" : "true");
+    if (this._isOpen) {
+      this._element.setAttribute("aria-modal", "true");
+    }
+    _bindDialogLabeling(this._element);
   }
 
   show() {
@@ -546,12 +646,18 @@ class Offcanvas {
       document.body.classList.add("rg-offcanvas-open");
     }
 
+    this._previouslyFocused = _getActiveElement(document);
     this._element.classList.add("is-open");
-    this._element.removeAttribute("aria-hidden");
+    this._element.setAttribute("aria-hidden", "false");
     this._element.setAttribute("aria-modal", "true");
     this._element.setAttribute("role", "dialog");
 
     document.addEventListener("keydown", this._onKeydown);
+    this._element.addEventListener("click", this._onClick);
+    if (!_focusFirstDescendant(this._element)) {
+      this._element.setAttribute("tabindex", "-1");
+      this._element.focus();
+    }
     _dispatchEvent(this._element, "rg:offcanvas:show", { instance: this });
   }
 
@@ -566,12 +672,16 @@ class Offcanvas {
     this._element.removeAttribute("aria-modal");
 
     document.removeEventListener("keydown", this._onKeydown);
+    this._element.removeEventListener("click", this._onClick);
 
     if (!this._options.scroll) {
       document.body.classList.remove("rg-offcanvas-open");
     }
 
     this._removeBackdrop();
+    if (this._previouslyFocused && typeof this._previouslyFocused.focus === "function") {
+      this._previouslyFocused.focus();
+    }
     _dispatchEvent(this._element, "rg:offcanvas:hide", { instance: this });
   }
 
@@ -616,10 +726,36 @@ class Offcanvas {
     this._backdrop = null;
   }
 
+  _handleClick(event) {
+    const dismiss = event.target.closest("[data-rg-dismiss='offcanvas']");
+    if (dismiss && this._element.contains(dismiss)) {
+      event.preventDefault();
+      this.hide();
+    }
+  }
+
   _handleKeydown(event) {
+    if (!this._isOpen) return;
     if (event.key === "Escape") {
       event.preventDefault();
       this.hide();
+      return;
+    }
+    if (event.key === "Tab") {
+      const focusables = _getFocusableElements(this._element);
+      if (!focusables.length) {
+        event.preventDefault();
+        return;
+      }
+      const currentIndex = focusables.indexOf(document.activeElement);
+      let nextIndex = currentIndex;
+      if (event.shiftKey) {
+        nextIndex = currentIndex <= 0 ? focusables.length - 1 : currentIndex - 1;
+      } else {
+        nextIndex = currentIndex === focusables.length - 1 ? 0 : currentIndex + 1;
+      }
+      event.preventDefault();
+      focusables[nextIndex].focus();
     }
   }
 
@@ -749,6 +885,9 @@ class Tooltip {
     const el = document.createElement("div");
     el.className = "tooltip";
     el.dataset.rgPlacement = this._options.placement;
+    el.setAttribute("role", "tooltip");
+    el.setAttribute("aria-hidden", "true");
+    _ensureId(el, "rg-tooltip");
 
     const inner = document.createElement("div");
     inner.className = "tooltip-inner";
@@ -767,6 +906,7 @@ class Tooltip {
 
     this._position();
     this._tooltip.classList.add("is-visible");
+    this._tooltip.setAttribute("aria-hidden", "false");
     this._trigger.setAttribute("aria-describedby", this._tooltip.id || "");
     this._isVisible = true;
 
@@ -778,6 +918,7 @@ class Tooltip {
     if (!this._tooltip) return;
 
     this._tooltip.classList.remove("is-visible");
+    this._tooltip.setAttribute("aria-hidden", "true");
     this._trigger.removeAttribute("aria-describedby");
     this._isVisible = false;
 
@@ -840,6 +981,9 @@ class Popover {
     this._popover = null;
     this._isVisible = false;
 
+    this._trigger.setAttribute("aria-haspopup", "dialog");
+    this._trigger.setAttribute("aria-expanded", "false");
+
     this._onClick = event => {
       event.preventDefault();
       this.toggle();
@@ -855,6 +999,9 @@ class Popover {
     const el = document.createElement("div");
     el.className = "popover";
     el.dataset.rgPlacement = this._options.placement;
+    el.setAttribute("role", "dialog");
+    el.setAttribute("aria-hidden", "true");
+    _ensureId(el, "rg-popover");
 
     if (this._options.title) {
       const header = document.createElement("div");
@@ -880,6 +1027,8 @@ class Popover {
 
     this._position();
     this._popover.classList.add("is-visible");
+    this._popover.setAttribute("aria-hidden", "false");
+    this._trigger.setAttribute("aria-controls", this._popover.id);
     this._trigger.setAttribute("aria-expanded", "true");
 
     this._isVisible = true;
@@ -890,6 +1039,7 @@ class Popover {
     if (!this._isVisible || !this._popover) return;
 
     this._popover.classList.remove("is-visible");
+    this._popover.setAttribute("aria-hidden", "true");
     this._trigger.setAttribute("aria-expanded", "false");
 
     this._isVisible = false;
@@ -1000,6 +1150,7 @@ class Carousel {
     if (this._currentIndex < 0) this._currentIndex = 0;
 
     this._intervalId = null;
+    this._onKeydown = this._handleKeydown.bind(this);
 
     if (!this._inner || this._items.length === 0) {
       _debugWarn("Rarog.Carousel: .carousel-inner with items not found", element);
@@ -1034,12 +1185,54 @@ class Carousel {
     element.addEventListener("mouseleave", this._onMouseLeave);
     element.addEventListener("touchstart", this._onTouchStart, { passive: true });
     element.addEventListener("touchend", this._onTouchEnd);
+    element.addEventListener("keydown", this._onKeydown);
+
+    this._initA11y();
+    this._updateSlides();
 
     if (this._options.autoplay) {
       this.play();
     }
 
     _carouselInstances.set(element, this);
+  }
+
+  _initA11y() {
+    this._element.setAttribute("role", "region");
+    this._element.setAttribute("aria-roledescription", "carousel");
+    if (!this._element.hasAttribute("aria-label")) {
+      this._element.setAttribute("aria-label", "Carousel");
+    }
+    if (!this._element.hasAttribute("tabindex")) {
+      this._element.setAttribute("tabindex", "0");
+    }
+    this._items.forEach((item, index) => {
+      item.setAttribute("role", "group");
+      item.setAttribute("aria-roledescription", "slide");
+      item.setAttribute("aria-label", `${index + 1} of ${this._items.length}`);
+    });
+    this._indicators.forEach((indicator, index) => {
+      indicator.setAttribute("aria-label", `Go to slide ${index + 1}`);
+      if (!indicator.hasAttribute("type") && indicator.tagName === "BUTTON") {
+        indicator.setAttribute("type", "button");
+      }
+    });
+  }
+
+  _handleKeydown(event) {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      this.prev();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      this.next();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      this.goTo(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      this.goTo(this._items.length - 1);
+    }
   }
 
   _updateIndicators() {
@@ -1113,6 +1306,7 @@ class Carousel {
     this._element.removeEventListener("mouseleave", this._onMouseLeave);
     this._element.removeEventListener("touchstart", this._onTouchStart);
     this._element.removeEventListener("touchend", this._onTouchEnd);
+    this._element.removeEventListener("keydown", this._onKeydown);
     _carouselInstances.delete(this._element);
   }
 
@@ -1164,11 +1358,54 @@ class Stepper {
       }
     };
 
-    element.addEventListener("click", this._onClick);
+    this._onKeydown = event => {
+      const step = event.target.closest(".stepper-step");
+      if (!step || !this._element.contains(step)) return;
+      const currentIndex = this._steps.indexOf(step);
+      if (currentIndex === -1) return;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        this.goTo(Math.min(this._steps.length - 1, currentIndex + 1));
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        this.goTo(Math.max(0, currentIndex - 1));
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        this.goTo(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        this.goTo(this._steps.length - 1);
+      } else if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        this.goTo(currentIndex);
+      }
+    };
 
+    element.addEventListener("click", this._onClick);
+    element.addEventListener("keydown", this._onKeydown);
+
+    this._initA11y();
     this._update();
 
     _stepperInstances.set(element, this);
+  }
+
+  _initA11y() {
+    const header = this._element.querySelector(".stepper-header");
+    if (header) header.setAttribute("role", "tablist");
+    this._steps.forEach((step, index) => {
+      const panel = this._contents[index];
+      const stepId = _ensureId(step, "rg-step");
+      step.setAttribute("role", "tab");
+      step.setAttribute("aria-selected", index === this._currentIndex ? "true" : "false");
+      step.setAttribute("tabindex", index === this._currentIndex ? "0" : "-1");
+      if (panel) {
+        const panelId = _ensureId(panel, "rg-step-panel");
+        step.setAttribute("aria-controls", panelId);
+        panel.setAttribute("role", "tabpanel");
+        panel.setAttribute("aria-labelledby", stepId);
+      }
+    });
   }
 
   _update() {
@@ -1176,9 +1413,13 @@ class Stepper {
       if (index === this._currentIndex) {
         step.classList.add("is-active");
         step.setAttribute("aria-current", "step");
+        step.setAttribute("aria-selected", "true");
+        step.setAttribute("tabindex", "0");
       } else {
         step.classList.remove("is-active");
         step.removeAttribute("aria-current");
+        step.setAttribute("aria-selected", "false");
+        step.setAttribute("tabindex", "-1");
       }
     });
 
@@ -1187,10 +1428,12 @@ class Stepper {
         content.classList.add("is-active");
         content.removeAttribute("hidden");
         content.setAttribute("aria-hidden", "false");
+        content.removeAttribute("tabindex");
       } else {
         content.classList.remove("is-active");
         content.setAttribute("hidden", "");
         content.setAttribute("aria-hidden", "true");
+        content.setAttribute("tabindex", "-1");
       }
     });
   }
