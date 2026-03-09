@@ -35,6 +35,27 @@ async function collectMarkdownFiles(dirRel) {
   return files
 }
 
+function normalizeDocTarget(href) {
+  const withoutHash = href.split('#')[0]
+  const withoutQuery = withoutHash.split('?')[0]
+  if (!withoutQuery || withoutQuery === '/') return 'docs/index.md'
+  const trimmed = withoutQuery.replace(/^\//, '')
+  const base = trimmed.endsWith('/') ? `${trimmed}index` : trimmed
+  return `docs/${base}.md`
+}
+
+function isIgnoredHref(href) {
+  return (
+    !href ||
+    href.startsWith('http://') ||
+    href.startsWith('https://') ||
+    href.startsWith('mailto:') ||
+    href.startsWith('tel:') ||
+    href.startsWith('#') ||
+    href.startsWith('javascript:')
+  )
+}
+
 if (!(await exists(docsDir))) {
   console.error(`Expected documentation directory ${docsDir}/ to exist.`)
   process.exit(1)
@@ -55,6 +76,7 @@ const markdownFiles = [
 ]
 
 const scriptPattern = /npm run ([a-zA-Z0-9:_-]+)/g
+const markdownLinkPattern = /\[[^\]]+\]\(([^)]+)\)/g
 const allowedExternalScriptsByFile = new Map([
   ['docs/guide-laravel.md', new Set(['rarog:build'])],
   ['docs/guide-nextjs.md', new Set(['rarog:build'])],
@@ -63,21 +85,55 @@ const allowedExternalScriptsByFile = new Map([
   ['docs/playground.md', new Set(['playground'])]
 ])
 
-const missing = []
+const missingScripts = []
+const brokenDocLinks = []
 for (const relPath of markdownFiles) {
   const content = await readFile(path.join(root, relPath), 'utf8')
   for (const match of content.matchAll(scriptPattern)) {
     const scriptName = match[1]
     const allowedExternalScripts = allowedExternalScriptsByFile.get(relPath) || new Set()
     if (!scripts.has(scriptName) && !allowedExternalScripts.has(scriptName)) {
-      missing.push(`${relPath}: npm run ${scriptName}`)
+      missingScripts.push(`${relPath}: npm run ${scriptName}`)
+    }
+  }
+
+  if (!relPath.startsWith('docs/')) continue
+
+  for (const match of content.matchAll(markdownLinkPattern)) {
+    const href = match[1].trim()
+    if (isIgnoredHref(href)) continue
+    if (href.endsWith('.png') || href.endsWith('.jpg') || href.endsWith('.jpeg') || href.endsWith('.svg')) continue
+
+    if (href.startsWith('/')) {
+      const target = normalizeDocTarget(href)
+      if (!(await exists(target))) {
+        brokenDocLinks.push(`${relPath}: ${href} -> missing ${target}`)
+      }
+      continue
+    }
+
+    if (href.startsWith('./') || href.startsWith('../')) {
+      const fromDir = path.posix.dirname(relPath)
+      const normalized = path.posix.normalize(path.posix.join(fromDir, href.split('#')[0].split('?')[0]))
+      const target = normalized.endsWith('.md') ? normalized : `${normalized}.md`
+      if (!(await exists(target))) {
+        brokenDocLinks.push(`${relPath}: ${href} -> missing ${target}`)
+      }
     }
   }
 }
 
-if (missing.length > 0) {
+if (missingScripts.length > 0) {
   console.error('Found documentation references to missing npm scripts:')
-  for (const item of missing) {
+  for (const item of missingScripts) {
+    console.error(`- ${item}`)
+  }
+  process.exit(1)
+}
+
+if (brokenDocLinks.length > 0) {
+  console.error('Found broken internal documentation links:')
+  for (const item of brokenDocLinks) {
     console.error(`- ${item}`)
   }
   process.exit(1)

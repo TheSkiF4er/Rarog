@@ -86,7 +86,9 @@ const checks = [
   [".github/workflows/release.yml", () => includesAll(releaseWorkflow, ["npm run test:unit", "npm run test:adapters", "npm run test:contracts"]), "release workflow runs unit, adapter, and contract tests before publish"],
   [".github/workflows/release.yml", () => releaseWorkflow.includes("npm run pack:packages"), "release workflow packs publishable packages before publish"],
   [".github/workflows/release.yml", () => releaseWorkflow.includes("npm ci"), "release workflow uses npm ci"],
-  [".github/workflows/ci.yml", () => ciWorkflow.includes("npm ci"), "CI workflow uses npm ci"]
+  [".github/workflows/ci.yml", () => ciWorkflow.includes("npm ci"), "CI workflow uses npm ci"],
+  [".github/workflows/docs.yml", () => readText(".github/workflows/docs.yml").includes("npm run docs:check"), "docs workflow runs docs:check"],
+  ["tools/check-docs-output.mjs", () => hasFile("tools/check-docs-output.mjs"), "docs build output checker exists"]
 ];
 
 let failed = false;
