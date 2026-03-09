@@ -7,7 +7,7 @@
 Прогоните:
 
 ```bash
-npm install
+npm ci
 npm run build
 npm run test:unit
 npm run docs:check
