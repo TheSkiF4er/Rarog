@@ -28,9 +28,7 @@
   "source": "src/index.js",
   "scripts": {
     "build": "node ../../tools/build-adapters.mjs",
-    "prepack": "npm run build"
+    "prepack": "node ../../tools/build-adapters.mjs react"
   },
-  "publishConfig": {
-    "access": "public"
-  }
+  "sideEffects": false
 }
