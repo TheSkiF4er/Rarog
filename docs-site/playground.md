@@ -1,30 +1,20 @@
 # Playground
 
-Здесь можно быстро поэкспериментировать с классами Rarog.
+Rarog теперь включает локальный demo playground без отдельной сборки.
 
-## Встроенный iframe (CodeSandbox)
+## Запуск
 
-Ниже — пример iframe с песочницей (URL можно заменить на свой CodeSandbox):
+```bash
+npm run playground
+```
 
-<iframe
-  src="https://codesandbox.io/embed/new?codemirror=1"
-  style="width:100%; height:500px; border:0; border-radius:8px; overflow:hidden;"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+Открой `http://127.0.0.1:4173/examples/playground/`.
 
-## Локальный playground
+## Что умеет playground
 
-Можно поднять свой playground на основе Vite + React starter:
+- переключение сцен (`Modal`, `Dropdown`, `Forms`, `DataTable`)
+- смена темы
+- RTL toggle
+- логирование runtime-событий
 
-1. Склонировать репозиторий с примерами (или папку `examples/starters/vite-react`).
-2. Установить зависимости:
-   ```bash
-   npm install
-   ```
-3. Запустить dev-сервер:
-   ```bash
-   npm run dev
-   ```
-
-Далее вы можете редактировать компоненты и классы Rarog в реальном времени.
+Playground использует исходные CSS entrypoints и `packages/js/src/rarog.esm.js`, поэтому хорошо подходит для быстрой ручной проверки компонентов и lifecycle.
