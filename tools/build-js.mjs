@@ -1,66 +1,83 @@
+import fs from "fs";
+import path from "path";
+import url from "url";
 import { build } from "esbuild";
-import { mkdir, copyFile, readFile } from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..");
-const pkg = JSON.parse(await readFile(path.join(root, "packages/js/package.json"), "utf8"));
-const version = pkg.version;
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..");
+const pkgDir = path.join(root, "packages", "js");
+const srcFile = path.join(pkgDir, "src", "rarog.esm.js");
+const typesFile = path.join(pkgDir, "src", "index.d.ts");
+const distDir = path.join(pkgDir, "dist");
+const banner = fs.readFileSync(srcFile, "utf8").match(/\/\*![\s\S]*?\*\//)?.[0] ?? "";
 
-const entry = path.join(root, "packages/js/src/rarog.esm.js");
-const typesEntry = path.join(root, "packages/js/src/index.d.ts");
-const outdir = path.join(root, "packages/js/dist");
-
-async function ensureOutdir() {
-  await mkdir(outdir, { recursive: true });
+function cleanDist() {
+  fs.rmSync(distDir, { recursive: true, force: true });
+  fs.mkdirSync(distDir, { recursive: true });
 }
 
-async function runBuilds() {
-  await ensureOutdir();
-
+async function bundle(options) {
   await build({
-    entryPoints: [entry],
-    outfile: path.join(outdir, "rarog.esm.js"),
-    bundle: false,
+    entryPoints: [srcFile],
+    bundle: true,
+    sourcemap: true,
+    legalComments: "none",
+    banner: banner ? { js: banner } : undefined,
+    ...options
+  });
+}
+
+async function main() {
+  cleanDist();
+
+  await bundle({
+    outfile: path.join(distDir, "rarog.esm.js"),
     format: "esm",
     platform: "browser",
-    target: ["es2020"],
-    sourcemap: true,
-    legalComments: "none",
-    banner: { js: `/*! @rarog/js v${version} */` }
+    target: ["es2019"]
   });
 
-  await build({
-    entryPoints: [entry],
-    outfile: path.join(outdir, "rarog.cjs"),
-    bundle: true,
+  await bundle({
+    outfile: path.join(distDir, "rarog.cjs"),
     format: "cjs",
     platform: "browser",
-    target: ["es2020"],
-    sourcemap: true,
-    legalComments: "none",
-    banner: { js: `/*! @rarog/js v${version} */` }
+    target: ["es2019"]
   });
 
-  await build({
-    entryPoints: [entry],
-    outfile: path.join(outdir, "rarog.iife.js"),
-    bundle: true,
+  await bundle({
+    outfile: path.join(distDir, "rarog.js"),
     format: "iife",
     globalName: "Rarog",
     platform: "browser",
-    target: ["es2020"],
-    sourcemap: true,
-    minify: false,
-    legalComments: "none",
-    banner: { js: `/*! @rarog/js v${version} */` }
+    target: ["es2019"],
+    footer: {
+      js: "window.Rarog = window.Rarog && window.Rarog.default ? window.Rarog.default : window.Rarog;"
+    }
   });
 
-  await copyFile(typesEntry, path.join(outdir, "index.d.ts"));
+  await bundle({
+    outfile: path.join(distDir, "rarog.iife.js"),
+    format: "iife",
+    globalName: "Rarog",
+    platform: "browser",
+    target: ["es2019"],
+    minify: true,
+    footer: {
+      js: "window.Rarog = window.Rarog && window.Rarog.default ? window.Rarog.default : window.Rarog;"
+    }
+  });
+
+  fs.copyFileSync(typesFile, path.join(distDir, "index.d.ts"));
+
+  const distPkg = {
+    type: "commonjs"
+  };
+  fs.writeFileSync(path.join(distDir, "package.json"), JSON.stringify(distPkg, null, 2) + "\n");
+
+  console.log("Built @rarog/js package to", distDir);
 }
 
-runBuilds().catch((error) => {
-  console.error("Rarog JS build failed:", error.message);
+main().catch(error => {
+  console.error(error);
   process.exitCode = 1;
 });
