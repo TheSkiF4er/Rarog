@@ -1,4 +1,4 @@
-import { createApp, h, nextTick } from "vue";
+import { createApp, h, nextTick, ref } from "vue";
 import { afterEach, describe, expect, it } from "vitest";
 import RarogPlugin, {
   RarogModal,
@@ -21,7 +21,7 @@ describe("@rarog/vue smoke", () => {
     app = null;
   });
 
-  it("imports the built adapter, installs the plugin, and mounts modal/dropdown output", async () => {
+  it("installs the plugin and mounts modal/dropdown output with imperative exposes", async () => {
     const harness = { modalEl: null, modalApi: null };
     const HookHarness = {
       name: "HookHarness",
@@ -39,7 +39,7 @@ describe("@rarog/vue smoke", () => {
     app = createApp({
       render() {
         return h("div", { "data-testid": "vue-root" }, [
-          h(RarogModal, { id: "vue-modal", title: "Hello Vue" }, {
+          h(RarogModal, { id: "vue-modal", title: "Hello Vue", defaultOpen: true }, {
             default: () => h("p", null, "Modal body")
           }),
           h(RarogDropdown, { label: "Vue menu", menuId: "vue-dropdown-menu" }, {
@@ -66,10 +66,39 @@ describe("@rarog/vue smoke", () => {
     expect(modal).toBeTruthy();
     expect(modal?.querySelector(".modal-title")?.textContent).toBe("Hello Vue");
     expect(dropdownButton?.textContent).toContain("Vue menu");
-    expect(dropdownMenu).toBeTruthy();
+    expect(dropdownMenu?.getAttribute("role")).toBe("menu");
     expect(hookHarness?.textContent).toBe("hook-mounted");
     expect(harness.modalEl?.value).toBeInstanceOf(HTMLElement);
     expect(harness.modalApi?.value).toBeTruthy();
     expect(typeof harness.modalApi.value.show).toBe("function");
+  });
+
+  it("supports controlled open state and emits update:open", async () => {
+    const open = ref(false);
+    const updates = [];
+
+    host = document.createElement("div");
+    document.body.appendChild(host);
+
+    app = createApp({
+      setup() {
+        return () => h(RarogModal, {
+          id: "vue-controlled-modal",
+          title: "Controlled Vue",
+          open: open.value,
+          "onUpdate:open": value => updates.push(value)
+        }, { default: () => h("p", null, "Body") });
+      }
+    });
+
+    app.use(RarogPlugin);
+    app.mount(host);
+    await nextTick();
+
+    const modal = host.querySelector("#vue-controlled-modal");
+    modal.dispatchEvent(new CustomEvent("rg:modal:shown", { bubbles: true }));
+    modal.dispatchEvent(new CustomEvent("rg:modal:hidden", { bubbles: true }));
+
+    expect(updates).toEqual([true, false]);
   });
 });
