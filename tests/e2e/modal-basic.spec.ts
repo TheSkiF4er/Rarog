@@ -4,17 +4,16 @@ test.describe("Rarog modal & dropdown (demo page)", () => {
   test("modal can be opened and closed", async ({ page }) => {
     await page.goto("/tests/rarog-js-core.test.html");
 
-    const openButton = page.getByRole("button", { name: /открыть модалку/i });
+    const openButton = page.locator("#modalToggle");
     await openButton.click();
 
-    const modal = page.locator(".modal.show");
-    await expect(modal).toBeVisible();
+    const modal = page.locator("#testModal");
+    await expect(modal).toHaveClass(/rg-modal-open/);
 
-    await page.screenshot({ path: "tests/e2e-snapshots/modal-open.png", fullPage: false });
-
-    const close = modal.getByRole("button", { name: /закрыть/i });
+    const close = modal.locator("[data-rg-dismiss='modal']");
     await close.click();
 
-    await expect(modal).toBeHidden();
+    await expect(modal).not.toHaveClass(/rg-modal-open/);
+    await expect(modal).toHaveAttribute("aria-hidden", "true");
   });
 });

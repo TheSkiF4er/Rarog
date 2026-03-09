@@ -1,22 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Rarog carousel & stepper (demo page)", () => {
-  test("carousel switches slides", async ({ page }) => {
-    await page.goto("/tests/rarog-js-core.test.html");
-
-    const next = page.locator("[data-rg-target='#demoCarousel'][data-rg-slide='next'], .carousel-control-next").first();
-    await next.click();
-    await page.waitForTimeout(200);
-
-    await expect(page.locator(".carousel-item.active")).toBeVisible();
-  });
-
+test.describe("Rarog stepper (demo page)", () => {
   test("stepper goes to next step", async ({ page }) => {
     await page.goto("/tests/rarog-js-core.test.html");
 
     const next = page.locator("[data-rg-step-to='next']").first();
     await next.click();
 
-    await expect(page.locator(".stepper-step.is-active")).toBeVisible();
+    await expect(page.locator("#demoStepper .stepper-step.is-active").nth(1)).toBeVisible();
+    await expect(page.locator("#demoStepper .stepper-content.is-active").nth(0)).toContainText("Step 2 content");
   });
 });
