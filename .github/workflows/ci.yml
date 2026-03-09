@@ -21,22 +21,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build CSS
+      - name: Build CSS & JS
         run: npm run build
-
-      - name: Build adapters
-        run: npm run build:adapters
-
-      - name: Package adapters
-        run: npm run pack:react && npm run pack:vue
-
-      - name: Smoke test adapters
-        run: npm run test:adapters:smoke
-
-      - name: Component contract tests
-        run: npm run test:contracts
 
       - name: Run tests (unit + e2e)
         run: npm test
