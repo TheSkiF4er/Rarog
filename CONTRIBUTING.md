@@ -27,6 +27,7 @@
    ```bash
    npm run build
    npm run test:unit
+   npm run test:adapters
    npm run docs:check
    ```
 
@@ -105,11 +106,14 @@ npm run build:css
 
 ```bash
 npm run test:unit
+npm run test:adapters
 node packages/cli/bin/rarog.js --help
 node packages/cli/bin/rarog.js validate
 ```
 
-Если меняете README или `docs-site/`, прогоняйте ещё и:
+`npm run test:unit` проверяет source/runtime-контур JS core. `npm run test:adapters` сначала пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, а затем гоняет adapter dist-smoke, чтобы локально не получать ложнозелёный результат на устаревшем `dist`.
+
+Если меняете README или `docs/`, прогоняйте ещё и:
 
 ```bash
 npm run docs:check
@@ -125,7 +129,7 @@ npm run docs:check
 - писать о том, что есть **в текущем состоянии репозитория**;
 - явно помечать experimental и placeholder-пакеты;
 - не ссылаться на `dist/` или пакеты, если они не создаются текущим build pipeline;
-- обновлять `README.md`, `docs-site/getting-started.md` и `docs-site/javascript.md` вместе с релевантными изменениями.
+- обновлять `README.md`, `docs/getting-started.md` и `docs/javascript.md` вместе с релевантными изменениями.
 
 ---
 

@@ -37,11 +37,10 @@ Rarog уже включает:
 - CLI: `packages/cli/bin/rarog.js`;
 - vanilla JS-ядро в исходниках: `packages/js/src/rarog.esm.js`;
 - плагины CommonJS: `packages/plugin-forms/index.cjs`, `packages/plugin-typography/index.cjs`;
-- документацию в `docs-site/`.
+- документацию в `docs/`.
 
 Что пока **не стоит считать production-ready API**:
-- React/Vue-адаптеры в `packages/react` и `packages/vue` — это заготовки под будущие пакеты;
-- отдельный публикуемый JS-бандл в репозитории пока не собирается автоматически;
+- React/Vue-адаптеры в `packages/react` и `packages/vue` всё ещё требуют отдельной smoke/compatibility-проверки перед релизом;
 - часть UI-kit и ecosystem-заявлений в старых docs описывает целевое состояние, а не полностью поставляемый артефакт.
 
 ---
@@ -140,12 +139,15 @@ packages/
 ```bash
 npm run build
 npm run test:unit
+npm run test:adapters
 npm run docs:check
 ```
 
 Где:
 - `npm run build` — каноническая полная сборка репозитория (`build:css + build:js + build:adapters`);
-- `npm run build:css` — только CSS-слои, если менялся только CSS surface.
+- `npm run build:css` — только CSS-слои, если менялся только CSS surface;
+- `npm run test:unit` — source/runtime unit-контур для JS core и контрактных JS-поверхностей;
+- `npm run test:adapters` — dist-smoke для React/Vue adapters; перед прогоном команда пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, чтобы не опираться на устаревший `dist`.
 
 Если нужно проверить CLI без глобальной установки:
 
@@ -158,11 +160,11 @@ node packages/cli/bin/rarog.js --help
 ## Документация
 
 Основные документы в репозитории:
-- `docs-site/getting-started.md`
-- `docs-site/javascript.md`
-- `docs-site/components.md`
-- `docs-site/tokens.md`
-- `docs-site/versioning.md`
+- `docs/getting-started.md`
+- `docs/javascript.md`
+- `docs/components.md`
+- `docs/tokens.md`
+- `docs/versioning.md`
 - `CONTRIBUTING.md`
 - `RELEASE.md`
 
