@@ -78,7 +78,8 @@ JIT будет анализировать все `.vue` файлы, поэтом
 
 ## 4. @rarog/vue и Nuxt‑starter
 
-Для Vue 3 пакет `@rarog/vue` даёт минимально рабочий набор: `RarogProvider`, `RarogModal`, `RarogOffcanvas`, `RarogDropdown`, composables `useModal/useOffcanvas/useDropdown` и плагин `RarogPlugin`.
+Для Vue 3 доступен пакет `@rarog/vue` с компонентами `RarogProvider`, `RarogModal`,
+`RarogOffcanvas`, `RarogDropdown`.
 
 Установка (в отдельном проекте):
 
@@ -125,3 +126,13 @@ import { RarogProvider, RarogModal } from "@rarog/vue";
 ```
 
 Готовый пример Nuxt‑интеграции лежит в `examples/starters/nuxt-rarog`.
+
+
+## Accessibility in Vue wrappers
+
+Для `@rarog/vue` действуют те же правила, что и для чистого JS core:
+
+- модалки и offcanvas должны содержать реальный title/body для корректного `aria-labelledby` и `aria-describedby`;
+- управляющие элементы должны быть кнопками, а не `div` с обработчиком клика;
+- при `v-if` / `Teleport` важно сохранять предсказуемые id и порядок фокуса;
+- keyboard navigation стоит проверять уже в mounted-состоянии приложения.
