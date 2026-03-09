@@ -141,7 +141,7 @@ npm run build
 npm run test:unit
 npm run test:adapters
 npm run test:release
-npm run docs:check
+npm run docs:lint
 ```
 
 Где:
@@ -150,6 +150,8 @@ npm run docs:check
 - `npm run test:unit` — source/runtime unit-контур для JS core и контрактных JS-поверхностей;
 - `npm run test:adapters` — dist-smoke для React/Vue adapters; перед прогоном команда пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, чтобы не опираться на устаревший `dist`;
 - `npm run test:release` — минимальный обязательный release gate (`test:unit + test:adapters + test:contracts`).
+- `npm run docs:lint` — быстрая проверка docs-контракта без полной сборки VitePress.
+- `npm run verify:artifacts` — post-build проверка содержимого publishable tarball через `npm pack --dry-run`.
 
 Если нужно проверить CLI без глобальной установки:
 
@@ -177,8 +179,8 @@ node packages/cli/bin/rarog.js --help
 Перед PR:
 - прогоните `npm run build`;
 - прогоните `npm run test:unit`;
-- прогоните `npm run docs:check`, если меняли README или docs.
+- прогоните `npm run docs:lint`, если меняли README или docs.
 
-Перед релизом дополнительно используйте `npm run test:release` как единый обязательный тестовый gate.
+Перед релизом дополнительно используйте `npm run test:release` как единый обязательный тестовый gate и `npm run verify:artifacts` после сборки, чтобы проверить реальный publish-surface.
 
 Подробности — в `CONTRIBUTING.md`.

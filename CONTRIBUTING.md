@@ -27,7 +27,7 @@
    ```bash
    npm run build
    npm run test:unit
-   npm run docs:check
+   npm run docs:lint
    ```
 
    Если изменение затрагивает React/Vue adapters или их `dist`-контур, дополнительно прогоните `npm run test:adapters`.
@@ -118,8 +118,10 @@ node packages/cli/bin/rarog.js validate
 Если меняете README или `docs/`, прогоняйте ещё и:
 
 ```bash
-npm run docs:check
+npm run docs:lint
 ```
+
+Полный `npm run docs:check` нужен, когда вы хотите локально подтвердить, что VitePress действительно собирается и output не пустой.
 
 ---
 
@@ -142,7 +144,7 @@ npm run docs:check
 Если вы меняете version strings, package metadata или release surface, сначала прогоните:
 
 ```bash
-npm run docs:check
+npm run docs:lint
 ```
 
 И затем убедитесь, что обновлены все заметные пользовательские entrypoints.
@@ -153,7 +155,7 @@ npm run docs:check
 Для обычного PR минимальный путь такой:
 - `npm run build`
 - `npm run test:unit`
-- `npm run docs:check`, если менялись README или `docs/`
+- `npm run docs:lint`, если менялись README или `docs/`
 
 Дополнительно запускайте `npm run test:adapters`, если затронуты adapters, adapter build или `dist`-артефакты.
 
@@ -161,4 +163,5 @@ npm run docs:check
 - `npm run release:verify`
 - `npm run build`
 - `npm run test:release`
+- `npm run verify:artifacts`
 - `npm run pack:packages`

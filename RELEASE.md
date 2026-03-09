@@ -5,9 +5,11 @@
 ## Канонические команды
 
 - `npm run build` — полная сборка репозитория (`build:css + build:js + build:adapters`).
-- `npm run docs:check` — проверка docs-контракта и сборка VitePress.
+- `npm run docs:lint` — быстрая проверка docs-контракта без полной сборки VitePress.
 - `npm run test:release` — минимальный обязательный тестовый gate перед публикацией (`test:unit + test:adapters + test:contracts`).
+- `npm run docs:check` — полный docs gate: lint + VitePress build + проверка output.
 - `npm run release:verify` — проверка release/docs-контракта перед сборкой и публикацией.
+- `npm run verify:artifacts` — post-build проверка publishable tarball через `npm pack --dry-run`.
 
 ## Перед релизом
 
@@ -18,6 +20,7 @@ npm ci
 npm run release:verify
 npm run build
 npm run test:release
+npm run verify:artifacts
 npm run pack:packages
 ```
 
@@ -35,6 +38,7 @@ Release workflow перед `npm publish` выполняет:
 - `npm run release:verify`
 - `npm run build:all`
 - `npm run test:release`
+- `npm run verify:artifacts`
 - `npm run pack:packages`
 
 Это означает, что релизный tag не должен обходить docs/release-проверки и основной тестовый gate.
