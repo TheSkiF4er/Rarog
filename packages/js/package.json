@@ -23,8 +23,7 @@
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "unpkg": "dist/rarog.js",
   "scripts": {
