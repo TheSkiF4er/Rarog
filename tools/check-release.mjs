@@ -88,6 +88,12 @@ addCheck(checks, docsConfigPath, () => hasFile(docsConfigPath), "vitepress confi
 addCheck(checks, artifactToolPath, () => hasFile(artifactToolPath), "package artifact verification tool exists");
 addCheck(checks, docsOutputToolPath, () => hasFile(docsOutputToolPath), "docs output validation tool exists");
 
+addCheck(checks, "package.json", () => rootPkg.main === "./packages/core/dist/rarog-core.min.css", "root main points to the built core CSS artifact");
+addCheck(checks, "package.json", () => rootPkg.style === "./packages/core/dist/rarog-core.min.css", "root style points to the built core CSS artifact");
+addCheck(checks, "package.json", () => Array.isArray(rootPkg.files) && rootPkg.files.includes("packages/cli/lib") && rootPkg.files.includes("packages/core/dist"), "root files allow-list includes CLI libs and built CSS artifacts");
+addCheck(checks, "package.json", () => rootPkg.exports?.["./core"] === "./packages/core/dist/rarog-core.min.css", "root exports expose the core CSS entrypoint");
+addCheck(checks, "package.json", () => Array.isArray(rootPkg.workspaces) && rootPkg.workspaces.includes("packages/*"), "root enables npm workspaces for package orchestration");
+
 // Package manifests
 addCheck(checks, "packages/js/package.json", () => jsPkg.exports?.["."]?.import === "./dist/index.mjs", "js import export points to dist/index.mjs");
 addCheck(checks, "packages/js/package.json", () => jsPkg.exports?.["."]?.require === "./dist/index.cjs", "js require export points to dist/index.cjs");

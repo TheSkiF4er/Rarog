@@ -8,6 +8,40 @@ const root = path.resolve(__dirname, '..')
 
 const packageSpecs = [
   {
+    name: 'rarog',
+    dir: '.',
+    requiredFiles: [
+      'package.json',
+      'README.md',
+      'LICENSE',
+      'packages/cli/bin/rarog.js',
+      'packages/cli/lib/api.js',
+      'packages/cli/lib/config.js',
+      'packages/cli/lib/fs.js',
+      'packages/core/dist/rarog-core.min.css',
+      'packages/utilities/dist/rarog-utilities.min.css',
+      'packages/components/dist/rarog-components.min.css'
+    ],
+    allowedRoots: ['package.json', 'README.md', 'LICENSE', 'packages'],
+    forbiddenPatterns: [
+      /^node_modules\//,
+      /^\.artifacts\//,
+      /^tests\//,
+      /^stories\//,
+      /^docs\//,
+      /^playwright\./,
+      /^vite(?:\.config)?/,
+      /^tsconfig(?:\.|$)/,
+      /^vitest(?:\.|$)/,
+      /^\.storybook\//,
+      /^\.github\//,
+      /^design\//,
+      /^examples\//,
+      /^plugins\//,
+      /^packages\/[^/]+\/src\//
+    ]
+  },
+  {
     name: '@rarog/js',
     dir: 'packages/js',
     requiredFiles: [
@@ -36,7 +70,7 @@ const packageSpecs = [
   }
 ]
 
-const forbiddenPatterns = [
+const defaultForbiddenPatterns = [
   /^node_modules\//,
   /^\.artifacts\//,
   /^tests\//,
@@ -107,6 +141,7 @@ for (const spec of packageSpecs) {
     console.log(`[OK] ${spec.name}: tarball contains required runtime files`)
   }
 
+    const forbiddenPatterns = spec.forbiddenPatterns || defaultForbiddenPatterns
   const forbidden = [...files].filter((file) => forbiddenPatterns.some((pattern) => pattern.test(file)))
   if (forbidden.length > 0) {
     console.error(`[FAIL] ${spec.name}: tarball contains forbidden files:`)
