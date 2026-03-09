@@ -27,7 +27,9 @@
     "test:adapters:smoke": "npm run build:adapters && vitest run tests/adapters/**/*.test.js",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "playground": "node tools/playground-dev.mjs"
+    "playground": "node tools/playground-dev.mjs",
+    "storybook:smoke": "node tests/storybook/storybook-smoke.mjs",
+    "storybook:serve:static": "python3 -m http.server 6006 -d storybook-static"
   },
   "repository": {
     "type": "git",
