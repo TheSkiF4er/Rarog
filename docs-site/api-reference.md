@@ -146,6 +146,19 @@
 
 Подробности см. раздел «JavaScript», здесь зафиксирован именно список поддерживаемых сущностей.
 
+### Destroy / Dispose
+
+Для стабильных JS-компонентов поддерживаются оба метода teardown:
+- `dispose()`
+- `destroy()`
+
+Это относится к `Dropdown`, `Collapse`, `Modal`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`, `Carousel`, `Stepper`, `Datepicker`, `DatetimePicker`, `Select`, `Combobox`, `TagsInput`, `DataTable`.
+
+Гарантии:
+- повторный вызов не должен ломать приложение;
+- после teardown `getInstance(element)` возвращает `null`;
+- `Rarog.dispose(root)` выполняет массовый teardown уже созданных инстансов внутри subtree.
+
 ## Гарантии стабильности
 
 - Все перечисленные утилиты, компоненты и JS-API считаются стабильными в ветке **2.x**.
@@ -154,40 +167,3 @@
   - **не допускается** изменение или удаление уже описанных здесь API без миграционного гайда и мажорного релиза.
 - В patch-релизах (`2.0.1`, `2.0.2`):
   - только исправления багов и улучшения без изменения публичного API.
-
-
-## JS lifecycle reference
-
-### Shared lifecycle names
-
-Для компонентов `Dropdown`, `Collapse`, `Modal`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`:
-
-- `rg:<component>:show` — cancelable pre-open
-- `rg:<component>:shown` — post-open
-- `rg:<component>:hide` — cancelable pre-close
-- `rg:<component>:hidden` — post-close
-
-### Shared event.detail payload
-
-```ts
-{
-  instance: object;
-  trigger: Element | null;
-  target: Element | null;
-  placement?: string;
-}
-```
-
-### Carousel transition payload
-
-```ts
-{
-  instance: object;
-  trigger: null;
-  target: Element;
-  index: number;
-  fromIndex: number;
-  toIndex: number;
-  direction: "next" | "prev" | "goto";
-}
-```
