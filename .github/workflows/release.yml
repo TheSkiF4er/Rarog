@@ -28,8 +28,14 @@ jobs:
       - name: Build all packages
         run: npm run build:all
 
-      - name: Run release test gate
-        run: npm run test:release
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Run adapter smoke tests
+        run: npm run test:adapters
+
+      - name: Run contract tests
+        run: npm run test:contracts
 
       - name: Pack publishable packages
         run: npm run pack:packages
