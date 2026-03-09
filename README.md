@@ -57,7 +57,7 @@ npm ci
 ### 2. Сборка CSS-слоёв
 
 ```bash
-npm run build
+npm run build:css
 ```
 
 После сборки создаются CSS-артефакты в:
@@ -142,6 +142,10 @@ npm run build
 npm run test:unit
 npm run docs:check
 ```
+
+Где:
+- `npm run build` — каноническая полная сборка репозитория (`build:css + build:js + build:adapters`);
+- `npm run build:css` — только CSS-слои, если менялся только CSS surface.
 
 Если нужно проверить CLI без глобальной установки:
 
