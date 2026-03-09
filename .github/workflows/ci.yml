@@ -35,7 +35,7 @@ jobs:
       - name: Smoke test adapters
         run: npm run test:adapters:smoke
 
-      - name: Contract sweep
+      - name: Component contract tests
         run: npm run test:contracts
 
       - name: Run tests (unit + e2e)
