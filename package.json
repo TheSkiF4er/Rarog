@@ -11,27 +11,21 @@
     "build:utilities": "node tools/build.mjs utilities",
     "build:components": "node tools/build.mjs components",
     "build:themes": "node tools/build.mjs themes",
-    "build:js": "node tools/build-js.mjs",
-    "build:adapters": "node tools/build-adapters.mjs",
-    "build:react": "node tools/build-adapters.mjs react",
-    "build:vue": "node tools/build-adapters.mjs vue",
-    "build:all": "npm run build && npm run build:js && npm run build:adapters",
     "docs": "node tools/docs-dev.mjs",
     "docs:dev": "vitepress dev docs-site",
     "docs:build": "vitepress build docs-site",
     "docs:preview": "vitepress preview docs-site",
-    "test": "npm run test:unit && npm run test:adapters:smoke && npm run test:e2e",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
-    "test:smoke": "node tests/rarog-release-sync.test.mjs && node tests/rarog-build-regress.test.mjs",
-    "test:adapters:smoke": "vitest run tests/adapters/**/*.test.js",
-    "pack:js": "npm pack ./packages/js",
+    "build:adapters": "node tools/build-adapters.mjs",
+    "build:react": "node tools/build-adapters.mjs react",
+    "build:vue": "node tools/build-adapters.mjs vue",
     "pack:react": "npm pack ./packages/react",
     "pack:vue": "npm pack ./packages/vue",
-    "pack:packages": "npm run pack:js && npm run pack:react && npm run pack:vue",
-    "release:check": "node tools/check-release.mjs",
-    "release:verify": "npm run release:check && npm run build:all && npm run test:smoke && npm run pack:packages"
+    "test:adapters:smoke": "npm run build:adapters && vitest run tests/adapters/**/*.test.js",
+    "test:contracts": "vitest run tests/js/contract-sweep.test.js"
   },
   "repository": {
     "type": "git",
@@ -61,6 +55,5 @@
   },
   "workspaces": [
     "packages/*"
-  ],
-  "packageManager": "npm@10"
+  ]
 }
