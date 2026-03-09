@@ -17,10 +17,6 @@ function hasFile(rel) {
   return fs.existsSync(path.join(ROOT_DIR, rel));
 }
 
-function workflowText(rel) {
-  return readText(rel);
-}
-
 function containsAll(text, snippets) {
   return snippets.every((snippet) => text.includes(snippet));
 }
@@ -39,9 +35,11 @@ const reactPkg = readJson("packages/react/package.json");
 const vuePkg = readJson("packages/vue/package.json");
 const version = rootPkg.version;
 
-const ciText = workflowText(".github/workflows/ci.yml");
-const docsText = workflowText(".github/workflows/docs.yml");
-const releaseText = workflowText(".github/workflows/release.yml");
+const ciText = readText(".github/workflows/ci.yml");
+const fullCiPath = ".github/workflows/full-ci.yml";
+const fullCiText = readText(fullCiPath);
+const docsText = readText(".github/workflows/docs.yml");
+const releaseText = readText(".github/workflows/release.yml");
 
 const docsConfigPath = "docs/.vitepress/config.ts";
 const lockfilePath = "package-lock.json";
@@ -69,6 +67,7 @@ for (const script of [
   "docs:lint",
   "docs:check",
   "test:adapters",
+  "test:ci",
   "test:release",
   "storybook",
   "storybook:build"
@@ -76,6 +75,7 @@ for (const script of [
   addCheck(checks, "package.json", () => Boolean(rootPkg.scripts?.[script]), `root ${script} script exists`);
 }
 addCheck(checks, "package.json", () => rootPkg.scripts?.["verify:artifacts"] === "node tools/check-package-artifacts.mjs", "verify:artifacts delegates to tools/check-package-artifacts.mjs");
+addCheck(checks, "package.json", () => rootPkg.scripts?.["test:ci"]?.includes("test:unit") && rootPkg.scripts?.["test:ci"]?.includes("test:adapters") && rootPkg.scripts?.["test:ci"]?.includes("test:contracts"), "test:ci covers unit, adapter, and contract tests");
 addCheck(checks, "package.json", () => rootPkg.scripts?.["release:verify"]?.includes("docs:check"), "root release:verify includes docs:check");
 addCheck(checks, "package.json", () => rootPkg.scripts?.["docs:check"]?.includes("docs:lint") && rootPkg.scripts?.["docs:check"]?.includes("docs:build") && rootPkg.scripts?.["docs:check"]?.includes("check-docs-output"), "docs:check includes lint, build, and output validation");
 for (const dep of ["esbuild", "react", "react-dom", "vue", "jsdom", "storybook", "vite", "@storybook/html-vite", "@storybook/addon-docs", "@storybook/addon-a11y"]) {
@@ -104,10 +104,16 @@ addCheck(checks, "packages/js/src/rarog.esm.js", () => readText("packages/js/src
 addCheck(checks, "tests/rarog-js-core.test.html", () => readText("tests/rarog-js-core.test.html").includes(`Rarog JS Core v${version}`), "html smoke banner version is synced");
 
 // Workflow invariants
-addCheck(checks, ".github/workflows/ci.yml", () => containsAnyGroup(ciText, [["npm run docs:lint"], ["npm run docs:check"]]), "ci workflow runs a docs gate");
-addCheck(checks, ".github/workflows/ci.yml", () => containsAll(ciText, ["npm run build:all"]), "ci workflow builds all packages");
-addCheck(checks, ".github/workflows/ci.yml", () => containsAll(ciText, ["npm run verify:artifacts"]), "ci workflow verifies publishable package artifacts");
+addCheck(checks, ".github/workflows/ci.yml", () => containsAnyGroup(ciText, [["npm run docs:lint"], ["npm run docs:check"]]), "fast ci runs a docs gate");
+addCheck(checks, ".github/workflows/ci.yml", () => containsAll(ciText, ["npm run build:all"]), "fast ci builds all packages");
+addCheck(checks, ".github/workflows/ci.yml", () => containsAll(ciText, ["npm run verify:artifacts"]), "fast ci verifies publishable package artifacts");
+addCheck(checks, ".github/workflows/ci.yml", () => containsAnyGroup(ciText, [["npm run test:ci"], ["npm run test:unit", "npm run test:adapters", "npm run test:contracts"]]), "fast ci runs the lightweight CI test gate");
+addCheck(checks, fullCiPath, () => hasFile(fullCiPath), "full ci workflow exists");
+addCheck(checks, fullCiPath, () => containsAll(fullCiText, ["npm run build:all"]), "full ci builds all packages");
+addCheck(checks, fullCiPath, () => containsAll(fullCiText, ["npm run test:e2e"]), "full ci runs end-to-end tests");
+addCheck(checks, fullCiPath, () => containsAll(fullCiText, ["npm run test:visual"]), "full ci runs visual regression checks");
 addCheck(checks, ".github/workflows/docs.yml", () => containsAll(docsText, ["npm run docs:check"]), "docs workflow runs full docs:check");
+addCheck(checks, ".github/workflows/docs.yml", () => containsAll(docsText, ["tools/check-docs-output.mjs"]), "docs workflow watches docs output validator changes");
 addCheck(checks, ".github/workflows/release.yml", () => containsAnyGroup(releaseText, [["npm run test:release"], ["npm run test:unit", "npm run test:adapters", "npm run test:contracts"]]), "release workflow runs the release test gate");
 addCheck(checks, ".github/workflows/release.yml", () => containsAll(releaseText, ["npm run release:verify"]), "release workflow runs release:verify");
 addCheck(checks, ".github/workflows/release.yml", () => containsAll(releaseText, ["npm run build:all"]), "release workflow builds all packages");

@@ -16,7 +16,9 @@ const packageSpecs = [
       'dist/index.cjs',
       'dist/index.d.ts',
       'dist/rarog.esm.js',
-      'dist/rarog.cjs'
+      'dist/rarog.cjs',
+      'dist/rarog.iife.js',
+      'dist/rarog.js'
     ],
     allowedRoots: ['dist', 'package.json']
   },
@@ -68,13 +70,7 @@ function runPackDryRun(packageDir) {
 }
 
 function hasAllowedRoot(file, allowedRoots) {
-  return allowedRoots.some((allowedRoot) => {
-    if (file === allowedRoot) {
-      return true
-    }
-
-    return file.startsWith(`${allowedRoot}/`)
-  })
+  return allowedRoots.some((allowedRoot) => file === allowedRoot || file.startsWith(`${allowedRoot}/`))
 }
 
 let failed = false
