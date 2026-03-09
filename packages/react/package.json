@@ -17,8 +17,7 @@
   },
   "files": [
     "dist",
-    "README.md",
-    "src"
+    "README.md"
   ],
   "peerDependencies": {
     "@rarog/js": ">=3.5.0",
