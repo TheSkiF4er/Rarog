@@ -12,6 +12,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "tools/check-docs.mjs"
+      - "tools/check-docs-output.mjs"
       - ".github/workflows/docs.yml"
   pull_request:
     branches: [ main, master, develop ]
@@ -24,6 +25,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "tools/check-docs.mjs"
+      - "tools/check-docs-output.mjs"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
