@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
 
 jobs:
   build-and-test:
@@ -23,17 +23,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build CSS & JS
-        run: npm run build
+      - name: Build CSS, JS, and adapters
+        run: npm run build:all
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Run tests (unit + e2e)
         run: npm test
 
-
-- name: Install Playwright Chromium
-  run: npx playwright install --with-deps chromium
-
-- name: Run visual regression checks
-  env:
-    CHROMIUM_PATH: /usr/bin/chromium
-  run: npm run test:visual
+      - name: Run visual regression checks
+        env:
+          CHROMIUM_PATH: /usr/bin/chromium
+        run: npm run test:visual

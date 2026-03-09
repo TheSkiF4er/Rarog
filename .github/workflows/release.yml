@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Verify release metadata
-        run: npm run release:check
+        run: npm run release:verify
 
       - name: Build all packages
         run: npm run build:all
