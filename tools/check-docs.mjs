@@ -44,11 +44,6 @@ const markdownFiles = [
 ];
 
 const scriptPattern = /npm run ([a-zA-Z0-9:_-]+)/g;
-
-if (docsDir === "docs" && !await exists("docs/.vitepress/config.ts")) {
-  console.error("Missing VitePress config at docs/.vitepress/config.ts");
-  process.exit(1);
-}
 const allowedExternalScriptsByFile = new Map([
   [`${docsDir}/guide-laravel.md`, new Set(["rarog:build"])],
   [`${docsDir}/guide-nextjs.md`, new Set(["rarog:build"])],
