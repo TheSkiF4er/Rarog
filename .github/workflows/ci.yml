@@ -3,8 +3,26 @@ name: CI
 on:
   push:
     branches: [main, master, develop]
+    paths-ignore:
+      - 'docs/**'
+      - 'design/**'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'RELEASE.md'
+      - 'tools/check-docs.mjs'
+      - 'tools/check-docs-output.mjs'
+      - '.github/workflows/docs.yml'
   pull_request:
     branches: [main, master, develop]
+    paths-ignore:
+      - 'docs/**'
+      - 'design/**'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'RELEASE.md'
+      - 'tools/check-docs.mjs'
+      - 'tools/check-docs-output.mjs'
+      - '.github/workflows/docs.yml'
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
