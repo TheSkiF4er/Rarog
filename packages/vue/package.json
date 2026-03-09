@@ -26,6 +26,10 @@
   },
   "source": "src/index.js",
   "scripts": {
-    "build": "node ../../tools/build-adapters.mjs"
+    "build": "node ../../tools/build-adapters.mjs",
+    "prepack": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
