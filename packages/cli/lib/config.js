@@ -1,7 +1,6 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const { pathToFileURL } = require("url");
 const {
   PROJECT_ROOT,
   pathInProject,
@@ -155,6 +154,12 @@ const defaultConfig = {
   content: ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"]
 };
 
+const defaultInitConfig = {
+  ...JSON.parse(JSON.stringify(defaultConfig)),
+  mode: "jit",
+  content: ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"]
+};
+
 const defaultProjectBuildManifest = {
   version: 1,
   tokens: {
@@ -190,6 +195,21 @@ const defaultRepoBuildManifest = {
   }
 };
 
+const THEME_CONFIG_CANDIDATES = [
+  { type: "js", rel: "rarog.config.js" },
+  { type: "ts", rel: "rarog.config.ts" },
+  { type: "json", rel: "rarog.config.json" }
+];
+
+const BUILD_MANIFEST_CANDIDATES = [
+  { rel: "rarog.build.json" },
+  { rel: "rarog.config.json" }
+];
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
 function deepMerge(base, extra) {
   if (!extra || typeof extra !== "object") return base;
   const result = Array.isArray(base) ? base.slice() : Object.assign({}, base);
@@ -221,7 +241,6 @@ function transpileTypeScriptConfig(source) {
     .replace(/export\s+default\s+config\s*;?/g, "module.exports = config;");
 }
 
-
 function loadTsConfig(tsPath) {
   const source = fs.readFileSync(tsPath, "utf8");
   const compiled = transpileTypeScriptConfig(source);
@@ -242,30 +261,98 @@ function loadJsonConfig(jsonPath) {
   return config;
 }
 
-function loadUserConfig() {
-  const candidates = [
-    { type: "js", file: pathInProject("rarog.config.js") },
-    { type: "ts", file: pathInProject("rarog.config.ts") },
-    { type: "json", file: pathInProject("rarog.config.json") }
-  ];
+function loadBuildManifestFile(manifestPath) {
+  const parsed = readJsonFile(manifestPath);
+  if (parsed && (parsed.tokens || parsed.build || parsed.outputs)) {
+    return parsed;
+  }
+  return null;
+}
 
-  for (const candidate of candidates) {
-    if (!fs.existsSync(candidate.file)) continue;
+function inspectConfigSurface() {
+  const themeConfigs = [];
+  const buildManifests = [];
 
-    if (candidate.type === "ts") {
-      return loadTsConfig(candidate.file);
-    }
-
-    if (candidate.type === "js") {
-      delete require.cache[candidate.file];
-      const cfg = require(candidate.file);
-      return cfg && cfg.default ? cfg.default : cfg;
-    }
-
+  for (const candidate of THEME_CONFIG_CANDIDATES) {
+    const file = pathInProject(candidate.rel);
+    if (!fs.existsSync(file)) continue;
     if (candidate.type === "json") {
-      const cfg = loadJsonConfig(candidate.file);
-      if (cfg) return cfg;
+      const parsed = readJsonFile(file);
+      if (parsed && (parsed.tokens || parsed.build || parsed.outputs)) continue;
     }
+    themeConfigs.push({ ...candidate, file });
+  }
+
+  for (const candidate of BUILD_MANIFEST_CANDIDATES) {
+    const file = pathInProject(candidate.rel);
+    if (!fs.existsSync(file)) continue;
+    const parsed = loadBuildManifestFile(file);
+    if (!parsed) continue;
+    buildManifests.push({ ...candidate, file });
+  }
+
+  return {
+    themeConfigs,
+    buildManifests,
+    selectedThemeConfig: themeConfigs[0] || null,
+    selectedBuildManifest: buildManifests[0] || null
+  };
+}
+
+function getConfigSurfaceDiagnostics() {
+  const surface = inspectConfigSurface();
+  const warnings = [];
+
+  if (surface.themeConfigs.length > 1) {
+    warnings.push({
+      code: "MULTIPLE_THEME_CONFIGS",
+      message: `Найдено несколько theme-config файлов (${surface.themeConfigs.map((entry) => path.basename(entry.file)).join(", ")}). Канонический flow использует rarog.config.js.`
+    });
+  }
+
+  if (surface.selectedThemeConfig && surface.selectedThemeConfig.type === "ts") {
+    warnings.push({
+      code: "TS_CONFIG_COMPAT",
+      message: "rarog.config.ts поддерживается только как compatibility-path. Канонический flow использует rarog.config.js."
+    });
+  }
+
+  if (surface.buildManifests.length > 1) {
+    warnings.push({
+      code: "MULTIPLE_BUILD_MANIFESTS",
+      message: `Найдено несколько build-manifest файлов (${surface.buildManifests.map((entry) => path.basename(entry.file)).join(", ")}). Канонический flow использует rarog.build.json.`
+    });
+  }
+
+  if (surface.selectedBuildManifest && path.basename(surface.selectedBuildManifest.file) === "rarog.config.json") {
+    warnings.push({
+      code: "LEGACY_BUILD_MANIFEST",
+      message: "rarog.config.json как build-manifest считается legacy. Канонический путь — rarog.build.json."
+    });
+  }
+
+  return {
+    ...surface,
+    warnings
+  };
+}
+
+function loadUserConfig() {
+  const selected = inspectConfigSurface().selectedThemeConfig;
+  if (!selected) return null;
+
+  if (selected.type === "ts") {
+    return loadTsConfig(selected.file);
+  }
+
+  if (selected.type === "js") {
+    delete require.cache[selected.file];
+    const cfg = require(selected.file);
+    return cfg && cfg.default ? cfg.default : cfg;
+  }
+
+  if (selected.type === "json") {
+    return loadJsonConfig(selected.file);
   }
 
   return null;
@@ -301,15 +388,19 @@ function getEffectiveConfig() {
   return merged;
 }
 
+function getDefaultInitConfig() {
+  return clone(defaultInitConfig);
+}
+
 function getProjectBuildManifestTemplate() {
-  return JSON.parse(JSON.stringify(defaultProjectBuildManifest));
+  return clone(defaultProjectBuildManifest);
 }
 
 function loadBuildManifest() {
-  const manifestPath = pathInProject("rarog.config.json");
-  if (fs.existsSync(manifestPath)) {
-    const parsed = readJsonFile(manifestPath);
-    if (parsed && (parsed.tokens || parsed.build || parsed.outputs)) {
+  const selected = inspectConfigSurface().selectedBuildManifest;
+  if (selected) {
+    const parsed = loadBuildManifestFile(selected.file);
+    if (parsed) {
       return deepMerge(defaultProjectBuildManifest, parsed);
     }
   }
@@ -319,10 +410,10 @@ function loadBuildManifest() {
     fileExistsInProject("packages/utilities/src") &&
     fileExistsInProject("packages/components/src")
   ) {
-    return JSON.parse(JSON.stringify(defaultRepoBuildManifest));
+    return clone(defaultRepoBuildManifest);
   }
 
-  return JSON.parse(JSON.stringify(defaultProjectBuildManifest));
+  return clone(defaultProjectBuildManifest);
 }
 
 function validateConfig(config) {
@@ -334,7 +425,7 @@ function validateConfig(config) {
   if (!config) {
     result.warnings.push({
       code: "CONFIG_MISSING",
-      message: "Файл rarog.config.{ts,js,json} не найден. Используется встроенный defaultConfig."
+      message: "Файл rarog.config.js не найден. Используется встроенный defaultConfig."
     });
     return result;
   }
@@ -396,6 +487,53 @@ function validateConfig(config) {
   return result;
 }
 
+function validateBuildManifest(manifest) {
+  const result = {
+    errors: [],
+    warnings: []
+  };
+
+  if (!manifest) {
+    result.warnings.push({
+      code: "BUILD_MANIFEST_MISSING",
+      message: "Файл rarog.build.json не найден. Используется встроенный build-manifest."
+    });
+    return result;
+  }
+
+  if (!manifest.tokens || typeof manifest.tokens !== "object") {
+    result.errors.push({
+      code: "BUILD_MANIFEST_TOKENS",
+      message: "Поле tokens в rarog.build.json обязательно и должно быть объектом с путями вывода токенов."
+    });
+  } else {
+    for (const [name, value] of Object.entries(manifest.tokens)) {
+      if (typeof value !== "string" || !value.trim()) {
+        result.errors.push({
+          code: "BUILD_MANIFEST_TOKEN_PATH",
+          message: `Поле tokens.${name} должно быть непустой строкой с путём вывода.`
+        });
+      }
+    }
+  }
+
+  if (manifest.outputs != null && typeof manifest.outputs !== "object") {
+    result.errors.push({
+      code: "BUILD_MANIFEST_OUTPUTS",
+      message: "Поле outputs в rarog.build.json должно быть объектом."
+    });
+  }
+
+  if (manifest.outputs && manifest.outputs.jitCss != null && typeof manifest.outputs.jitCss !== "string") {
+    result.errors.push({
+      code: "BUILD_MANIFEST_JIT_OUTPUT",
+      message: "Поле outputs.jitCss должно быть строкой с путём к выходному CSS-файлу."
+    });
+  }
+
+  return result;
+}
+
 module.exports = {
   PROJECT_ROOT,
   defaultConfig,
@@ -403,7 +541,11 @@ module.exports = {
   loadUserConfig,
   getEffectiveConfig,
   loadBuildManifest,
+  getDefaultInitConfig,
   getProjectBuildManifestTemplate,
+  inspectConfigSurface,
+  getConfigSurfaceDiagnostics,
   validateConfig,
+  validateBuildManifest,
   writeProjectFile
 };

@@ -10,12 +10,14 @@ const {
   writeProjectFile
 } = require("./fs");
 const {
-  defaultConfig,
   loadUserConfig,
   getEffectiveConfig,
   loadBuildManifest,
+  getDefaultInitConfig,
   getProjectBuildManifestTemplate,
-  validateConfig
+  getConfigSurfaceDiagnostics,
+  validateConfig,
+  validateBuildManifest
 } = require("./config");
 
 function generateColorCss(theme) {
@@ -682,10 +684,20 @@ function runPlugins(effectiveConfig) {
 
 
 function cmdBuild() {
+  const surface = getConfigSurfaceDiagnostics();
   const buildManifest = loadBuildManifest();
   const effective = getEffectiveConfig();
 
-  // 1. Всегда пересобираем токены из конфига (full-режим для design-токенов).
+  const themeConfigLabel = surface.selectedThemeConfig
+    ? path.basename(surface.selectedThemeConfig.file)
+    : "built-in defaults";
+  const buildManifestLabel = surface.selectedBuildManifest
+    ? path.basename(surface.selectedBuildManifest.file)
+    : "built-in defaults";
+
+  console.log(`[rarog] Theme config: ${themeConfigLabel}`);
+  console.log(`[rarog] Build manifest: ${buildManifestLabel}`);
+
   const colorCss = generateColorCss(effective.theme);
   const spacingCss = generateSpacingCss(effective.theme);
   const radiusCss = generateRadiusCss(effective.theme);
@@ -699,64 +711,78 @@ function cmdBuild() {
   writeProjectFile(buildManifest.tokens.breakpoints, breakpointsCss);
 
   const pkg = readPackageJson("package.json");
-  const tokensJson = generateTokensJson(
-    effective.theme,
-    effective.screens,
-    pkg.version
-  );
+  const tokensJson = generateTokensJson(effective.theme, effective.screens, pkg.version);
   writeProjectFile("rarog.tokens.json", tokensJson);
 
-  console.log("[rarog] Tokens have been generated from rarog.config.{ts,js}");
+  console.log(`[rarog] Tokens generated from ${themeConfigLabel}.`);
 
-  // 2. JIT / Tree-shaking (при необходимости).
   const mode = effective.mode || "full";
   if (mode !== "jit") {
+    console.log('[rarog] mode !== "jit": generated token artifacts only.');
     return;
   }
 
   const contentPatterns = effective.content && effective.content.length
     ? effective.content
-    : ["./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"];
+    : ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"];
 
   console.log("[rarog] JIT mode enabled. Scanning content:", contentPatterns);
 
-  const files = scanContentFiles(contentPatterns);
-  if (!files.length) {
-    console.warn("[rarog] JIT: нет файлов контента по заданным паттернам. CSS не был урезан.");
-    return;
+  const utilitiesCssCandidates = [
+    "packages/utilities/dist/rarog-utilities.css",
+    "packages/utilities/dist/rarog-utilities.min.css",
+    "packages/utilities/src/rarog-utilities.css"
+  ];
+  const componentsCssCandidates = [
+    "packages/components/dist/rarog-components.css",
+    "packages/components/dist/rarog-components.min.css",
+    "packages/components/src/rarog-components.css"
+  ];
+
+  const utilitiesCssSource = utilitiesCssCandidates
+    .map(rel => pathInPackage(rel))
+    .find(candidate => fs.existsSync(candidate));
+  const componentsCssSource = componentsCssCandidates
+    .map(rel => pathInPackage(rel))
+    .find(candidate => fs.existsSync(candidate));
+
+  if (!utilitiesCssSource || !componentsCssSource) {
+    throw new Error("[rarog] Не найдены CSS-артефакты utilities/components. Выполните полную сборку пакета перед publish.");
   }
-
-  const usedClasses = extractClassesFromContent(files);
-  console.log(`[rarog] JIT: найдено ${usedClasses.length} уникальных классов.`);
-
-  const utilitiesCssSource = fs.existsSync(pathInPackage("packages/utilities/dist/rarog-utilities.css"))
-    ? pathInPackage("packages/utilities/dist/rarog-utilities.css")
-    : pathInPackage("packages/utilities/src/rarog-utilities.css");
-  const componentsCssSource = fs.existsSync(pathInPackage("packages/components/dist/rarog-components.css"))
-    ? pathInPackage("packages/components/dist/rarog-components.css")
-    : pathInPackage("packages/components/src/rarog-components.css");
 
   const utilitiesCssFull = fs.readFileSync(utilitiesCssSource, "utf8");
   const componentsCssFull = fs.readFileSync(componentsCssSource, "utf8");
 
-  const utilitiesJit = filterCssByUsedClasses(utilitiesCssFull, usedClasses);
-  const componentsJit = filterCssByUsedClasses(componentsCssFull, usedClasses);
-  const arbitraryCss = generateArbitraryCss(usedClasses);
+  const files = scanContentFiles(contentPatterns);
+  let utilitiesJit = utilitiesCssFull;
+  let componentsJit = componentsCssFull;
+  let arbitraryCss = "";
+
+  if (!files.length) {
+    console.warn("[rarog] JIT: файлы контента не найдены. Будет записан fallback bundle без tree-shaking.");
+  } else {
+    const usedClasses = extractClassesFromContent(files);
+    console.log(`[rarog] JIT: найдено ${usedClasses.length} уникальных классов.`);
+
+    if (!usedClasses.length) {
+      console.warn("[rarog] JIT: классы Rarog не найдены. Будет записан fallback bundle без tree-shaking.");
+    } else {
+      utilitiesJit = filterCssByUsedClasses(utilitiesCssFull, usedClasses);
+      componentsJit = filterCssByUsedClasses(componentsCssFull, usedClasses);
+      arbitraryCss = generateArbitraryCss(usedClasses);
+    }
+  }
 
   const { utilitiesCssExtra, componentsCssExtra } = runPlugins(effective);
 
   let jitCss = "";
   jitCss += "/* Rarog CSS Framework - JIT build */\n";
-  jitCss += "/* Сгенерировано rarog build (mode=jit) на основе контента проекта. */\n\n";
-
-  // Подключаем токены (цвета/spacing/radius/shadow/breakpoints)
+  jitCss += `/* Generated by rarog build using ${themeConfigLabel} + ${buildManifestLabel}. */\n\n`;
   jitCss += colorCss + "\n";
   jitCss += spacingCss + "\n";
   jitCss += radiusCss + "\n";
   jitCss += shadowCss + "\n";
   jitCss += breakpointsCss + "\n";
-
-  // Включаем урезанные utilities/components + произвольные значения.
   jitCss += "\n/* Rarog Utilities (JIT) */\n";
   jitCss += utilitiesJit + "\n";
   if (utilitiesCssExtra) {
@@ -769,123 +795,70 @@ function cmdBuild() {
   }
   jitCss += arbitraryCss;
 
-  writeProjectFile((buildManifest.outputs && buildManifest.outputs.jitCss) || "dist/rarog.jit.css", jitCss);
-  console.log(`[rarog] JIT CSS written to ${((buildManifest.outputs && buildManifest.outputs.jitCss) || "dist/rarog.jit.css")}`);
+  const jitOutput = (buildManifest.outputs && buildManifest.outputs.jitCss) || "dist/rarog.jit.css";
+  writeProjectFile(jitOutput, jitCss);
+  console.log(`[rarog] JIT CSS written to ${jitOutput}`);
 }
 
-
 function cmdInit() {
-  const jsPath = pathInProject("rarog.config.js");
-  const tsPath = pathInProject("rarog.config.ts");
-  const jsonPath = pathInProject("rarog.config.json");
+  const blockingFiles = [
+    "rarog.config.js",
+    "rarog.config.ts",
+    "rarog.config.json",
+    "rarog.build.json",
+    "rarog.config.types.ts",
+    "src/index.html"
+  ].filter((rel) => fs.existsSync(pathInProject(rel)));
 
-  if (fs.existsSync(jsPath) || fs.existsSync(tsPath) || fs.existsSync(jsonPath)) {
-    console.error("[rarog] rarog.config.js/ts/json уже существует, init отменён.");
+  if (blockingFiles.length > 0) {
+    console.error(`[rarog] init отменён. Уже существуют: ${blockingFiles.join(", ")}`);
     process.exit(1);
   }
 
+  const initConfig = getDefaultInitConfig();
   const jsContent = `/**
- * Rarog Config (JavaScript)
- * Базовый конфиг для темы, брейкпоинтов и расширений.
- *
- * Поля:
- *   - theme: цвета, spacing, radius, shadow;
- *   - screens: брейкпоинты;
- *   - extend: добавление/расширение токенов;
- *   - plugins: хуки для дополнительных возможностей (пока заглушка).
+ * Rarog Config (canonical JavaScript flow)
+ * - theme: design tokens
+ * - screens: breakpoints
+ * - extend: token extensions
+ * - plugins: runtime hooks
  */
-
-/** @type {import('./rarog.config.types').RarogConfig | any} */
-const config = ${JSON.stringify(defaultConfig, null, 2)};
+const config = ${JSON.stringify(initConfig, null, 2)};
 
 module.exports = config;
 `;
 
-  const tsTypes = `export interface RarogThemeColorsScale {
-  [shade: number]: string;
-}
-
-export interface RarogSemanticColors {
-  bg: string;
-  bgSoft: string;
-  bgElevated: string;
-  bgElevatedSoft: string;
-  surface: string;
-  borderSubtle: string;
-  border: string;
-  borderStrong: string;
-  muted: string;
-  text: string;
-  textMuted: string;
-  focusRing: string;
-  accentSoft: string;
-}
-
-export interface RarogThemeColors {
-  primary: RarogThemeColorsScale;
-  secondary: RarogThemeColorsScale;
-  success: RarogThemeColorsScale;
-  danger: RarogThemeColorsScale;
-  warning: RarogThemeColorsScale;
-  info: RarogThemeColorsScale;
-  semantic: RarogSemanticColors;
-}
-
-export interface RarogThemeConfig {
-  colors: RarogThemeColors;
-  spacing: Record<string, string>;
-  radius: Record<string, string>;
-  shadow: Record<string, string>;
-}
-
-export interface RarogConfig {
-  theme: RarogThemeConfig;
-  screens: Record<string, string>;
-  extend?: {
-    colors?: Partial<RarogThemeColors>;
-    spacing?: Record<string, string>;
-    radius?: Record<string, string>;
-    shadow?: Record<string, string>;
-  };
-  plugins?: Array<(config: RarogConfig) => void>;
-}
-`;
-
-  const tsContent = `import type { RarogConfig } from "./rarog.config.types";
-
-const config: RarogConfig = ${JSON.stringify(defaultConfig, null, 2)} as RarogConfig;
-
-export default config;
-`;
-
   writeProjectFile("rarog.config.js", jsContent);
-  writeProjectFile("rarog.config.types.ts", tsTypes);
-  writeProjectFile("rarog.config.ts", tsContent);
-  writeProjectFile("rarog.config.json", JSON.stringify(getProjectBuildManifestTemplate(), null, 2) + "\n");
+  writeProjectFile("rarog.build.json", JSON.stringify(getProjectBuildManifestTemplate(), null, 2) + "\n");
 
-  // Пример проекта
-  const exampleHtml = `<!DOCTYPE html>
+  const starterHtml = `<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rarog Starter</title>
-  <link rel="stylesheet" href="../../dist/rarog.jit.css">
-  <!-- Run \`rarog build\` before opening this file. -->
-  <script type="module">
-    console.info("Starter page expects token CSS or JIT CSS generated by \`rarog build\`.");
-  </script>
+  <link rel="stylesheet" href="../dist/rarog.jit.css">
 </head>
-<body style="font-family: system-ui, sans-serif; padding: 1rem;">
-  <h1>Rarog Starter</h1>
-  <p>Эта страница создана командой <code>rarog init</code>.</p>
-  <p>Сначала выполните <code>rarog build</code>, затем подключите сгенерированный CSS-манифест из <code>dist/</code> или JIT-бандл.</p>
+<body>
+  <div class="rg-container-lg py-6">
+    <div class="card shadow-md">
+      <div class="card-header flex items-center justify-between">
+        <h1 class="h5 mb-0">Rarog starter</h1>
+        <span class="badge badge-primary">jit</span>
+      </div>
+      <div class="card-body">
+        <p class="text-muted mb-4">Этот файл создаётся командой <code>rarog init</code>.</p>
+        <button class="btn btn-primary">Build works</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
 `;
 
-  writeProjectFile("examples/starter/index.html", exampleHtml);
+  writeProjectFile("src/index.html", starterHtml);
 
-  console.log("[rarog] rarog.config.js/ts/json и пример проекта созданы.");
+  console.log("[rarog] Созданы rarog.config.js, rarog.build.json и src/index.html.");
 }
 
 function cmdDocs() {
@@ -910,31 +883,44 @@ function cmdDocs() {
 /* -------------------------------------------------------------------------- */
 
 function cmdValidate() {
+  const surface = getConfigSurfaceDiagnostics();
   const userConfig = loadUserConfig();
-  const result = validateConfig(userConfig);
+  const buildManifest = loadBuildManifest();
+  const configResult = validateConfig(userConfig);
+  const manifestResult = validateBuildManifest(buildManifest);
 
-  const hasErrors = result.errors.length > 0;
-  const hasWarnings = result.warnings.length > 0;
+  const warnings = [...surface.warnings, ...configResult.warnings, ...manifestResult.warnings];
+  const errors = [...configResult.errors, ...manifestResult.errors];
 
-  if (!hasErrors && !hasWarnings) {
-    console.log("\x1b[32m[rarog] Конфиг rarog.config.* выглядит корректным.\x1b[0m");
+  const themeConfigLabel = surface.selectedThemeConfig
+    ? path.basename(surface.selectedThemeConfig.file)
+    : "built-in defaults";
+  const buildManifestLabel = surface.selectedBuildManifest
+    ? path.basename(surface.selectedBuildManifest.file)
+    : "built-in defaults";
+
+  console.log(`[rarog] Theme config: ${themeConfigLabel}`);
+  console.log(`[rarog] Build manifest: ${buildManifestLabel}`);
+
+  if (!warnings.length && !errors.length) {
+    console.log("\x1b[32m[rarog] Config + build manifest выглядят корректно.\x1b[0m");
     return;
   }
 
-  if (hasWarnings) {
-    console.log("\x1b[33m[rarog] Предупреждения конфига:\x1b[0m");
-    result.warnings.forEach(w => {
-      console.log("  [warn]", w.code + ":", w.message);
+  if (warnings.length) {
+    console.log("\x1b[33m[rarog] Предупреждения:\x1b[0m");
+    warnings.forEach((warning) => {
+      console.log("  [warn]", warning.code + ":", warning.message);
     });
     console.log("");
   }
 
-  if (hasErrors) {
-    console.log("\x1b[31m[rarog] Ошибки конфига:\x1b[0m");
-    result.errors.forEach(e => {
-      console.log("  [error]", e.code + ":", e.message);
+  if (errors.length) {
+    console.log("\x1b[31m[rarog] Ошибки:\x1b[0m");
+    errors.forEach((error) => {
+      console.log("  [error]", error.code + ":", error.message);
     });
-    console.log("\nПодробнее о конфиге и manifest: https://cajeer.ru/rarog");
+    console.log("\nПодробнее о canonical config/build flow: https://cajeer.ru/rarog");
     process.exitCode = 1;
   }
 }
@@ -947,10 +933,10 @@ function printHelp() {
   console.log("Rarog CLI");
   console.log("");
   console.log("Использование:");
-  console.log("  rarog build    Сгенерировать токены и optional JIT CSS из rarog.config.{ts,js} + rarog.config.json");
-  console.log("  rarog init     Создать стартовый rarog.config.js/ts/json и пример проекта");
+  console.log("  rarog build    Сгенерировать токены и optional JIT CSS из rarog.config.js + rarog.build.json");
+  console.log("  rarog init     Создать rarog.config.js + rarog.build.json + src/index.html");
   console.log("  rarog docs     Запустить dev-документацию из пакета Rarog");
-  console.log("  rarog validate Проверить rarog.config.{ts,js} и вывести предупреждения/ошибки");
+  console.log("  rarog validate Проверить theme-config и build-manifest");
   console.log("");
 }
 
@@ -987,6 +973,12 @@ if (require.main === module) {
 }
 
 module.exports = {
+  generateColorCss,
+  generateSpacingCss,
+  generateRadiusCss,
+  generateShadowCss,
+  generateBreakpointsCss,
+  getEffectiveConfig,
   cmdBuild,
   cmdInit,
   cmdDocs,
