@@ -1,40 +1,86 @@
-# Версионирование и поддержка Rarog 3.x
+# Versioning Policy
 
-Rarog следует SemVer (`MAJOR.MINOR.PATCH`) и чётко разделяет типы изменений.
+Rarog следует **SemVer**: `MAJOR.MINOR.PATCH`.
 
-## Ветка 3.x
+## Что означает версия
 
-- **3.0.0** — API Freeze v3, первый стабильный релиз 3.x;
-- **3.1–3.4** — расширение компонент, утилит, DX и дизайн-системы;
-- **3.5.0** — укрепление надёжности, тестов и экосистемы.
+### PATCH
 
-Гарантии для 3.x:
+Patch-релизы используются для:
+- bug fixes;
+- security fixes;
+- docs/build/publish fixes без расширения surface;
+- non-breaking DX improvements.
 
-- публичные CSS-классы (utilities + components), JS-API и Plugin API
-  считаются стабильными в пределах 3.x;
-- минорные релизы 3.x могут добавлять новые возможности, но не должны ломать
-  существующий код без веской причины;
-- patch-релизы 3.x (3.5.1, 3.5.2 и т.п.) используются для bugfix/security-update.
+PATCH **не должен**:
+- менять stable API contract;
+- удалять entrypoints;
+- менять expected output paths в каноническом flow.
 
-## Поддержка
+### MINOR
 
-Планируемая поддержка ветки 3.x:
+Minor-релизы используются для:
+- добавления новых stable возможностей;
+- расширения utilities/components/themes;
+- продвижения surface из beta в stable;
+- добавления opt-in возможностей без breaking changes.
 
-- **bugfix**-обновления — не менее 12 месяцев после выхода 3.5.0;
-- **security**-обновления — не менее 18 месяцев после выхода 3.5.0 или
-  до появления стабильной ветки 4.x (что наступит позже).
+MINOR может:
+- добавлять новые subpath exports;
+- вводить deprecation warnings;
+- расширять CLI, если старый stable path остаётся рабочим.
 
-Для production-проектов рекомендуется закреплять мажорную версию (`^3.5.0`) и
-регулярно обновляться в рамках 3.x.
+### MAJOR
 
-## План на 4.x (high-level)
+Major нужен для:
+- удаления deprecated stable surface;
+- изменения root package contract;
+- смены канонического config/build flow;
+- любого intentional breaking change для stable API.
 
-Ветку 4.x будут оправдывать только изменения, которые невозможно аккуратно
-внести в 3.x без breaking:
+## Deprecation policy
 
-- радикальные изменения в токенах/темах;
-- снятие legacy-слоя или пересборка компонент;
-- пересмотр плагинного API.
+Для stable surface действует такой процесс:
+1. Сначала появляется deprecation note в docs/README/release notes.
+2. Затем surface остаётся рабочим минимум один minor-цикл, если нет security/critical reason убрать его раньше.
+3. Удаление происходит только в следующем major.
 
-Точные планы по 4.x будут опубликованы отдельно; до этого момента 3.x остаётся
-рекомендуемой стабильной веткой.
+Для beta/experimental surface срок может быть короче, но изменение всё равно должно быть задокументировано.
+
+## RFC process для больших API изменений
+
+RFC обязателен, если изменение затрагивает:
+- root package exports;
+- config/build flow;
+- публичный Plugin API;
+- adapter/runtime contracts;
+- migration path для stable пользователей.
+
+Минимальный RFC должен содержать:
+- problem statement;
+- proposed API;
+- compatibility impact;
+- migration plan;
+- rollout plan;
+- alternatives considered.
+
+## Release policy
+
+Канонический release gate:
+
+```bash
+npm ci
+npm run release:verify
+npm run build
+npm run test:release
+npm run verify:artifacts
+npm run pack:packages
+```
+
+Только после этого CI публикует `rarog`, `@rarog/js`, `@rarog/react` и `@rarog/vue`.
+
+## Support policy
+
+- Stable surface поддерживается в пределах текущего major.
+- Beta surface поддерживается best-effort с migration notes.
+- Experimental surface не имеет долгосрочных compatibility guarantees.

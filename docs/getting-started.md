@@ -1,83 +1,47 @@
 # Getting Started
 
-Этот раздел помогает быстро запустить **текущую поставляемую версию репозитория**, без предположений о внешнем CDN или несуществующих артефактах.
+Этот раздел описывает **канонический install/build flow** для текущего состояния репозитория.
 
 ## Быстрый путь для нового проекта
 
 ```bash
 npm install rarog
 npx rarog init
+npx rarog validate
 npx rarog build
 ```
 
-После этого у вас будут:
-- `rarog.config.js` и `rarog.config.ts` для theme-конфига;
-- `rarog.config.json` как build-manifest с путями вывода;
-- `dist/tokens/*.css` и, при `mode: "jit"`, `dist/rarog.jit.css`;
-- `examples/starter/index.html` как минимальная стартовая страница.
+После `init` создаются ровно три файла:
+- `rarog.config.js`
+- `rarog.build.json`
+- `src/index.html`
 
-## Установка зависимостей
+После `build` по умолчанию появляются:
+- `dist/tokens/_color.css`
+- `dist/tokens/_spacing.css`
+- `dist/tokens/_radius.css`
+- `dist/tokens/_shadow.css`
+- `dist/tokens/_breakpoints.css`
+- `dist/rarog.jit.css`
 
-```bash
-npm ci
-```
+## Канонические конфиги
 
-## Сборка CSS
+### Theme config
 
-```bash
-npm run build:css
-```
+Канонический theme-config:
+- `rarog.config.js`
 
-Если нужно собрать весь репозиторный surface (CSS + JS + adapters), используйте:
+Compatibility-path:
+- `rarog.config.ts`
 
-```bash
-npm run build
-```
+`rarog init` по умолчанию создаёт только `rarog.config.js`.
 
-Сборка создаёт CSS-файлы в каталоге `dist/` у следующих пакетов:
-- `packages/core/dist/`
-- `packages/utilities/dist/`
-- `packages/components/dist/`
-- `packages/themes/dist/`
-
-Минимальный набор для подключения:
-
-```html
-<link rel="stylesheet" href="/css/rarog-core.min.css">
-<link rel="stylesheet" href="/css/rarog-utilities.min.css">
-<link rel="stylesheet" href="/css/rarog-components.min.css">
-<link rel="stylesheet" href="/css/rarog-theme-default.min.css">
-```
-
-## CLI
-
-Локальный запуск CLI из репозитория:
-
-```bash
-node packages/cli/bin/rarog.js --help
-node packages/cli/bin/rarog.js build
-node packages/cli/bin/rarog.js validate
-```
-
-Если пакет установлен как зависимость проекта, можно использовать:
-
-```bash
-npx rarog build
-```
-
-## Конфиг
-
-Поддерживаются:
-- `rarog.config.ts` — приоритетный theme-config;
-- `rarog.config.js` — fallback theme-config;
-- `rarog.config.json` — build-manifest, а не theme-config.
-
-Пример минимального `rarog.config.js`:
+Минимальный пример:
 
 ```js
 module.exports = {
-  mode: "full",
-  content: ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"],
+  mode: "jit",
+  content: ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}"],
   theme: {
     extend: {
       colors: {
@@ -90,46 +54,15 @@ module.exports = {
 };
 ```
 
-## JS-ядро: текущее состояние
+### Build manifest
 
-Vanilla JS-ядро находится в `packages/js/src/rarog.esm.js`.
+Канонический build-manifest:
+- `rarog.build.json`
 
-Важно:
-- исходники JS-ядра лежат в `packages/js/src/`;
-- publishable output создаётся через `npm run build:js` или полную сборку `npm run build`;
-- для внешнего использования ориентируйтесь на артефакты из `packages/js/dist/`.
+Legacy fallback:
+- `rarog.config.json`
 
-## Быстрый пример разметки
-
-```html
-<div class="rg-container-lg py-6">
-  <div class="rg-row rg-gap-y-4">
-    <div class="rg-col-12 rg-col-md-8">
-      <div class="card">
-        <div class="card-header">Добро пожаловать в Rarog</div>
-        <div class="card-body">
-          <p class="text-muted">
-            Это базовый пример использования сетки и карточки.
-          </p>
-          <button class="btn btn-primary">Основная кнопка</button>
-        </div>
-      </div>
-    </div>
-    <div class="rg-col-12 rg-col-md-4">
-      <div class="alert alert-info">
-        <strong>Подсказка:</strong> responsive-утилиты используют префиксы `sm:`, `md:`, `lg:`, `xl:` и `2xl:`.
-      </div>
-    </div>
-  </div>
-</div>
-```
-
-
-## Build-manifest
-
-`rarog.config.json` используется для путей вывода, а не для описания темы.
-
-Пример:
+Пример минимального `rarog.build.json`:
 
 ```json
 {
@@ -146,3 +79,61 @@ Vanilla JS-ядро находится в `packages/js/src/rarog.esm.js`.
   }
 }
 ```
+
+## CLI flow
+
+### `rarog init`
+
+Создаёт стартовый проект без сюрпризов:
+- один theme-config;
+- один build-manifest;
+- один smoke HTML input.
+
+### `rarog validate`
+
+Проверяет:
+- theme-config surface;
+- build-manifest surface;
+- предупреждения по legacy/multi-config состояниям.
+
+### `rarog build`
+
+Делает каноническую пользовательскую сборку:
+- генерирует token CSS по путям из `rarog.build.json`;
+- в режиме `jit` пишет `outputs.jitCss`;
+- если classes не найдены, CLI использует предсказуемый fallback bundle, а не молча публикует пустой output.
+
+## Сборка репозитория
+
+Для разработки самого монорепо:
+
+```bash
+npm ci
+npm run build
+npm run test:ci
+npm run verify:artifacts
+```
+
+Где:
+- `npm run build` — полная сборка (`build:css + build:js + build:adapters`);
+- `npm run verify:artifacts` — запускается **после полной сборки**;
+- `npm run test:ci` — включает temp-project smoke test (`init → validate → build → output exists`).
+
+## Root package surface
+
+Root `rarog` публикует CSS surface через:
+- `style`
+- subpath exports
+
+Root `main` для CSS не используется.
+
+Поддерживаемые entrypoints:
+- `rarog/core`
+- `rarog/utilities`
+- `rarog/components`
+- `rarog/themes/default`
+- `rarog/themes/dark`
+- `rarog/themes/contrast`
+- `rarog/themes/creative`
+- `rarog/themes/enterprise`
+- `rarog/cli`
