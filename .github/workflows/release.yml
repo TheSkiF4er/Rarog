@@ -37,6 +37,11 @@ jobs:
       - name: Pack publishable packages
         run: npm run pack:packages
 
+      - name: Publish rarog
+        run: npm publish . --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish @rarog/js
         run: npm publish ./packages/js --access public
         env:
