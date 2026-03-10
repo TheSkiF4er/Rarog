@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import url from "url";
 
-import rarogCli from "../packages/cli/bin/rarog.js";
+import * as rarogCli from "../packages/cli/lib/api.js";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, "..");
@@ -11,16 +11,24 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT_DIR, rel), "utf8");
 }
 
+function resolveManifestPath() {
+  const canonical = path.join(ROOT_DIR, "rarog.build.json");
+  const legacy = path.join(ROOT_DIR, "rarog.config.json");
+  if (fs.existsSync(canonical)) return canonical;
+  return legacy;
+}
+
 function main() {
   const pkg = JSON.parse(read("package.json"));
-  const cfgJson = JSON.parse(read("rarog.config.json"));
+  const manifestPath = resolveManifestPath();
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
   const effective = rarogCli.getEffectiveConfig();
 
-  const colorActual = read(cfgJson.tokens.colors).trim();
-  const spacingActual = read(cfgJson.tokens.spacing).trim();
-  const radiusActual = read(cfgJson.tokens.radius).trim();
-  const shadowActual = read(cfgJson.tokens.shadow).trim();
-  const breakpointsActual = read(cfgJson.tokens.breakpoints).trim();
+  const colorActual = read(manifest.tokens.colors).trim();
+  const spacingActual = read(manifest.tokens.spacing).trim();
+  const radiusActual = read(manifest.tokens.radius).trim();
+  const shadowActual = read(manifest.tokens.shadow).trim();
+  const breakpointsActual = read(manifest.tokens.breakpoints).trim();
 
   const colorGenerated = rarogCli.generateColorCss(effective.theme).trim();
   const spacingGenerated = rarogCli.generateSpacingCss(effective.theme).trim();
