@@ -1,6 +1,6 @@
 # Rarog CSS Framework 3.5.0
 
-> **Rarog** — CSS-фреймворк и дизайн-система на базе design-tokens, utilities, компонентов и экспериментального JS-ядра.
+> **Rarog** — CSS-фреймворк и дизайн-система на базе design-tokens, utilities, компонентов и CLI.
 
 <p align="left">
   <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
@@ -15,71 +15,83 @@
   <a href="https://cajeer.ru/rarog">
     <img src="https://img.shields.io/badge/docs-cajeer.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
   </a>
-  <a href="./LICENSE">
-    <img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License" />
-  </a>
 </p>
 
-- Автор: **TheSkiF4er**
-- Лицензия: **Apache 2.0**
-- Контакты: `support@cajeer.ru`
 - Текущая стабильная ветка: **3.x**
 - Текущая версия: **3.5.0**
 - Документация: `https://cajeer.ru/rarog`
 
----
+## Канонический install/build/publish flow
 
-## Что реально есть в репозитории сейчас
+### Для пользователя CLI
 
-Rarog уже включает:
-- дизайн-токены: `rarog.tokens.json` и `design/figma.tokens.json`;
-- CSS-слои: `packages/core/src`, `packages/utilities/src`, `packages/components/src`, `packages/themes/src`;
-- CLI: `packages/cli/bin/rarog.js`;
-- vanilla JS-ядро в исходниках: `packages/js/src/rarog.esm.js`;
-- плагины CommonJS: `packages/plugin-forms/index.cjs`, `packages/plugin-typography/index.cjs`;
-- документацию в `docs/`.
+```bash
+npm install rarog
+npx rarog init
+npx rarog validate
+npx rarog build
+```
 
-## Матрица стабильности surface
+По умолчанию `init` создаёт ровно три файла:
+- `rarog.config.js` — канонический theme-config;
+- `rarog.build.json` — канонический build-manifest;
+- `src/index.html` — минимальный smoke-input для JIT.
 
-| Surface | Status | Примечание |
-|---|---|---|
-| Core CSS | Stable | Основной CSS-слой и design tokens. |
-| Utilities | Stable | Utility API поддерживается как основной surface. |
-| Components CSS | Stable | Компонентные CSS-слои входят в основной релиз. |
-| Themes | Stable | Поставляемые темы публикуются как готовые CSS-артефакты. |
-| CLI | Beta | Основные команды поддерживаются, но DX ещё развивается. |
-| JS Runtime | Beta | Рабочий runtime, но контракт расширяется. |
-| React bindings | Experimental | Требуют отдельной smoke/compatibility-проверки перед релизом. |
-| Vue bindings | Experimental | Требуют отдельной smoke/compatibility-проверки перед релизом. |
-| Plugin API | Experimental | Публичный контракт описан отдельно и может эволюционировать. |
+`rarog.config.ts` поддерживается только как compatibility-path. `rarog.config.json` остаётся legacy-форматом для build-manifest и больше не является каноническим путём.
 
-Что пока **не стоит считать production-ready API**:
-- React/Vue-адаптеры в `packages/react` и `packages/vue` всё ещё требуют отдельной smoke/compatibility-проверки перед релизом;
-- часть UI-kit и ecosystem-заявлений в старых docs описывает целевое состояние, а не полностью поставляемый артефакт.
-
----
-
-## Быстрый старт
-
-### 1. Установка
+### Для разработки репозитория
 
 ```bash
 npm ci
+npm run build
+npm run test:ci
+npm run verify:artifacts
 ```
 
-### 2. Сборка CSS-слоёв
+Где:
+- `npm run build` — каноническая полная сборка (`build:css + build:js + build:adapters`);
+- `npm run test:ci` — unit/adapters/contracts + temp-project smoke test;
+- `npm run verify:artifacts` — post-build проверка publishable tarball;
+- `npm run pack:packages` — упаковка всех publishable пакетов в `.artifacts/`.
 
-```bash
-npm run build:css
-```
+## Root package surface
 
-После сборки создаются CSS-артефакты в:
-- `packages/core/dist/`
-- `packages/utilities/dist/`
-- `packages/components/dist/`
-- `packages/themes/dist/`
+Root package предсказуемо публикует CSS surface:
+- `style` → `./packages/core/dist/rarog-core.min.css`
+- subpath exports:
+  - `rarog/core`
+  - `rarog/utilities`
+  - `rarog/components`
+  - `rarog/themes/default`
+  - `rarog/themes/dark`
+  - `rarog/themes/contrast`
+  - `rarog/themes/creative`
+  - `rarog/themes/enterprise`
+  - `rarog/cli`
 
-### 3. Базовое подключение собранных файлов
+Сомнительный root `main` для CSS больше не используется, чтобы не ломать tooling.
+
+## Surface matrix
+
+| Surface | Status | Notes |
+|---|---|---|
+| Core CSS | Stable | Основной publish surface root package. |
+| Utilities CSS | Stable | Поддерживаемые utility classes и tokens. |
+| Components CSS | Stable | Поддерживаемые компонентные CSS-слои. |
+| Built-in themes | Stable | `default`, `dark`, `contrast`, `creative`, `enterprise`. |
+| CLI config/build flow | Stable | `init → validate → build` с `rarog.config.js` и `rarog.build.json`. |
+| JS runtime (`@rarog/js`) | Beta | Поддерживается, но API ещё расширяется. |
+| React bindings (`@rarog/react`) | Experimental | Требуют отдельной compatibility-проверки. |
+| Vue bindings (`@rarog/vue`) | Experimental | Требуют отдельной compatibility-проверки. |
+| Plugin API | Experimental | Для больших изменений нужен RFC. |
+
+Подробности:
+- `docs/stability.md`
+- `docs/versioning.md`
+
+## Быстрый старт
+
+### Подключение собранных CSS-слоёв
 
 ```html
 <link rel="stylesheet" href="/css/rarog-core.min.css">
@@ -88,113 +100,58 @@ npm run build:css
 <link rel="stylesheet" href="/css/rarog-theme-default.min.css">
 ```
 
-### 4. Опционально: CLI
+### Локальный запуск CLI из репозитория
 
 ```bash
 node packages/cli/bin/rarog.js --help
-node packages/cli/bin/rarog.js build
 node packages/cli/bin/rarog.js validate
+node packages/cli/bin/rarog.js build
 ```
 
----
+## Publish flow
 
-## Минимальный пример разметки
-
-```html
-<div class="rg-container-lg mt-6">
-  <div class="card shadow-md">
-    <div class="card-header flex items-center justify-between">
-      <h1 class="h5 mb-0">Добро пожаловать в Rarog 3.5.0</h1>
-      <span class="badge badge-primary">3.x stable</span>
-    </div>
-    <div class="card-body">
-      <p class="text-muted mb-4">
-        Design-tokens, utilities и компоненты подключены как отдельные CSS-слои.
-      </p>
-      <button class="btn btn-primary btn-lg">Начать</button>
-    </div>
-  </div>
-</div>
-```
-
----
-
-## Структура проекта
-
-```text
-packages/
-  cli/
-  components/
-  core/
-  js/
-  plugin-forms/
-  plugin-typography/
-  react/
-  themes/
-  utilities/
-  vue/
-```
-
-Коротко по пакетам:
-- `core` — reset, globals, typography, tokens;
-- `utilities` — utility-классы;
-- `components` — компонентный CSS;
-- `themes` — готовые темы;
-- `js` — vanilla JS core;
-- `react`, `vue` — экспериментальные placeholders;
-- `plugin-*` — первые runtime-плагины.
-
----
-
-## Разработка
-
-Полезные команды:
+Канонический publish pipeline в CI:
 
 ```bash
+npm ci
+npm run release:verify
 npm run build
-npm run test:unit
-npm run test:adapters
 npm run test:release
-npm run docs:lint
+npm run verify:artifacts
+npm run pack:packages
 ```
 
-Где:
-- `npm run build` — каноническая полная сборка репозитория (`build:css + build:js + build:adapters`);
-- `npm run build:css` — только CSS-слои, если менялся только CSS surface;
-- `npm run test:unit` — source/runtime unit-контур для JS core и контрактных JS-поверхностей;
-- `npm run test:adapters` — dist-smoke для React/Vue adapters; перед прогоном команда пересобирает `@rarog/js`, `@rarog/react` и `@rarog/vue`, чтобы не опираться на устаревший `dist`;
-- `npm run test:release` — минимальный обязательный release gate (`test:unit + test:adapters + test:contracts`).
-- `npm run docs:lint` — быстрая проверка docs-контракта без полной сборки VitePress.
-- `npm run verify:artifacts` — post-build проверка содержимого publishable tarball через `npm pack --dry-run`.
-
-Если нужно проверить CLI без глобальной установки:
-
-```bash
-node packages/cli/bin/rarog.js --help
-```
-
----
+После этого release workflow публикует:
+- `rarog`
+- `@rarog/js`
+- `@rarog/react`
+- `@rarog/vue`
 
 ## Документация
 
-Основные документы в репозитории:
+Основные документы:
 - `docs/getting-started.md`
-- `docs/javascript.md`
-- `docs/components.md`
-- `docs/tokens.md`
+- `docs/stability.md`
 - `docs/versioning.md`
-- `CONTRIBUTING.md`
+- `docs/javascript.md`
 - `RELEASE.md`
-
----
 
 ## Contributing
 
 Перед PR:
-- прогоните `npm run build`;
-- прогоните `npm run test:unit`;
-- прогоните `npm run docs:lint`, если меняли README или docs.
 
-Перед релизом дополнительно используйте `npm run test:release` как единый обязательный тестовый gate и `npm run verify:artifacts` после сборки, чтобы проверить реальный publish-surface.
+```bash
+npm run build
+npm run test:ci
+npm run docs:lint
+```
 
-Подробности — в `CONTRIBUTING.md`.
+Перед релизом:
+
+```bash
+npm run release:verify
+npm run build
+npm run test:release
+npm run verify:artifacts
+npm run pack:packages
+```

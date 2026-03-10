@@ -1,19 +1,16 @@
 # RELEASE.md
 
-Этот документ описывает **канонический релизный путь** для текущего состояния репозитория.
+Этот документ описывает **канонический релизный путь**.
 
 ## Канонические команды
 
-- `npm run build` — полная сборка репозитория (`build:css + build:js + build:adapters`).
-- `npm run docs:lint` — быстрая проверка docs-контракта без полной сборки VitePress.
-- `npm run test:release` — минимальный обязательный тестовый gate перед публикацией (`test:unit + test:adapters + test:contracts`).
-- `npm run docs:check` — полный docs gate: lint + VitePress build + проверка output.
-- `npm run release:verify` — проверка release/docs-контракта перед сборкой и публикацией.
-- `npm run verify:artifacts` — post-build проверка publishable tarball через `npm pack --dry-run`.
+- `npm run build` — полная сборка (`build:css + build:js + build:adapters`).
+- `npm run test:release` — release gate (`test:unit + test:adapters + test:contracts + test:smoke`).
+- `npm run release:verify` — release/docs contract gate.
+- `npm run verify:artifacts` — post-build проверка publishable tarball.
+- `npm run pack:packages` — упаковка publishable пакетов в `.artifacts/`.
 
 ## Перед релизом
-
-Прогоните:
 
 ```bash
 npm ci
@@ -24,45 +21,35 @@ npm run verify:artifacts
 npm run pack:packages
 ```
 
-Дополнительно стоит проверить CLI smoke:
+## Что делает CI перед публикацией
 
-```bash
-node packages/cli/bin/rarog.js --help
-node packages/cli/bin/rarog.js validate
-```
+Release workflow выполняет именно этот порядок:
+1. `npm ci`
+2. `npm run release:verify`
+3. `npm run build:all`
+4. `npm run test:release`
+5. `npm run verify:artifacts`
+6. `npm run pack:packages`
+7. `npm publish . --access public`
+8. `npm publish ./packages/js --access public`
+9. `npm publish ./packages/react --access public`
+10. `npm publish ./packages/vue --access public`
 
-## Что проверяется в GitHub Actions
+## Release invariants
 
-Release workflow перед `npm publish` выполняет:
+Перед публикацией нужно убедиться, что:
+- канонический theme-config — `rarog.config.js`;
+- канонический build-manifest — `rarog.build.json`;
+- root package публикует `style` и subpath exports;
+- root package не использует CSS `main`;
+- `verify:artifacts` запускается только после полной сборки;
+- temp-project smoke test зелёный.
 
-- `npm run release:verify`
-- `npm run build:all`
-- `npm run test:release`
-- `npm run verify:artifacts`
-- `npm run pack:packages`
+## После изменений install/build/publish контура
 
-Это означает, что релизный tag не должен обходить docs/release-проверки и основной тестовый gate.
-
-## Что проверить руками
-
-Перед публикацией убедитесь, что синхронизированы:
-- версия в `package.json`;
-- версия в README и docs, если она упоминается явно;
-- баннеры/headers в CSS и JS-файлах, если они содержат версию;
-- реально поставляемый surface пакета.
-
-## После изменения релизного контура
-
-Обязательно перепроверьте:
+Перепроверьте:
 - `README.md`
 - `docs/getting-started.md`
-- `docs/javascript.md`
-- `CONTRIBUTING.md`
-- `plugins/registry.json`, если менялись plugin-обещания
-
-## Что пока не стоит обещать в релиз-нотах без отдельной проверки
-
-Не анонсируйте как стабильные, пока нет отдельного подтверждения качества и упаковки:
-- React/Vue adapters;
-- внешние JS-бандлы, если они не были собраны и проверены;
-- UI kits или starters, если они не входят в опубликованный артефакт.
+- `docs/stability.md`
+- `docs/versioning.md`
+- `.github/workflows/release.yml`

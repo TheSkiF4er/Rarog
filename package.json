@@ -4,7 +4,6 @@
   "description": "Rarog CSS Framework — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
-  "main": "./packages/core/dist/rarog-core.min.css",
   "scripts": {
     "build": "npm run build:all",
     "build:css": "node tools/build.mjs",
@@ -26,7 +25,7 @@
     "test:unit": "vitest run tests/js",
     "test:unit:watch": "vitest",
     "test:adapters": "npm run build:js && npm run build:adapters && vitest run tests/adapters",
-    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts",
+    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke",
     "test:contracts": "vitest run tests/js/component-contracts.test.js tests/js/contract-sweep.test.js tests/js/dispose-contract.test.js tests/js/event-contract.test.js tests/js/event-contract-core.test.js tests/js/event-contract-overlay-components.test.js",
     "test:e2e": "playwright test",
     "visual:serve": "node tools/visual-dev.mjs --port 4175",
@@ -37,7 +36,8 @@
     "pack:packages": "node tools/pack-packages.mjs",
     "docs:check": "npm run docs:lint && npm run docs:build && node tools/check-docs-output.mjs",
     "docs:lint": "node tools/check-docs.mjs",
-    "test:release": "npm run test:unit && npm run test:adapters && npm run test:contracts"
+    "test:release": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke",
+    "test:smoke": "node tests/cli-temp-project-smoke.mjs"
   },
   "repository": {
     "type": "git",
@@ -79,7 +79,10 @@
     "./themes/default": "./packages/themes/dist/rarog-theme-default.min.css",
     "./themes/dark": "./packages/themes/dist/rarog-theme-dark.min.css",
     "./themes/contrast": "./packages/themes/dist/rarog-theme-contrast.min.css",
-    "./cli": "./packages/cli/bin/rarog.js"
+    "./cli": "./packages/cli/bin/rarog.js",
+    "./themes/creative": "./packages/themes/dist/rarog-theme-creative.min.css",
+    "./themes/enterprise": "./packages/themes/dist/rarog-theme-enterprise.min.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "packages/cli/bin",
@@ -93,5 +96,8 @@
   ],
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
