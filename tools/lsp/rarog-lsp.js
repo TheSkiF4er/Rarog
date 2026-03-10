@@ -180,14 +180,17 @@ connection.onInitialized(() => {
 
 documents.onDidChangeContent(change => {
   const uri = change.document.uri;
-  if (uri.endsWith("rarog.config.json") || uri.endsWith("rarog.config.js") || uri.endsWith("rarog.config.ts")) {
+  if (uri.endsWith("rarog.build.json") || uri.endsWith("rarog.config.json") || uri.endsWith("rarog.config.js") || uri.endsWith("rarog.config.ts")) {
     validateConfigDocument(change.document);
   }
 });
 
 function validateConfigDocument(doc) {
-  if (!cliApi || typeof cliApi.validateConfig !== "function") {
-    // LSP всё равно может подсветить синтаксические ошибки JSON
+  const isJsonConfig = doc.uri.endsWith("rarog.build.json") || doc.uri.endsWith("rarog.config.json");
+  const hasThemeValidator = cliApi && typeof cliApi.validateConfig === "function";
+  const hasManifestValidator = cliApi && typeof cliApi.validateBuildManifest === "function";
+
+  if ((!isJsonConfig && !hasThemeValidator) || (isJsonConfig && !hasManifestValidator && !hasThemeValidator)) {
     if (doc.languageId === "json") {
       try {
         JSON.parse(doc.getText());
@@ -198,7 +201,7 @@ function validateConfigDocument(doc) {
             start: { line: 0, character: 0 },
             end: { line: 0, character: 1 }
           },
-          message: "Некорректный JSON в rarog.config.json: " + err.message,
+          message: `Некорректный JSON в ${path.basename(url.fileURLToPath(doc.uri))}: ` + err.message,
           source: "rarog-lsp"
         };
         connection.sendDiagnostics({ uri: doc.uri, diagnostics: [diag] });
@@ -221,7 +224,7 @@ function validateConfigDocument(doc) {
           start: { line: 0, character: 0 },
           end: { line: 0, character: 1 }
         },
-        message: "Некорректный JSON в rarog.config.json: " + err.message,
+        message: `Некорректный JSON в ${path.basename(url.fileURLToPath(doc.uri))}: ` + err.message,
         source: "rarog-lsp"
       };
       connection.sendDiagnostics({ uri: doc.uri, diagnostics: [diag] });
@@ -250,7 +253,9 @@ function validateConfigDocument(doc) {
     }
   }
 
-  const result = cliApi.validateConfig(config);
+  const result = isJsonConfig && hasManifestValidator
+    ? cliApi.validateBuildManifest(config)
+    : cliApi.validateConfig(config);
   const diagnostics = [];
 
   (result.errors || []).forEach(err => {
@@ -302,8 +307,8 @@ connection.onCompletion(params => {
     }
   });
 
-  // Токены (primary-500, space-4 и т.п.) — особенно полезно внутри rarog.config.*
-  if (doc.uri.endsWith("rarog.config.ts") || doc.uri.endsWith("rarog.config.js") || doc.uri.endsWith("rarog.config.json")) {
+  // Токены (primary-500, space-4 и т.п.) — особенно полезно внутри rarog.config.* и build-manifest.
+  if (doc.uri.endsWith("rarog.config.ts") || doc.uri.endsWith("rarog.config.js") || doc.uri.endsWith("rarog.config.json") || doc.uri.endsWith("rarog.build.json")) {
     tokenCompletionsCache.forEach(tok => {
       if (!prefix || tok.label.startsWith(prefix)) {
         items.push(tok);
