@@ -25,5 +25,4 @@ Use config to define:
 ## See also
 
 * [Themes](../themes/README.md)
-* [Plugin API](../plugin-api/README
-* .md)
+* [Plugin API](../plugin-api/README.md)
