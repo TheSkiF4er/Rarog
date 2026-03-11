@@ -1,1 +1,15 @@
-
+{
+  "id": "dashboard",
+  "description": "layout and surface defaults for analytics-heavy interfaces",
+  "tokens": {
+    "radius": "lg",
+    "density": "compact",
+    "shadow": "md",
+    "surface": "elevated"
+  },
+  "layout": {
+    "shell": "d-grid rg-gap-4",
+    "sidebar": "card shadow-sm rounded-lg",
+    "panel": "card shadow-md rounded-lg"
+  }
+}

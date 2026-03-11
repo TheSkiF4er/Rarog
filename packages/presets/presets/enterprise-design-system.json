@@ -1,0 +1,16 @@
+{
+  "id": "enterprise-design-system",
+  "description": "sane defaults for internal platforms and multi-product suites",
+  "tokens": {
+    "radius": "md",
+    "density": "comfortable",
+    "shadow": "sm",
+    "surface": "neutral",
+    "focusRing": "primary"
+  },
+  "components": {
+    "button": "btn btn-primary",
+    "card": "card shadow-sm rounded-md",
+    "alert": "alert alert-primary"
+  }
+}

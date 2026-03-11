@@ -1,0 +1,19 @@
+{
+  "id": "tailwind-aliases",
+  "description": "keeps common tailwind mental model during rarog adoption",
+  "aliases": {
+    "flex": "d-flex",
+    "inline-flex": "d-inline-flex",
+    "grid": "d-grid",
+    "hidden": "d-none",
+    "block": "d-block",
+    "justify-between": "justify-between",
+    "items-center": "items-center",
+    "rounded": "rounded",
+    "rounded-lg": "rounded-lg",
+    "shadow": "shadow-sm",
+    "w-full": "w-full",
+    "h-full": "h-full",
+    "sr-only": "sr-only"
+  }
+}

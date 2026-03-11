@@ -1,0 +1,20 @@
+{
+  "id": "bootstrap-spacing",
+  "description": "maps bootstrap spacing expectations to rarog-compatible utility scale",
+  "spacingScale": {
+    "0": "0rem",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "1rem",
+    "4": "1.5rem",
+    "5": "3rem"
+  },
+  "aliases": {
+    "g-0": "rg-gap-0",
+    "g-1": "rg-gap-1",
+    "g-2": "rg-gap-2",
+    "g-3": "rg-gap-3",
+    "g-4": "rg-gap-4",
+    "g-5": "rg-gap-5"
+  }
+}
