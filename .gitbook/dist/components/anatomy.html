@@ -1,0 +1,32 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Component anatomy · Rarog Docs</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f7f8fb;color:#172033}a{color:#1d4ed8;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.nav{padding:24px;border-right:1px solid #dbe2f0;background:#fff;position:sticky;top:0;height:100vh;overflow:auto}.nav ul{padding-left:18px}.content{padding:32px;max-width:960px}pre{background:#0f172a;color:#e5edf8;padding:16px;border-radius:14px;overflow:auto}code{background:#eef2ff;padding:2px 6px;border-radius:6px}table{border-collapse:collapse}h1,h2,h3{line-height:1.2}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{position:relative;height:auto;border-right:0;border-bottom:1px solid #dbe2f0}}</style></head><body><div class="shell"><aside class="nav"><h1>Rarog Docs</h1><p>GitBook content export</p><ul><li><a href="README.html">Documentation</a></li><li><a href="docs-platform-v2.html">Docs platform v2</a></li><li><a href="getting-started/README.html">Getting Started</a></li><li><a href="installation/README.html">Installation</a></li><li><a href="cli/README.html">CLI</a></li><li><a href="build/README.html">Build</a></li><li><a href="live-playground.html">Live playground</a></li><li><a href="copy-paste-examples.html">Copy-paste examples</a></li><li><a href="tokens/README.html">Tokens</a></li><li><a href="tokens.html">Token architecture v2</a></li><li><a href="semantic-tokens.html">Semantic tokens</a></li><li><a href="themes/README.html">Themes</a></li><li><a href="themes/theme-engine-v1.html">Theme engine v1</a></li><li><a href="themes/token-theme-explorer.html">Token and theme explorer</a></li><li><a href="utilities/README.html">Utilities</a></li><li><a href="components/README.html">Components</a></li><li><a href="accessibility.html">Accessibility baseline</a></li><li><a href="runtime/README.html">Runtime</a></li><li><a href="plugin-api/README.html">Plugin API</a></li><li><a href="migration/README.html">Migration</a></li><li><a href="starters/README.html">Official starters</a></li><li><a href="contributor-guide/README.html">Contributor Guide</a></li><li><a href="build/jit-how-it-works.html">How JIT works</a></li><li><a href="build/jit-troubleshooting.html">JIT troubleshooting guide</a></li></ul></aside><main class="content"><h1>Component anatomy</h1>
+<p>Component anatomy помогает объяснять не только внешний API, но и внутреннюю структуру, важную для theming, accessibility и composition.</p>
+<h2>Shared anatomy model</h2>
+<p>Почти все компоненты Rarog можно описать через четыре слоя:</p>
+<ol>
+<li><strong>Root</strong> — контейнер и semantic role</li>
+<li><strong>Control / trigger</strong> — интерактивная часть</li>
+<li><strong>Content / panel</strong> — основное содержимое</li>
+<li><strong>Affordances</strong> — icon slots, badges, helper text, dismiss buttons</li>
+</ol>
+<h2>Example: dialog</h2>
+<ul>
+<li>root: <code>.modal</code></li>
+<li>container: <code>.modal-dialog</code></li>
+<li>header: <code>.modal-header</code></li>
+<li>title: <code>.modal-title</code></li>
+<li>body: <code>.modal-body</code></li>
+<li>footer: <code>.modal-footer</code></li>
+</ul>
+<h2>Example: tabs</h2>
+<ul>
+<li>list: tablist container</li>
+<li>trigger: each tab button with selected state</li>
+<li>panel: content surface tied through ARIA relationships</li>
+</ul>
+<h2>Why it matters</h2>
+<p>Anatomy pages помогают:</p>
+<ul>
+<li>делать theme overrides без ломки компонента;</li>
+<li>стабильно оформлять visual tests;</li>
+<li>держать consistent accessibility checklist между реализациями React, Vue и vanilla.</li>
+</ul></main></div></body></html>
