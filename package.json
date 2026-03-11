@@ -15,9 +15,9 @@
     "build:adapters": "node tools/build-adapters.mjs",
     "build:all": "npm run build:css && npm run build:js && npm run build:adapters",
     "docs": "node tools/docs-dev.mjs",
-    "docs:dev": "node tools/docs-dev.mjs",
-    "docs:build": "node tools/build-docs-site.mjs",
-    "docs:preview": "node tools/docs-dev.mjs --dir .gitbook/dist",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "storybook:build": "storybook build",
     "storybook:smoke": "node tests/storybook/storybook-smoke.mjs",
@@ -25,7 +25,7 @@
     "test:unit": "vitest run tests/js",
     "test:unit:watch": "vitest",
     "test:adapters": "npm run build:js && npm run build:adapters && vitest run tests/adapters",
-    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke && npm run test:starters",
+    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke",
     "test:contracts": "vitest run tests/js/component-contracts.test.js tests/js/contract-sweep.test.js tests/js/dispose-contract.test.js tests/js/event-contract.test.js tests/js/event-contract-core.test.js tests/js/event-contract-overlay-components.test.js",
     "test:e2e": "playwright test",
     "visual:serve": "node tools/visual-dev.mjs --port 4175",
@@ -38,11 +38,9 @@
     "docs:lint": "node tools/check-docs.mjs",
     "test:release": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke",
     "test:smoke": "node tests/cli-temp-project-smoke.mjs",
-    "test:starters": "node tests/starters/smoke.mjs",
-    "dev": "node tools/docs-dev.mjs",
-    "playground": "node tools/playground-dev.mjs",
-    "build:app": "npm run build:all",
-    "rarog:build": "npm run build:all"
+    "migrate:bootstrap": "node packages/cli/bin/rarog.js migrate bootstrap",
+    "migrate:tailwind": "node packages/cli/bin/rarog.js migrate tailwind",
+    "inspect:classes": "node packages/cli/bin/rarog.js inspect classes"
   },
   "repository": {
     "type": "git",
@@ -88,9 +86,7 @@
     "./themes/creative": "./packages/themes/dist/rarog-theme-creative.min.css",
     "./themes/enterprise": "./packages/themes/dist/rarog-theme-enterprise.min.css",
     "./package.json": "./package.json",
-    "./themes/aurora": "./packages/themes/dist/rarog-theme-aurora.min.css",
-    "./themes/graphite": "./packages/themes/dist/rarog-theme-graphite.min.css",
-    "./themes/enterprise-plus": "./packages/themes/dist/rarog-theme-enterprise-plus.min.css"
+    "./presets": "./packages/presets/registry.json"
   },
   "files": [
     "packages/cli/bin",
@@ -99,6 +95,7 @@
     "packages/utilities/dist",
     "packages/components/dist",
     "packages/themes/dist",
+    "packages/presets",
     "README.md",
     "LICENSE"
   ],
