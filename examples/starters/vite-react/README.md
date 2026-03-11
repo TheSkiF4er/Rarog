@@ -1,29 +1,21 @@
 # Vite + React + Rarog Starter
 
-Стартовый шаблон для проектов на Vite + React с использованием Rarog.
+Стартовый шаблон React adapter v1 c `@rarog/react`.
+
+## Что показывает пример
+
+- SSR-safe `RarogProvider`
+- typed wrapped components
+- controlled tabs/switch
+- overlay usage через `RarogModal`
 
 ## Быстрый старт
 
-1. Перейдите в директорию:
-   ```bash
-   cd examples/starters/vite-react
-   ```
-
-2. Установите зависимости:
-   ```bash
-   npm install
-   ```
-
-3. Соберите Rarog в корне монорепозитория:
-   ```bash
-   cd ../../..
-   npm run build
-   ```
-
-4. Запустите dev-сервер Vite:
-   ```bash
-   cd examples/starters/vite-react
-   npm run dev
-   ```
-
-Откройте указанный адрес (по умолчанию `http://localhost:5173`) и редактируйте компоненты/классы Rarog.
+```bash
+cd examples/starters/vite-react
+npm install
+cd ../../..
+npm run build
+cd examples/starters/vite-react
+npm run dev
+```
