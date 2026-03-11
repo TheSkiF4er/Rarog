@@ -1,83 +1,50 @@
-/* Rarog State Utilities (hover/focus)
- *
- * Использование:
- *   class="btn btn-outline hover:bg-primary hover:text-primary"
- *   class="input focus:border-primary"
- *
- * В CSS двоеточие экранируется: .hover\:bg-primary:hover { ... }
- */
+/* State and variant utilities */
 
-/* Hover: фон и текст */
+.hover\:bg-primary:hover { background-color: var(--rarog-color-primary); color: var(--rarog-color-primary-foreground); }
+.hover\:bg-primary-600:hover { background-color: var(--rarog-color-primary-600); color: #ffffff; }
+.hover\:bg-secondary:hover { background-color: var(--rarog-color-secondary); color: #ffffff; }
+.hover\:bg-surface:hover { background-color: var(--rarog-color-surface); }
+.hover\:text-primary:hover { color: var(--rarog-color-primary); }
+.hover\:text-primary-600:hover { color: var(--rarog-color-primary-600); }
+.hover\:text-white:hover { color: #ffffff; }
+.hover\:border-primary:hover { border-color: var(--rarog-color-primary); }
+.hover\:shadow-md:hover { box-shadow: var(--rarog-shadow-md, 0 4px 6px rgba(15, 23, 42, 0.16)); }
+.hover\:opacity-75:hover { opacity: 0.75; }
+.hover\:underline:hover { text-decoration: underline; }
 
-.hover\:bg-primary:hover {
-  background-color: var(--rarog-color-primary);
-  color: var(--rarog-color-primary-foreground);
-}
+.focus\:border-primary:focus,
+.focus-visible\:border-primary:focus-visible { border-color: var(--rarog-color-primary); }
+.focus\:ring-2:focus,
+.focus-visible\:ring-2:focus-visible { box-shadow: 0 0 0 2px var(--rarog-color-focus-ring, var(--rarog-color-primary-500)); }
+.focus\:outline-none:focus,
+.focus-visible\:outline-none:focus-visible { outline: none; }
+.focus\:bg-surface:focus { background-color: var(--rarog-color-surface); }
+.focus\:text-primary:focus { color: var(--rarog-color-primary); }
 
-.hover\:text-primary:hover {
-  color: var(--rarog-color-primary);
-}
+.active\:scale-95:active { --rarog-scale-x: 0.95; --rarog-scale-y: 0.95; transform: translate(var(--rarog-translate-x, 0), var(--rarog-translate-y, 0)) rotate(var(--rarog-rotate, 0)) scaleX(var(--rarog-scale-x, 1)) scaleY(var(--rarog-scale-y, 1)); }
+.active\:bg-primary:active { background-color: var(--rarog-color-primary); color: var(--rarog-color-primary-foreground); }
 
-.hover\:underline:hover {
-  text-decoration: underline;
-}
+.disabled\:opacity-50:disabled,
+.disabled\:opacity-50[aria-disabled="true"] { opacity: 0.5; }
+.disabled\:pointer-events-none:disabled,
+.disabled\:pointer-events-none[aria-disabled="true"] { pointer-events: none; }
 
-/* Focus: рамка */
+.group { position: relative; }
+.group:hover .group-hover\:bg-primary { background-color: var(--rarog-color-primary); color: var(--rarog-color-primary-foreground); }
+.group:hover .group-hover\:text-primary { color: var(--rarog-color-primary); }
+.group:hover .group-hover\:border-primary { border-color: var(--rarog-color-primary); }
+.group:hover .group-hover\:opacity-100 { opacity: 1; }
+.group:focus-within .group-focus\:border-primary { border-color: var(--rarog-color-primary); }
+.group:focus-within .group-focus\:ring-2 { box-shadow: 0 0 0 2px var(--rarog-color-focus-ring, var(--rarog-color-primary-500)); }
 
-.focus\:border-primary:focus {
-  border-color: var(--rarog-color-primary);
-  box-shadow: 0 0 0 1px var(--rarog-color-primary);
-}
+.peer:checked ~ .peer-checked\:bg-primary { background-color: var(--rarog-color-primary); color: var(--rarog-color-primary-foreground); }
+.peer:checked ~ .peer-checked\:text-primary { color: var(--rarog-color-primary); }
+.peer:checked ~ .peer-checked\:border-primary { border-color: var(--rarog-color-primary); }
+.peer:focus ~ .peer-focus\:border-primary,
+.peer:focus-visible ~ .peer-focus-visible\:ring-2 { box-shadow: 0 0 0 2px var(--rarog-color-focus-ring, var(--rarog-color-primary-500)); border-color: var(--rarog-color-primary); }
+.peer:disabled ~ .peer-disabled\:opacity-50 { opacity: 0.5; }
 
-/* Group / Peer / Data variants
- * Минимальная реализация:
- *   group-hover:bg-primary
- *   peer-checked:bg-primary / peer-focus:border-primary
- *   data-[state=open]:bg-primary
- */
-
-/* group-hover: на основе контейнера .group */
-
-.group {
-  position: relative;
-}
-
-.group:hover .group-hover\:bg-primary {
-  background-color: var(--rarog-color-primary);
-  color: var(--rarog-color-primary-foreground);
-}
-
-.group:hover .group-hover\:text-primary {
-  color: var(--rarog-color-primary);
-}
-
-.group:hover .group-hover\:border-primary {
-  border-color: var(--rarog-color-primary);
-}
-
-/* peer-*: управляем состоянием соседних элементов */
-
-.peer:checked ~ .peer-checked\:bg-primary {
-  background-color: var(--rarog-color-primary);
-  color: var(--rarog-color-primary-foreground);
-}
-
-.peer:checked ~ .peer-checked\:text-primary {
-  color: var(--rarog-color-primary);
-}
-
-.peer:focus ~ .peer-focus\:border-primary {
-  border-color: var(--rarog-color-primary);
-  box-shadow: 0 0 0 1px var(--rarog-color-primary);
-}
-
-/* data-[state=open]:* — условная стилизация по data-state */
-
-.data-\[state\=open\]\:bg-primary[data-state="open"] {
-  background-color: var(--rarog-color-primary);
-  color: var(--rarog-color-primary-foreground);
-}
-
-.data-\[state\=open\]\:border-primary[data-state="open"] {
-  border-color: var(--rarog-color-primary);
-}
+.data-\[state\=open\]\:bg-primary[data-state="open"] { background-color: var(--rarog-color-primary); color: var(--rarog-color-primary-foreground); }
+.data-\[state\=open\]\:border-primary[data-state="open"] { border-color: var(--rarog-color-primary); }
+.data-\[state\=open\]\:opacity-100[data-state="open"] { opacity: 1; }
+.data-\[state\=closed\]\:opacity-0[data-state="closed"] { opacity: 0; }
