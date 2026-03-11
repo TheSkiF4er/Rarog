@@ -14,3 +14,6 @@
 - [Plugin API](plugin-api/README.md)
 - [Migration](migration/README.md)
 - [Contributor Guide](contributor-guide/README.md)
+- [Utility API audit vs Tailwind](utilities/utility-api-audit.md)
+- [How JIT works](build/jit-how-it-works.md)
+- [JIT troubleshooting guide](build/jit-troubleshooting.md)
