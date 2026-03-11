@@ -19,6 +19,7 @@ const {
   validateConfig,
   validateBuildManifest
 } = require("./config");
+const jit = require("./jit");
 
 function generateColorCss(theme) {
   const c = theme.colors || {};
@@ -683,7 +684,48 @@ function runPlugins(effectiveConfig) {
 }
 
 
-function cmdBuild() {
+function resolveCssSources() {
+  const coreCssCandidates = [
+    "packages/core/dist/rarog-core.css",
+    "packages/core/dist/rarog-core.min.css"
+  ];
+  const utilitiesCssCandidates = [
+    "packages/utilities/dist/rarog-utilities.css",
+    "packages/utilities/dist/rarog-utilities.min.css",
+    "packages/utilities/src/rarog-utilities.css"
+  ];
+  const componentsCssCandidates = [
+    "packages/components/dist/rarog-components.css",
+    "packages/components/dist/rarog-components.min.css",
+    "packages/components/src/rarog-components.css"
+  ];
+
+  const coreCssSource = coreCssCandidates
+    .map((rel) => pathInPackage(rel))
+    .find((candidate) => fs.existsSync(candidate));
+  const utilitiesCssSource = utilitiesCssCandidates
+    .map((rel) => pathInPackage(rel))
+    .find((candidate) => fs.existsSync(candidate));
+  const componentsCssSource = componentsCssCandidates
+    .map((rel) => pathInPackage(rel))
+    .find((candidate) => fs.existsSync(candidate));
+
+  if (!coreCssSource || !utilitiesCssSource || !componentsCssSource) {
+    throw new Error("[rarog] Не найдены CSS-артефакты core/utilities/components. Выполните полную сборку пакета перед publish.");
+  }
+
+  return {
+    coreCssSource,
+    utilitiesCssSource,
+    componentsCssSource,
+    coreCssFull: fs.readFileSync(coreCssSource, "utf8"),
+    utilitiesCssFull: fs.readFileSync(utilitiesCssSource, "utf8"),
+    componentsCssFull: fs.readFileSync(componentsCssSource, "utf8")
+  };
+}
+
+function cmdBuild(options = {}) {
+  const debug = Boolean(options.debug);
   const surface = getConfigSurfaceDiagnostics();
   const buildManifest = loadBuildManifest();
   const effective = getEffectiveConfig();
@@ -728,49 +770,41 @@ function cmdBuild() {
 
   console.log("[rarog] JIT mode enabled. Scanning content:", contentPatterns);
 
-  const utilitiesCssCandidates = [
-    "packages/utilities/dist/rarog-utilities.css",
-    "packages/utilities/dist/rarog-utilities.min.css",
-    "packages/utilities/src/rarog-utilities.css"
-  ];
-  const componentsCssCandidates = [
-    "packages/components/dist/rarog-components.css",
-    "packages/components/dist/rarog-components.min.css",
-    "packages/components/src/rarog-components.css"
-  ];
+  const { coreCssFull, utilitiesCssFull, componentsCssFull } = resolveCssSources();
+  const files = jit.scanContentFiles(PROJECT_ROOT, contentPatterns);
+  const analysis = jit.analyzeClasses({ files, coreCssFull, utilitiesCssFull, componentsCssFull });
 
-  const utilitiesCssSource = utilitiesCssCandidates
-    .map(rel => pathInPackage(rel))
-    .find(candidate => fs.existsSync(candidate));
-  const componentsCssSource = componentsCssCandidates
-    .map(rel => pathInPackage(rel))
-    .find(candidate => fs.existsSync(candidate));
-
-  if (!utilitiesCssSource || !componentsCssSource) {
-    throw new Error("[rarog] Не найдены CSS-артефакты utilities/components. Выполните полную сборку пакета перед publish.");
-  }
-
-  const utilitiesCssFull = fs.readFileSync(utilitiesCssSource, "utf8");
-  const componentsCssFull = fs.readFileSync(componentsCssSource, "utf8");
-
-  const files = scanContentFiles(contentPatterns);
   let utilitiesJit = utilitiesCssFull;
   let componentsJit = componentsCssFull;
   let arbitraryCss = "";
+  let arbitraryIssues = [];
 
   if (!files.length) {
     console.warn("[rarog] JIT: файлы контента не найдены. Будет записан fallback bundle без tree-shaking.");
+  } else if (!analysis.usedClasses.length) {
+    console.warn("[rarog] JIT: классы не найдены. Будет записан fallback bundle без tree-shaking.");
   } else {
-    const usedClasses = extractClassesFromContent(files);
-    console.log(`[rarog] JIT: найдено ${usedClasses.length} уникальных классов.`);
+    utilitiesJit = jit.filterCssByUsedClasses(utilitiesCssFull, analysis.usedClasses);
+    componentsJit = jit.filterCssByUsedClasses(componentsCssFull, analysis.usedClasses);
+    const arbitrary = jit.generateArbitraryCss(analysis.usedClasses);
+    arbitraryCss = arbitrary.css;
+    arbitraryIssues = arbitrary.issues;
+  }
 
-    if (!usedClasses.length) {
-      console.warn("[rarog] JIT: классы Rarog не найдены. Будет записан fallback bundle без tree-shaking.");
-    } else {
-      utilitiesJit = filterCssByUsedClasses(utilitiesCssFull, usedClasses);
-      componentsJit = filterCssByUsedClasses(componentsCssFull, usedClasses);
-      arbitraryCss = generateArbitraryCss(usedClasses);
+  if (analysis.unknownClasses.length) {
+    console.warn(`[rarog] JIT: найдено ${analysis.unknownClasses.length} подозрительных/неподдерживаемых utility-классов.`);
+    analysis.unknownClasses.slice(0, 20).forEach((className) => {
+      console.warn(`  [unknown] ${className}`);
+    });
+    if (analysis.unknownClasses.length > 20) {
+      console.warn(`  ... и ещё ${analysis.unknownClasses.length - 20}`);
     }
+  }
+
+  if (arbitraryIssues.length) {
+    arbitraryIssues.slice(0, 20).forEach((issue) => {
+      console.warn(`  [arbitrary] ${issue.className}: ${issue.reason}`);
+    });
   }
 
   const { utilitiesCssExtra, componentsCssExtra } = runPlugins(effective);
@@ -783,6 +817,8 @@ function cmdBuild() {
   jitCss += radiusCss + "\n";
   jitCss += shadowCss + "\n";
   jitCss += breakpointsCss + "\n";
+  jitCss += "\n/* Rarog Core */\n";
+  jitCss += coreCssFull + "\n";
   jitCss += "\n/* Rarog Utilities (JIT) */\n";
   jitCss += utilitiesJit + "\n";
   if (utilitiesCssExtra) {
@@ -794,10 +830,74 @@ function cmdBuild() {
     jitCss += "/* Rarog plugin components */\n" + componentsCssExtra + "\n";
   }
   jitCss += arbitraryCss;
+  jitCss = jit.dedupeCssBlocks(jitCss);
 
   const jitOutput = (buildManifest.outputs && buildManifest.outputs.jitCss) || "dist/rarog.jit.css";
   writeProjectFile(jitOutput, jitCss);
   console.log(`[rarog] JIT CSS written to ${jitOutput}`);
+
+  if (debug) {
+    const debugPath = path.join(path.dirname(jitOutput), "rarog.jit.debug.json");
+    writeProjectFile(debugPath, JSON.stringify({
+      contentPatterns,
+      scannedFiles: files,
+      usedClasses: analysis.usedClasses,
+      unknownClasses: analysis.unknownClasses,
+      arbitraryIssues,
+      counts: {
+        files: files.length,
+        usedClasses: analysis.usedClasses.length,
+        unknownClasses: analysis.unknownClasses.length
+      }
+    }, null, 2) + "\n");
+    console.log(`[rarog] Debug report written to ${debugPath}`);
+  }
+}
+
+function cmdAnalyze() {
+  const effective = getEffectiveConfig();
+  const contentPatterns = effective.content && effective.content.length
+    ? effective.content
+    : ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"];
+  const { coreCssFull, utilitiesCssFull, componentsCssFull } = resolveCssSources();
+  const files = jit.scanContentFiles(PROJECT_ROOT, contentPatterns);
+  const analysis = jit.analyzeClasses({ files, coreCssFull, utilitiesCssFull, componentsCssFull });
+
+  console.log(`[rarog] analyze: scanned files = ${files.length}`);
+  console.log(`[rarog] analyze: used classes = ${analysis.usedClasses.length}`);
+  console.log(`[rarog] analyze: unknown utility-like classes = ${analysis.unknownClasses.length}`);
+  if (analysis.unknownClasses.length) {
+    analysis.unknownClasses.forEach((className) => console.log(`  - ${className}`));
+  }
+}
+
+function cmdDoctor() {
+  const surface = getConfigSurfaceDiagnostics();
+  const effective = getEffectiveConfig();
+  const contentPatterns = effective.content && effective.content.length
+    ? effective.content
+    : ["./src/**/*.{html,php,js,jsx,ts,tsx,vue}", "./resources/**/*.{html,php,js,jsx,ts,tsx,vue}"];
+  const warnings = [];
+
+  if (!surface.selectedThemeConfig) warnings.push("theme config не найден; используются built-in defaults");
+  if (!surface.selectedBuildManifest) warnings.push("build manifest не найден; используются built-in defaults");
+
+  const files = jit.scanContentFiles(PROJECT_ROOT, contentPatterns);
+  if (!files.length) warnings.push("content scanning не нашёл ни одного файла");
+
+  try {
+    resolveCssSources();
+  } catch (error) {
+    warnings.push(error.message);
+  }
+
+  if (!warnings.length) {
+    console.log("[rarog] doctor: всё выглядит здоровым для JIT/build flow.");
+    return;
+  }
+
+  console.log("[rarog] doctor: найдены потенциальные проблемы:");
+  warnings.forEach((warning) => console.log(`  [warn] ${warning}`));
 }
 
 function cmdInit() {
@@ -933,19 +1033,22 @@ function printHelp() {
   console.log("Rarog CLI");
   console.log("");
   console.log("Использование:");
-  console.log("  rarog build    Сгенерировать токены и optional JIT CSS из rarog.config.js + rarog.build.json");
-  console.log("  rarog init     Создать rarog.config.js + rarog.build.json + src/index.html");
-  console.log("  rarog docs     Запустить dev-документацию из пакета Rarog");
-  console.log("  rarog validate Проверить theme-config и build-manifest");
+  console.log("  rarog build [--debug]    Сгенерировать токены и optional JIT CSS из rarog.config.js + rarog.build.json");
+  console.log("  rarog init              Создать rarog.config.js + rarog.build.json + src/index.html");
+  console.log("  rarog docs              Запустить dev-документацию из пакета Rarog");
+  console.log("  rarog analyze           Показать summary по content scanning и неизвестным utility-классам");
+  console.log("  rarog doctor            Проверить JIT/build surface и типовые проблемы");
+  console.log("  rarog validate          Проверить theme-config и build-manifest");
   console.log("");
 }
 
 function main() {
-  const [, , cmd] = process.argv;
+  const [, , cmd, ...args] = process.argv;
+  const debug = args.includes("--debug");
 
   switch (cmd) {
     case "build":
-      cmdBuild();
+      cmdBuild({ debug });
       break;
     case "init":
       cmdInit();
@@ -955,6 +1058,12 @@ function main() {
       break;
     case "validate":
       cmdValidate();
+      break;
+    case "analyze":
+      cmdAnalyze();
+      break;
+    case "doctor":
+      cmdDoctor();
       break;
     case "-h":
     case "--help":
@@ -983,6 +1092,8 @@ module.exports = {
   cmdInit,
   cmdDocs,
   cmdValidate,
+  cmdAnalyze,
+  cmdDoctor,
   printHelp,
   main
 };
