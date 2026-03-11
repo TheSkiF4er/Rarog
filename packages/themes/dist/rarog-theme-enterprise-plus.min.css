@@ -1,0 +1,18 @@
+[data-rg-theme="enterprise-plus"] {
+  --rarog-color-bg: #f5f7fb;
+  --rarog-color-bg-soft: #fbfcfe;
+  --rarog-color-bg-elevated: #ffffff;
+  --rarog-color-bg-elevated-soft: #f8fafc;
+  --rarog-color-surface: #ffffff;
+  --rarog-color-border-subtle: #e8eef5;
+  --rarog-color-border: #d9e2ec;
+  --rarog-color-border-strong: #0f172a;
+  --rarog-color-text: #0f172a;
+  --rarog-color-text-muted: #475569;
+  --rarog-color-focus-ring: #2563eb;
+  --rarog-color-accent-soft: #e8efff;
+  --rarog-color-primary: #1d4ed8;
+  --rarog-color-primary-foreground: #ffffff;
+  --rarog-color-secondary: #475569;
+  --rarog-color-secondary-foreground: #ffffff;
+}

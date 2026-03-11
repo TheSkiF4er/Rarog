@@ -1,0 +1,18 @@
+[data-rg-theme="graphite"] {
+  --rarog-color-bg: #0b1020;
+  --rarog-color-bg-soft: #111827;
+  --rarog-color-bg-elevated: #111827;
+  --rarog-color-bg-elevated-soft: #162033;
+  --rarog-color-surface: #0f172a;
+  --rarog-color-border-subtle: #182235;
+  --rarog-color-border: #243146;
+  --rarog-color-border-strong: #f8fafc;
+  --rarog-color-text: #f8fafc;
+  --rarog-color-text-muted: #c7d2fe;
+  --rarog-color-focus-ring: #60a5fa;
+  --rarog-color-accent-soft: #172554;
+  --rarog-color-primary: #8b5cf6;
+  --rarog-color-primary-foreground: #ffffff;
+  --rarog-color-secondary: #22d3ee;
+  --rarog-color-secondary-foreground: #0b1020;
+}
