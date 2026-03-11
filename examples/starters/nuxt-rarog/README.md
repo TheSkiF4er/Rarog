@@ -1,18 +1,19 @@
 # Rarog + Nuxt Starter
 
-Пример интеграции Rarog с Nuxt 3 и пакетом `@rarog/vue`.
+Nuxt starter for `@rarog/vue`.
 
-- CSS Rarog подключается через `nuxt.config.ts` (опция `css`).
-- JS Core инициализируется через компонент `<RarogProvider>` в `app.vue`.
-- Компоненты (modal/offcanvas и др.) используются через HTML‑структуру + data‑атрибуты.
+## What it covers
 
-## Запуск
+- Nuxt-compatible plugin usage
+- wrapped component coverage for common UI work
+- composable-friendly mount path through `RarogProvider`
+- modal and tabs example
+
+## Run
 
 ```bash
-# в корне репозитория
 npm install
 npm run build
-
 cd examples/starters/nuxt-rarog
 npm install
 npm run dev
