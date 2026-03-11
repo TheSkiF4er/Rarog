@@ -5,6 +5,7 @@ const themeSelect = document.getElementById('themeSelect');
 const rtlToggle = document.getElementById('rtlToggle');
 const debugToggle = document.getElementById('debugToggle');
 const rerenderBtn = document.getElementById('rerenderBtn');
+const scopeThemeBtn = document.getElementById('scopeThemeBtn');
 const stage = document.getElementById('playgroundStage');
 const eventLog = document.getElementById('eventLog');
 const themeLink = document.getElementById('rarog-theme-link');
@@ -118,7 +119,22 @@ const scenes = {
         <tr><td>Falcon</td><td>Lina</td><td>Paused</td></tr>
       </tbody>
     </table>
+  `  ,
+  tokens: () => `
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="h5 mb-1">Token browser</h3>
+          <p class="text-muted mb-0">Raw, semantic and runtime tokens for the selected theme.</p>
+        </div>
+        <span class="badge badge-outline">theme v1</span>
+      </div>
+      <div class="card-body">
+        <div id="tokenBrowserRoot" class="rg-row rg-gap-y-4"></div>
+      </div>
+    </div>
   `
+
 };
 
 function logEvent(event) {
@@ -143,10 +159,21 @@ function renderScene() {
   eventLog.textContent = '';
   Rarog.reinit(stage);
   bindEventLog();
+  renderTokenBrowser();
 }
 
 function updateTheme() {
-  themeLink.setAttribute('href', `../../packages/themes/src/rarog-theme-${themeSelect.value}.css`);
+  const theme = themeSelect.value;
+  const legacyThemes = ['default', 'dark', 'creative', 'contrast', 'enterprise'];
+  if (legacyThemes.includes(theme)) {
+    themeLink.setAttribute('href', `../../packages/themes/src/rarog-theme-${theme}.css`);
+    stage.removeAttribute('data-rg-theme');
+    document.documentElement.removeAttribute('data-rg-theme');
+  } else {
+    themeLink.setAttribute('href', '../../packages/themes/src/rarog-theme-default.css');
+    stage.setAttribute('data-rg-theme', theme);
+  }
+  renderTokenBrowser();
 }
 
 function updateDirection() {
@@ -164,3 +191,33 @@ debugToggle.addEventListener('change', () => {
 updateTheme();
 updateDirection();
 renderScene();
+
+
+async function renderTokenBrowser() {
+  if (sceneSelect.value !== 'tokens') return;
+  const root = document.getElementById('tokenBrowserRoot');
+  if (!root) return;
+  const response = await fetch('../../rarog.tokens.json');
+  const data = await response.json();
+  const raw = data.tokenArchitecture?.raw || data.tokens || {};
+  const semantic = data.tokenArchitecture?.semantic || {};
+  const runtime = data.tokenArchitecture?.runtime || {};
+  const renderBlock = (title, entries) => `
+    <div class="rg-col-12 rg-col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><strong>${title}</strong></div>
+        <div class="card-body">${Object.entries(entries).slice(0, 8).map(([k,v]) => `<div class="d-flex justify-content-between gap-3 py-1"><code>${k}</code><span class="text-muted">${typeof v === 'object' ? JSON.stringify(v) : v}</span></div>`).join('')}</div>
+      </div>
+    </div>`;
+  root.innerHTML = [
+    renderBlock('raw.color.primary', raw.color?.primary || {}),
+    renderBlock('semantic.color', semantic.color || semantic),
+    renderBlock('runtime.presets', Object.fromEntries(Object.entries(runtime.presets || {}).map(([k,v]) => [k, Object.keys(v).join(', ')])))
+  ].join('');
+}
+
+scopeThemeBtn.addEventListener('click', () => {
+  const active = stage.getAttribute('data-rg-theme');
+  if (active) stage.removeAttribute('data-rg-theme');
+  else if (!['default','dark','creative','contrast','enterprise'].includes(themeSelect.value)) stage.setAttribute('data-rg-theme', themeSelect.value);
+});
