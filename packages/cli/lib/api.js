@@ -20,6 +20,7 @@ const {
   validateBuildManifest
 } = require("./config");
 const jit = require("./jit");
+const themeEngine = require("./theme");
 
 function generateColorCss(theme) {
   const c = theme.colors || {};
@@ -900,6 +901,53 @@ function cmdDoctor() {
   warnings.forEach((warning) => console.log(`  [warn] ${warning}`));
 }
 
+
+function cmdThemeCreate(args = []) {
+  const output = args[0] || "themes/custom-theme.json";
+  const nameArg = args.find((arg) => arg.startsWith("--name="));
+  const extendsArg = args.find((arg) => arg.startsWith("--extends="));
+  const filePath = themeEngine.createThemeFile(output, {
+    name: nameArg ? nameArg.split("=").slice(1).join("=") : undefined,
+    extendsTheme: extendsArg ? extendsArg.split("=").slice(1).join("=") : undefined
+  });
+  console.log(`[rarog] theme create: starter manifest written to ${themeEngine.relativeProjectPath(filePath)}`);
+}
+
+function cmdThemeDiff(args = []) {
+  const [basePath, nextPath] = args;
+  if (!basePath || !nextPath) {
+    console.error("[rarog] theme diff: нужно указать два файла, например rarog theme diff themes/a.json themes/b.json");
+    process.exit(1);
+  }
+  const baseTheme = themeEngine.loadThemeManifest(basePath);
+  const nextTheme = themeEngine.loadThemeManifest(nextPath);
+  const changes = themeEngine.diffThemeManifests(baseTheme, nextTheme);
+  console.log(`[rarog] theme diff: ${changes.length} changes between ${baseTheme.name || basePath} and ${nextTheme.name || nextPath}`);
+  changes.slice(0, 120).forEach((change) => {
+    console.log(`  [${change.kind}] ${change.key}: ${change.before ?? "∅"} -> ${change.after ?? "∅"}`);
+  });
+  if (changes.length > 120) console.log(`  ... and ${changes.length - 120} more`);
+}
+
+function cmdThemeValidate(args = []) {
+  const target = args[0] || "themes/custom-theme.json";
+  const theme = themeEngine.loadThemeManifest(target);
+  const result = themeEngine.validateThemeManifest(theme, target);
+  if (result.valid && !result.warnings.length) {
+    console.log(`[rarog] theme validate: ${target} looks valid.`);
+    return;
+  }
+  if (result.warnings.length) {
+    console.log("[rarog] theme validate: warnings");
+    result.warnings.forEach((warning) => console.log(`  [warn] ${warning}`));
+  }
+  if (result.errors.length) {
+    console.log("[rarog] theme validate: errors");
+    result.errors.forEach((error) => console.log(`  [error] ${error}`));
+    process.exitCode = 1;
+  }
+}
+
 function cmdInit() {
   const blockingFiles = [
     "rarog.config.js",
@@ -1039,12 +1087,34 @@ function printHelp() {
   console.log("  rarog analyze           Показать summary по content scanning и неизвестным utility-классам");
   console.log("  rarog doctor            Проверить JIT/build surface и типовые проблемы");
   console.log("  rarog validate          Проверить theme-config и build-manifest");
+  console.log("  rarog theme create      Создать starter theme manifest (JSON)");
+  console.log("  rarog theme diff        Сравнить два theme manifest файла");
+  console.log("  rarog theme validate    Проверить theme manifest");
   console.log("");
 }
 
 function main() {
   const [, , cmd, ...args] = process.argv;
   const debug = args.includes("--debug");
+
+  if (cmd === "theme") {
+    const [subcmd, ...themeArgs] = args;
+    switch (subcmd) {
+      case "create":
+        cmdThemeCreate(themeArgs);
+        return;
+      case "diff":
+        cmdThemeDiff(themeArgs);
+        return;
+      case "validate":
+        cmdThemeValidate(themeArgs);
+        return;
+      default:
+        console.error(`[rarog] Неизвестная команда theme: ${subcmd || "(empty)"}`);
+        printHelp();
+        process.exit(1);
+    }
+  }
 
   switch (cmd) {
     case "build":
@@ -1094,6 +1164,9 @@ module.exports = {
   cmdValidate,
   cmdAnalyze,
   cmdDoctor,
+  cmdThemeCreate,
+  cmdThemeDiff,
+  cmdThemeValidate,
   printHelp,
   main
 };
