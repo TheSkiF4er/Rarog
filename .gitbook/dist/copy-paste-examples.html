@@ -1,0 +1,63 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Copy-paste examples · Rarog Docs</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f7f8fb;color:#172033}a{color:#1d4ed8;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.nav{padding:24px;border-right:1px solid #dbe2f0;background:#fff;position:sticky;top:0;height:100vh;overflow:auto}.nav ul{padding-left:18px}.content{padding:32px;max-width:960px}pre{background:#0f172a;color:#e5edf8;padding:16px;border-radius:14px;overflow:auto}code{background:#eef2ff;padding:2px 6px;border-radius:6px}table{border-collapse:collapse}h1,h2,h3{line-height:1.2}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{position:relative;height:auto;border-right:0;border-bottom:1px solid #dbe2f0}}</style></head><body><div class="shell"><aside class="nav"><h1>Rarog Docs</h1><p>GitBook content export</p><ul><li><a href="README.html">Documentation</a></li><li><a href="docs-platform-v2.html">Docs platform v2</a></li><li><a href="getting-started/README.html">Getting Started</a></li><li><a href="installation/README.html">Installation</a></li><li><a href="cli/README.html">CLI</a></li><li><a href="build/README.html">Build</a></li><li><a href="live-playground.html">Live playground</a></li><li><a href="copy-paste-examples.html">Copy-paste examples</a></li><li><a href="tokens/README.html">Tokens</a></li><li><a href="tokens.html">Token architecture v2</a></li><li><a href="semantic-tokens.html">Semantic tokens</a></li><li><a href="themes/README.html">Themes</a></li><li><a href="themes/theme-engine-v1.html">Theme engine v1</a></li><li><a href="themes/token-theme-explorer.html">Token and theme explorer</a></li><li><a href="utilities/README.html">Utilities</a></li><li><a href="components/README.html">Components</a></li><li><a href="accessibility.html">Accessibility baseline</a></li><li><a href="runtime/README.html">Runtime</a></li><li><a href="plugin-api/README.html">Plugin API</a></li><li><a href="migration/README.html">Migration</a></li><li><a href="starters/README.html">Official starters</a></li><li><a href="contributor-guide/README.html">Contributor Guide</a></li><li><a href="build/jit-how-it-works.html">How JIT works</a></li><li><a href="build/jit-troubleshooting.html">JIT troubleshooting guide</a></li></ul></aside><main class="content"><h1>Copy-paste examples</h1>
+<p>Этот раздел собирает короткие production-готовые фрагменты, которые можно вставить в проект без долгой адаптации.</p>
+<h2>Button row</h2>
+<pre><code class="language-html">
+&lt;div class="d-flex gap-2 flex-wrap"&gt;
+
+  &lt;button class="btn btn-primary"&gt;Save changes&lt;/button&gt;
+
+  &lt;button class="btn btn-secondary"&gt;Preview&lt;/button&gt;
+
+  &lt;button class="btn btn-ghost"&gt;Cancel&lt;/button&gt;
+
+&lt;/div&gt;
+
+</code></pre>
+<h2>Settings form</h2>
+<pre><code class="language-html">
+&lt;div class="card"&gt;
+
+  &lt;div class="card-header"&gt;Workspace settings&lt;/div&gt;
+
+  &lt;div class="card-body d-grid gap-3"&gt;
+
+    &lt;input class="input" type="text" placeholder="Workspace name" /&gt;
+
+    &lt;textarea class="input" rows="4" placeholder="Description"&gt;&lt;/textarea&gt;
+
+    &lt;label class="d-flex align-items-center gap-2"&gt;&lt;input type="checkbox" /&gt; Enable audit log&lt;/label&gt;
+
+  &lt;/div&gt;
+
+&lt;/div&gt;
+
+</code></pre>
+<h2>Dialog trigger</h2>
+<pre><code class="language-html">
+&lt;button class="btn btn-primary" data-rg-toggle="modal" data-rg-target="#demoDialog"&gt;Open dialog&lt;/button&gt;
+
+&lt;div class="modal" id="demoDialog" aria-hidden="true"&gt;
+
+  &lt;div class="modal-dialog"&gt;
+
+    &lt;div class="modal-header"&gt;
+
+      &lt;h2 class="modal-title"&gt;Publish release&lt;/h2&gt;
+
+      &lt;button class="btn btn-ghost" data-rg-dismiss="modal" aria-label="Close"&gt;✕&lt;/button&gt;
+
+    &lt;/div&gt;
+
+    &lt;div class="modal-body"&gt;Ready to publish?&lt;/div&gt;
+
+  &lt;/div&gt;
+
+&lt;/div&gt;
+
+</code></pre>
+<h2>Where to go next</h2>
+<ul>
+<li>anatomy and accessibility details: [Component anatomy](components/anatomy.md)</li>
+<li>utility search: [Utility lookup](utilities/lookup.md)</li>
+<li>full starters: [Official starters](starters/README.md)</li>
+</ul></main></div></body></html>
