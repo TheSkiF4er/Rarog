@@ -1,6 +1,6 @@
-# Theme engine v1
+# Theme engine
 
-Theme engine v1 turns themes into a first-class product feature.
+Theme engine turns themes into a first-class product feature.
 
 ## Supported scenarios
 
