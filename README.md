@@ -12,14 +12,14 @@
   <a href="https://github.com/TheSkiF4er/rarog/releases">
     <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub release" />
   </a>
-  <a href="https://skif4er.ru/arog/rarog">
-    <img src="https://img.shields.io/badge/docs-cajeer.ru%2Farog%2Frarog-blue?logo=readthedocs" alt="Docs" />
+  <a href="https://docs.skif4er.ru/rarog">
+    <img src="https://img.shields.io/badge/docs-docs.cajeer.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
   </a>
 </p>
 
 - Текущая стабильная ветка: **1.x**
 - Текущая версия: **1.0.0**
-- Документация: `https://skif4er.ru/arog/rarog`
+- Документация: `https://docs.skif4er.ru/rarog`
 
 ## Канонический install/build/publish flow
 
