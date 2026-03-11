@@ -47,6 +47,11 @@ export interface RarogTableEventDetail<TInstance = unknown>
   visibleRows?: number;
 }
 
+export interface RarogTabsEventDetail<TInstance = unknown>
+  extends RarogBaseEventDetail<TInstance> {
+  index: number;
+}
+
 export interface RarogEventMap {
   "rg:dropdown:show": RarogBaseEventDetail<Dropdown>;
   "rg:dropdown:shown": RarogBaseEventDetail<Dropdown>;
@@ -113,6 +118,7 @@ export interface RarogEventMap {
   "rg:table:sort": RarogTableEventDetail<DataTable>;
   "rg:table:page": RarogTableEventDetail<DataTable>;
   "rg:table:update": RarogTableEventDetail<DataTable>;
+  "rg:tabs:change": RarogTabsEventDetail<Tabs>;
   "rg:core:dispose": { root: ParentNode | Document | HTMLElement };
 }
 
@@ -203,6 +209,14 @@ export declare class Stepper {
   goTo(index: number): void;
   reset(): void;
   destroy(): void;
+}
+
+export declare class Tabs {
+  constructor(element: HTMLElement, options?: Record<string, unknown>);
+  static getInstance(element: HTMLElement): Tabs | null;
+  static getOrCreate(element: HTMLElement, options?: Record<string, unknown>): Tabs;
+  activate(index: number, options?: { focus?: boolean }): void;
+  dispose(): void;
 }
 
 export declare class Datepicker {

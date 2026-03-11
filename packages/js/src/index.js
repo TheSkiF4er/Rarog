@@ -14,6 +14,7 @@ export {
   Combobox,
   TagsInput,
   DataTable,
+  Tabs,
   InputMask,
   Events,
   initDataApi,
