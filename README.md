@@ -1,4 +1,4 @@
-# Rarog CSS Framework 3.5.0
+# Rarog CSS Framework 1.0.0
 
 > **Rarog** — CSS-фреймворк и дизайн-система на базе design-tokens, utilities, компонентов и CLI.
 
@@ -17,8 +17,8 @@
   </a>
 </p>
 
-- Текущая стабильная ветка: **3.x**
-- Текущая версия: **3.5.0**
+- Текущая стабильная ветка: **1.x**
+- Текущая версия: **1.0.0**
 - Документация: `https://skif4er.ru/arog/rarog`
 
 ## Канонический install/build/publish flow
