@@ -1,0 +1,18 @@
+[data-rg-theme="aurora"] {
+  --rarog-color-bg: #f6fbff;
+  --rarog-color-bg-soft: #ffffff;
+  --rarog-color-bg-elevated: #ffffff;
+  --rarog-color-bg-elevated-soft: #eef8ff;
+  --rarog-color-surface: #ffffff;
+  --rarog-color-border-subtle: #e7f1f8;
+  --rarog-color-border: #d6e8f5;
+  --rarog-color-border-strong: #1f3b5b;
+  --rarog-color-text: #12324d;
+  --rarog-color-text-muted: #4f6d8a;
+  --rarog-color-focus-ring: #38bdf8;
+  --rarog-color-accent-soft: #e0f2fe;
+  --rarog-color-primary: #0ea5e9;
+  --rarog-color-primary-foreground: #ffffff;
+  --rarog-color-secondary: #14b8a6;
+  --rarog-color-secondary-foreground: #ffffff;
+}
