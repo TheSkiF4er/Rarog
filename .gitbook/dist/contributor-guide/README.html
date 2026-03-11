@@ -1,1 +1,451 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contributor Guide · Rarog Docs</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f7f8fb;color:#172033}a{color:#1d4ed8;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.nav{padding:24px;border-right:1px solid #dbe2f0;background:#fff;position:sticky;top:0;height:100vh;overflow:auto}.nav ul{padding-left:18px}.content{padding:32px;max-width:960px}pre{background:#0f172a;color:#e5edf8;padding:16px;border-radius:14px;overflow:auto}code{background:#eef2ff;padding:2px 6px;border-radius:6px}table{border-collapse:collapse}h1,h2,h3{line-height:1.2}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{position:relative;height:auto;border-right:0;border-bottom:1px solid #dbe2f0}}</style></head><body><div class="shell"><aside class="nav"><h1>Rarog Docs</h1><p>GitBook content export</p><ul><li><a href="README.html">Documentation</a></li><li><a href="docs-platform-v2.html">Docs platform v2</a></li><li><a href="getting-started/README.html">Getting Started</a></li><li><a href="installation/README.html">Installation</a></li><li><a href="cli/README.html">CLI</a></li><li><a href="build/README.html">Build</a></li><li><a href="live-playground.html">Live playground</a></li><li><a href="copy-paste-examples.html">Copy-paste examples</a></li><li><a href="tokens/README.html">Tokens</a></li><li><a href="tokens.html">Token architecture v2</a></li><li><a href="semantic-tokens.html">Semantic tokens</a></li><li><a href="themes/README.html">Themes</a></li><li><a href="themes/theme-engine-v1.html">Theme engine v1</a></li><li><a href="themes/token-theme-explorer.html">Token and theme explorer</a></li><li><a href="utilities/README.html">Utilities</a></li><li><a href="components/README.html">Components</a></li><li><a href="accessibility.html">Accessibility baseline</a></li><li><a href="runtime/README.html">Runtime</a></li><li><a href="plugin-api/README.html">Plugin API</a></li><li><a href="migration/README.html">Migration</a></li><li><a href="starters/README.html">Official starters</a></li><li><a href="contributor-guide/README.html">Contributor Guide</a></li><li><a href="build/jit-how-it-works.html">How JIT works</a></li><li><a href="build/jit-troubleshooting.html">JIT troubleshooting guide</a></li></ul></aside><main class="content"><h1>Contributor Guide</h1>
+<p>Материалы для контрибьюторов: локальная разработка, playground/storybook, плагины и поддержка документации.</p>
+<h2>Included legacy sources</h2>
+<ul>
+<li><code>design-system.md</code></li>
+<li><code>playground.md</code></li>
+<li><code>storybook.md</code></li>
+<li><code>ide-plugins.md</code></li>
+<li><code>versioning.md</code></li>
+</ul>
+<h2>Imported from <code>design-system.md</code></h2>
+<h2>Design System Suite</h2>
+<p>Начиная с Rarog <strong>3.3.0</strong>, фреймворк позиционируется не только как CSS‑/JS‑слой, но и как основа полноценной дизайн‑системы.</p>
+<h3>Слои дизайн‑системы</h3>
+<ol>
+<li><strong>Tokens</strong>  </li>
+<p>Базовый уровень — <code>rarog.tokens.json</code> и CSS‑переменные:</p>
+</ol>
+<ul>
+<li>цветовые шкалы (<code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>info</code>);</li>
+<li>spacing, radius, shadow;</li>
+<li>semantic‑токены (<code>bg</code>, <code>surface</code>, <code>border</code>, <code>text</code>, <code>accentSoft</code>, <code>focusRing</code>);</li>
+<li><code>tokens.themes.*</code> для <code>default</code>, <code>dark</code>, <code>contrast</code>, <code>enterprise</code>, <code>creative</code>.</li>
+</ul>
+<ol>
+<li><strong>Themes</strong>  </li>
+<p>Набор готовых тем в пакете <code>packages/themes</code>:</p>
+</ol>
+<ul>
+<li><code>rarog-theme-default.css</code></li>
+<li><code>rarog-theme-dark.css</code></li>
+<li><code>rarog-theme-contrast.css</code></li>
+<li><code>rarog-theme-enterprise.css</code></li>
+<li><code>rarog-theme-creative.css</code></li>
+</ul>
+<p>Темы переопределяют только семантические переменные и не ломают утилити‑слой.</p>
+<ol>
+<li><strong>Components &amp; JS</strong>  </li>
+<p>Компонентный слой (CSS) и JS‑ядро используют только семантические токены, поэтому переключение темы не требует переписывать компоненты.</p>
+</ol>
+<ol>
+<li><strong>Figma Design Kit</strong>  </li>
+<p>В каталоге <code>design/</code> находятся артефакты для Figma:</p>
+</ol>
+<ul>
+<li><code>design/figma.tokens.json</code> — экспорт токенов в формате Tokens Studio;</li>
+<li><code>design/figma-kit/</code> — описание состава Figma Design Kit и рекомендованного flow.</li>
+</ul>
+<h3>Design → Dev handshake</h3>
+<p>Рекомендуемый цикл работы команды «дизайнеры + разработчики»:</p>
+<ol>
+<li><strong>Дизайнеры</strong> настраивают токены и темы в Figma через Tokens Studio,</li>
+<p>основываясь на <code>design/figma.tokens.json</code>.</p>
+<li><strong>Разработчики</strong> описывают те же значения в <code>rarog.config.*</code> (или правят существующие).</li>
+<li>Запускается <code>npx rarog build</code>, который обновляет CSS‑переменные и <code>rarog.tokens.json</code>.</li>
+<li>При изменении токенов/тем:</li>
+</ol>
+<ul>
+<li>сначала обновляется конфиг и выполняется сборка;</li>
+<li>затем экспортируется обновлённый <code>design/figma.tokens.json</code> и синхронизируется с Figma.</li>
+</ul>
+<p>Таким образом, у дизайн‑системы есть единый источник правды — токены, а Rarog служит «runtime‑слоем», который гарантирует, что эти токены последовательно используются во всех утилитах, компонентах и JS‑паттернах.</p>
+<h2>Imported from <code>playground.md</code></h2>
+<h2>Playground</h2>
+<p>Rarog теперь включает локальный demo playground без отдельной сборки.</p>
+<h3>Запуск</h3>
+<pre><code class="language-bash">
+npm run playground
 
+</code></pre>
+<p>Открой <code>http://127.0.0.1:4173/examples/playground/</code>.</p>
+<h3>Что умеет playground</h3>
+<ul>
+<li>переключение сцен (<code>Modal</code>, <code>Dropdown</code>, <code>Forms</code>, <code>DataTable</code>)</li>
+<li>смена темы</li>
+<li>RTL toggle</li>
+<li>логирование runtime-событий</li>
+</ul>
+<p>Playground использует исходные CSS entrypoints и <code>packages/js/src/rarog.esm.js</code>, поэтому хорошо подходит для быстрой ручной проверки компонентов и lifecycle.</p>
+<h2>Imported from <code>storybook.md</code></h2>
+<h2>Storybook</h2>
+<p>Rarog теперь включает локальный Storybook-контур для HTML/JS Core компонентов.</p>
+<h3>Запуск</h3>
+<pre><code class="language-bash">
+npm install
+
+npm run storybook
+
+</code></pre>
+<p>По умолчанию Storybook поднимается на <code>http://127.0.0.1:6006</code>.</p>
+<h3>Что уже покрыто</h3>
+<ul>
+<li>Foundations / Button</li>
+<li>Overlays / Modal</li>
+<li>Overlays / Dropdown</li>
+<li>Data / DataTable</li>
+</ul>
+<p>Storybook собран на <code>@storybook/html-vite</code>, поэтому истории работают прямо с исходными CSS entrypoints и <code>packages/js/src/rarog.esm.js</code>.</p>
+<h2>Imported from <code>ide-plugins.md</code></h2>
+<h2>IDE &amp; Plugins</h2>
+<p>Rarog 2.4.0 фокусируется на повседневном DX: IDE, плагины и дизайн-токены.</p>
+<h3>VSCode Extension (alpha)</h3>
+<p>В репозитории есть MVP-расширение VSCode:</p>
+<ul>
+<li>каталог: <code>tools/vscode-rarog</code>;</li>
+<li>файл манифеста: <code>tools/vscode-rarog/package.json</code>;</li>
+<li>основное тело: <code>tools/vscode-rarog/out/extension.js</code>;</li>
+<li>словарь классов: <code>tools/vscode-rarog/rarog-classmap.json</code>.</li>
+</ul>
+<h4>Установка из репозитория</h4>
+<ol>
+<li>Открой проект Rarog в VSCode.</li>
+<li>Выполни:</li>
+</ol>
+<p>``<code>bash cd tools/vscode-rarog npm install # при необходимости: vsce package </code>``</p>
+<ol>
+<li>Установи получившийся <code>.vsix</code> через VSCode (<code>Extensions → ... → Install from VSIX</code>).</li>
+</ol>
+<p>Расширение даёт:</p>
+<ul>
+<li>автодополнение классов Rarog (utilities, компоненты, plugin-классы);</li>
+<li>hover-доки по классам (описание + категория).</li>
+</ul>
+<h4>Обновление словаря классов</h4>
+<p>Словарь классов генерируется скриптом:</p>
+<pre><code class="language-bash">
+node tools/generate-class-dictionary.mjs
+
+</code></pre>
+<p>Он использует:</p>
+<ul>
+<li><code>rarog.tokens.json</code> (цвета, spacing, radius, shadow);</li>
+<li>базовый список компонент/утилит.</li>
+</ul>
+<p>Результат записывается в <code>tools/vscode-rarog/rarog-classmap.json</code>. Расширение подхватывает обновлённый файл после перезапуска VSCode.</p>
+<h3>Plugin API v1</h3>
+<p>В <code>rarog.config.ts/js</code> есть поле <code>plugins</code>:</p>
+<pre><code class="language-ts">
+import type { RarogConfig, RarogPlugin } from './rarog.config.types';
+
+
+
+const config: RarogConfig = {
+
+  // ...
+
+  plugins: [
+
+    "./packages/plugin-forms/index.cjs",
+
+    "./packages/plugin-typography/index.cjs"
+
+  ]
+
+};
+
+
+
+export default config;
+
+</code></pre>
+<p>Плагин может быть:</p>
+<ul>
+<li>строкой (путь до модуля);</li>
+<li>функцией <code>(ctx) =&gt; void | { utilitiesCss?: string; componentsCss?: string }</code>.</li>
+</ul>
+<h4>Сигнатуры</h4>
+<pre><code class="language-ts">
+export interface RarogPluginContext {
+
+  config: RarogConfig;
+
+}
+
+
+
+export interface RarogPluginResult {
+
+  utilitiesCss?: string;
+
+  componentsCss?: string;
+
+}
+
+
+
+export type RarogPlugin =
+
+  | ((ctx: RarogPluginContext) =&gt; void | RarogPluginResult)
+
+  | string;
+
+</code></pre>
+<p>Плагины вызываются в JIT-режиме (<code>mode: "jit"</code>):</p>
+<ul>
+<li>регистрируются в <code>rarog.config.*</code>;</li>
+<li>CLI вызывает их в <code>runPlugins(effectiveConfig)</code>;</li>
+<li>возвращённый CSS добавляется в итоговый <code>dist/rarog.jit.css</code>:</li>
+</ul>
+<ul>
+<li><code>utilitiesCss</code> → секция <code>/<em> Rarog plugin utilities </em>/</code>;</li>
+<li><code>componentsCss</code> → секция <code>/<em> Rarog plugin components </em>/</code>.</li>
+</ul>
+<p>Плагин может:</p>
+<ul>
+<li>читать <code>ctx.config.theme</code>, <code>ctx.config.screens</code>, <code>ctx.config.extend</code>;</li>
+<li>вернуть дополнительный CSS с классами, которые будут доступны в проекте.</li>
+</ul>
+<h3>Официальные плагины</h3>
+<h4>@rarog/plugin-forms</h4>
+<p>Расположение:</p>
+<ul>
+<li><code>packages/plugin-forms/index.cjs</code></li>
+</ul>
+<p>Возможности (MVP):</p>
+<ul>
+<li><code>.form-control-sm</code>, <code>.form-control-lg</code> — уменьшенные/увеличенные поля ввода;</li>
+<li><code>.field</code>, <code>.field-label-inline</code>, <code>.field-hint</code> — структуры для форменных полей;</li>
+<li><code>.input-muted</code> — «мягкое» поле ввода;</li>
+<li><code>.switch</code> (checkbox/radio) — простые switch-переключатели на чистом CSS.</li>
+</ul>
+<p>Пример подключения:</p>
+<pre><code class="language-ts">
+// rarog.config.ts
+
+const config: RarogConfig = {
+
+  // ...
+
+  plugins: [
+
+    "./packages/plugin-forms/index.cjs"
+
+  ]
+
+};
+
+</code></pre>
+<h4>@rarog/plugin-typography</h4>
+<p>Расположение:</p>
+<ul>
+<li><code>packages/plugin-typography/index.cjs</code></li>
+</ul>
+<p>Возможности:</p>
+<ul>
+<li><code>.prose</code> — типографика для markdown/контентных статей;</li>
+<li>стилизация:</li>
+</ul>
+<ul>
+<li>заголовков <code>h1–h4</code>,</li>
+<li>абзацев,</li>
+<li>списков,</li>
+<li><code>code</code> и <code>pre</code>,</li>
+<li><code>blockquote</code>,</li>
+<li>встроенных медиа (<code>img</code>, <code>video</code>).</li>
+</ul>
+<p>Пример:</p>
+<pre><code class="language-html">
+&lt;article class="prose"&gt;
+
+  &lt;h1&gt;Заголовок статьи&lt;/h1&gt;
+
+  &lt;p&gt;Контентный параграф с оформлением в стиле Rarog.&lt;/p&gt;
+
+&lt;/article&gt;
+
+</code></pre>
+<p>И подключение:</p>
+<pre><code class="language-ts">
+plugins: [
+
+  "./packages/plugin-typography/index.cjs"
+
+]
+
+</code></pre>
+<h3>Design Tokens → Figma</h3>
+<p>Для интеграции с дизайн-инструментами используется файл:</p>
+<ul>
+<li><code>design/figma.tokens.json</code></li>
+</ul>
+<p>Формат совместим с Tokens Studio / Design Tokens tooling:</p>
+<ul>
+<li>секции: <code>color</code>, <code>spacing</code>, <code>radius</code>, <code>shadow</code>;</li>
+<li>значения — объект вида:</li>
+</ul>
+<p>``<code>json { "value": "#3b82f6", "type": "color" } </code>``</p>
+<h4>Подключение в Figma (Tokens Studio)</h4>
+<ol>
+<li>Установи плагин Tokens Studio в Figma.</li>
+<li>В настройках проекта выбери импорт из локального/удалённого JSON.</li>
+<li>Укажи путь до <code>design/figma.tokens.json</code> (через Git-провайдер или ручной импорт).</li>
+<li>Сопоставь группы:</li>
+</ol>
+<ul>
+<li><code>color.primary.<em></code> / <code>color.semantic.</em></code> → цветовые токены;</li>
+<li><code>spacing.*</code> → spacing;</li>
+<li><code>radius.*</code> → border radius;</li>
+<li><code>shadow.*</code> → тени.</li>
+</ul>
+<p>После этого:</p>
+<ul>
+<li>дизайнеры используют те же токены, что и в Rarog;</li>
+<li>разработчики подхватывают их через <code>var(--rarog-...)</code> и утилити-классы.</li>
+</ul>
+<h3>Rarog LSP Server (3.2.0+)</h3>
+<p>Начиная с 3.2.0, помимо простого VSCode-расширения, Rarog предоставляет полноценный LSP-сервер, который можно подключать из любых современных IDE/редакторов.</p>
+<ul>
+<li>бинарь: <code>node tools/lsp/rarog-lsp.js</code>;</li>
+<li>протокол: стандартный Language Server Protocol;</li>
+<li>возможности:</li>
+<li>автодополнение классов (<code>rg-<em></code>, <code>btn-</em></code>, <code>bg-<em></code>, <code>text-</em></code>, variants и т.д.);</li>
+<li>подсказки по токенам (<code>primary-500</code>, <code>space-4</code>, <code>radius-md</code>, <code>shadow-lg</code>);</li>
+<li>hover-подсказки с кратким описанием и ссылкой на docs;</li>
+<li>базовая валидация <code>rarog.config.*</code> (та же логика, что и в <code>rarog validate</code>).</li>
+</ul>
+<p>Поддерживаемые типы файлов (MVP):</p>
+<ul>
+<li><code>.html</code>, <code>.blade.php</code>;</li>
+<li><code>.js</code> / <code>.ts</code> / <code>.jsx</code> / <code>.tsx</code>;</li>
+<li><code>.vue</code>;</li>
+<li>любые шаблоны, где используется строковый <code>class=""</code> / <code>className=""</code> и Tailwind-подобные списки классов.</li>
+</ul>
+<h4>VSCode + LSP</h4>
+<p>Расширение в каталоге <code>tools/vscode-rarog</code> может использовать как локальный словари-классов, так и LSP-сервер (через стандартный VSCode LSP-клиент). В простом сценарии можно просто:</p>
+<pre><code class="language-bash">
+node tools/lsp/rarog-lsp.js --stdio
+
+</code></pre>
+<p>и подключить его через любую LSP-конфигурацию VSCode/Neovim/WebStorm, указав корень проекта как workspace root.</p>
+<h4>WebStorm / Neovim / другие IDE</h4>
+<p>Так как сервер реализует стандартный LSP, его можно подключать как обычный <code>node</code>-LSP:</p>
+<ul>
+<li>команда: <code>node tools/lsp/rarog-lsp.js --stdio</code>;</li>
+<li>root: корень проекта с <code>rarog.config.*</code> и <code>rarog.tokens.json</code>;</li>
+<li>триггеры:</li>
+<li>HTML/Blade/JSX/TSX/Vue-файлы;</li>
+<li>конфиг <code>rarog.config.*</code> для валидации.</li>
+</ul>
+<p>Подробные примеры конфигураций для WebStorm/Neovim можно взять из типовых настроек LSP для Tailwind CSS и адаптировать, заменив команду и root.</p>
+<h3>CLI DX: rarog validate</h3>
+<p>В 3.2.0 появился отдельный DX-инструмент для проверки конфига:</p>
+<pre><code class="language-bash">
+npx rarog validate
+
+## или
+
+pnpm rarog validate
+
+</code></pre>
+<p>Команда:</p>
+<ul>
+<li>ищет <code>rarog.config.js/ts/json</code> в корне;</li>
+<li>запускает базовую проверку:</li>
+<li>формата и сортировки <code>screens</code> (брейкпоинты);</li>
+<li>типа <code>plugins</code> (обязан быть массив);</li>
+<li>типа <code>theme.colors</code>;</li>
+<li>выводит:</li>
+<li><code>[warn]</code> — мягкие предупреждения (например, нестандартный формат брейкпоинтов);</li>
+<li><code>[error]</code> — ошибки, из-за которых стоит поправить конфиг (и код возврата <code>1</code>).</li>
+</ul>
+<p>Это тот же самый валидатор, который использует LSP-сервер для диагностики <code>rarog.config.*</code> прямо в IDE.</p>
+<h2>Imported from <code>versioning.md</code></h2>
+<h2>Versioning Policy</h2>
+<p>Rarog следует <strong>SemVer</strong>: <code>MAJOR.MINOR.PATCH</code>.</p>
+<h3>Что означает версия</h3>
+<h4>PATCH</h4>
+<p>Patch-релизы используются для:</p>
+<ul>
+<li>bug fixes;</li>
+<li>security fixes;</li>
+<li>docs/build/publish fixes без расширения surface;</li>
+<li>non-breaking DX improvements.</li>
+</ul>
+<p>PATCH <strong>не должен</strong>:</p>
+<ul>
+<li>менять stable API contract;</li>
+<li>удалять entrypoints;</li>
+<li>менять expected output paths в каноническом flow.</li>
+</ul>
+<h4>MINOR</h4>
+<p>Minor-релизы используются для:</p>
+<ul>
+<li>добавления новых stable возможностей;</li>
+<li>расширения utilities/components/themes;</li>
+<li>продвижения surface из beta в stable;</li>
+<li>добавления opt-in возможностей без breaking changes.</li>
+</ul>
+<p>MINOR может:</p>
+<ul>
+<li>добавлять новые subpath exports;</li>
+<li>вводить deprecation warnings;</li>
+<li>расширять CLI, если старый stable path остаётся рабочим.</li>
+</ul>
+<h4>MAJOR</h4>
+<p>Major нужен для:</p>
+<ul>
+<li>удаления deprecated stable surface;</li>
+<li>изменения root package contract;</li>
+<li>смены канонического config/build flow;</li>
+<li>любого intentional breaking change для stable API.</li>
+</ul>
+<h3>Deprecation policy</h3>
+<p>Для stable surface действует такой процесс:</p>
+<ol>
+<li>Сначала появляется deprecation note в docs/README/release notes.</li>
+<li>Затем surface остаётся рабочим минимум один minor-цикл, если нет security/critical reason убрать его раньше.</li>
+<li>Удаление происходит только в следующем major.</li>
+</ol>
+<p>Для beta/experimental surface срок может быть короче, но изменение всё равно должно быть задокументировано.</p>
+<h3>RFC process для больших API изменений</h3>
+<p>RFC обязателен, если изменение затрагивает:</p>
+<ul>
+<li>root package exports;</li>
+<li>config/build flow;</li>
+<li>публичный Plugin API;</li>
+<li>adapter/runtime contracts;</li>
+<li>migration path для stable пользователей.</li>
+</ul>
+<p>Минимальный RFC должен содержать:</p>
+<ul>
+<li>problem statement;</li>
+<li>proposed API;</li>
+<li>compatibility impact;</li>
+<li>migration plan;</li>
+<li>rollout plan;</li>
+<li>alternatives considered.</li>
+</ul>
+<h3>Release policy</h3>
+<p>Канонический release gate:</p>
+<pre><code class="language-bash">
+npm ci
+
+npm run release:verify
+
+npm run build
+
+npm run test:release
+
+npm run verify:artifacts
+
+npm run pack:packages
+
+</code></pre>
+<p>Только после этого CI публикует <code>rarog</code>, <code>@rarog/js</code>, <code>@rarog/react</code> и <code>@rarog/vue</code>.</p>
+<h3>Support policy</h3>
+<ul>
+<li>Stable surface поддерживается в пределах текущего major.</li>
+<li>Beta surface поддерживается best-effort с migration notes.</li>
+<li>Experimental surface не имеет долгосрочных compatibility guarantees.</li>
+</ul></main></div></body></html>
