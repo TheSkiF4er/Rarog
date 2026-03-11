@@ -1,5 +1,18 @@
 # Migration
 
+Этот раздел теперь включает не только migration between Rarog versions, но и adoption toolkit для перехода с Bootstrap и Tailwind.
+
+## Included guides
+
+- [Bootstrap → Rarog migration guide](bootstrap-to-rarog.md)
+- [Tailwind → Rarog migration guide](tailwind-to-rarog.md)
+- [Class mapping tables](class-mapping-tables.md)
+- [Migration assistant MVP](migration-assistant-mvp.md)
+
+---
+
+# Migration
+
 Миграция между версиями, политика версионирования и стабильность публичных поверхностей.
 
 ## Included legacy sources
