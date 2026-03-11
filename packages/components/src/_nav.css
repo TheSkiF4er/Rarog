@@ -53,3 +53,19 @@
   border-color: var(--rarog-color-primary);
   background-color: transparent;
 }
+
+/* Tabs v1 */
+
+.tabs {
+  display: grid;
+  gap: var(--rarog-space-3);
+}
+
+.tabs[data-rg-orientation="vertical"] {
+  grid-template-columns: minmax(10rem, 14rem) minmax(0, 1fr);
+  align-items: start;
+}
+
+.tabs[data-rg-orientation="vertical"] .tab-list {
+  flex-direction: column;
+}

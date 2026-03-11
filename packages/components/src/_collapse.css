@@ -12,3 +12,16 @@
 .collapse.rg-collapse-open {
   opacity: 1;
 }
+
+
+.accordion-panel {
+  transition: opacity 0.2s ease-out;
+}
+
+.accordion-panel[hidden] {
+  opacity: 0;
+}
+
+.accordion-panel:not([hidden]) {
+  opacity: 1;
+}
