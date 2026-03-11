@@ -82,7 +82,10 @@
     "./cli": "./packages/cli/bin/rarog.js",
     "./themes/creative": "./packages/themes/dist/rarog-theme-creative.min.css",
     "./themes/enterprise": "./packages/themes/dist/rarog-theme-enterprise.min.css",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./themes/aurora": "./packages/themes/dist/rarog-theme-aurora.min.css",
+    "./themes/graphite": "./packages/themes/dist/rarog-theme-graphite.min.css",
+    "./themes/enterprise-plus": "./packages/themes/dist/rarog-theme-enterprise-plus.min.css"
   },
   "files": [
     "packages/cli/bin",
