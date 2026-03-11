@@ -3,7 +3,8 @@ import { test, expect } from "@playwright/test";
 const pages = [
   { path: "/tests/visual/fixtures/overlays.html", name: "overlays" },
   { path: "/tests/visual/fixtures/forms.html", name: "forms" },
-  { path: "/tests/visual/fixtures/data-layout.html", name: "data-layout" }
+  { path: "/tests/visual/fixtures/data-layout.html", name: "data-layout" },
+  { path: "/tests/visual/fixtures/components-v1.html", name: "components-v1" }
 ];
 
 for (const pageDef of pages) {
