@@ -1,0 +1,34 @@
+{
+  "$schema": "https://rarog.dev/schema/theme-manifest-v1.json",
+  "version": 1,
+  "name": "enterprise-plus",
+  "extends": "enterprise",
+  "meta": { "mode": "light", "brand": "white-label", "description": "White-label B2B theme with neutral surfaces and strong hierarchy." },
+  "semantic": {
+    "color": {
+      "bg": "#f5f7fb",
+      "bgSoft": "#fbfcfe",
+      "bgElevated": "#ffffff",
+      "bgElevatedSoft": "#f8fafc",
+      "surface": "#ffffff",
+      "border": "#d9e2ec",
+      "borderSubtle": "#e8eef5",
+      "borderStrong": "#0f172a",
+      "muted": "#8a94a6",
+      "text": "#0f172a",
+      "textMuted": "#475569",
+      "focusRing": "#2563eb",
+      "accentSoft": "#e8efff",
+      "primary": "#1d4ed8",
+      "primaryForeground": "#ffffff",
+      "secondary": "#475569",
+      "secondaryForeground": "#ffffff"
+    }
+  },
+  "runtime": {
+    "density": { "comfortable": { "controlX": "0.9375rem", "controlY": "0.625rem", "panelGap": "1rem" } },
+    "shape": { "rounded": { "control": "0.875rem", "surface": "1.25rem", "pill": "9999px" } },
+    "shadow": { "subtle": { "sm": "0 2px 8px rgba(15,23,42,.08)", "md": "0 14px 34px rgba(15,23,42,.12)" } }
+  },
+  "selectors": { "scoped": "[data-rg-theme=\"enterprise-plus\"]" }
+}

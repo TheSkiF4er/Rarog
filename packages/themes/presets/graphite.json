@@ -1,0 +1,34 @@
+{
+  "$schema": "https://rarog.dev/schema/theme-manifest-v1.json",
+  "version": 1,
+  "name": "graphite",
+  "extends": "dark",
+  "meta": { "mode": "dark", "brand": "graphite", "description": "Polished dark enterprise theme for dashboards and operations UIs." },
+  "semantic": {
+    "color": {
+      "bg": "#0b1020",
+      "bgSoft": "#111827",
+      "bgElevated": "#111827",
+      "bgElevatedSoft": "#162033",
+      "surface": "#0f172a",
+      "border": "#243146",
+      "borderSubtle": "#182235",
+      "borderStrong": "#f8fafc",
+      "muted": "#7b8ba8",
+      "text": "#f8fafc",
+      "textMuted": "#c7d2fe",
+      "focusRing": "#60a5fa",
+      "accentSoft": "#172554",
+      "primary": "#8b5cf6",
+      "primaryForeground": "#ffffff",
+      "secondary": "#22d3ee",
+      "secondaryForeground": "#0b1020"
+    }
+  },
+  "runtime": {
+    "density": { "comfortable": { "controlX": "0.875rem", "controlY": "0.625rem", "panelGap": "1rem" } },
+    "shape": { "soft": { "control": "0.75rem", "surface": "1rem", "pill": "9999px" } },
+    "shadow": { "balanced": { "sm": "0 8px 20px rgba(2,6,23,.35)", "md": "0 24px 56px rgba(2,6,23,.48)" } }
+  },
+  "selectors": { "scoped": "[data-rg-theme=\"graphite\"]" }
+}

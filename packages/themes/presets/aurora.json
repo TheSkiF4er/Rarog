@@ -1,1 +1,34 @@
-
+{
+  "$schema": "https://rarog.dev/schema/theme-manifest-v1.json",
+  "version": 1,
+  "name": "aurora",
+  "extends": "default",
+  "meta": { "mode": "light", "brand": "aurora", "description": "Bright SaaS theme with calm blues and fresh mint accents." },
+  "semantic": {
+    "color": {
+      "bg": "#f6fbff",
+      "bgSoft": "#ffffff",
+      "bgElevated": "#ffffff",
+      "bgElevatedSoft": "#eef8ff",
+      "surface": "#ffffff",
+      "border": "#d6e8f5",
+      "borderSubtle": "#e7f1f8",
+      "borderStrong": "#1f3b5b",
+      "muted": "#7f9bb7",
+      "text": "#12324d",
+      "textMuted": "#4f6d8a",
+      "focusRing": "#38bdf8",
+      "accentSoft": "#e0f2fe",
+      "primary": "#0ea5e9",
+      "primaryForeground": "#ffffff",
+      "secondary": "#14b8a6",
+      "secondaryForeground": "#ffffff"
+    }
+  },
+  "runtime": {
+    "density": { "comfortable": { "controlX": "0.875rem", "controlY": "0.625rem", "panelGap": "1rem" } },
+    "shape": { "soft": { "control": "0.875rem", "surface": "1.125rem", "pill": "9999px" } },
+    "shadow": { "balanced": { "sm": "0 4px 10px rgba(14,165,233,.12)", "md": "0 16px 36px rgba(14,165,233,.16)" } }
+  },
+  "selectors": { "scoped": "[data-rg-theme=\"aurora\"]" }
+}
