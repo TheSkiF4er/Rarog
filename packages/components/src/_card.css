@@ -16,3 +16,12 @@
   font-size: 0.875rem;
   color: var(--rarog-color-text-muted);
 }
+
+.card-body {
+  padding: 0;
+}
+
+.card-title {
+  margin: 0 0 var(--rarog-space-2);
+  font-weight: 600;
+}
