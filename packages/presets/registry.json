@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "presets": [
+    {
+      "id": "bootstrap-spacing",
+      "title": "Bootstrap-like spacing preset",
+      "kind": "compatibility",
+      "entry": "./presets/bootstrap-spacing.json",
+      "tags": ["bootstrap", "spacing", "migration"]
+    },
+    {
+      "id": "tailwind-aliases",
+      "title": "Tailwind-like utility aliases",
+      "kind": "compatibility",
+      "entry": "./presets/tailwind-aliases.json",
+      "tags": ["tailwind", "aliases", "utilities"]
+    },
+    {
+      "id": "enterprise-design-system",
+      "title": "Enterprise design-system preset",
+      "kind": "product",
+      "entry": "./presets/enterprise-design-system.json",
+      "tags": ["enterprise", "tokens", "components"]
+    },
+    {
+      "id": "dashboard",
+      "title": "Dashboard preset",
+      "kind": "product",
+      "entry": "./presets/dashboard.json",
+      "tags": ["dashboard", "analytics", "layout"]
+    }
+  ]
+}
