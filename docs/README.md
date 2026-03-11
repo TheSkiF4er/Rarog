@@ -1,271 +1,30 @@
 # Documentation
 
-Эта структура документации приведена к новой IA: пользовательские сценарии сгруппированы по крупным разделам, а содержимое старой документации перенесено и перегруппировано ниже.
-
-## Included legacy sources
-
-- `index.md`
-- `why-rarog.md`
-- `design-system.md`
-- `showcase.md`
-
-## Imported from `index.md`
-
-
-
-
-## Imported from `why-rarog.md`
-
-## Why Rarog
-
-Rarog задуман как альтернатива связке **Tailwind + Bootstrap**:
-
-- дизайн‑токены как первая граждане,
-- утилиты на уровне Tailwind для 80% кейсов,
-- компонентный слой и JS‑ядро на уровне Bootstrap,
-- JIT/CLI/плагины и DX под ежедневную работу.
-
-### Краткое позиционирование
-
-- Если тебе нужен только low‑level utility‑слой → Tailwind.
-- Если тебе нужны в первую очередь готовые компоненты → Bootstrap.
-- Если нужна **комбинация**: tokens + utilities + components + JS + JIT + плагин‑экосистема
-  и плотная интеграция с Cajeer → имеет смысл смотреть в сторону Rarog.
-
-### Сравнение с Tailwind и Bootstrap
-
-#### По областям
-
-| Область          | Rarog                              | Tailwind                        | Bootstrap                    |
-|------------------|------------------------------------|---------------------------------|------------------------------|
-| Design tokens    | JSON + CSS vars (`rarog.tokens`)   | `tailwind.config.js`            | Sass‑переменные              |
-| Utility‑слой     | Tailwind‑подобный (`2.x`)          | Полный utility‑слой             | Есть, но менее фокусно       |
-| Компоненты       | Bootstrap‑уровень (`alerts`, ... ) | Нет (нужны UI‑библиотеки)       | Богатый компонентный набор   |
-| JS‑ядро          | Ванильный JS (без jQuery)          | Нет (кроме plugins отдельных)   | JS‑компоненты (v5 без jQuery)|
-| JIT / Tree‑shake | Да (`mode: "jit"`)                 | Да (JIT по умолчанию)           | Нет (нужна ручная оптимизация) |
-| IDE/DX           | CLI, JIT, VSCode‑плагин, плагины   | Отличный DX, экосистема тулз    | Нормальный DX, меньше tooling|
-| Экосистема       | Заточен под Cajeer‑stack + web     | Огромная экосистема             | Огромная экосистема          |
-
-#### Когда выбирать Rarog
-
-Rarog особенно уместен, если:
-
-- ты строишь продукты внутри **Cajeer‑экосистемы**;
-- нужен единый visual language для:
-
-  - лендингов,
-  - панелей/админок,
-  - внутренних тулз/дашбордов;
-- команда хочет:
-
-  - понятные компоненты «из коробки»,
-  - при этом — гибкий утилити‑слой,
-  - дизайн‑токены, синхронизированные с Figma.
-
-#### Когда миксовать
-
-Rarog можно использовать:
-
-- как компонентный слой поверх Tailwind (если не хватает компонентов);
-- как tokens+components слой, но с утилитами Tailwind (там, где команда уже в него вложилась);
-- как CSS‑ядро в разнородных приложениях (Laravel, React, Cajeer‑панели).
-
----
-
-### Философия Rarog
-
-1. **Tokens first.**  
-   Сначала формализуем цвета, spacing, radius, shadow — в JSON, затем строим поверх них утилиты и компоненты.
-
-2. **Utilities second.**  
-   Utility‑слой должен позволять сверстать 80% задач без custom‑CSS.
-
-3. **Components & JS**, а не только CSS.  
-   Модалки, offcanvas, dropdown, navbar, toasts и т.д. — с data‑атрибутами и JS‑API.
-
-4. **DX & Ecosystem.**  
-   CLI, JIT, конфиг, плагины, IDE‑расширения, starter‑ы под популярные стеки.
-
-Если смотреть на Rarog как на продукт, то это не просто CSS‑библиотека, а
-**дизайн‑система уровня runtime**: токены → утилиты → компоненты → JS → tooling.
-
-
-### UI‑киты и шаблоны
-
-Начиная с 3.0.0, Rarog поставляется не только как фреймворк, но и как набор
-готовых UI‑китов:
-
-- **Rarog UI Admin** — админ‑панель;
-- **Rarog Landing Kit** — лендинговые секции;
-- **Rarog SaaS Starter** — auth/dashboard/settings/billing для SaaS.
-
-Это позволяет:
-
-- быстрее показать Rarog «в деле» команде/заказчику;
-- брать готовые layout’ы и переносить их в Laravel/React/Next.js/Cajeer‑проекты;
-- использовать Rarog как часть дизайн‑системы, а не только как CSS‑слой.
-
-### Сравнение с Tailwind CSS и Bootstrap
-
-Ниже — упрощённое сравнение трёх подходов по ключевым осям.
-
-#### Уровень фич (high‑level)
-
-| Область                     | Rarog                                       | Tailwind CSS                               | Bootstrap                               |
-|----------------------------|---------------------------------------------|--------------------------------------------|-----------------------------------------|
-| Design tokens              | Есть, `rarog.tokens.json`, темы, theme packs | Нет формальных токенов из коробки          | Частично, в виде Sass‑переменных       |
-| Utility‑классы             | Широкий охват, responsive/variants/JIT      | Максимально широкий охват                  | Ограниченные утилиты                   |
-| Компоненты (CSS)           | Полный набор (формы, таблицы, навигация, UI‑киты) | Нет, только primitives                      | Да, классический компонентный слой     |
-| JS‑ядро                    | Свой ванильный JS‑core (модалки, dropdown, offcanvas, carousel, stepper, data‑components) | Нет, всё через сторонние решения         | Встроенный JS‑слой на основе ES6       |
-| JIT / tree‑shaking         | Встроенный JIT, режимы `full` / `jit` / split‑build | Да (Tailwind JIT)                          | Нет встроенного JIT                    |
-| DX / IDE / LSP             | CLI, LSP, VSCode‑extension, plugin‑API      | Богатая экосистема, Tailwind‑плагины       | Базовые тулзы, упор на CSS/JS, а не DX |
-| UI‑киты и шаблоны          | Admin, Landing, SaaS‑стартеры               | Обычно через внешние UI‑библиотеки         | Есть темы/шаблоны, но менее системно   |
-| CDN                        | Официальный CDN `cdn.cajeer.ru/rarog`       | Завязка на сторонние CDN                   | Официальные и сторонние CDN            |
-
-#### Плюсы и минусы Rarog (в контексте Tailwind/Bootstrap)
-
-|                      | Плюсы Rarog                                                                 | Минусы / ограничения Rarog                                                 |
-|----------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| Относительно Tailwind| + Есть готовые компоненты и JS‑ядро<br>+ Design‑tokens и темы из коробки<br>+ UI‑киты и шаблоны | − Меньшая экосистема и количество сторонних плагинов<br>− Меньше «готовых рецептов» в сообществе |
-| Относительно Bootstrap| + Utility‑подход и JIT‑режим<br>+ Богатый utility‑слой на уровне Tailwind<br>+ Tokens + JIT + плагин‑экосистема | − Bootstrap до сих пор узнаваем и привычен многим командам<br>− Некоторая кривая обучения для команды без опыта с utility‑CSS |
-
-Если коротко: **Rarog пытается закрыть сразу обе половины задачи** — быть и utility‑слоем, и
-компонентной библиотекой, и базой для дизайн‑системы, не привязывая вас к конкретному фреймворку.
-
-
-## Imported from `design-system.md`
-
-## Design System Suite
-
-Начиная с Rarog **3.3.0**, фреймворк позиционируется не только как CSS‑/JS‑слой,
-но и как основа полноценной дизайн‑системы.
-
-### Слои дизайн‑системы
-
-1. **Tokens**  
-   Базовый уровень — `rarog.tokens.json` и CSS‑переменные:
-
-   - цветовые шкалы (`primary`, `secondary`, `success`, `danger`, `info`);
-   - spacing, radius, shadow;
-   - semantic‑токены (`bg`, `surface`, `border`, `text`, `accentSoft`, `focusRing`);
-   - `tokens.themes.*` для `default`, `dark`, `contrast`, `enterprise`, `creative`.
-
-2. **Themes**  
-   Набор готовых тем в пакете `packages/themes`:
-
-   - `rarog-theme-default.css`
-   - `rarog-theme-dark.css`
-   - `rarog-theme-contrast.css`
-   - `rarog-theme-enterprise.css`
-   - `rarog-theme-creative.css`
-
-   Темы переопределяют только семантические переменные и не ломают утилити‑слой.
-
-3. **Components & JS**  
-   Компонентный слой (CSS) и JS‑ядро используют только семантические токены,
-   поэтому переключение темы не требует переписывать компоненты.
-
-4. **Figma Design Kit**  
-   В каталоге `design/` находятся артефакты для Figma:
-
-   - `design/figma.tokens.json` — экспорт токенов в формате Tokens Studio;
-   - `design/figma-kit/` — описание состава Figma Design Kit и рекомендованного flow.
-
-### Design → Dev handshake
-
-Рекомендуемый цикл работы команды «дизайнеры + разработчики»:
-
-1. **Дизайнеры** настраивают токены и темы в Figma через Tokens Studio,
-   основываясь на `design/figma.tokens.json`.
-2. **Разработчики** описывают те же значения в `rarog.config.*` (или правят существующие).
-3. Запускается `npx rarog build`, который обновляет CSS‑переменные и `rarog.tokens.json`.
-4. При изменении токенов/тем:
-
-   - сначала обновляется конфиг и выполняется сборка;
-   - затем экспортируется обновлённый `design/figma.tokens.json` и синхронизируется с Figma.
-
-Таким образом, у дизайн‑системы есть единый источник правды — токены, а Rarog
-служит «runtime‑слоем», который гарантирует, что эти токены последовательно
-используются во всех утилитах, компонентах и JS‑паттернах.
-
-
-## Imported from `showcase.md`
-
-## Showcase & UI Kits
-
-Rarog 3.0.0 включает готовые UI‑наборы и шаблоны, которые можно использовать
-как витрину и стартовую точку для проектов.
-
-### Rarog UI Admin
-
-Полноценный пример admin‑dashboard:
-
-- sidebar + navbar;
-- KPI‑карточки;
-- таблица с toolbar‑ом и пагинацией;
-- формы, модалки, toasts.
-
-Путь в репозитории:
-
-```text
-examples/ui-kits/admin-dashboard/index.html
-```
-
-Идеален как база для:
-
-- внутренних админ‑панелей;
-- панелей управления SaaS‑продуктом;
-- админок в Cajeer‑экосистеме.
-
-### Rarog Landing Kit
-
-Набор секций для лендингов:
-
-- hero + CTA;
-- features;
-- pricing (мини‑блок и полноценная секция);
-- блог + FAQ;
-- финальный CTA‑блок.
-
-Путь:
-
-```text
-examples/ui-kits/landing-kit/index.html
-```
-
-Можно использовать как:
-
-- standalone‑лендинг;
-- основу для маркетинговых страниц;
-- шаблон для лендингов внутри Cajeer‑проектов.
-
-### Rarog SaaS Starter
-
-Мини‑пример SaaS‑приложения:
-
-- `auth.html` — вход/регистрация;
-- `dashboard.html` — usage‑статистика, активность, onboarding checklist;
-- `settings.html` — профиль, безопасность и блок Billing & Usage.
-
-Путь:
-
-```text
-examples/ui-kits/saas-starter/
-```
-
-Рекомендуемый сценарий:
-
-- берёшь нужный layout;
-- переносишь в Laravel/React/Next.js;
-- подключаешь Rarog (JIT/CLI) и начинаешь заменять демо‑данные на реальные.
-
-### Связка с Guides
-
-UI‑киты и Starter интегрируются с существующими гайдами:
-
-- в **Laravel Guide** можно использовать `saas-starter` как основу Blade‑layout’ов;
-- в **React/Next.js Guide** — как примеры страниц/route’ов;
-- в **Cajeer Stack Guide** — как референс‑layout для админок и лендингов.
-
-Скриншоты и «живые» демо для этих наборов можно вынести на отдельный
-`docs.cajeer.ru/rarog/showcase` или похожий раздел.
+Rarog docs platform v2 теперь ориентирована на **GitBook** как на основной delivery-слой документации. Цель — сделать документацию не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, lookup-страницами, anatomy-разборами компонентов, accessibility notes, token/theme explorer и понятными migration-путями.
+
+## What is new in docs platform v2
+
+- **GitBook-native IA** через `docs/SUMMARY.md` и `.gitbook.yaml`
+- **Live playground** в `examples/playground/` для интерактивных сценариев
+- **Utility lookup** для быстрого поиска классов и альтернатив
+- **Component anatomy** и accessibility notes для production-команд
+- **Token/theme explorer** как вход в theming workflows
+- **Migration pages** для перехода с Tailwind и Bootstrap
+- **Copy-paste examples** для быстрых стартов и внедрения в проекты
+- **Starter catalog** с официальными шаблонами и smoke-проверкой
+
+## Key sections
+
+- [Docs platform v2](docs-platform-v2.md)
+- [Live playground](live-playground.md)
+- [Copy-paste examples](copy-paste-examples.md)
+- [Utility lookup](utilities/lookup.md)
+- [Component anatomy](components/anatomy.md)
+- [Accessibility notes](components/accessibility-notes.md)
+- [Token and theme explorer](themes/token-theme-explorer.md)
+- [Migration guides](migration/README.md)
+- [Official starters](starters/README.md)
+
+## Authoring model
+
+GitBook является source of truth для структуры разделов и навигации. Для локальной проверки репозиторий также умеет делать lightweight static export в `.gitbook/dist`, чтобы CI мог проверить структуру, ссылки и готовность документации к публикации.
