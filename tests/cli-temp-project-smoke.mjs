@@ -70,15 +70,22 @@ function main() {
     console.log("[smoke] Step 2/4: validate");
     runNode(projectDir, [cliPath, "validate"]);
 
-    console.log("[smoke] Step 3/4: build");
-    runNode(projectDir, [cliPath, "build"]);
+    console.log("[smoke] Step 3/6: doctor");
+    runNode(projectDir, [cliPath, "doctor"]);
 
-    console.log("[smoke] Step 4/4: output exists");
+    console.log("[smoke] Step 4/6: analyze");
+    runNode(projectDir, [cliPath, "analyze"]);
+
+    console.log("[smoke] Step 5/6: build --debug");
+    runNode(projectDir, [cliPath, "build", "--debug"]);
+
+    console.log("[smoke] Step 6/6: output exists");
     const manifest = JSON.parse(fs.readFileSync(path.join(projectDir, "rarog.build.json"), "utf8"));
     for (const rel of Object.values(manifest.tokens || {})) {
       assert(fs.existsSync(path.join(projectDir, rel)), `missing token output: ${rel}`);
     }
     assert(fs.existsSync(path.join(projectDir, manifest.outputs.jitCss)), `missing JIT output: ${manifest.outputs.jitCss}`);
+    assert(fs.existsSync(path.join(projectDir, "dist", "rarog.jit.debug.json")), "missing JIT debug report");
 
     console.log("[OK] temp-project smoke passed");
   } finally {
