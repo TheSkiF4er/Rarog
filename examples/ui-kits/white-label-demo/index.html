@@ -1,1 +1,46 @@
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rarog White-label Demo</title>
+    <link rel="stylesheet" href="../../../packages/core/src/rarog-core.css" />
+    <link rel="stylesheet" href="../../../packages/utilities/src/rarog-utilities.css" />
+    <link rel="stylesheet" href="../../../packages/components/src/rarog-components.css" />
+    <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-aurora.css" />
+    <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-graphite.css" />
+    <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-enterprise-plus.css" />
+    <style>
+      body { background: var(--rarog-color-bg, #f5f7fb); margin: 0; }
+      .tenant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; padding: 1.5rem; }
+      .tenant-card { background: var(--rarog-color-surface); border: 1px solid var(--rarog-color-border); border-radius: 1rem; box-shadow: 0 12px 30px rgba(15,23,42,.08); overflow: hidden; }
+      .tenant-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--rarog-color-border-subtle); }
+      .tenant-body { padding: 1.25rem; }
+    </style>
+  </head>
+  <body>
+    <div class="tenant-grid">
+      <section class="tenant-card" data-rg-theme="aurora">
+        <div class="tenant-header"><strong>Aurora tenant</strong></div>
+        <div class="tenant-body">
+          <button class="btn btn-primary mb-3">Primary action</button>
+          <div class="alert alert-info">Brand-friendly SaaS tenant theme.</div>
+        </div>
+      </section>
+      <section class="tenant-card" data-rg-theme="graphite">
+        <div class="tenant-header"><strong>Graphite tenant</strong></div>
+        <div class="tenant-body">
+          <button class="btn btn-primary mb-3">Approve</button>
+          <div class="alert alert-warning">Dark operations tenant running side-by-side.</div>
+        </div>
+      </section>
+      <section class="tenant-card" data-rg-theme="enterprise-plus">
+        <div class="tenant-header"><strong>Enterprise+ tenant</strong></div>
+        <div class="tenant-body">
+          <button class="btn btn-primary mb-3">Save policy</button>
+          <div class="alert alert-success">White-label baseline for per-tenant overrides.</div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
