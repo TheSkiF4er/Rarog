@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rarog Visual Regression — Components v1</title>
+  <link rel="stylesheet" href="../../../packages/core/src/rarog-core.css" />
+  <link rel="stylesheet" href="../../../packages/utilities/src/rarog-utilities.css" />
+  <link rel="stylesheet" href="../../../packages/components/src/rarog-components.css" />
+  <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-default.css" />
+  <style>
+    * { animation: none !important; transition: none !important; caret-color: transparent !important; }
+    body { margin: 0; background: #0b1020; color: #e5e7eb; font-family: Inter, system-ui, sans-serif; }
+    .frame { max-width: 1280px; margin: 0 auto; padding: 32px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .stack { display: grid; gap: 12px; }
+    .modal { position: static; display: flex; background: rgba(15, 23, 42, 0.35); padding: 0; }
+    .modal-dialog { margin: 0; max-width: none; width: 100%; }
+    .dropdown-menu, .tooltip, .popover { display: block; position: static; opacity: 1; visibility: visible; transform: none; }
+  </style>
+</head>
+<body>
+  <main class="frame stack">
+    <header class="d-flex justify-between items-center">
+      <div><div class="h3 mb-1">Rarog component pack v1</div><div class="text-muted">Visual baseline with reduced motion</div></div>
+      <span class="badge badge-primary">a11y baseline</span>
+    </header>
+    <section class="grid">
+      <article class="card stack">
+        <div class="card-header">Controls</div>
+        <button class="btn btn-primary">Primary</button>
+        <input class="input" placeholder="Input" />
+        <textarea class="textarea" placeholder="Textarea"></textarea>
+        <select class="select"><option>Native select</option></select>
+        <label class="check"><input class="checkbox" type="checkbox" checked /><span class="check-indicator"></span><span class="check-label">Checkbox</span></label>
+        <label class="choice"><input class="radio" type="radio" name="visual-radio" checked /><span class="radio-indicator"></span><span class="choice-label">Radio</span></label>
+        <label class="switch-field"><input class="switch" type="checkbox" role="switch" checked /><span class="switch-track"></span><span class="switch-label">Switch</span></label>
+      </article>
+      <article class="card stack">
+        <div class="card-header">Feedback</div>
+        <div class="alert alert-info">Informational alert for inline guidance.</div>
+        <div class="d-flex gap-2 items-center"><span class="badge badge-outline">Neutral</span><span class="badge badge-primary">Stable</span></div>
+        <div class="d-flex gap-3 items-center"><span class="spinner"></span><div class="skeleton skeleton-line" style="width: 8rem;"></div></div>
+        <div class="skeleton skeleton-card"></div>
+      </article>
+      <article class="card stack">
+        <div class="card-header">Overlay primitives</div>
+        <div class="dropdown-menu"><button class="dropdown-item">Profile</button><button class="dropdown-item">Billing</button></div>
+        <div class="tooltip">Tooltip content</div>
+        <div class="modal"><div class="modal-dialog dialog-surface"><div class="dialog-header">Dialog</div><div class="dialog-body">Focusable overlay content</div></div></div>
+      </article>
+    </section>
+    <section class="tabs stack" data-rg-tabs>
+      <div class="tab-list" data-rg-tab-list>
+        <button class="tab-trigger" data-rg-tab data-rg-target="#v1-tab-a" aria-selected="true">Tabs</button>
+        <button class="tab-trigger" data-rg-tab data-rg-target="#v1-tab-b">Accordion</button>
+      </div>
+      <div id="v1-tab-a" class="tab-panel" data-rg-tab-panel>Keyboard-navigable tabs baseline.</div>
+      <div id="v1-tab-b" class="tab-panel" data-rg-tab-panel hidden>
+        <div class="accordion">
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="true">What ships in v1?</button>
+            <div class="accordion-panel">Core form, feedback and overlay primitives.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
