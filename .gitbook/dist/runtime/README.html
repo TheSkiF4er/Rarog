@@ -1,1 +1,548 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Runtime · Rarog Docs</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f7f8fb;color:#172033}a{color:#1d4ed8;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.nav{padding:24px;border-right:1px solid #dbe2f0;background:#fff;position:sticky;top:0;height:100vh;overflow:auto}.nav ul{padding-left:18px}.content{padding:32px;max-width:960px}pre{background:#0f172a;color:#e5edf8;padding:16px;border-radius:14px;overflow:auto}code{background:#eef2ff;padding:2px 6px;border-radius:6px}table{border-collapse:collapse}h1,h2,h3{line-height:1.2}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{position:relative;height:auto;border-right:0;border-bottom:1px solid #dbe2f0}}</style></head><body><div class="shell"><aside class="nav"><h1>Rarog Docs</h1><p>GitBook content export</p><ul><li><a href="README.html">Documentation</a></li><li><a href="docs-platform-v2.html">Docs platform v2</a></li><li><a href="getting-started/README.html">Getting Started</a></li><li><a href="installation/README.html">Installation</a></li><li><a href="cli/README.html">CLI</a></li><li><a href="build/README.html">Build</a></li><li><a href="live-playground.html">Live playground</a></li><li><a href="copy-paste-examples.html">Copy-paste examples</a></li><li><a href="tokens/README.html">Tokens</a></li><li><a href="tokens.html">Token architecture v2</a></li><li><a href="semantic-tokens.html">Semantic tokens</a></li><li><a href="themes/README.html">Themes</a></li><li><a href="themes/theme-engine-v1.html">Theme engine v1</a></li><li><a href="themes/token-theme-explorer.html">Token and theme explorer</a></li><li><a href="utilities/README.html">Utilities</a></li><li><a href="components/README.html">Components</a></li><li><a href="accessibility.html">Accessibility baseline</a></li><li><a href="runtime/README.html">Runtime</a></li><li><a href="plugin-api/README.html">Plugin API</a></li><li><a href="migration/README.html">Migration</a></li><li><a href="starters/README.html">Official starters</a></li><li><a href="contributor-guide/README.html">Contributor Guide</a></li><li><a href="build/jit-how-it-works.html">How JIT works</a></li><li><a href="build/jit-troubleshooting.html">JIT troubleshooting guide</a></li></ul></aside><main class="content"><h1>Runtime</h1>
+<p>Runtime-поведение JS-ядра, lifecycle, события, стабильность surface и практики интеграции.</p>
+<h2>Included legacy sources</h2>
+<ul>
+<li><code>javascript.md</code></li>
+<li><code>api-reference.md</code></li>
+<li><code>stability.md</code></li>
+</ul>
+<h2>Imported from <code>javascript.md</code></h2>
+<h2>JavaScript</h2>
+<p>JS-ядро Rarog v2 поставляется в виде:</p>
+<ul>
+<li>UMD-бандла: <code>packages/js/dist/rarog.js</code></li>
+<li>ESM-бандла: <code>packages/js/dist/rarog.esm.js</code></li>
+</ul>
+<h3>Поддерживаемые компоненты</h3>
+<ul>
+<li><code>Dropdown</code></li>
+<li><code>Collapse</code></li>
+<li><code>Modal</code></li>
+<li><code>Offcanvas</code></li>
+<li><code>Toast</code></li>
+<li><code>Tooltip</code></li>
+<li><code>Popover</code></li>
+<li><code>Carousel</code></li>
+<li><code>Stepper</code></li>
+</ul>
+<p>---</p>
+<h3>Data-API</h3>
+<p>Любой компонент можно инициализировать с помощью data-атрибутов:</p>
+<pre><code class="language-html">
+&lt;!-- Modal --&gt;
 
+&lt;button class="btn btn-primary" data-rg-toggle="modal" data-rg-target="#welcomeModal"&gt;
+
+  Открыть модалку
+
+&lt;/button&gt;
+
+
+
+&lt;!-- Offcanvas --&gt;
+
+&lt;button class="btn btn-ghost" data-rg-toggle="offcanvas" data-rg-target="#mainOffcanvas"&gt;
+
+  Открыть меню
+
+&lt;/button&gt;
+
+
+
+&lt;!-- Toast --&gt;
+
+&lt;button class="btn btn-secondary" data-rg-toggle="toast" data-rg-target="#demoToast"&gt;
+
+  Показать toast
+
+&lt;/button&gt;
+
+
+
+&lt;!-- Tooltip --&gt;
+
+&lt;button
+
+  class="btn btn-ghost"
+
+  data-rg-toggle="tooltip"
+
+  data-rg-title="Tooltip Rarog"
+
+&gt;
+
+  Наведи на меня
+
+&lt;/button&gt;
+
+
+
+&lt;!-- Popover --&gt;
+
+&lt;button
+
+  class="btn btn-secondary"
+
+  data-rg-toggle="popover"
+
+  data-rg-popover-title="Заголовок"
+
+  data-rg-popover-content="Контент popover"
+
+&gt;
+
+  Кликни для popover
+
+&lt;/button&gt;
+
+</code></pre>
+<p>Dismiss-атрибуты:</p>
+<pre><code class="language-html">
+&lt;button data-rg-dismiss="modal"&gt;Закрыть модалку&lt;/button&gt;
+
+&lt;button data-rg-dismiss="offcanvas"&gt;Закрыть меню&lt;/button&gt;
+
+&lt;button data-rg-dismiss="toast"&gt;Закрыть toast&lt;/button&gt;
+
+</code></pre>
+<p>Инициализация выполняется автоматически при загрузке документа. Для SPA/SSR и сложных сценариев можно использовать lifecycle-API JS Core v3:</p>
+<pre><code class="language-js">
+import { Rarog } from "../packages/js/dist/rarog.esm.js";
+
+
+
+// базовая инициализация Data-API и tooltip/popover для всего документа
+
+Rarog.init();
+
+
+
+// инициализация внутри конкретного контейнера (например, после рендера React/Vue)
+
+const root = document.getElementById("app-root");
+
+Rarog.init(root);
+
+
+
+// dispose / reinit
+
+Rarog.dispose(root); // удалить tooltip/popover внутри контейнера
+
+Rarog.reinit(root);  // пересобрать Data-API и всплывающие компоненты
+
+</code></pre>
+<p>---</p>
+<h3>JS-API и события</h3>
+<p>Каждый компонент имеет статические методы <code>getInstance</code> / <code>getOrCreate</code>:</p>
+<pre><code class="language-js">
+import Rarog, { Modal, Offcanvas, Toast, Tooltip, Popover } from "../packages/js/dist/rarog.esm.js";
+
+
+
+const modalElement = document.getElementById("welcomeModal");
+
+const modal = Modal.getOrCreate(modalElement);
+
+modal.show();
+
+
+
+const offcanvasElement = document.getElementById("mainOffcanvas");
+
+const offcanvas = Offcanvas.getOrCreate(offcanvasElement);
+
+offcanvas.toggle();
+
+
+
+const toastElement = document.getElementById("demoToast");
+
+const toast = Toast.getOrCreate(toastElement);
+
+toast.show();
+
+</code></pre>
+<h4>События (Event API)</h4>
+<p>Rarog генерирует события в стиле Bootstrap, но с префиксом <code>rg:</code>:</p>
+<ul>
+<li><code>rg:modal:show</code> / <code>rg:modal:hide</code></li>
+<li><code>rg:dropdown:show</code> / <code>rg:dropdown:hide</code></li>
+<li><code>rg:collapse:show</code> / <code>rg:collapse:hide</code></li>
+<li><code>rg:offcanvas:show</code> / <code>rg:offcanvas:hide</code></li>
+<li><code>rg:toast:show</code> / <code>rg:toast:hide</code></li>
+<li><code>rg:tooltip:show</code> / <code>rg:tooltip:hide</code></li>
+<li><code>rg:popover:show</code> / <code>rg:popover:hide</code></li>
+</ul>
+<pre><code class="language-js">
+const modalEl = document.getElementById("welcomeModal");
+
+
+
+modalEl.addEventListener("rg:modal:show", event =&gt; {
+
+  console.log("Модалка открывается", event.detail.instance);
+
+});
+
+
+
+modalEl.addEventListener("rg:modal:hide", event =&gt; {
+
+  console.log("Модалка закрывается");
+
+});
+
+</code></pre>
+<p>Во всех событиях в <code>event.detail.instance</code> лежит JS-инстанс компонента.</p>
+<p>---</p>
+<h3>Destroy / dispose</h3>
+<p>Минимальный интерфейс освобождения ресурсов — через сам браузер (удаление DOM-узлов). Если вам нужно явно удалить обработчики, можно реализовать свою обёртку, сохраняя инстансы и вызывая <code>hide()</code> перед удалением элементов. В будущих версиях может появиться <code>dispose()</code>-API.</p>
+<h3>Carousel &amp; Stepper JS-API</h3>
+<pre><code class="language-js">
+import { Rarog } from "../packages/js/dist/rarog.esm.js";
+
+
+
+const carouselEl = document.getElementById("heroCarousel");
+
+const carousel = Rarog.Carousel.getOrCreate(carouselEl);
+
+
+
+carousel.next();
+
+carousel.prev();
+
+carousel.goTo(2);
+
+carousel.play();
+
+carousel.pause();
+
+
+
+const stepperEl = document.getElementById("signupStepper");
+
+const stepper = Rarog.Stepper.getOrCreate(stepperEl);
+
+
+
+stepper.next();
+
+stepper.prev();
+
+stepper.goTo(1);
+
+stepper.reset();
+
+
+
+stepperEl.addEventListener("rg:stepper:goto", event =&gt; {
+
+  console.log("Текущий шаг:", event.detail.index);
+
+});
+
+</code></pre>
+<p>---</p>
+<h3>EventBus / Events</h3>
+<p>JS Core v3 добавляет простой event-bus, доступный через <code>Rarog.Events</code>:</p>
+<pre><code class="language-js">
+import { Rarog } from "../packages/js/dist/rarog.esm.js";
+
+
+
+Rarog.Events.on("rg:carousel:next", payload =&gt; {
+
+  console.log("Слайд переключился", payload);
+
+});
+
+
+
+// Любое событие `rg:*` пробрасывается в bus через `Events.emit`:
+
+Rarog.Events.on("rg:modal:show", ({ element, detail }) =&gt; {
+
+  console.log("Открылся modal", element, detail.instance);
+
+});
+
+</code></pre>
+<p>Для включения debug-режима (логирование в консоль) достаточно выставить глобальный флаг:</p>
+<pre><code class="language-html">
+&lt;script&gt;
+
+  window.RAROG_DEBUG = true;
+
+&lt;/script&gt;
+
+</code></pre>
+<h3>Debug / Devtools</h3>
+<p>Для отладки поведения компонент и событий Rarog JS Core есть debug-режим.</p>
+<p>Варианты включения:</p>
+<ul>
+<li>через глобальные флаги (ещё до загрузки скриптов):</li>
+</ul>
+<p>``<code>html &lt;script&gt; window.RAROG_DEBUG = true; &lt;/script&gt; &lt;script src="/js/rarog.umd.js"&gt;&lt;/script&gt; </code>``</p>
+<ul>
+<li>через JS-API в рантайме:</li>
+</ul>
+<p>```js import Rarog from "rarog/dist/rarog.esm.js";</p>
+<p>Rarog.setDebug(true); console.log(Rarog.isDebugEnabled()); // true ```</p>
+<p>Что делает debug-режим:</p>
+<ul>
+<li>логирует все <code>rg:*</code>-события через <code>console.log("[Rarog]", "event", type, payload)</code>;</li>
+<li>выводит предупреждения о некорректной структуре HTML/атрибутов</li>
+<p>(например, отсутствующий <code>.modal-dialog</code> или <code>.stepper-step</code>);</p>
+<li>логирует ошибки обработчиков событий в консоль как <code>[Rarog Events]</code>.</li>
+</ul>
+<p>Debug-режим не должен использоваться в production-сборках; его цель — помочь разработчику во время интеграции и настройки компонент.</p>
+<h3>События остальных компонентов</h3>
+<p>Для оставшихся интерактивных компонентов в 3.x стабилизированы следующие семейства событий:</p>
+<ul>
+<li><code>Stepper</code>: <code>rg:stepper:change</code>, <code>rg:stepper:changed</code></li>
+<li><code>Datepicker</code>: <code>rg:datepicker:show|shown|hide|hidden|change|changed</code></li>
+<li><code>Select</code>: <code>rg:select:show|shown|hide|hidden|change|changed</code></li>
+<li><code>Combobox</code>: <code>rg:combobox:show|shown|hide|hidden|change|changed</code></li>
+<li><code>TagsInput</code>: <code>rg:tagsinput:add|added|remove|removed|cleared</code></li>
+<li><code>DataTable</code>: <code>rg:datatable:pagechange|pagechanged|sortchange|sortchanged</code></li>
+</ul>
+<p>Во всех событиях используется тот же публичный <code>event.detail</code>-контракт: <code>instance</code>, <code>trigger</code>, <code>target</code>, а при необходимости — <code>index</code>, <code>key</code>, <code>value</code>.</p>
+<h2>Imported from <code>api-reference.md</code></h2>
+<h2>API Reference (Rarog 3.x)</h2>
+<p>Этот раздел фиксирует <strong>стабильный публичный API 3.x</strong> для CSS, компонентов и JS Core. Используйте его как быстрый справочник по именам классов, конструкторам, методам и событиям.</p>
+<h3>JS Core</h3>
+<p>Канонический пакетный surface:</p>
+<ul>
+<li><code>@rarog/js</code></li>
+<li>default export: <code>Rarog</code></li>
+<li>именованные экспорты: <code>Dropdown</code>, <code>Collapse</code>, <code>Modal</code>, <code>Offcanvas</code>, <code>Toast</code>, <code>Tooltip</code>, <code>Popover</code>, <code>Carousel</code>, <code>Stepper</code>, <code>Datepicker</code>, <code>DatetimePicker</code>, <code>Select</code>, <code>Combobox</code>, <code>TagsInput</code>, <code>DataTable</code>, <code>InputMask</code>, <code>Events</code></li>
+<li>type exports: <code>RarogEventMap</code>, <code>RarogEventName</code>, <code>RarogEventDetail&lt;TName&gt;</code>, <code>RarogCustomEvent&lt;TName&gt;</code></li>
+</ul>
+<h4>Общий lifecycle contract</h4>
+<p>Для компонентов с открытием/закрытием Rarog 3.x использует единый контракт:</p>
+<ul>
+<li>pre-event: <code>rg:&lt;component&gt;:show</code></li>
+<li>post-event: <code>rg:&lt;component&gt;:shown</code></li>
+<li>pre-hide: <code>rg:&lt;component&gt;:hide</code></li>
+<li>post-hide: <code>rg:&lt;component&gt;:hidden</code></li>
+</ul>
+<p>Где runtime уже поддерживает lifecycle-контракт, pre-events считаются <strong>cancelable</strong> и могут использоваться с <code>preventDefault()</code> перед изменением состояния.</p>
+<p><code>event.detail</code> в lifecycle-событиях может содержать:</p>
+<ul>
+<li><code>instance</code> — инстанс компонента</li>
+<li><code>trigger</code> — DOM-элемент, инициировавший действие, если применимо</li>
+<li><code>target</code> — основной DOM-target компонента, если применимо</li>
+<li><code>placement</code> — для <code>Tooltip</code> / <code>Popover</code></li>
+<li><code>index</code>, <code>fromIndex</code>, <code>toIndex</code>, <code>direction</code> — для <code>Carousel</code></li>
+<li><code>value</code> — для <code>Datepicker</code>, <code>Select</code>, <code>Combobox</code>, <code>Stepper</code></li>
+</ul>
+<h4>Constructors / methods</h4>
+<h5>Overlay &amp; disclosure</h5>
+<ul>
+<li><code>Dropdown.getInstance(element)</code> / <code>Dropdown.getOrCreate(element, options)</code></li>
+<li><code>Collapse.getInstance(element)</code> / <code>Collapse.getOrCreate(element, options)</code></li>
+<li><code>Modal.getInstance(element)</code> / <code>Modal.getOrCreate(element, options)</code></li>
+<li><code>Offcanvas.getInstance(element)</code> / <code>Offcanvas.getOrCreate(element, options)</code></li>
+<li><code>Toast.getInstance(element)</code> / <code>Toast.getOrCreate(element, options)</code></li>
+<li><code>Tooltip.getInstance(element)</code> / <code>Tooltip.getOrCreate(element, options)</code></li>
+<li><code>Popover.getInstance(element)</code> / <code>Popover.getOrCreate(element, options)</code></li>
+</ul>
+<p>Методы:</p>
+<ul>
+<li><code>show()</code></li>
+<li><code>hide()</code></li>
+<li><code>toggle()</code> — где применимо</li>
+</ul>
+<h5>Flow &amp; selection</h5>
+<ul>
+<li><code>Carousel.getInstance(element)</code> / <code>Carousel.getOrCreate(element, options)</code></li>
+<li><code>next()</code></li>
+<li><code>prev()</code></li>
+<li><code>goTo(index)</code></li>
+<li><code>play()</code></li>
+<li><code>pause()</code></li>
+<li><code>destroy()</code></li>
+<li><code>Stepper.getInstance(element)</code> / <code>Stepper.getOrCreate(element, options)</code></li>
+<li><code>next()</code></li>
+<li><code>prev()</code></li>
+<li><code>goTo(index)</code></li>
+<li><code>reset()</code></li>
+<li><code>destroy()</code></li>
+<li><code>Datepicker.getInstance(element)</code> / <code>Datepicker.getOrCreate(element, options)</code></li>
+<li><code>show()</code> / <code>hide()</code> / <code>toggle()</code></li>
+<li><code>dispose()</code></li>
+<li><code>DatetimePicker.getInstance(element)</code> / <code>DatetimePicker.getOrCreate(element, options)</code></li>
+<li><code>Select.getInstance(element)</code> / <code>Select.getOrCreate(element, options)</code></li>
+<li><code>show()</code> / <code>hide()</code> / <code>toggle()</code></li>
+<li><code>dispose()</code></li>
+<li><code>Combobox.getInstance(element)</code> / <code>Combobox.getOrCreate(element, options)</code></li>
+<li><code>show()</code> / <code>hide()</code> / <code>toggle()</code></li>
+<li><code>dispose()</code></li>
+<li><code>TagsInput.getInstance(element)</code> / <code>TagsInput.getOrCreate(element, options)</code></li>
+<li><code>addTag(value)</code></li>
+<li><code>removeTag(value)</code></li>
+<li><code>clear()</code></li>
+<li><code>dispose()</code></li>
+<li><code>DataTable.getInstance(element)</code> / <code>DataTable.getOrCreate(element, options)</code></li>
+<li><code>dispose()</code></li>
+<li><code>InputMask.apply(element, pattern)</code></li>
+<li><code>InputMask.remove(element)</code></li>
+</ul>
+<h4>Stable event names</h4>
+<h5>Dropdown / Collapse / Modal / Offcanvas / Toast</h5>
+<ul>
+<li><code>rg:dropdown:show|shown|hide|hidden</code></li>
+<li><code>rg:collapse:show|shown|hide|hidden</code></li>
+<li><code>rg:modal:show|shown|hide|hidden</code></li>
+<li><code>rg:offcanvas:show|shown|hide|hidden</code></li>
+<li><code>rg:toast:show|shown|hide|hidden</code></li>
+</ul>
+<h5>Tooltip / Popover</h5>
+<ul>
+<li><code>rg:tooltip:show|shown|hide|hidden</code></li>
+<li><code>rg:popover:show|shown|hide|hidden</code></li>
+</ul>
+<p>Дополнительно <code>event.detail.placement</code> содержит placement popup-элемента.</p>
+<h5>Carousel</h5>
+<p>Lifecycle:</p>
+<ul>
+<li><code>rg:carousel:slide</code></li>
+<li><code>rg:carousel:slid</code></li>
+</ul>
+<p>Legacy-compatible события навигации:</p>
+<ul>
+<li><code>rg:carousel:next</code></li>
+<li><code>rg:carousel:prev</code></li>
+<li><code>rg:carousel:goto</code></li>
+<li><code>rg:carousel:play</code></li>
+<li><code>rg:carousel:pause</code></li>
+</ul>
+<h5>Stepper</h5>
+<ul>
+<li><code>rg:stepper:change</code></li>
+<li><code>rg:stepper:changed</code></li>
+<li><code>rg:stepper:next</code></li>
+<li><code>rg:stepper:prev</code></li>
+<li><code>rg:stepper:goto</code></li>
+<li><code>rg:stepper:reset</code></li>
+</ul>
+<h5>Datepicker / Select / Combobox</h5>
+<ul>
+<li><code>rg:datepicker:show|shown|hide|hidden</code></li>
+<li><code>rg:datepicker:select</code></li>
+<li><code>rg:select:show|shown|hide|hidden</code></li>
+<li><code>rg:select:change</code></li>
+<li><code>rg:combobox:show|shown|hide|hidden</code></li>
+<li><code>rg:combobox:change</code></li>
+</ul>
+<p>Legacy-compatible для combobox:</p>
+<ul>
+<li><code>rg:combobox:open</code></li>
+<li><code>rg:combobox:close</code></li>
+</ul>
+<h5>TagsInput / DataTable / Core</h5>
+<ul>
+<li><code>rg:tags-input:add</code></li>
+<li><code>rg:tags-input:remove</code></li>
+<li><code>rg:tags-input:change</code></li>
+<li><code>rg:table:search</code></li>
+<li><code>rg:table:sort</code></li>
+<li><code>rg:table:page</code></li>
+<li><code>rg:table:update</code></li>
+<li><code>rg:core:dispose</code></li>
+</ul>
+<h4>Typed events in TypeScript</h4>
+<p>В <code>packages/js/src/index.d.ts</code> экспортируются:</p>
+<ul>
+<li><code>RarogEventMap</code></li>
+<li><code>RarogEventName</code></li>
+<li><code>RarogEventDetail&lt;TName&gt;</code></li>
+<li><code>RarogCustomEvent&lt;TName&gt;</code></li>
+</ul>
+<p>Пример:</p>
+<pre><code class="language-ts">
+import type { RarogCustomEvent, RarogEventDetail } from "@rarog/js";
+
+
+
+function onShown(event: RarogCustomEvent&lt;"rg:modal:shown"&gt;) {
+
+  const detail: RarogEventDetail&lt;"rg:modal:shown"&gt; = event.detail;
+
+  console.log(detail.instance);
+
+}
+
+</code></pre>
+<h4>Namespace helpers</h4>
+<ul>
+<li><code>Rarog.config</code></li>
+<li><code>Rarog.setDebug(value)</code></li>
+<li><code>Rarog.isDebugEnabled()</code></li>
+<li><code>Rarog.initDataApi(root?)</code></li>
+<li><code>Rarog.init(root?)</code></li>
+<li><code>Rarog.dispose(root?)</code></li>
+<li><code>Rarog.reinit(root?)</code></li>
+<li><code>Rarog.Events.on/off/emit(...)</code></li>
+</ul>
+<h3>CSS / Components</h3>
+<p>Остальные группы API — utilities, токены, компоненты и модификаторы — описаны в профильных разделах docs. Ветка 3.x считает стабильными только те классы и варианты, которые явно перечислены в документации и migration guides.</p>
+<h2>Imported from <code>stability.md</code></h2>
+<h2>Stability Matrix</h2>
+<p>Этот документ фиксирует, что в Rarog считается <strong>stable</strong>, <strong>beta</strong> и <strong>experimental</strong>.</p>
+<h3>Public surface matrix</h3>
+<pre><code>| Surface | Status | Compatibility promise |</code></pre>
+<pre><code>|---|---|---|</code></pre>
+<pre><code>| Core CSS | Stable | Не ломается в patch/minor без deprecation window. |</code></pre>
+<pre><code>| Utilities CSS | Stable | Имена классов и поведение меняются только через documented deprecation. |</code></pre>
+<pre><code>| Components CSS | Stable | Breaking changes только в major. |</code></pre>
+<pre><code>| Built-in themes | Stable | Публичные theme entrypoints сохраняются в пределах major. |</code></pre>
+<pre><code>| CLI flow (`init`, `validate`, `build`) | Stable | Канонический flow поддерживается как основной DX path. |</code></pre>
+<pre><code>| `rarog.config.js` | Stable | Основной theme-config contract. |</code></pre>
+<pre><code>| `rarog.build.json` | Stable | Основной build-manifest contract. |</code></pre>
+<pre><code>| `rarog.config.ts` | Beta | Поддерживается как compatibility-path. Может быть упрощён или убран в следующем major. |</code></pre>
+<pre><code>| `@rarog/js` | Beta | API usable, но ещё расширяется. |</code></pre>
+<pre><code>| `@rarog/react` | Experimental | Без strong compatibility guarantees. |</code></pre>
+<pre><code>| `@rarog/vue` | Experimental | Без strong compatibility guarantees. |</code></pre>
+<pre><code>| Plugin API | Experimental | Все большие изменения идут через RFC. |</code></pre>
+<h3>Что значит каждый статус</h3>
+<h4>Stable</h4>
+<p>Гарантии:</p>
+<ul>
+<li>SemVer обязателен;</li>
+<li>breaking changes только в major;</li>
+<li>deprecations документируются заранее;</li>
+<li>docs и publish surface должны совпадать с реальностью.</li>
+</ul>
+<h4>Beta</h4>
+<p>Гарантии:</p>
+<ul>
+<li>surface публичный, но может ещё доформировываться;</li>
+<li>minor-релизы могут менять детали API, если это явно задокументировано;</li>
+<li>при возможности даётся migration note.</li>
+</ul>
+<h4>Experimental</h4>
+<p>Гарантии:</p>
+<ul>
+<li>feedback-first surface;</li>
+<li>изменения возможны даже в minor;</li>
+<li>production adoption только после собственной проверки команды.</li>
+</ul>
+<h3>Stable-by-default rules</h3>
+<p>Следующие вещи должны оставаться предсказуемыми:</p>
+<ul>
+<li>один канонический theme-config (<code>rarog.config.js</code>);</li>
+<li>один канонический build-manifest (<code>rarog.build.json</code>);</li>
+<li>root package без CSS <code>main</code>;</li>
+<li><code>verify:artifacts</code> только после полной сборки;</li>
+<li>publish pipeline без обхода release/test/artifact gates.</li>
+</ul>
+<h3>Изменение статуса surface</h3>
+<p>Surface можно перевести:</p>
+<ul>
+<li>из Experimental в Beta — после smoke/compatibility gates и стабилизации docs;</li>
+<li>из Beta в Stable — после как минимум одного релизного цикла без неожиданных breaking changes и с понятным publish contract.</li>
+</ul></main></div></body></html>
