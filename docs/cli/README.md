@@ -9,9 +9,9 @@ rarog build
 rarog build --debug
 rarog analyze
 rarog doctor
-rarog theme create themes/acme.json --name=acme --extends=default
-rarog theme diff packages/themes/presets/aurora.json packages/themes/presets/graphite.json
-rarog theme validate packages/themes/presets/enterprise-plus.json
+rarog inspect classes src/index.html
+rarog migrate bootstrap --input src/index.html --output src/index.migrated.html
+rarog migrate tailwind --input src/App.tsx --output src/App.rg.tsx
 ```
 
 ## When to use the CLI
@@ -35,8 +35,8 @@ Use the CLI when you want to:
 - `rarog doctor` — быстро проверяет config/build/JIT surface
 
 
-## Theme engine
+## Migration toolkit
 
-- `rarog theme create` — создаёт starter theme manifest для brand / tenant темы
-- `rarog theme diff` — показывает различия между двумя theme manifest файлами
-- `rarog theme validate` — проверяет обязательные semantic/runtime блоки
+- `rarog inspect classes` — показывает mix из Rarog / Bootstrap / Tailwind классов
+- `rarog migrate bootstrap` — first-pass codemod для Bootstrap-разметки
+- `rarog migrate tailwind` — first-pass codemod для Tailwind-разметки
