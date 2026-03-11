@@ -1,18 +1,19 @@
 # Rarog + Next.js Starter
 
-Минимальный пример интеграции Rarog с Next.js 14 (App Router) и `@rarog/react`.
+Next.js starter for `@rarog/react`.
 
-- Rarog CSS/JS подключается глобально через `app/layout.tsx`.
-- JS Core инициализируется через `<RarogProvider>` (SPA/SSR‑friendly).
-- Используются стандартные компоненты: modal, offcanvas, alerts.
+## What it covers
 
-## Запуск (после сборки Rarog в корне монорепы)
+- SSR-friendly `RarogProvider`
+- wrapped components instead of raw HTML-only integration
+- controlled + composable APIs
+- modal and tabs example in App Router
+
+## Run
 
 ```bash
-# в корне репозитория
 npm install
-npm run build   # rarog build + сборка CSS/JS
-
+npm run build
 cd examples/starters/nextjs-rarog
 npm install
 npm run dev
