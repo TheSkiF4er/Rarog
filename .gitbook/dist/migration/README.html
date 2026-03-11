@@ -1,1 +1,372 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Migration · Rarog Docs</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f7f8fb;color:#172033}a{color:#1d4ed8;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.nav{padding:24px;border-right:1px solid #dbe2f0;background:#fff;position:sticky;top:0;height:100vh;overflow:auto}.nav ul{padding-left:18px}.content{padding:32px;max-width:960px}pre{background:#0f172a;color:#e5edf8;padding:16px;border-radius:14px;overflow:auto}code{background:#eef2ff;padding:2px 6px;border-radius:6px}table{border-collapse:collapse}h1,h2,h3{line-height:1.2}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{position:relative;height:auto;border-right:0;border-bottom:1px solid #dbe2f0}}</style></head><body><div class="shell"><aside class="nav"><h1>Rarog Docs</h1><p>GitBook content export</p><ul><li><a href="README.html">Documentation</a></li><li><a href="docs-platform-v2.html">Docs platform v2</a></li><li><a href="getting-started/README.html">Getting Started</a></li><li><a href="installation/README.html">Installation</a></li><li><a href="cli/README.html">CLI</a></li><li><a href="build/README.html">Build</a></li><li><a href="live-playground.html">Live playground</a></li><li><a href="copy-paste-examples.html">Copy-paste examples</a></li><li><a href="tokens/README.html">Tokens</a></li><li><a href="tokens.html">Token architecture v2</a></li><li><a href="semantic-tokens.html">Semantic tokens</a></li><li><a href="themes/README.html">Themes</a></li><li><a href="themes/theme-engine-v1.html">Theme engine v1</a></li><li><a href="themes/token-theme-explorer.html">Token and theme explorer</a></li><li><a href="utilities/README.html">Utilities</a></li><li><a href="components/README.html">Components</a></li><li><a href="accessibility.html">Accessibility baseline</a></li><li><a href="runtime/README.html">Runtime</a></li><li><a href="plugin-api/README.html">Plugin API</a></li><li><a href="migration/README.html">Migration</a></li><li><a href="starters/README.html">Official starters</a></li><li><a href="contributor-guide/README.html">Contributor Guide</a></li><li><a href="build/jit-how-it-works.html">How JIT works</a></li><li><a href="build/jit-troubleshooting.html">JIT troubleshooting guide</a></li></ul></aside><main class="content"><h1>Migration</h1>
+<p>Миграция между версиями, политика версионирования и стабильность публичных поверхностей.</p>
+<h2>Included legacy sources</h2>
+<ul>
+<li><code>migration-1x-to-2x.md</code></li>
+<li><code>migration-2x-to-3x.md</code></li>
+<li><code>versioning.md</code></li>
+<li><code>stability.md</code></li>
+</ul>
+<h2>Imported from <code>migration-1x-to-2x.md</code></h2>
+<h2>Migration 1.x → 2.0.0</h2>
+<p>Выпуск <strong>Rarog 2.0.0</strong> акцентирован на шлифовке, стабилизации API и позиционировании фреймворка как альтернативы связке Tailwind + Bootstrap.</p>
+<p>Основная цель миграции — сделать переход с 1.x на 2.x максимально предсказуемым.</p>
+<h3>Ключевые изменения</h3>
+<h4>1. Удалены legacy-классы <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code></h4>
+<p>В 1.x эти классы были помечены как legacy:</p>
+<pre><code class="language-css">
+/* Legacy simple grid helpers — сохранены для обратной совместимости.
 
+ * Предпочтительно использовать .rg-row / .rg-col.
+
+ */
+
+.grid-2 { ... }
+
+.grid-3 { ... }
+
+.grid-4 { ... }
+
+</code></pre>
+<p>В 2.0.0 они <strong>удалены</strong>.</p>
+<h5>Как мигрировать</h5>
+<p>Если в проекте использовались:</p>
+<pre><code class="language-html">
+&lt;div class="grid-3 gap-4"&gt;
+
+  ...
+
+&lt;/div&gt;
+
+</code></pre>
+<p>Рекомендуемый эквивалент:</p>
+<pre><code class="language-html">
+&lt;div class="rg-row rg-gap-y-4"&gt;
+
+  &lt;div class="rg-col-12 rg-col-md-4"&gt;
+
+    ...
+
+  &lt;/div&gt;
+
+  &lt;div class="rg-col-12 rg-col-md-4"&gt;
+
+    ...
+
+  &lt;/div&gt;
+
+  &lt;div class="rg-col-12 rg-col-md-4"&gt;
+
+    ...
+
+  &lt;/div&gt;
+
+&lt;/div&gt;
+
+</code></pre>
+<p>В общем случае:</p>
+<ul>
+<li><code>grid-2</code> → сетка на основе <code>.rg-row</code> + <code>.rg-col-6</code> (или <code>.rg-col-md-6</code>) для двух колонок.</li>
+<li><code>grid-3</code> → <code>.rg-col-md-4</code>.</li>
+<li><code>grid-4</code> → <code>.rg-col-md-3</code>.</li>
+</ul>
+<h4>2. Уточнены naming-конвенции</h4>
+<p>Для ветки 2.x действуют следующие требования:</p>
+<ul>
+<li>Layout и сетка:</li>
+<li><code>rg-<em></code> — префикс для структурных классов сетки (<code>rg-row</code>, <code>rg-col-</em></code>, контейнеры, order/offset).</li>
+<li>Компоненты:</li>
+<li><code>btn-<em></code>, <code>alert-</em></code>, <code>badge-<em></code>, <code>nav-</em></code>, <code>pagination-<em></code>, <code>progress-</em></code>, <code>modal-*</code> и т.д.</li>
+<li>Утилиты:</li>
+<li>короткие, семантически понятные имена (<code>d-flex</code>, <code>mt-4</code>, <code>text-center</code>, <code>bg-primary</code>).</li>
+<li>Responsive:</li>
+<li>префиксы <code>sm:</code>, <code>md:</code>, <code>lg:</code>, <code>xl:</code>, <code>2xl:</code>.</li>
+<li>Состояния:</li>
+<li><code>hover:<em></code>, <code>focus:</em></code> поверх базового класса.</li>
+<li>JIT:</li>
+<li>arbitrary-значения в виде <code>w-[320px]</code>, <code>bg-[#0f172a]</code>, <code>text-[white]</code>.</li>
+</ul>
+<p>Существующие классы 1.x, которые соответствуют этим правилам, <strong>не менялись</strong> — 2.0.0 вносит одно реальное breaking change: удаление <code>.grid-2/3/4</code>.</p>
+<h4>3. Документация и API Reference</h4>
+<ul>
+<li>Добавлен раздел <strong>API Reference</strong>, фиксирующий список поддерживаемых утилит и компонентов.</li>
+<li>Добавлен раздел <strong>Versioning &amp; Support</strong>:</li>
+<li>описывает политику semver и поддержку ветки 2.x.</li>
+</ul>
+<h3>Чек-лист миграции</h3>
+<ol>
+<li>Найти использование <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code> и заменить их на сетку <code>rg-row</code>/<code>rg-col-*</code>.</li>
+<li>Проверить кастомные темы и токены:</li>
+</ol>
+<ul>
+<li>структура <code>rarog.config.js</code> не изменилась, но рекомендуется свериться с актуальным примером.</li>
+</ul>
+<ol>
+<li>Убедиться, что JIT-конфигурация (<code>mode: "jit"</code>, <code>content</code>) соответствует реальной структуре проекта.</li>
+<li>Обновить версии зависимостей/артефактов (CSS/JS) до 2.0.0.</li>
+</ol>
+<p>После выполнения шагов выше проект должен без проблем работать на Rarog 2.0.0.</p>
+<h2>Imported from <code>migration-2x-to-3x.md</code></h2>
+<h2>Миграция с Rarog 2.x на 3.0.0</h2>
+<p>Rarog 3.0.0 — это эволюция 2.x без агрессивных переписываний. Основные цели:</p>
+<ul>
+<li>закрепить API как <strong>3.x API Contract</strong>;</li>
+<li>добавить поддержку container queries и modern layout-паттернов;</li>
+<li>оформить полную RU/EN-документацию и версионирование.</li>
+</ul>
+<p>Для большинства проектов миграция сводится к обновлению версии пакета.</p>
+<h3>1. Обновление пакета</h3>
+<ul>
+<li>Если вы используете npm/pnpm/yarn:</li>
+</ul>
+<pre><code class="language-bash">
+npm install rarog@^3.0.0
+
+## или
+
+pnpm add rarog@^3.0.0
+
+</code></pre>
+<ul>
+<li>Убедитесь, что:</li>
+</ul>
+<ul>
+<li><code>package.json</code> содержит <code>"rarog": "^3.0.0"</code>;</li>
+<li>в сборке подключается актуальный <code>rarog.css</code>/<code>rarog-*.css</code> и <code>rarog.js</code>.</li>
+</ul>
+<h3>2. Проверка config &amp; CLI</h3>
+<p>Rarog 3.0.0 использует тот же формат <code>rarog.config.*</code>, что и 2.x:</p>
+<ul>
+<li><code>theme</code>, <code>screens</code>, <code>variants</code>, <code>plugins</code>, <code>mode</code>.</li>
+</ul>
+<p>Проверьте, что:</p>
+<ul>
+<li>нет использования приватных полей/опций в конфиге;</li>
+<li>JIT-конфигурация (<code>content</code>, <code>mode: "jit"</code>) остаётся прежней.</li>
+</ul>
+<p>Если вы писали свои плагины:</p>
+<ul>
+<li>убедитесь, что они используют задокументированный Plugin API,</li>
+<p>а не внутренние структуры.</p>
+</ul>
+<h3>3. Container Queries и modern layout (опционально)</h3>
+<p>Новый слой 3.0.0 — helpers для container queries:</p>
+<ul>
+<li>токены: <code>--rarog-cq-sm</code>, <code>--rarog-cq-md</code>, <code>--rarog-cq-lg</code>;</li>
+<li>классы:</li>
+</ul>
+<ul>
+<li><code>.rg-cq</code> — контейнер для <code>@container (inline-size)</code>;</li>
+<li><code>.rg-cq-page</code> — page-level контейнер <code>container-name: rg-page</code>;</li>
+<li>утилиты вида <code>cq-md:d-flex</code>, <code>cq-md:rg-cols-2</code> внутри @container.</li>
+</ul>
+<p>Пример:</p>
+<pre><code class="language-html">
+&lt;section class="rg-cq"&gt;
+
+  &lt;div class="card d-grid cq-md:d-flex cq-md:rg-cols-2"&gt;
+
+    ...
+
+  &lt;/div&gt;
+
+&lt;/section&gt;
+
+</code></pre>
+<p>Никаких breaking changes по layout нет: это <strong>дополнительный</strong> слой.</p>
+<h3>4. Очистка legacy 2.x</h3>
+<p>В 3.0.0:</p>
+<ul>
+<li>удалены/заморожены только те части, которые:</li>
+</ul>
+<ul>
+<li>не были документированы;</li>
+<li>были явно помечены как experimental/@internal.</li>
+</ul>
+<p>Если вы опирались на недокументированные классы или внутренние JS-API:</p>
+<ul>
+<li>рекомендуется перейти на задокументированные утилиты/компоненты;</li>
+<li>см. раздел <strong>API Contract</strong>, чтобы понять, какие части считаются публичными.</li>
+</ul>
+<h3>5. Документация и i18n</h3>
+<ul>
+<li>RU-документация обновлена под 3.x.</li>
+<li>EN-документация расширена и покрывает те же основные разделы:</li>
+</ul>
+<ul>
+<li>Getting Started,</li>
+<li>Why Rarog,</li>
+<li>Tokens,</li>
+<li>Utilities,</li>
+<li>Components,</li>
+<li>JavaScript,</li>
+<li>Theming,</li>
+<li>Guides,</li>
+<li>Cookbook,</li>
+<li>Accessibility,</li>
+<li>Performance &amp; Bundle Size,</li>
+<li>Branding,</li>
+<li>Migration.</li>
+</ul>
+<p>Версионирование docs:</p>
+<ul>
+<li>/v2 — ссылка и справка по 2.x (legacy);</li>
+<li>/v3 — текущая документация (3.x, по умолчанию).</li>
+</ul>
+<h3>6. Checklist миграции</h3>
+<ol>
+<li>Обновить пакет до <code>3.0.0</code>.</li>
+<li>Убедиться, что проект не использует внутренние API (при необходимости —</li>
+<p>заменить на задокументированные).</p>
+<li>Перепроверить кастомные плагины Rarog — они должны использовать публичный</li>
+<p>Plugin API.</p>
+<li>При желании — начать использовать container queries (<code>.rg-cq</code>, <code>cq-md:*</code>)</li>
+<p>в компонентах/секциях.</p>
+<li>Обновить ссылки на документацию (при наличии), указав, что проект</li>
+<p>использует Rarog 3.x.</p>
+</ol>
+<h2>Imported from <code>versioning.md</code></h2>
+<h2>Versioning Policy</h2>
+<p>Rarog следует <strong>SemVer</strong>: <code>MAJOR.MINOR.PATCH</code>.</p>
+<h3>Что означает версия</h3>
+<h4>PATCH</h4>
+<p>Patch-релизы используются для:</p>
+<ul>
+<li>bug fixes;</li>
+<li>security fixes;</li>
+<li>docs/build/publish fixes без расширения surface;</li>
+<li>non-breaking DX improvements.</li>
+</ul>
+<p>PATCH <strong>не должен</strong>:</p>
+<ul>
+<li>менять stable API contract;</li>
+<li>удалять entrypoints;</li>
+<li>менять expected output paths в каноническом flow.</li>
+</ul>
+<h4>MINOR</h4>
+<p>Minor-релизы используются для:</p>
+<ul>
+<li>добавления новых stable возможностей;</li>
+<li>расширения utilities/components/themes;</li>
+<li>продвижения surface из beta в stable;</li>
+<li>добавления opt-in возможностей без breaking changes.</li>
+</ul>
+<p>MINOR может:</p>
+<ul>
+<li>добавлять новые subpath exports;</li>
+<li>вводить deprecation warnings;</li>
+<li>расширять CLI, если старый stable path остаётся рабочим.</li>
+</ul>
+<h4>MAJOR</h4>
+<p>Major нужен для:</p>
+<ul>
+<li>удаления deprecated stable surface;</li>
+<li>изменения root package contract;</li>
+<li>смены канонического config/build flow;</li>
+<li>любого intentional breaking change для stable API.</li>
+</ul>
+<h3>Deprecation policy</h3>
+<p>Для stable surface действует такой процесс:</p>
+<ol>
+<li>Сначала появляется deprecation note в docs/README/release notes.</li>
+<li>Затем surface остаётся рабочим минимум один minor-цикл, если нет security/critical reason убрать его раньше.</li>
+<li>Удаление происходит только в следующем major.</li>
+</ol>
+<p>Для beta/experimental surface срок может быть короче, но изменение всё равно должно быть задокументировано.</p>
+<h3>RFC process для больших API изменений</h3>
+<p>RFC обязателен, если изменение затрагивает:</p>
+<ul>
+<li>root package exports;</li>
+<li>config/build flow;</li>
+<li>публичный Plugin API;</li>
+<li>adapter/runtime contracts;</li>
+<li>migration path для stable пользователей.</li>
+</ul>
+<p>Минимальный RFC должен содержать:</p>
+<ul>
+<li>problem statement;</li>
+<li>proposed API;</li>
+<li>compatibility impact;</li>
+<li>migration plan;</li>
+<li>rollout plan;</li>
+<li>alternatives considered.</li>
+</ul>
+<h3>Release policy</h3>
+<p>Канонический release gate:</p>
+<pre><code class="language-bash">
+npm ci
+
+npm run release:verify
+
+npm run build
+
+npm run test:release
+
+npm run verify:artifacts
+
+npm run pack:packages
+
+</code></pre>
+<p>Только после этого CI публикует <code>rarog</code>, <code>@rarog/js</code>, <code>@rarog/react</code> и <code>@rarog/vue</code>.</p>
+<h3>Support policy</h3>
+<ul>
+<li>Stable surface поддерживается в пределах текущего major.</li>
+<li>Beta surface поддерживается best-effort с migration notes.</li>
+<li>Experimental surface не имеет долгосрочных compatibility guarantees.</li>
+</ul>
+<h2>Imported from <code>stability.md</code></h2>
+<h2>Stability Matrix</h2>
+<p>Этот документ фиксирует, что в Rarog считается <strong>stable</strong>, <strong>beta</strong> и <strong>experimental</strong>.</p>
+<h3>Public surface matrix</h3>
+<pre><code>| Surface | Status | Compatibility promise |</code></pre>
+<pre><code>|---|---|---|</code></pre>
+<pre><code>| Core CSS | Stable | Не ломается в patch/minor без deprecation window. |</code></pre>
+<pre><code>| Utilities CSS | Stable | Имена классов и поведение меняются только через documented deprecation. |</code></pre>
+<pre><code>| Components CSS | Stable | Breaking changes только в major. |</code></pre>
+<pre><code>| Built-in themes | Stable | Публичные theme entrypoints сохраняются в пределах major. |</code></pre>
+<pre><code>| CLI flow (`init`, `validate`, `build`) | Stable | Канонический flow поддерживается как основной DX path. |</code></pre>
+<pre><code>| `rarog.config.js` | Stable | Основной theme-config contract. |</code></pre>
+<pre><code>| `rarog.build.json` | Stable | Основной build-manifest contract. |</code></pre>
+<pre><code>| `rarog.config.ts` | Beta | Поддерживается как compatibility-path. Может быть упрощён или убран в следующем major. |</code></pre>
+<pre><code>| `@rarog/js` | Beta | API usable, но ещё расширяется. |</code></pre>
+<pre><code>| `@rarog/react` | Experimental | Без strong compatibility guarantees. |</code></pre>
+<pre><code>| `@rarog/vue` | Experimental | Без strong compatibility guarantees. |</code></pre>
+<pre><code>| Plugin API | Experimental | Все большие изменения идут через RFC. |</code></pre>
+<h3>Что значит каждый статус</h3>
+<h4>Stable</h4>
+<p>Гарантии:</p>
+<ul>
+<li>SemVer обязателен;</li>
+<li>breaking changes только в major;</li>
+<li>deprecations документируются заранее;</li>
+<li>docs и publish surface должны совпадать с реальностью.</li>
+</ul>
+<h4>Beta</h4>
+<p>Гарантии:</p>
+<ul>
+<li>surface публичный, но может ещё доформировываться;</li>
+<li>minor-релизы могут менять детали API, если это явно задокументировано;</li>
+<li>при возможности даётся migration note.</li>
+</ul>
+<h4>Experimental</h4>
+<p>Гарантии:</p>
+<ul>
+<li>feedback-first surface;</li>
+<li>изменения возможны даже в minor;</li>
+<li>production adoption только после собственной проверки команды.</li>
+</ul>
+<h3>Stable-by-default rules</h3>
+<p>Следующие вещи должны оставаться предсказуемыми:</p>
+<ul>
+<li>один канонический theme-config (<code>rarog.config.js</code>);</li>
+<li>один канонический build-manifest (<code>rarog.build.json</code>);</li>
+<li>root package без CSS <code>main</code>;</li>
+<li><code>verify:artifacts</code> только после полной сборки;</li>
+<li>publish pipeline без обхода release/test/artifact gates.</li>
+</ul>
+<h3>Изменение статуса surface</h3>
+<p>Surface можно перевести:</p>
+<ul>
+<li>из Experimental в Beta — после smoke/compatibility gates и стабилизации docs;</li>
+<li>из Beta в Stable — после как минимум одного релизного цикла без неожиданных breaking changes и с понятным publish contract.</li>
+</ul></main></div></body></html>
