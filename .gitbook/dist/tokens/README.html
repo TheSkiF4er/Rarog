@@ -1,1 +1,209 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tokens · Rarog Docs</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f7f8fb;color:#172033}a{color:#1d4ed8;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.nav{padding:24px;border-right:1px solid #dbe2f0;background:#fff;position:sticky;top:0;height:100vh;overflow:auto}.nav ul{padding-left:18px}.content{padding:32px;max-width:960px}pre{background:#0f172a;color:#e5edf8;padding:16px;border-radius:14px;overflow:auto}code{background:#eef2ff;padding:2px 6px;border-radius:6px}table{border-collapse:collapse}h1,h2,h3{line-height:1.2}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{position:relative;height:auto;border-right:0;border-bottom:1px solid #dbe2f0}}</style></head><body><div class="shell"><aside class="nav"><h1>Rarog Docs</h1><p>GitBook content export</p><ul><li><a href="README.html">Documentation</a></li><li><a href="docs-platform-v2.html">Docs platform v2</a></li><li><a href="getting-started/README.html">Getting Started</a></li><li><a href="installation/README.html">Installation</a></li><li><a href="cli/README.html">CLI</a></li><li><a href="build/README.html">Build</a></li><li><a href="live-playground.html">Live playground</a></li><li><a href="copy-paste-examples.html">Copy-paste examples</a></li><li><a href="tokens/README.html">Tokens</a></li><li><a href="tokens.html">Token architecture v2</a></li><li><a href="semantic-tokens.html">Semantic tokens</a></li><li><a href="themes/README.html">Themes</a></li><li><a href="themes/theme-engine-v1.html">Theme engine v1</a></li><li><a href="themes/token-theme-explorer.html">Token and theme explorer</a></li><li><a href="utilities/README.html">Utilities</a></li><li><a href="components/README.html">Components</a></li><li><a href="accessibility.html">Accessibility baseline</a></li><li><a href="runtime/README.html">Runtime</a></li><li><a href="plugin-api/README.html">Plugin API</a></li><li><a href="migration/README.html">Migration</a></li><li><a href="starters/README.html">Official starters</a></li><li><a href="contributor-guide/README.html">Contributor Guide</a></li><li><a href="build/jit-how-it-works.html">How JIT works</a></li><li><a href="build/jit-troubleshooting.html">JIT troubleshooting guide</a></li></ul></aside><main class="content"><h1>Tokens</h1>
+<p>Токены как базовый слой дизайн-системы: структура, pipeline и связь с Figma.</p>
+<h2>Included legacy sources</h2>
+<ul>
+<li><code>tokens.md</code></li>
+<li><code>design-system.md</code></li>
+<li><code>branding.md</code></li>
+</ul>
+<h2>Imported from <code>tokens.md</code></h2>
+<h2>Tokens</h2>
+<p>Rarog строится вокруг универсального слоя дизайн-токенов.</p>
+<p>Основные группы токенов:</p>
+<ul>
+<li>Цвета (<code>_color.css</code> и <code>rarog.tokens.json</code>)</li>
+<li>Отступы (<code>_spacing.css</code>)</li>
+<li>Радиусы (<code>_radius.css</code>)</li>
+<li>Тени (<code>_shadow.css</code>)</li>
+<li>Брейкпоинты (<code>_breakpoints.css</code>)</li>
+</ul>
+<p>Все эти файлы генерируются командой:</p>
+<pre><code class="language-bash">
+npx rarog build
 
+</code></pre>
+<p>на основе <code>rarog.config.js</code> / <code>rarog.config.ts</code>.</p>
+<h3>Интеграция с Figma</h3>
+<p>Для использования тех же токенов в дизайн-системе доступен экспорт:</p>
+<ul>
+<li>файл <code>design/figma.tokens.json</code> — совместим с Tokens Studio / Design Tokens tooling.</li>
+</ul>
+<p>Подробнее про импорт в Figma и Tokens Studio см. раздел <strong>IDE &amp; Plugins</strong>.</p>
+<h3>Token pipeline v2 (3.3.0+)</h3>
+<p>В 3.3.0 структура <code>rarog.tokens.json</code> была уточнена под сценарий «полноценная дизайн‑система»:</p>
+<ul>
+<li><code>tokens.color.*</code> — «сырые» палитры (primary, secondary, success, danger, info…);</li>
+<li><code>tokens.spacing</code>, <code>tokens.radius</code>, <code>tokens.shadow</code>, <code>tokens.layout</code> — атомарные шкалы;</li>
+<li><code>tokens.color.semantic</code> и <code>tokens.semantic</code> — семантические токены (фон, текст, бордеры);</li>
+<li><code>tokens.themes.*</code> — набор тем (<code>default</code>, <code>dark</code>, <code>contrast</code>, <code>enterprise</code>, <code>creative</code>),</li>
+<p>каждая из которых задаёт свой набор <code>semantic</code>‑значений.</p>
+</ul>
+<p>Экспорт в Figma теперь строится поверх этой структуры:</p>
+<ul>
+<li><code>design/figma.tokens.json</code> содержит как базовые шкалы, так и semantic‑слой и темы;</li>
+<li>Figma‑kit (см. <code>design/figma-kit/</code>) использует эти токены как единственный источник правды.</li>
+</ul>
+<p>Базовый flow:</p>
+<ol>
+<li>Настраиваете токены в <code>rarog.config.*</code>.</li>
+<li>Запускаете <code>npx rarog build</code> для генерации CSS и <code>rarog.tokens.json</code>.</li>
+<li>Обновляете <code>design/figma.tokens.json</code> (через тот же пайплайн).</li>
+<li>Обновляете токены в Figma (Tokens Studio или аналог).</li>
+</ol>
+<h2>Imported from <code>design-system.md</code></h2>
+<h2>Design System Suite</h2>
+<p>Начиная с Rarog <strong>3.3.0</strong>, фреймворк позиционируется не только как CSS‑/JS‑слой, но и как основа полноценной дизайн‑системы.</p>
+<h3>Слои дизайн‑системы</h3>
+<ol>
+<li><strong>Tokens</strong>  </li>
+<p>Базовый уровень — <code>rarog.tokens.json</code> и CSS‑переменные:</p>
+</ol>
+<ul>
+<li>цветовые шкалы (<code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>info</code>);</li>
+<li>spacing, radius, shadow;</li>
+<li>semantic‑токены (<code>bg</code>, <code>surface</code>, <code>border</code>, <code>text</code>, <code>accentSoft</code>, <code>focusRing</code>);</li>
+<li><code>tokens.themes.*</code> для <code>default</code>, <code>dark</code>, <code>contrast</code>, <code>enterprise</code>, <code>creative</code>.</li>
+</ul>
+<ol>
+<li><strong>Themes</strong>  </li>
+<p>Набор готовых тем в пакете <code>packages/themes</code>:</p>
+</ol>
+<ul>
+<li><code>rarog-theme-default.css</code></li>
+<li><code>rarog-theme-dark.css</code></li>
+<li><code>rarog-theme-contrast.css</code></li>
+<li><code>rarog-theme-enterprise.css</code></li>
+<li><code>rarog-theme-creative.css</code></li>
+</ul>
+<p>Темы переопределяют только семантические переменные и не ломают утилити‑слой.</p>
+<ol>
+<li><strong>Components &amp; JS</strong>  </li>
+<p>Компонентный слой (CSS) и JS‑ядро используют только семантические токены, поэтому переключение темы не требует переписывать компоненты.</p>
+</ol>
+<ol>
+<li><strong>Figma Design Kit</strong>  </li>
+<p>В каталоге <code>design/</code> находятся артефакты для Figma:</p>
+</ol>
+<ul>
+<li><code>design/figma.tokens.json</code> — экспорт токенов в формате Tokens Studio;</li>
+<li><code>design/figma-kit/</code> — описание состава Figma Design Kit и рекомендованного flow.</li>
+</ul>
+<h3>Design → Dev handshake</h3>
+<p>Рекомендуемый цикл работы команды «дизайнеры + разработчики»:</p>
+<ol>
+<li><strong>Дизайнеры</strong> настраивают токены и темы в Figma через Tokens Studio,</li>
+<p>основываясь на <code>design/figma.tokens.json</code>.</p>
+<li><strong>Разработчики</strong> описывают те же значения в <code>rarog.config.*</code> (или правят существующие).</li>
+<li>Запускается <code>npx rarog build</code>, который обновляет CSS‑переменные и <code>rarog.tokens.json</code>.</li>
+<li>При изменении токенов/тем:</li>
+</ol>
+<ul>
+<li>сначала обновляется конфиг и выполняется сборка;</li>
+<li>затем экспортируется обновлённый <code>design/figma.tokens.json</code> и синхронизируется с Figma.</li>
+</ul>
+<p>Таким образом, у дизайн‑системы есть единый источник правды — токены, а Rarog служит «runtime‑слоем», который гарантирует, что эти токены последовательно используются во всех утилитах, компонентах и JS‑паттернах.</p>
+<h2>Imported from <code>branding.md</code></h2>
+<h2>Branding</h2>
+<p>Rarog — это не только CSS‑фреймворк, но и визуальный язык. Этот раздел описывает базовые бренд‑guidelines и то, как использовать их в продуктах и документации.</p>
+<h3>Название и тэглайн</h3>
+<ul>
+<li>Полное имя: <strong>Rarog CSS</strong></li>
+<li>Коротко: <strong>Rarog</strong></li>
+<li>Рекомендуемый тэглайн:</li>
+</ul>
+<p>&gt; Design tokens + utilities + components + JS core</p>
+<p>В русскоязычном контексте можно использовать формулировку:</p>
+<p>&gt; «Гибридный CSS‑фреймворк нового поколения»</p>
+<h3>Цветовая палитра</h3>
+<p>Основы — из <code>rarog.tokens.json</code>.</p>
+<h4>Primary</h4>
+<p>По умолчанию основан на шкале синего:</p>
+<ul>
+<li><code>--rarog-color-primary-500</code> → <code>#3b82f6</code></li>
+<li><code>--rarog-color-primary-600</code> → <code>#2563eb</code></li>
+</ul>
+<p>Рекомендуемое использование:</p>
+<ul>
+<li>CTA‑кнопки (<code>btn-primary</code>);</li>
+<li>ссылки и акцентные элементы;</li>
+<li>focus‑ring (<code>--rarog-color-semantic-focusRing</code>).</li>
+</ul>
+<h4>Secondary</h4>
+<p>Тёмно‑серо‑синяя палитра:</p>
+<ul>
+<li><code>--rarog-color-secondary-600</code> → основан на <code>#475569</code>.</li>
+</ul>
+<p>Рекомендуемое использование:</p>
+<ul>
+<li>второстепенные кнопки (<code>btn-secondary</code>);</li>
+<li>навигация, сайдбар, фон карточек.</li>
+</ul>
+<h4>Semantic</h4>
+<p>Из <code>color.semantic</code>:</p>
+<ul>
+<li><code>bg</code> / <code>bgSoft</code> / <code>bgElevated</code> — фоновые слои;</li>
+<li><code>surface</code> — поверхность карточек/компонент;</li>
+<li><code>border</code> / <code>borderSubtle</code> / <code>borderStrong</code> — границы;</li>
+<li><code>text</code> / <code>textMuted</code> — текст;</li>
+<li><code>accentSoft</code> — мягкий акцент для фона.</li>
+</ul>
+<h3>Лого и отображение бренда</h3>
+<p>Пока у Rarog нет «тяжёлого» графического логотипа. Рекомендуется:</p>
+<ul>
+<li>текстовое написание <code>Rarog</code> базовым шрифтом интерфейса;</li>
+<li>в hero/brand‑зоне docs и лендингов — немного увеличенный кегль + <code>font-semibold</code>;</li>
+<li>использовать primary‑палитру для подчеркивания.</li>
+</ul>
+<p>Пример:</p>
+<pre><code class="language-html">
+&lt;div class="d-inline-flex items-center gap-2"&gt;
+
+  &lt;span class="text-xl font-semibold"&gt;Rarog&lt;/span&gt;
+
+  &lt;span class="badge badge-outline"&gt;CSS&lt;/span&gt;
+
+&lt;/div&gt;
+
+</code></pre>
+<p>В дальнейшем логотип можно добавить как SVG‑иконку, но текущие гайды не завязаны на конкретном артефакте.</p>
+<h3>Типографика</h3>
+<p>Базово Rarog опирается на системные шрифты:</p>
+<ul>
+<li>в UI/панелях — <code>system-ui</code>;</li>
+<li>в коде — <code>ui-monospace</code>.</li>
+</ul>
+<p>Для контентных страниц и документации:</p>
+<ul>
+<li>рекомендуется использовать <code>.prose</code> из <code>@rarog/plugin-typography</code>;</li>
+<li>избегать чрезмерного количества разных шрифтов, чтобы не ломать визуальную</li>
+<p>целостность экосистемы.</p>
+</ul>
+<h3>Тон документации (tone of voice)</h3>
+<p>Рекомендуемый стиль:</p>
+<ul>
+<li>спокойный, инженерный;</li>
+<li>минимум маркетингового шума, максимум пользы;</li>
+<li>короткие и точные примеры кода;</li>
+<li>объяснение «почему» (design decisions) рядом с «как».</li>
+</ul>
+<h3>Использование бренда в сторонних проектах</h3>
+<ul>
+<li>Используй название «Rarog CSS» при первом упоминании.</li>
+<li>Можно указывать:</li>
+</ul>
+<p>&gt; «UI‑слой построен на базе Rarog CSS (Apache 2.0).»</p>
+<ul>
+<li>Ссылки:</li>
+</ul>
+<ul>
+<li>GitHub: <code>https://github.com/TheSkiF4er/rarog</code></li>
+<li>docs: <code>https://docs.cajeer.ru/rarog</code> (условный URL / рекомендуемый паттерн)</li>
+</ul>
+<p>---</p>
+<p>Если в дальнейшем будет нужен полноценный брендбук (логотип, гайд по иконкам, иллюстрациям и т.п.), его можно вынести в отдельный репозиторий <code>rarog-brand</code> и синхронизировать через Figma‑токены.</p>
+<h2>Token architecture v2</h2>
+<ul>
+<li>[Token architecture v2](../tokens.md)</li>
+<li>[Semantic tokens](../semantic-tokens.md)</li>
+</ul>
+<p>Rarog теперь разделяет raw, semantic, component и runtime theme tokens, чтобы поддерживать multi-brand и per-tenant theming без дублирования CSS.</p></main></div></body></html>
