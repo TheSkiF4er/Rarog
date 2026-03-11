@@ -18,6 +18,7 @@ const _selectInstances = new WeakMap();
 const _comboboxInstances = new WeakMap();
 const _tagsInputInstances = new WeakMap();
 const _dataTableInstances = new WeakMap();
+const _tabsInstances = new WeakMap();
 const _maskHandlers = Object.create(null);
 
 const _eventBusListeners = new Map();
@@ -332,6 +333,112 @@ class Collapse {
 
   static getOrCreate(trigger, options) {
     return this.getInstance(trigger) || new Collapse(trigger, options);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Tabs                                                                       */
+/* -------------------------------------------------------------------------- */
+
+class Tabs {
+  constructor(element, options = {}) {
+    if (!element) {
+      throw new Error("Rarog.Tabs: element is required");
+    }
+    this._element = element;
+    this._options = Object.assign({ orientation: element.getAttribute("data-rg-orientation") || "horizontal" }, options);
+    this._list = element.querySelector("[data-rg-tab-list]") || element.querySelector(".tab-list") || element.querySelector("[role='tablist']");
+    this._tabs = Array.from(element.querySelectorAll("[data-rg-tab], .tab-trigger, [role='tab']"));
+    this._panels = Array.from(element.querySelectorAll("[data-rg-tab-panel], .tab-panel, [role='tabpanel']"));
+    this._selected = Math.max(0, this._tabs.findIndex(tab => tab.getAttribute("aria-selected") === "true" || tab.classList.contains("is-active")));
+    this._onClick = this._handleClick.bind(this);
+    this._onKeydown = this._handleKeydown.bind(this);
+    this._initA11y();
+    this._bindEvents();
+    this.activate(this._selected, { focus: false });
+    _tabsInstances.set(element, this);
+  }
+
+  _initA11y() {
+    if (this._list) {
+      this._list.setAttribute("role", "tablist");
+      this._list.setAttribute("aria-orientation", this._options.orientation === "vertical" ? "vertical" : "horizontal");
+    }
+
+    this._tabs.forEach((tab, index) => {
+      if (!tab.id) tab.id = `rg-tab-${Math.random().toString(36).slice(2, 8)}`;
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("tabindex", index === this._selected ? "0" : "-1");
+      const controls = tab.getAttribute("data-rg-target") || tab.getAttribute("aria-controls");
+      let panel = controls ? document.querySelector(controls.startsWith("#") ? controls : `#${controls}`) : this._panels[index];
+      if (!panel) panel = this._panels[index] || null;
+      if (panel) {
+        if (!panel.id) panel.id = `rg-tab-panel-${Math.random().toString(36).slice(2, 8)}`;
+        tab.setAttribute("aria-controls", panel.id);
+        panel.setAttribute("role", "tabpanel");
+        panel.setAttribute("aria-labelledby", tab.id);
+      }
+    });
+  }
+
+  _bindEvents() {
+    this._tabs.forEach(tab => {
+      tab.addEventListener("click", this._onClick);
+      tab.addEventListener("keydown", this._onKeydown);
+    });
+  }
+
+  _handleClick(event) {
+    const tab = event.currentTarget;
+    const index = this._tabs.indexOf(tab);
+    if (index >= 0) this.activate(index);
+  }
+
+  _handleKeydown(event) {
+    const isVertical = this._options.orientation === "vertical";
+    const prevKeys = isVertical ? ["ArrowUp"] : ["ArrowLeft"];
+    const nextKeys = isVertical ? ["ArrowDown"] : ["ArrowRight"];
+    let nextIndex = null;
+    if (nextKeys.includes(event.key)) nextIndex = (this._selected + 1) % this._tabs.length;
+    else if (prevKeys.includes(event.key)) nextIndex = (this._selected - 1 + this._tabs.length) % this._tabs.length;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = this._tabs.length - 1;
+    if (nextIndex === null) return;
+    event.preventDefault();
+    this.activate(nextIndex);
+  }
+
+  activate(index, options = {}) {
+    if (!this._tabs.length) return;
+    const focus = options.focus !== false;
+    this._selected = Math.max(0, Math.min(index, this._tabs.length - 1));
+    _dispatchEvent(this._element, "rg:tabs:change", { instance: this, index: this._selected });
+    this._tabs.forEach((tab, tabIndex) => {
+      const selected = tabIndex === this._selected;
+      tab.setAttribute("aria-selected", String(selected));
+      tab.setAttribute("tabindex", selected ? "0" : "-1");
+      tab.classList.toggle("is-active", selected);
+      const panelId = tab.getAttribute("aria-controls");
+      const panel = panelId ? document.getElementById(panelId) : this._panels[tabIndex];
+      if (panel) panel.hidden = !selected;
+    });
+    if (focus && this._tabs[this._selected]) this._tabs[this._selected].focus();
+  }
+
+  dispose() {
+    this._tabs.forEach(tab => {
+      tab.removeEventListener("click", this._onClick);
+      tab.removeEventListener("keydown", this._onKeydown);
+    });
+    _tabsInstances.delete(this._element);
+  }
+
+  static getInstance(element) {
+    return _tabsInstances.get(element) || null;
+  }
+
+  static getOrCreate(element, options) {
+    return this.getInstance(element) || new Tabs(element, options);
   }
 }
 
@@ -2594,6 +2701,11 @@ function initDataApi(root = document) {
     DataTable.getOrCreate(element);
   });
 
+  const tabsElements = root.querySelectorAll("[data-rg-tabs]");
+  tabsElements.forEach(element => {
+    Tabs.getOrCreate(element);
+  });
+
   const maskedInputs = root.querySelectorAll("[data-rg-mask]");
   maskedInputs.forEach(element => {
     _applyMaskToInput(element);
@@ -2624,6 +2736,7 @@ const Rarog = {
   Combobox,
   TagsInput,
   DataTable,
+  Tabs,
   InputMask,
   Events,
   config: RarogConfig,
@@ -2662,6 +2775,7 @@ export {
   Combobox,
   TagsInput,
   DataTable,
+  Tabs,
   InputMask,
   Events,
   initDataApi,
@@ -2671,5 +2785,3 @@ export {
   Rarog
 };
 export default Rarog;
-
-export const VERSION = "3.5.0";
