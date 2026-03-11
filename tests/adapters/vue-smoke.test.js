@@ -3,6 +3,9 @@ import { afterEach, describe, expect, it } from "vitest";
 import RarogPlugin, {
   RarogModal,
   RarogDropdown,
+  RarogButton,
+  RarogInput,
+  RarogTabs,
   useModal
 } from "../../packages/vue/dist/index.mjs";
 
@@ -21,7 +24,7 @@ describe("@rarog/vue smoke", () => {
     app = null;
   });
 
-  it("installs the plugin and mounts modal/dropdown output with imperative exposes", async () => {
+  it("installs the plugin and mounts wrapped primitives, modal/dropdown output with imperative exposes", async () => {
     const harness = { modalEl: null, modalApi: null };
     const HookHarness = {
       name: "HookHarness",
@@ -39,6 +42,15 @@ describe("@rarog/vue smoke", () => {
     app = createApp({
       render() {
         return h("div", { "data-testid": "vue-root" }, [
+          h(RarogButton, null, { default: () => "Action" }),
+          h(RarogInput, { placeholder: "Search" }),
+          h(RarogTabs, {
+            items: [
+              { value: "one", label: "One", content: "Panel one" },
+              { value: "two", label: "Two", content: "Panel two" }
+            ],
+            defaultValue: "one"
+          }),
           h(RarogModal, { id: "vue-modal", title: "Hello Vue", defaultOpen: true }, {
             default: () => h("p", null, "Modal body")
           }),
@@ -52,7 +64,7 @@ describe("@rarog/vue smoke", () => {
 
     app.use(RarogPlugin);
     expect(app._context.components.RarogModal).toBeTruthy();
-    expect(app._context.components.RarogDropdown).toBeTruthy();
+    expect(app._context.components.RarogButton).toBeTruthy();
     expect(app._context.directives.rarog).toBeTruthy();
 
     app.mount(host);
@@ -62,8 +74,14 @@ describe("@rarog/vue smoke", () => {
     const dropdownButton = host.querySelector(".dropdown button[data-rg-target='#vue-dropdown-menu']");
     const dropdownMenu = host.querySelector("#vue-dropdown-menu.dropdown-menu");
     const hookHarness = host.querySelector(".hook-harness");
+    const button = host.querySelector(".btn.btn-primary");
+    const input = host.querySelector("input.input");
+    const tab = host.querySelector('[role="tab"][aria-selected="true"]');
 
     expect(modal).toBeTruthy();
+    expect(button?.textContent).toContain("Action");
+    expect(input?.getAttribute("placeholder")).toBe("Search");
+    expect(tab?.textContent).toContain("One");
     expect(modal?.querySelector(".modal-title")?.textContent).toBe("Hello Vue");
     expect(dropdownButton?.textContent).toContain("Vue menu");
     expect(dropdownMenu?.getAttribute("role")).toBe("menu");

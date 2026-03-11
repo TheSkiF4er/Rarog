@@ -6,6 +6,10 @@ import {
   RarogProvider,
   RarogModal,
   RarogDropdown,
+  RarogButton,
+  RarogInput,
+  RarogSwitch,
+  RarogTabs,
   useModal
 } from "../../packages/react/dist/index.mjs";
 
@@ -48,7 +52,7 @@ describe("@rarog/react smoke", () => {
     root = null;
   });
 
-  it("renders provider, modal, dropdown, and hook consumers with imperative handles", async () => {
+  it("renders provider, wrapped primitives, modal, dropdown, and hook consumers with imperative handles", async () => {
     host = document.createElement("div");
     document.body.appendChild(host);
     root = createRoot(host);
@@ -60,6 +64,16 @@ describe("@rarog/react smoke", () => {
         React.createElement(
           RarogProvider,
           { "data-testid": "provider" },
+          React.createElement(RarogButton, null, "Action"),
+          React.createElement(RarogInput, { placeholder: "Search" }),
+          React.createElement(RarogSwitch, { defaultChecked: true, label: "Enabled" }),
+          React.createElement(RarogTabs, {
+            defaultValue: "one",
+            items: [
+              { value: "one", label: "One", content: React.createElement("p", null, "Panel one") },
+              { value: "two", label: "Two", content: React.createElement("p", null, "Panel two") }
+            ]
+          }),
           React.createElement(RarogModal, { ref: modalRef, id: "react-modal", title: "Hello React", defaultOpen: true },
             React.createElement("p", null, "Modal body")
           ),
@@ -76,8 +90,16 @@ describe("@rarog/react smoke", () => {
     const dropdownButton = host.querySelector(".dropdown button[data-rg-target='#react-dropdown-menu']");
     const dropdownMenu = host.querySelector("#react-dropdown-menu.dropdown-menu");
     const hookHarness = host.querySelector(".hook-harness");
+    const button = host.querySelector(".btn.btn-primary");
+    const input = host.querySelector("input.input");
+    const switcher = host.querySelector('[role="switch"]');
+    const tab = host.querySelector('[role="tab"][aria-selected="true"]');
 
     expect(provider).toBeTruthy();
+    expect(button?.textContent).toContain("Action");
+    expect(input?.getAttribute("placeholder")).toBe("Search");
+    expect(switcher?.getAttribute("aria-checked")).toBe("true");
+    expect(tab?.textContent).toContain("One");
     expect(modal).toBeTruthy();
     expect(modal?.querySelector(".modal-title")?.textContent).toBe("Hello React");
     expect(dropdownButton?.textContent).toContain("Open menu");
