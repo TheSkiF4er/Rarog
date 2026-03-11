@@ -20,7 +20,7 @@ const {
   validateBuildManifest
 } = require("./config");
 const jit = require("./jit");
-const themeEngine = require("./theme");
+const { spawnSync } = require("child_process");
 
 function generateColorCss(theme) {
   const c = theme.colors || {};
@@ -901,53 +901,6 @@ function cmdDoctor() {
   warnings.forEach((warning) => console.log(`  [warn] ${warning}`));
 }
 
-
-function cmdThemeCreate(args = []) {
-  const output = args[0] || "themes/custom-theme.json";
-  const nameArg = args.find((arg) => arg.startsWith("--name="));
-  const extendsArg = args.find((arg) => arg.startsWith("--extends="));
-  const filePath = themeEngine.createThemeFile(output, {
-    name: nameArg ? nameArg.split("=").slice(1).join("=") : undefined,
-    extendsTheme: extendsArg ? extendsArg.split("=").slice(1).join("=") : undefined
-  });
-  console.log(`[rarog] theme create: starter manifest written to ${themeEngine.relativeProjectPath(filePath)}`);
-}
-
-function cmdThemeDiff(args = []) {
-  const [basePath, nextPath] = args;
-  if (!basePath || !nextPath) {
-    console.error("[rarog] theme diff: нужно указать два файла, например rarog theme diff themes/a.json themes/b.json");
-    process.exit(1);
-  }
-  const baseTheme = themeEngine.loadThemeManifest(basePath);
-  const nextTheme = themeEngine.loadThemeManifest(nextPath);
-  const changes = themeEngine.diffThemeManifests(baseTheme, nextTheme);
-  console.log(`[rarog] theme diff: ${changes.length} changes between ${baseTheme.name || basePath} and ${nextTheme.name || nextPath}`);
-  changes.slice(0, 120).forEach((change) => {
-    console.log(`  [${change.kind}] ${change.key}: ${change.before ?? "∅"} -> ${change.after ?? "∅"}`);
-  });
-  if (changes.length > 120) console.log(`  ... and ${changes.length - 120} more`);
-}
-
-function cmdThemeValidate(args = []) {
-  const target = args[0] || "themes/custom-theme.json";
-  const theme = themeEngine.loadThemeManifest(target);
-  const result = themeEngine.validateThemeManifest(theme, target);
-  if (result.valid && !result.warnings.length) {
-    console.log(`[rarog] theme validate: ${target} looks valid.`);
-    return;
-  }
-  if (result.warnings.length) {
-    console.log("[rarog] theme validate: warnings");
-    result.warnings.forEach((warning) => console.log(`  [warn] ${warning}`));
-  }
-  if (result.errors.length) {
-    console.log("[rarog] theme validate: errors");
-    result.errors.forEach((error) => console.log(`  [error] ${error}`));
-    process.exitCode = 1;
-  }
-}
-
 function cmdInit() {
   const blockingFiles = [
     "rarog.config.js",
@@ -1030,6 +983,99 @@ function cmdDocs() {
 /* Валидация конфига                                                            */
 /* -------------------------------------------------------------------------- */
 
+
+function parseCliOption(args, name, fallback = undefined) {
+  const direct = args.find((arg) => arg.startsWith(`${name}=`));
+  if (direct) return direct.slice(name.length + 1);
+  const index = args.indexOf(name);
+  if (index >= 0 && args[index + 1]) return args[index + 1];
+  return fallback;
+}
+
+function collectInspectFiles(args) {
+  const positional = args.filter((arg) => !arg.startsWith('-'));
+  if (positional.length) return positional.map((file) => pathInProject(file));
+  const defaults = ['src/index.html', 'index.html', 'stories/index.html'];
+  return defaults.map((file) => pathInProject(file)).filter((file) => fs.existsSync(file));
+}
+
+function runNodeScript(relScript, scriptArgs = []) {
+  const scriptPath = pathInProject(relScript);
+  const fallbackPath = pathInPackage(relScript);
+  const resolved = fs.existsSync(scriptPath) ? scriptPath : fallbackPath;
+  return spawnSync(process.execPath, [resolved, ...scriptArgs], {
+    cwd: PROJECT_ROOT,
+    encoding: 'utf8'
+  });
+}
+
+function printMigrationSummary(title, result) {
+  console.log(`[rarog] ${title}`);
+  if (result.status && result.status !== 0) {
+    if (result.stdout) process.stdout.write(result.stdout);
+    if (result.stderr) process.stderr.write(result.stderr);
+    process.exit(result.status || 1);
+  }
+  let payload = null;
+  try {
+    payload = JSON.parse(result.stdout || '{}');
+  } catch (error) {
+    console.log(result.stdout || '');
+    return;
+  }
+  const changes = Array.isArray(payload.changes) ? payload.changes : [];
+  console.log(`  changed tokens: ${changes.length}`);
+  changes.slice(0, 20).forEach((item) => {
+    console.log(`  ${item.from} -> ${item.to}`);
+  });
+  if (changes.length > 20) {
+    console.log(`  ... and ${changes.length - 20} more`);
+  }
+}
+
+function cmdInspectClasses(args = []) {
+  const files = collectInspectFiles(args);
+  if (!files.length) {
+    console.log('[rarog] inspect classes: files not found. Pass explicit file paths.');
+    return;
+  }
+  const result = runNodeScript('tools/codemods/inspect-classes.mjs', files);
+  if (result.status && result.status !== 0) {
+    if (result.stderr) process.stderr.write(result.stderr);
+    process.exit(result.status || 1);
+  }
+  const payload = JSON.parse(result.stdout || '{}');
+  console.log('[rarog] inspect classes');
+  console.log(`  files: ${payload.files.length}`);
+  Object.entries(payload.counts || {}).forEach(([bucket, count]) => {
+    console.log(`  ${bucket}: ${count}`);
+  });
+  ['bootstrap', 'tailwind', 'unknown'].forEach((bucket) => {
+    const values = (payload.buckets && payload.buckets[bucket]) || [];
+    if (values.length) {
+      console.log(`
+  ${bucket} examples:`);
+      values.slice(0, 12).forEach((value) => console.log(`    - ${value}`));
+    }
+  });
+}
+
+function cmdMigrateBootstrap(args = []) {
+  const input = parseCliOption(args, '--input', parseCliOption(args, '-i', 'src/index.html'));
+  const output = parseCliOption(args, '--output', parseCliOption(args, '-o', input));
+  const write = args.includes('--write');
+  const result = runNodeScript('tools/codemods/bootstrap-to-rarog.mjs', [input, output, ...(write ? ['--write'] : [])]);
+  printMigrationSummary('migrate bootstrap', result);
+}
+
+function cmdMigrateTailwind(args = []) {
+  const input = parseCliOption(args, '--input', parseCliOption(args, '-i', 'src/index.html'));
+  const output = parseCliOption(args, '--output', parseCliOption(args, '-o', input));
+  const write = args.includes('--write');
+  const result = runNodeScript('tools/codemods/tailwind-to-rarog.mjs', [input, output, ...(write ? ['--write'] : [])]);
+  printMigrationSummary('migrate tailwind', result);
+}
+
 function cmdValidate() {
   const surface = getConfigSurfaceDiagnostics();
   const userConfig = loadUserConfig();
@@ -1087,34 +1133,12 @@ function printHelp() {
   console.log("  rarog analyze           Показать summary по content scanning и неизвестным utility-классам");
   console.log("  rarog doctor            Проверить JIT/build surface и типовые проблемы");
   console.log("  rarog validate          Проверить theme-config и build-manifest");
-  console.log("  rarog theme create      Создать starter theme manifest (JSON)");
-  console.log("  rarog theme diff        Сравнить два theme manifest файла");
-  console.log("  rarog theme validate    Проверить theme manifest");
   console.log("");
 }
 
 function main() {
   const [, , cmd, ...args] = process.argv;
   const debug = args.includes("--debug");
-
-  if (cmd === "theme") {
-    const [subcmd, ...themeArgs] = args;
-    switch (subcmd) {
-      case "create":
-        cmdThemeCreate(themeArgs);
-        return;
-      case "diff":
-        cmdThemeDiff(themeArgs);
-        return;
-      case "validate":
-        cmdThemeValidate(themeArgs);
-        return;
-      default:
-        console.error(`[rarog] Неизвестная команда theme: ${subcmd || "(empty)"}`);
-        printHelp();
-        process.exit(1);
-    }
-  }
 
   switch (cmd) {
     case "build":
@@ -1134,6 +1158,26 @@ function main() {
       break;
     case "doctor":
       cmdDoctor();
+      break;
+    case "inspect":
+      if (args[0] === 'classes') {
+        cmdInspectClasses(args.slice(1));
+        break;
+      }
+      console.error(`[rarog] Неизвестная inspect-команда: ${args[0] || '(empty)'}`);
+      process.exit(1);
+      break;
+    case "migrate":
+      if (args[0] === 'bootstrap') {
+        cmdMigrateBootstrap(args.slice(1));
+        break;
+      }
+      if (args[0] === 'tailwind') {
+        cmdMigrateTailwind(args.slice(1));
+        break;
+      }
+      console.error(`[rarog] Неизвестная migrate-команда: ${args[0] || '(empty)'}`);
+      process.exit(1);
       break;
     case "-h":
     case "--help":
@@ -1164,9 +1208,6 @@ module.exports = {
   cmdValidate,
   cmdAnalyze,
   cmdDoctor,
-  cmdThemeCreate,
-  cmdThemeDiff,
-  cmdThemeValidate,
   printHelp,
   main
 };
