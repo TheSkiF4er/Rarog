@@ -330,3 +330,7 @@ declare const Rarog: {
 
 export { Rarog };
 export default Rarog;
+
+export declare function applyTheme(target: Element | Document | null, themeName?: string | null): void;
+export declare function diffThemes(left: Record<string, unknown>, right: Record<string, unknown>): Array<{ key: string; before: unknown; after: unknown }>;
+export declare function validateTheme(theme: Record<string, unknown>): { valid: boolean; missing: string[] };

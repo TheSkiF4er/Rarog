@@ -26,3 +26,5 @@ export {
 } from "./rarog.esm.js";
 
 export { default } from "./rarog.esm.js";
+
+export { applyTheme, diffThemes, validateTheme } from "./theme-engine.js";
