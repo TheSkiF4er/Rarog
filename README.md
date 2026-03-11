@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub release" />
   </a>
   <a href="https://docs.skif4er.ru/rarog">
-    <img src="https://img.shields.io/badge/docs-docs.cajeer.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
+    <img src="https://img.shields.io/badge/docs-docs.skif4er.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
   </a>
 </p>
 
