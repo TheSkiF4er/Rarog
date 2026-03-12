@@ -2,7 +2,7 @@
 
 Этот гайд нужен для проектов, которые хотят сохранить utility-first DX, но перейти на Rarog tokens, components и theme engine.
 
-## Recommended migration path
+## Рекомендуемый путь миграции
 
 1. Запустите `rarog inspect classes`, чтобы увидеть tailwind-heavy surface.
 2. Подключите preset `tailwind-aliases` для мягкого входа.
@@ -45,7 +45,7 @@ Rarog уже поддерживает большой слой utility syntax, п
 
 Это значит, что migration MVP фокусируется на **inspection + safe codemod + docs**, а не на полном AST-rewrite.
 
-## Manual review zones
+## Зоны ручной проверки
 
 - arbitrary values (`w-[37rem]`, `grid-cols-[1fr_auto]`)
 - plugin utilities

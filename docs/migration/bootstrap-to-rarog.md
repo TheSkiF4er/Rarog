@@ -1,14 +1,14 @@
 # Bootstrap → Rarog migration guide
 
-Этот гайд нужен для команд, которые уже используют Bootstrap и хотят перейти на Rarog постепенно, без «big bang rewrite».
+Этот гайд нужен для команд, которые уже используют Bootstrap и хотят перейти на Rarog постепенно, без big bang rewrite.
 
-## Recommended migration path
+## Рекомендуемый путь миграции
 
 1. Сначала запустите `rarog inspect classes`, чтобы понять смесь Bootstrap / Tailwind / Rarog классов в проекте.
 2. Подключите compatibility preset `bootstrap-spacing`.
 3. Переносите layout и spacing раньше компонентов.
-4. Потом мигрируйте кнопки, alerts, badges, form controls.
-5. В конце удаляйте bootstrap-specific helpers и проверяйте визуальные regression snapshots.
+4. Потом мигрируйте кнопки, alerts, badges и form controls.
+5. В конце удаляйте bootstrap-specific helpers и проверяйте visual regression snapshots.
 
 ## CLI MVP
 
@@ -20,33 +20,33 @@ rarog migrate bootstrap --input src/app.jsx --output src/app.jsx --write
 
 ## High-value mappings
 
-| Bootstrap | Rarog | Notes |
+| Bootstrap | Rarog | Комментарий |
 | --- | --- | --- |
 | `row` | `rg-row` | базовая grid-row модель |
-| `col-12` | `rg-col-12` | direct mapping |
-| `col-md-6` | `rg-col-md-6` | same breakpoint intent |
+| `col-12` | `rg-col-12` | прямое сопоставление |
+| `col-md-6` | `rg-col-md-6` | тот же intent по breakpoint |
 | `g-3` | `rg-gap-3` | лучше через preset |
 | `justify-content-between` | `justify-between` | flex helper |
-| `align-items-center` | `items-center` | flex alignment |
-| `text-start` | `text-left` | logical simplification |
+| `align-items-center` | `items-center` | выравнивание flex |
+| `text-start` | `text-left` | упрощение логических классов |
 | `fw-bold` | `font-bold` | typography helper |
-| `rounded-pill` | `rounded-full` | radius mapping |
-| `w-100` | `w-full` | sizing helper |
-| `btn btn-primary` | `btn btn-primary` | component survives nearly unchanged |
-| `alert alert-primary` | `alert alert-primary` | component survives nearly unchanged |
+| `rounded-pill` | `rounded-full` | сопоставление radius |
+| `w-100` | `w-full` | helper размера |
+| `btn btn-primary` | `btn btn-primary` | компонент почти не меняется |
+| `alert alert-primary` | `alert alert-primary` | компонент почти не меняется |
 
-## Manual review zones
+## Зоны ручной проверки
 
 Нужно перепроверять вручную:
 
-- complex forms with validation markup
-- navbar / offcanvas compositions
-- utility combinations with `position-*`, `translate-middle`, `z-*`
-- custom bootstrap themes and Sass overrides
+- сложные формы с validation markup;
+- navbar / offcanvas композиции;
+- utility-комбинации с `position-*`, `translate-middle`, `z-*`;
+- кастомные bootstrap themes и Sass overrides.
 
-## Suggested rollout
+## Рекомендуемый rollout
 
-- **Week 1:** enable preset + inspect classes
-- **Week 2:** migrate spacing/layout helpers
-- **Week 3:** migrate components
-- **Week 4:** remove bootstrap CSS from bundles
+- **Неделя 1:** enable preset + inspect classes
+- **Неделя 2:** миграция spacing/layout helpers
+- **Неделя 3:** миграция компонентов
+- **Неделя 4:** удаление Bootstrap CSS из бандлов

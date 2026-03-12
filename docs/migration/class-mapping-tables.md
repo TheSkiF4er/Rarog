@@ -1,4 +1,4 @@
-# Class mapping tables
+# Таблицы сопоставления классов
 
 ## Bootstrap → Rarog
 

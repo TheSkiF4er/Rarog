@@ -1,12 +1,12 @@
-# Migration assistant MVP
+# Миграция assistant MVP
 
-Migration assistant в этой версии решает три задачи:
+Миграция assistant в этой версии решает три задачи:
 
 1. **inspect** — понять, какие class systems реально используются в проекте;
 2. **codemod** — безопасно заменить high-confidence classes;
 3. **preset** — удержать UX знакомым для команды во время перехода.
 
-## Included commands
+## Включено commands
 
 ```bash
 rarog inspect classes [files...]

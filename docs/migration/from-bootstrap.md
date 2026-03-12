@@ -1,4 +1,4 @@
-# Migration from Bootstrap
+# Миграция from Bootstrap
 
 Bootstrap-команды обычно уже привыкли к готовым компонентам и JS patterns. В Rarog migration focus смещается на tokens, themes и utility density.
 
@@ -9,7 +9,7 @@ Bootstrap-команды обычно уже привыкли к готовым 
 - theme customization → official themes + white-label starter
 - docs usage → GitBook pages + playground + copy-paste examples
 
-## Recommended path
+## Рекомендуемый путь
 
 1. сохранить знакомый component-first слой;
 2. постепенно внедрить utility classes для layout и spacing;

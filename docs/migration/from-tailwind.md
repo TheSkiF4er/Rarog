@@ -1,4 +1,4 @@
-# Migration from Tailwind
+# Миграция from Tailwind
 
 Этот guide помогает командам, привыкшим к Tailwind, перейти на Rarog без потери utility-first темпа.
 
@@ -9,7 +9,7 @@
 - UI kit via external libs → built-in components + adapters
 - dark mode config → theme engine + scoped themes
 
-## Recommended path
+## Рекомендуемый путь
 
 1. перенести design tokens в raw + semantic layers;
 2. закрыть parity-gap через audit matrix;
