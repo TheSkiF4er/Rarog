@@ -1,448 +1,190 @@
-# Plugin API
+# Plugin SDK v1
 
-Публичный Plugin API, официальные плагины, registry и tooling вокруг расширений.
+Plugin system в Rarog 3.5+ теперь рассматривается как **реальная расширяемая платформа**, а не как декоративный CSS-hook.
 
-## Included legacy sources
+## Что входит в Plugin SDK v1
 
-- `plugin-api.md`
-- `plugins-registry.md`
-- `ide-plugins.md`
+- **stable plugin contract** — стабильный объектный контракт `createPlugin()` / `definePlugin()`;
+- **plugin test harness** — `createPluginTestHarness()` для локальной и CI-проверки плагинов;
+- **plugin starter template** — генератор `create-rarog-plugin`;
+- **plugin compatibility docs** — правила совместимости и поддержки движка;
+- **semantic version policy** — зафиксированная SemVer-политика для API v1.
 
-## Imported from `plugin-api.md`
+## Stable plugin contract
 
-## Plugin API
+Rarog поддерживает два типа плагинов:
 
-Этот документ фиксирует **текущий публичный контракт** plugin API в ветке 3.x.
+1. **SDK v1 plugin object** — рекомендуемый и стабильный формат.
+2. **Legacy function plugin** — обратно совместимый формат для ветки 3.x.
 
-### Статус
-
-Plugin API имеет статус **Experimental**.
-
-Это означает:
-- базовый контракт уже можно использовать для внутренних и community-плагинов;
-- минорные версии 3.x могут расширять контекст и возвращаемую структуру;
-- внутренние helper-функции CLI не считаются частью public API, если они не описаны здесь.
-
-### Что считается публичным контрактом
-
-Плагин может быть:
-- функцией, переданной напрямую в `plugins`;
-- строкой с путём до CommonJS-модуля или совместимого Node-модуля.
-
-Минимальный формат:
+### Рекомендуемый формат
 
 ```js
-module.exports = function rarogPlugin(ctx) {
-  return {
-    utilitiesCss: ".content-auto { content-visibility: auto; }",
-    componentsCss: ".card-accent { border-inline-start: 4px solid var(--rarog-color-primary); }"
-  };
-};
+const { createPlugin } = require("@rarog/plugin-sdk");
+
+module.exports = createPlugin({
+  name: "@rarog/plugin-example",
+  version: "1.0.0",
+  description: "Example first-class plugin.",
+  engine: {
+    rarog: ">=3.5.0 <4.0.0"
+  },
+  capabilities: {
+    utilities: true,
+    components: true,
+    diagnostics: true
+  },
+  setup(ctx) {
+    return {
+      utilitiesCss: ".example-stack { display:grid; gap:1rem; }",
+      componentsCss: ".example-card { border-radius:var(--rarog-radius-lg); }",
+      diagnostics: [
+        { level: "info", message: "Example plugin active." }
+      ]
+    };
+  }
+});
 ```
 
-### Контекст плагина
+### Обязательные поля
 
-На вход плагин получает объект:
+- `name`
+- `setup(ctx)`
+
+### Рекомендуемые поля
+
+- `version`
+- `description`
+- `engine.rarog`
+- `capabilities`
+- `keywords`
+- `official`
+
+## Plugin context
+
+`setup(ctx)` получает стабильный контекст:
 
 ```ts
 interface RarogPluginContext {
   config: RarogConfig;
+  meta?: {
+    mode: "full" | "jit";
+    rootDir: string;
+    env: string;
+  };
+  helpers?: {
+    warn(message: string): void;
+  };
 }
 ```
 
-Гарантируется только поле `config`.
+### Стабильно гарантируется
 
-#### `config`
+- `ctx.config`
+- `ctx.meta.mode`
+- `ctx.meta.rootDir`
+- `ctx.meta.env`
+- `ctx.helpers.warn()`
 
-Это уже вычисленный effective config, где:
-- учтён `defaultConfig`;
-- применены пользовательские `theme`, `screens`, `variants`, `content`, `mode`;
-- применены расширения из `extend`.
+### Не считается публичным контрактом
 
-### Возвращаемое значение
+- внутренние пути CLI;
+- прямой доступ к build manifest;
+- регистрация новых CLI-команд через runtime hook;
+- мутация внутренних структур build pipeline.
 
-Плагин может вернуть объект:
+## Plugin result
 
 ```ts
 interface RarogPluginResult {
   utilitiesCss?: string;
   componentsCss?: string;
+  diagnostics?: Array<{
+    level: "info" | "warn" | "error";
+    message: string;
+  }>;
 }
 ```
 
-#### `utilitiesCss`
+## Plugin test harness
 
-Строка CSS, которая будет добавлена в секцию utility-слоя JIT-сборки.
+SDK поставляет test harness для двух сценариев:
 
-#### `componentsCss`
-
-Строка CSS, которая будет добавлена в секцию component-слоя JIT-сборки.
-
-### Ограничения текущей версии
-
-В текущем контракте плагин **не должен рассчитывать**, что он может:
-- мутировать внутренние структуры CLI;
-- менять build manifest;
-- регистрировать новые CLI-команды;
-- рассчитывать на стабильный доступ к внутренним путям пакета;
-- зависеть от недокументированных полей `ctx`.
-
-### Совместимость
-
-При публикации плагина рекомендуется:
-- явно указывать поддерживаемый диапазон версий Rarog;
-- тестировать минимум сценарии `mode: "full"` и `mode: "jit"`, если плагин влияет на JIT CSS;
-- не полагаться на побочные эффекты порядка подключения нескольких плагинов.
-
-### Рекомендации для авторов плагинов
-
-1. Возвращайте чистые CSS-строки без побочных эффектов.
-2. Используйте CSS custom properties Rarog вместо жёстко зашитых цветов.
-3. Держите utilities и components раздельно.
-4. Документируйте, какие классы и паттерны добавляет плагин.
-5. Указывайте, зависит ли плагин от `@rarog/js`, React или Vue.
-
-### Пример конфигурации
+- проверка совместимости по `engine.rarog` и `apiVersion`;
+- smoke-test CSS-выхода и diagnostics.
 
 ```js
-module.exports = {
-  mode: "jit",
-  content: ["./src/**/*.{html,js,jsx,ts,tsx,vue}"],
-  plugins: [
-    require("./plugins/rarog-plugin-content"),
-    "./plugins/rarog-plugin-marketing.cjs"
-  ]
+const { createPluginTestHarness } = require("@rarog/plugin-sdk");
+const plugin = require("./index.cjs");
+
+const harness = createPluginTestHarness({
+  rarogVersion: "3.5.0",
+  rootDir: process.cwd()
+});
+
+const execution = harness.execute(plugin, {
+  config: { mode: "jit" }
+});
+
+console.log(execution.compatibility);
+console.log(execution.result.utilitiesCss);
+```
+
+## Starter template
+
+Создать новый плагин можно командой:
+
+```bash
+create-rarog-plugin my-plugin
+```
+
+Или через npm script внутри репозитория:
+
+```bash
+npm run create:plugin -- my-plugin
+```
+
+Генератор создаёт:
+
+- `plugins/<plugin-name>/index.cjs`
+- `plugins/<plugin-name>/README.md`
+- `plugins/<plugin-name>/plugin.test.cjs`
+
+## Official plugins
+
+Первый пакет официальных плагинов на SDK v1:
+
+- `@rarog/plugin-typography`
+- `@rarog/plugin-forms`
+- `@rarog/plugin-motion`
+- `@rarog/plugin-charts-theme`
+- `@rarog/plugin-dashboard-kit`
+- `@rarog/plugin-marketing-blocks`
+
+## Legacy compatibility
+
+Функции-плагины старого формата продолжают работать в ветке 3.x:
+
+```js
+module.exports = function legacyPlugin(ctx) {
+  return {
+    utilitiesCss: ".legacy { display:block; }"
+  };
 };
 ```
 
+Но для новых плагинов SDK v1 обязателен.
 
-## Imported from `plugins-registry.md`
+## Deliverables
 
-## Registry плагинов Rarog
+В рамках Plugin SDK v1 в репозитории добавлены:
 
-Начиная с ветки 3.x, вокруг Rarog формируется экосистема плагинов.
+- `packages/plugin-sdk/index.cjs`
+- `packages/cli/bin/create-rarog-plugin.js`
+- `packages/cli/lib/plugin-starter.js`
+- обновлённый runtime loader в `packages/cli/lib/api.js`
+- официальный registry в `plugins/registry.json`
+- first-party plugins v1
+- test harness coverage в `tests/js/plugin-sdk.test.js`
 
-### Официальные плагины
-
-- `@rarog/plugin-forms` — дополнительные форменные утилиты и паттерны.
-- `@rarog/plugin-typography` — расширенная типографика для контентных страниц.
-- (дальше) потенциальные пакеты: `@rarog/plugin-animations`, `@rarog/plugin-ecommerce`,
-  `@rarog/plugin-email` и т.п.
-
-Каждый плагин может:
-
-- читать вычисленный `config`;
-- возвращать `utilitiesCss`;
-- возвращать `componentsCss`.
-
-Текущий публичный контракт подробно описан в `docs/plugin-api.md`.
-
-### Формат registry (MVP)
-
-В каталоге `plugins/registry.json` поддерживается список официальных и community-плагинов:
-
-```jsonc
-{
-  "official": [
-    {
-      "name": "@rarog/plugin-forms",
-      "description": "Форменные утилиты и паттерны поверх Rarog.",
-      "since": "2.4.0"
-    },
-    {
-      "name": "@rarog/plugin-typography",
-      "description": "Типографика для статей, документации, блогов.",
-      "since": "2.4.0"
-    }
-  ],
-  "community": []
-}
-```
-
-Этот файл может использоваться tooling-скриптами, генерацией docs, а также внешними
-репозиториями для сборки каталогов расширений.
-
-### Как опубликовать свой плагин
-
-1. Оформить пакет в npm (имя желательно в пространстве имён `@rarog/` или с префиксом `rarog-`).
-2. Описать поддержку версий Rarog и SemVer-политику плагина.
-3. Обеспечить базовый набор тестов (unit/интеграционные) и документацию.
-4. Прислать PR в основной репозиторий с обновлением `plugins/registry.json` и кратким описанием.
-
-Rarog Team оставляет за собой право помечать плагины как:
-
-- **official** — поддерживаются основной командой,
-- **community** — поддерживаются внешними авторами,
-- **deprecated** — не рекомендуются к использованию на новых проектах.
-
-
-## Imported from `ide-plugins.md`
-
-## IDE & Plugins
-
-Rarog 2.4.0 фокусируется на повседневном DX: IDE, плагины и дизайн-токены.
-
-### VSCode Extension (alpha)
-
-В репозитории есть MVP-расширение VSCode:
-
-- каталог: `tools/vscode-rarog`;
-- файл манифеста: `tools/vscode-rarog/package.json`;
-- основное тело: `tools/vscode-rarog/out/extension.js`;
-- словарь классов: `tools/vscode-rarog/rarog-classmap.json`.
-
-#### Установка из репозитория
-
-1. Открой проект Rarog в VSCode.
-2. Выполни:
-
-   ```bash
-   cd tools/vscode-rarog
-   npm install
-   # при необходимости: vsce package
-   ```
-
-3. Установи получившийся `.vsix` через VSCode (`Extensions → ... → Install from VSIX`).
-
-Расширение даёт:
-
-- автодополнение классов Rarog (utilities, компоненты, plugin-классы);
-- hover-доки по классам (описание + категория).
-
-#### Обновление словаря классов
-
-Словарь классов генерируется скриптом:
-
-```bash
-node tools/generate-class-dictionary.mjs
-```
-
-Он использует:
-
-- `rarog.tokens.json` (цвета, spacing, radius, shadow);
-- базовый список компонент/утилит.
-
-Результат записывается в `tools/vscode-rarog/rarog-classmap.json`. Расширение подхватывает обновлённый файл после перезапуска VSCode.
-
-### Plugin API v1
-
-В `rarog.config.ts/js` есть поле `plugins`:
-
-```ts
-import type { RarogConfig, RarogPlugin } from './rarog.config.types';
-
-const config: RarogConfig = {
-  // ...
-  plugins: [
-    "./packages/plugin-forms/index.cjs",
-    "./packages/plugin-typography/index.cjs"
-  ]
-};
-
-export default config;
-```
-
-Плагин может быть:
-
-- строкой (путь до модуля);
-- функцией `(ctx) => void | { utilitiesCss?: string; componentsCss?: string }`.
-
-#### Сигнатуры
-
-```ts
-export interface RarogPluginContext {
-  config: RarogConfig;
-}
-
-export interface RarogPluginResult {
-  utilitiesCss?: string;
-  componentsCss?: string;
-}
-
-export type RarogPlugin =
-  | ((ctx: RarogPluginContext) => void | RarogPluginResult)
-  | string;
-```
-
-Плагины вызываются в JIT-режиме (`mode: "jit"`):
-
-- регистрируются в `rarog.config.*`;
-- CLI вызывает их в `runPlugins(effectiveConfig)`;
-- возвращённый CSS добавляется в итоговый `dist/rarog.jit.css`:
-
-  - `utilitiesCss` → секция `/* Rarog plugin utilities */`;
-  - `componentsCss` → секция `/* Rarog plugin components */`.
-
-Плагин может:
-
-- читать `ctx.config.theme`, `ctx.config.screens`, `ctx.config.extend`;
-- вернуть дополнительный CSS с классами, которые будут доступны в проекте.
-
-### Официальные плагины
-
-#### @rarog/plugin-forms
-
-Расположение:
-
-- `packages/plugin-forms/index.cjs`
-
-Возможности (MVP):
-
-- `.form-control-sm`, `.form-control-lg` — уменьшенные/увеличенные поля ввода;
-- `.field`, `.field-label-inline`, `.field-hint` — структуры для форменных полей;
-- `.input-muted` — «мягкое» поле ввода;
-- `.switch` (checkbox/radio) — простые switch-переключатели на чистом CSS.
-
-Пример подключения:
-
-```ts
-// rarog.config.ts
-const config: RarogConfig = {
-  // ...
-  plugins: [
-    "./packages/plugin-forms/index.cjs"
-  ]
-};
-```
-
-#### @rarog/plugin-typography
-
-Расположение:
-
-- `packages/plugin-typography/index.cjs`
-
-Возможности:
-
-- `.prose` — типографика для markdown/контентных статей;
-- стилизация:
-
-  - заголовков `h1–h4`,
-  - абзацев,
-  - списков,
-  - `code` и `pre`,
-  - `blockquote`,
-  - встроенных медиа (`img`, `video`).
-
-Пример:
-
-```html
-<article class="prose">
-  <h1>Заголовок статьи</h1>
-  <p>Контентный параграф с оформлением в стиле Rarog.</p>
-</article>
-```
-
-И подключение:
-
-```ts
-plugins: [
-  "./packages/plugin-typography/index.cjs"
-]
-```
-
-### Design Tokens → Figma
-
-Для интеграции с дизайн-инструментами используется файл:
-
-- `design/figma.tokens.json`
-
-Формат совместим с Tokens Studio / Design Tokens tooling:
-
-- секции: `color`, `spacing`, `radius`, `shadow`;
-- значения — объект вида:
-
-  ```json
-  {
-    "value": "#3b82f6",
-    "type": "color"
-  }
-  ```
-
-#### Подключение в Figma (Tokens Studio)
-
-1. Установи плагин Tokens Studio в Figma.
-2. В настройках проекта выбери импорт из локального/удалённого JSON.
-3. Укажи путь до `design/figma.tokens.json` (через Git-провайдер или ручной импорт).
-4. Сопоставь группы:
-
-   - `color.primary.*` / `color.semantic.*` → цветовые токены;
-   - `spacing.*` → spacing;
-   - `radius.*` → border radius;
-   - `shadow.*` → тени.
-
-После этого:
-
-- дизайнеры используют те же токены, что и в Rarog;
-- разработчики подхватывают их через `var(--rarog-...)` и утилити-классы.
-
-
-### Rarog LSP Server (3.2.0+)
-
-Начиная с 3.2.0, помимо простого VSCode-расширения, Rarog предоставляет полноценный
-LSP-сервер, который можно подключать из любых современных IDE/редакторов.
-
-- бинарь: `node tools/lsp/rarog-lsp.js`;
-- протокол: стандартный Language Server Protocol;
-- возможности:
-  - автодополнение классов (`rg-*`, `btn-*`, `bg-*`, `text-*`, variants и т.д.);
-  - подсказки по токенам (`primary-500`, `space-4`, `radius-md`, `shadow-lg`);
-  - hover-подсказки с кратким описанием и ссылкой на docs;
-  - базовая валидация `rarog.config.*` (та же логика, что и в `rarog validate`).
-
-Поддерживаемые типы файлов (MVP):
-
-- `.html`, `.blade.php`;
-- `.js` / `.ts` / `.jsx` / `.tsx`;
-- `.vue`;
-- любые шаблоны, где используется строковый `class=""` / `className=""` и Tailwind-подобные списки классов.
-
-#### VSCode + LSP
-
-Расширение в каталоге `tools/vscode-rarog` может использовать как локальный
-словари-классов, так и LSP-сервер (через стандартный VSCode LSP-клиент). В простом
-сценарии можно просто:
-
-```bash
-node tools/lsp/rarog-lsp.js --stdio
-```
-
-и подключить его через любую LSP-конфигурацию VSCode/Neovim/WebStorm, указав корень
-проекта как workspace root.
-
-#### WebStorm / Neovim / другие IDE
-
-Так как сервер реализует стандартный LSP, его можно подключать как обычный
-`node`-LSP:
-
-- команда: `node tools/lsp/rarog-lsp.js --stdio`;
-- root: корень проекта с `rarog.config.*` и `rarog.tokens.json`;
-- триггеры:
-  - HTML/Blade/JSX/TSX/Vue-файлы;
-  - конфиг `rarog.config.*` для валидации.
-
-Подробные примеры конфигураций для WebStorm/Neovim можно взять из типовых
-настроек LSP для Tailwind CSS и адаптировать, заменив команду и root.
-
-### CLI DX: rarog validate
-
-В 3.2.0 появился отдельный DX-инструмент для проверки конфига:
-
-```bash
-npx rarog validate
-## или
-pnpm rarog validate
-```
-
-Команда:
-
-- ищет `rarog.config.js/ts/json` в корне;
-- запускает базовую проверку:
-  - формата и сортировки `screens` (брейкпоинты);
-  - типа `plugins` (обязан быть массив);
-  - типа `theme.colors`;
-- выводит:
-  - `[warn]` — мягкие предупреждения (например, нестандартный формат брейкпоинтов);
-  - `[error]` — ошибки, из-за которых стоит поправить конфиг (и код возврата `1`).
-
-Это тот же самый валидатор, который использует LSP-сервер для диагностики
-`rarog.config.*` прямо в IDE.
+Подробнее про версионирование и совместимость — в [Plugin Compatibility](./compatibility.md).
