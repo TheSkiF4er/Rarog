@@ -1,8 +1,8 @@
-# Copy-paste examples
+# Copy-paste примеры
 
 Этот раздел собирает короткие production-готовые фрагменты, которые можно вставить в проект без долгой адаптации.
 
-## Button row
+## Кнопка row
 
 ```html
 <div class="d-flex gap-2 flex-wrap">
@@ -42,6 +42,6 @@
 
 ## Where to go next
 
-- anatomy and accessibility details: [Component anatomy](components/anatomy.md)
-- utility search: [Utility lookup](utilities/lookup.md)
-- full starters: [Official starters](starters/README.md)
+- anatomy and accessibility details: [Anatomy компонентов](components/anatomy.md)
+- utility search: [Справочник утилит](utilities/lookup.md)
+- full starters: [Официальные стартеры](starters/README.md)

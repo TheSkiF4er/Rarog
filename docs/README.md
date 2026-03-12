@@ -1,40 +1,40 @@
-# Documentation
+# Документация
 
-Rarog docs platform v2 теперь ориентирована на **GitBook** как на основной delivery-слой документации. Цель — сделать документацию не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, lookup-страницами, anatomy-разборами компонентов, accessibility notes, token/theme explorer и понятными migration-путями.
+Документация Rarog ориентирована на **GitBook** как на основной слой публикации. Цель — сделать docs не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, справочниками по утилитам, anatomy-разборами компонентов, заметками по доступности, обозревателем токенов и тем и понятными маршрутами миграции.
 
-## What is new in docs platform v2
+## Что нового в платформе документации v2
 
 - **GitBook-native IA** через `docs/SUMMARY.md` и `.gitbook.yaml`
-- **Live playground** в `examples/playground/` для интерактивных сценариев
-- **Utility lookup** для быстрого поиска классов и альтернатив
-- **Component anatomy** и accessibility notes для production-команд
-- **Token/theme explorer** как вход в theming workflows
-- **Migration pages** для перехода с Tailwind и Bootstrap
-- **Copy-paste examples** для быстрых стартов и внедрения в проекты
-- **Starter catalog** с официальными шаблонами и smoke-проверкой
+- **Живой playground** в `examples/playground/` для интерактивных сценариев
+- **Справочник утилит** для быстрого поиска классов и альтернатив
+- **Разбор anatomy компонентов** и заметки по доступности для production-команд
+- **Обозреватель токенов и тем** как вход в theming-workflows
+- **Страницы миграции** для перехода с Tailwind, Bootstrap, Chakra UI, MUI и Ant Design
+- **Copy-paste примеры** для быстрых стартов и внедрения в проекты
+- **Каталог стартеров** с официальными шаблонами и smoke-проверкой
 
-## Key sections
+## Ключевые разделы
 
-- [Docs platform v2](docs-platform.md)
-- [Live playground](live-playground.md)
-- [Copy-paste examples](copy-paste-examples.md)
-- [Utility lookup](utilities/lookup.md)
-- [Component anatomy](components/anatomy.md)
-- [Accessibility notes](components/accessibility-notes.md)
-- [Token and theme explorer](themes/token-theme-explorer.md)
-- [Migration guides](migration/README.md)
-- [Official starters](starters/README.md)
+- [Платформа документации v2](docs-platform.md)
+- [Живой playground](live-playground.md)
+- [Copy-paste примеры](copy-paste-examples.md)
+- [Справочник утилит](utilities/lookup.md)
+- [Anatomy компонентов](components/anatomy.md)
+- [Заметки по доступности](components/accessibility-notes.md)
+- [Обозреватель токенов и тем](themes/token-theme-explorer.md)
+- [Гайды по миграции](migration/README.md)
+- [Официальные стартеры](starters/README.md)
 
-## Authoring model
+## Модель ведения документации
 
 GitBook является source of truth для структуры разделов и навигации. Для локальной проверки репозиторий также умеет делать lightweight static export в `.gitbook/dist`, чтобы CI мог проверить структуру, ссылки и готовность документации к публикации.
 
-## Launch-ready positioning
+## Запуск и позиционирование 1.0
 
-Rarog 1.0 docs теперь включают отдельный launch-layer:
+Документация Rarog 1.0 включает отдельный слой запуска:
 
-- positioning и narrative для **why Rarog**;
-- comparison pages против Tailwind / Bootstrap / shadcn / Chakra / MUI;
-- starter + showcase gallery;
-- production recommendations для multi-theme SaaS, white-label B2B и internal dashboards/admins;
-- roadmap v2 как продолжение 1.0 launch story.
+- narrative и позиционирование «почему Rarog»;
+- страницы сравнений с Tailwind / Bootstrap / shadcn/ui / Chakra UI / MUI;
+- галерею стартеров и demo-apps;
+- рекомендации для production для multi-theme SaaS, white-label B2B и внутренних дашбордов/админок;
+- дорожную карту v2 как продолжение запуска 1.0.

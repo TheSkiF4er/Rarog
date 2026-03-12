@@ -1,6 +1,6 @@
-# Semantic tokens
+# Семантические токены
 
-Semantic tokens are the stable API between design tokens and components.
+Семантические токены are the stable API between design tokens and components.
 
 ## Naming system
 

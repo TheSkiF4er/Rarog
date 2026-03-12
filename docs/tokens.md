@@ -5,9 +5,9 @@ Rarog v2 token model is split into four layers so themes remain scalable instead
 ## Layers
 
 1. **Raw tokens** — foundational scales such as color ramps, spacing, radius, shadows.
-2. **Semantic tokens** — intent-driven names like `surface`, `textMuted`, `focusRing`.
+2. **Семантические токены** — intent-driven names like `surface`, `textMuted`, `focusRing`.
 3. **Component tokens** — component-level hooks like `button.radius` or `card.shadow`.
-4. **Runtime theme variables** — variables resolved at runtime for brand, tenant, density, shape, and shadow mode.
+4. **Рантайм theme variables** — variables resolved at runtime for brand, tenant, density, shape, and shadow mode.
 
 ## Resolution pipeline
 
@@ -22,7 +22,7 @@ raw -> semantic -> component -> runtime CSS vars -> rendered component
 - component tokens reference semantic/runtime tokens
 - runtime variables are the last override layer and can be scoped per tenant
 
-## Runtime scales
+## Рантайм scales
 
 Rarog v2 standardizes three runtime scales:
 
@@ -32,9 +32,9 @@ Rarog v2 standardizes three runtime scales:
 
 ## Inheritance model
 
-A theme manifest can declare `extends` and only override the semantic/component/runtime pieces it needs. This makes multi-brand and white-label setups predictable.
+A manifest темы can declare `extends` and only override the semantic/component/runtime pieces it needs. This makes multi-brand and white-label setups predictable.
 
-## Where it lives
+## Where it живойs
 
 - `rarog.tokens.json`
 - `packages/themes/presets/*.json`

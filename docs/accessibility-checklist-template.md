@@ -9,7 +9,7 @@
 ## Keyboard
 
 - [ ] All actions reachable by keyboard only
-- [ ] Focus order is logical
+- [ ] Фокус order is logical
 - [ ] Escape / arrow / Enter / Space behavior documented if relevant
 
 ## Semantics and ARIA

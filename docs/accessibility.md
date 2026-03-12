@@ -1,22 +1,22 @@
-# Accessibility baseline
+# Базовый уровень доступности
 
-Rarog now treats accessibility as a release baseline, not as a later enhancement.
+Rarog теперь рассматривает accessibility как релизный baseline, а не как позднее улучшение.
 
-## Baseline rules
+## Базовые правила
 
-- Keyboard-first interactions for all interactive components
-- ARIA patterns only when native semantics are insufficient
-- Shared visible focus ring via `:focus-visible`
-- `prefers-reduced-motion` honored across overlays, loaders and transitions
-- Color and surface tokens chosen for AA-oriented contrast defaults
-- Every component ships with a checklist and visual/a11y regression touchpoint
+- keyboard-first interactions для всех интерактивных компонентов;
+- ARIA-паттерны только там, где нативной семантики недостаточно;
+- общий visible focus ring через `:focus-visible`;
+- `prefers-reduced-motion` соблюдается в overlays, loaders и transitions;
+- color и surface tokens выбраны с ориентиром на AA-контраст по умолчанию;
+- каждый компонент поставляется с чек-листом и точкой визуальной/a11y-регрессии.
 
-## Automated checks
+## Автоматические проверки
 
-- Vitest/jsdom coverage for tabs, dialogs, select semantics and keyboard interactions
-- Playwright visual regression with reduced motion enabled
-- Storybook a11y addon available for manual review
+- покрытие Vitest/jsdom для tabs, dialogs, select semantics и keyboard interactions;
+- Playwright visual regression с включённым reduced motion;
+- addon Storybook для a11y доступен для ручной проверки.
 
-## Manual checklist
+## Ручной чек-лист
 
-Use `docs/accessibility-checklist-template.md` for every component change.
+Используйте `docs/accessibility-checklist-template.md` для каждого изменения компонента.
