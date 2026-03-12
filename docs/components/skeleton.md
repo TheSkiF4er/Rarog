@@ -1,4 +1,4 @@
-# Skeleton
+# Скелетон
 
 Placeholder surfaces for async content loading.
 

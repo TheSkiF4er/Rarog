@@ -1,4 +1,4 @@
-# Input
+# Поле ввода
 
 Single-line text field with validation and help text.
 

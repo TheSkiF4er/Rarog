@@ -1,4 +1,4 @@
-# Select
+# Выбор
 
 Native select plus enhanced `rg-select` variant.
 

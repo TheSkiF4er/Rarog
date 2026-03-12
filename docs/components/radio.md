@@ -1,4 +1,4 @@
-# Radio
+# Радиокнопка
 
 Mutually exclusive choices using shared `name`.
 

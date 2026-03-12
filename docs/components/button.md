@@ -1,4 +1,4 @@
-# Button
+# Кнопка
 
 Primary action with size and intent variants.
 

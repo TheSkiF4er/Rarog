@@ -1,4 +1,4 @@
-# Dropdown
+# Выпадающее меню
 
 Menu anchored to a trigger button.
 

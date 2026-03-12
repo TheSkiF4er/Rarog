@@ -1,4 +1,4 @@
-# Card
+# Карточка
 
 Surface primitive for content grouping and actions.
 

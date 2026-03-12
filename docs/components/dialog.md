@@ -1,6 +1,6 @@
-# Modal / Dialog
+# Модальное окно / Диалог
 
-Focus-trapped overlay surface for interruptive tasks.
+Фокус-trapped overlay surface for interruptive tasks.
 
 ## CSS API
 

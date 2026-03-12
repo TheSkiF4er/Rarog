@@ -1,4 +1,4 @@
-# Alert
+# Алерт
 
 Inline feedback with semantic variants.
 

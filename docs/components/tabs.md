@@ -1,4 +1,4 @@
-# Tabs
+# Вкладки
 
 Keyboard-navigable tablist with horizontal and vertical layouts.
 

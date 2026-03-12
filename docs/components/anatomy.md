@@ -1,8 +1,8 @@
-# Component anatomy
+# Anatomy компонентов
 
-Component anatomy помогает объяснять не только внешний API, но и внутреннюю структуру, важную для theming, accessibility и composition.
+Anatomy компонентов помогает объяснять не только внешний API, но и внутреннюю структуру, важную для theming, accessibility и composition.
 
-## Shared anatomy model
+## Общая модель anatomy
 
 Почти все компоненты Rarog можно описать через четыре слоя:
 
@@ -11,7 +11,7 @@ Component anatomy помогает объяснять не только внеш
 3. **Content / panel** — основное содержимое
 4. **Affordances** — icon slots, badges, helper text, dismiss buttons
 
-## Example: dialog
+## Пример: dialog
 
 - root: `.modal`
 - container: `.modal-dialog`
@@ -20,16 +20,16 @@ Component anatomy помогает объяснять не только внеш
 - body: `.modal-body`
 - footer: `.modal-footer`
 
-## Example: tabs
+## Пример: tabs
 
-- list: tablist container
-- trigger: each tab button with selected state
-- panel: content surface tied through ARIA relationships
+- list: контейнер tablist
+- trigger: кнопка вкладки с selected-state
+- panel: поверхность контента, связанная через ARIA-отношения
 
-## Why it matters
+## Почему это важно
 
-Anatomy pages помогают:
+Anatomy-страницы помогают:
 
-- делать theme overrides без ломки компонента;
-- стабильно оформлять visual tests;
-- держать consistent accessibility checklist между реализациями React, Vue и vanilla.
+- делать theme overrides без поломки компонента;
+- стабильно оформлять визуальные тесты;
+- держать consistent accessibility checklist между React, Vue и vanilla-реализациями.

@@ -1,4 +1,4 @@
-# Tooltip
+# Подсказка
 
 Descriptive overlay for non-critical supporting text.
 

@@ -1,4 +1,4 @@
-# Switch
+# Переключатель
 
 On/off toggle with reduced-motion-safe track animation.
 

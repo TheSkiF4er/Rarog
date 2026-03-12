@@ -1,23 +1,23 @@
-# Accessibility notes
+# Заметки по доступности
 
-Этот раздел агрегирует общие accessibility expectations для компонентного слоя Rarog.
+Этот раздел агрегирует общие expectations по доступности для компонентного слоя Rarog.
 
-## Baseline
+## Базовый уровень
 
-- keyboard-first interactions
-- visible focus rings
-- reduced motion support
-- contrast-safe defaults
-- ARIA roles/patterns for interactive widgets
-- predictable disabled and invalid states
+- keyboard-first interactions;
+- видимые focus rings;
+- поддержка reduced motion;
+- contrast-safe defaults;
+- ARIA roles/patterns для интерактивных widgets;
+- предсказуемые disabled и invalid states.
 
-## By component family
+## По семействам компонентов
 
-- **Forms**: labels, descriptions, error text, required/invalid states
-- **Overlays**: focus trap, escape handling, restore focus, inert background expectations
-- **Navigation**: arrow-key support where pattern requires it
-- **Status UI**: alerts, badges, spinners should not create noisy announcements
+- **Формы**: labels, descriptions, error text, required/invalid states
+- **Оверлеи**: focus trap, escape handling, restore focus, expectations по inert background
+- **Навигация**: поддержка стрелок там, где этого требует паттерн
+- **Status UI**: alerts, badges, spinners не должны создавать шумные анонсы
 
-## Team workflow
+## Командный workflow
 
-Use [accessibility checklist](../accessibility.md) and [template](../accessibility-checklist-template.md) together with component docs and visual fixtures.
+Используйте [чек-лист доступности](../accessibility.md) и [шаблон](../accessibility-checklist-template.md) вместе с документацией по компонентам и визуальными fixtures.

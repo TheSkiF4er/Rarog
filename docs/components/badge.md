@@ -1,4 +1,4 @@
-# Badge
+# Бейдж
 
 Compact status pill for tags and counts.
 

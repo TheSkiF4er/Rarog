@@ -1,4 +1,4 @@
-# Checkbox
+# Чекбокс
 
 Binary selection control with accessible hidden input pattern.
 

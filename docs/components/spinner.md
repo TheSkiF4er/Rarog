@@ -1,4 +1,4 @@
-# Spinner
+# Спиннер
 
 Loading indicator with size hooks and reduced motion fallback.
 

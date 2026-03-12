@@ -1,4 +1,4 @@
-# Accordion
+# Аккордеон
 
 Progressive disclosure built on collapse panels.
 

@@ -1,4 +1,4 @@
-# Textarea
+# Текстовая область
 
 Multi-line field for long-form input.
 
