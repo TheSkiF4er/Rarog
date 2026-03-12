@@ -27,7 +27,7 @@ module.exports = createPlugin({
   version: "1.0.0",
   description: "Example first-class plugin.",
   engine: {
-    rarog: ">=3.5.0 <4.0.0"
+    rarog: ">=1.0.0 <2.0.0"
   },
   capabilities: {
     utilities: true,
@@ -118,7 +118,7 @@ const { createPluginTestHarness } = require("@rarog/plugin-sdk");
 const plugin = require("./index.cjs");
 
 const harness = createPluginTestHarness({
-  rarogVersion: "3.5.0",
+  rarogVersion: "1.0.0",
   rootDir: process.cwd()
 });
 
