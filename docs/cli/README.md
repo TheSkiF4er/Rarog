@@ -9,6 +9,12 @@ rarog build
 rarog build --debug
 rarog analyze
 rarog doctor
+rarog token inspect rarog.tokens.json --path=tokens.color.semantic
+rarog token diff rarog.tokens.json snapshots/rarog.tokens.prev.json
+rarog theme diff packages/themes/presets/enterprise-plus.json themes/acme.json
+rarog component scaffold PricingCard --dir src/components
+rarog audit a11y src
+rarog audit bundle dist
 rarog inspect classes src/index.html
 rarog migrate bootstrap --input src/index.html --output src/index.migrated.html
 rarog migrate tailwind --input src/App.tsx --output src/App.rg.tsx
@@ -40,3 +46,15 @@ Use the CLI when you want to:
 - `rarog inspect classes` — показывает mix из Rarog / Bootstrap / Tailwind классов
 - `rarog migrate bootstrap` — first-pass codemod для Bootstrap-разметки
 - `rarog migrate tailwind` — first-pass codemod для Tailwind-разметки
+
+
+## Pro tools
+
+- `rarog token inspect` — показывает leaf token values по файлу или dot-path
+- `rarog token diff` — сравнивает два token JSON snapshot
+- `rarog theme diff` — сравнивает semantic/runtime theme manifests
+- `rarog component scaffold` — генерирует starter component files
+- `rarog audit a11y` — лёгкий static accessibility audit
+- `rarog audit bundle` — проверяет размеры CSS/JS output
+
+Подробнее: [CLI Pro tools](./pro-tools.md)
