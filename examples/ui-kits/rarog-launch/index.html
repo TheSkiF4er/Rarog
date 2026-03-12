@@ -1,1 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rarog 1.0</title>
+  <style>
+    :root{--bg:#07111f;--panel:#0f1b31;--soft:#152542;--line:#213353;--text:#eef4ff;--muted:#9db0d3;--brand:#60a5fa;--brand2:#8b5cf6;--brand3:#22c55e}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top,#13284d 0%,#09111f 42%,#07111f 100%);color:var(--text)} a{text-decoration:none;color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px}.nav,.card,.compare,.feature{background:rgba(15,27,49,.8);border:1px solid var(--line);border-radius:24px}.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;position:sticky;top:16px;backdrop-filter:blur(16px);z-index:10}.logo{font-weight:800;letter-spacing:.3px}.actions,.hero-actions,.card-actions{display:flex;gap:10px;flex-wrap:wrap}.btn{padding:11px 15px;border-radius:14px;border:1px solid var(--line);background:#152542;color:var(--text)}.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));border:none}.btn.success{background:linear-gradient(135deg,#0f766e,var(--brand3));border:none}
+    .hero{display:grid;grid-template-columns:1.15fr .95fr;gap:18px;padding:34px 0 18px}.eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--brand);font-size:12px}.hero h1{font-size:64px;line-height:1.02;margin:16px 0 14px}.lead{font-size:19px;line-height:1.65;color:var(--muted);max-width:760px}.hero .card{padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.28)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.stat{padding:16px;border-radius:18px;background:#12203a;border:1px solid var(--line)}.stat strong{display:block;font-size:28px;margin-top:6px}
+    .section{padding:18px 0}.section-title{font-size:34px;margin:0 0 12px}.muted{color:var(--muted)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature,.compare,.card{padding:22px}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--soft);font-size:12px;color:var(--brand);margin-bottom:12px}
+    .compare-table{display:grid;gap:10px}.compare-row{display:grid;grid-template-columns:1.2fr repeat(3,.9fr);gap:12px;padding:12px 0;border-top:1px solid var(--line)}.yes{color:#86efac}.mid{color:#fcd34d}.no{color:#fca5a5}
+    .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.gallery .card{min-height:220px}.footer{padding-top:28px;color:var(--muted)}
+    @media (max-width:980px){.hero,.grid3,.gallery,.stats,.compare-row{grid-template-columns:1fr}.hero h1{font-size:42px}.nav{position:static}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <div class="logo">Rarog 1.0</div>
+      <div class="actions">
+        <a class="btn" href="../../gallery/index.html">Examples gallery</a>
+        <a class="btn" href="../../../docs/launch/README.md">Launch docs</a>
+        <a class="btn primary" href="../white-label-demo/index.html">Theme builder</a>
+      </div>
+    </header>
 
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Positioning launch</span>
+        <h1>The design system platform for multi-theme product teams</h1>
+        <p class="lead">Rarog помогает запускать branded, accessible, dashboard-heavy приложения быстрее — без ручной сборки своей design system platform layer с нуля.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="../../gallery/index.html">Explore examples</a>
+          <a class="btn" href="../../../docs/comparisons/README.md">Compare stacks</a>
+          <a class="btn success" href="../../../docs/launch/production-recommendations.md">Production guide</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="muted">Focus</span><strong>3 niches</strong></div>
+          <div class="stat"><span class="muted">Operational layer</span><strong>CLI + quality gates</strong></div>
+          <div class="stat"><span class="muted">Theme story</span><strong>Builder + diff + export</strong></div>
+        </div>
+      </div>
+      <aside class="card">
+        <span class="tag">Why Rarog</span>
+        <h2>Built for teams that cannot afford UI drift</h2>
+        <p class="muted">Когда у продукта несколько брендов, dashboard-heavy интерфейсы и реальные release constraints, нужен не просто CSS toolkit, а целостная платформа: tokens, themes, components, tooling, benchmarks и quality gates.</p>
+        <div class="card-actions">
+          <a class="btn" href="../../../docs/launch/why-rarog.md">Read narrative</a>
+          <a class="btn" href="../../../docs/launch/roadmap-v2.md">Roadmap v2</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Focused dominance in three niches</h2>
+      <div class="grid3">
+        <article class="feature"><span class="tag">Multi-theme SaaS</span><h3>One product shell, many tenants</h3><p class="muted">Shared app shell, token-driven theme switching, pricing-to-dashboard continuity and release-safe theme manifests.</p><a class="btn primary" href="../../showcase/multi-theme-saas/index.html">Open showcase</a></article>
+        <article class="feature"><span class="tag">White-label B2B</span><h3>Brand onboarding without product forks</h3><p class="muted">Theme compare, import/export, procurement-safe previews and customer-specific brand packs.</p><a class="btn primary" href="../../showcase/white-label-b2b/index.html">Open showcase</a></article>
+        <article class="feature"><span class="tag">Internal dashboards/admins</span><h3>Dense interfaces with discipline</h3><p class="muted">Forms, tables, approvals, alerts, audits and admin ergonomics without losing consistency.</p><a class="btn primary" href="../../showcase/internal-admin/index.html">Open showcase</a></article>
+      </div>
+    </section>
+
+    <section class="section compare">
+      <span class="tag">Comparison lens</span>
+      <h2 class="section-title">Why teams choose Rarog over stitching tools together</h2>
+      <div class="compare-table">
+        <div class="compare-row"><strong>Capability</strong><strong>Rarog</strong><strong>Low-level utility stack</strong><strong>Component-only stack</strong></div>
+        <div class="compare-row"><span>Multi-theme product delivery</span><span class="yes">Strong</span><span class="mid">Needs assembly</span><span class="mid">Usually React-only</span></div>
+        <div class="compare-row"><span>White-label workflows</span><span class="yes">Builder + export + compare</span><span class="no">Custom build</span><span class="mid">Partial</span></div>
+        <div class="compare-row"><span>Dashboard/admin fit</span><span class="yes">First-class</span><span class="mid">Needs kit layer</span><span class="mid">Depends on coverage</span></div>
+        <div class="compare-row"><span>Operational tooling</span><span class="yes">Doctor, audit, diff, quality gates</span><span class="no">Separate tooling</span><span class="mid">Framework-centric</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Starter gallery and showcase apps</h2>
+      <div class="gallery">
+        <article class="card"><span class="tag">Starter</span><h3>Framework starters</h3><p class="muted">Vanilla, React, Next, Vue and Nuxt entry points.</p><a class="btn" href="../../starters/README.md">Open list</a></article>
+        <article class="card"><span class="tag">Showcase</span><h3>Production-shaped apps</h3><p class="muted">SaaS, white-label and internal admin examples for positioning and adoption.</p><a class="btn" href="../../gallery/index.html">Open gallery</a></article>
+        <article class="card"><span class="tag">Migration</span><h3>Move from existing stack</h3><p class="muted">Bootstrap, Tailwind, Chakra UI and MUI adoption guides.</p><a class="btn" href="../../../docs/migration/README.md">Open guides</a></article>
+        <article class="card"><span class="tag">Ops</span><h3>Ship with discipline</h3><p class="muted">Benchmarks, release quality gates and export-surface validation.</p><a class="btn" href="../../../docs/benchmarks/README.md">Open benchmarks</a></article>
+      </div>
+    </section>
+
+    <footer class="footer">Rarog 1.0 positioning: polished website, comparison pages, starter gallery, migration paths, showcase apps, production recommendations and roadmap v2.</footer>
+  </div>
+</body>
+</html>
