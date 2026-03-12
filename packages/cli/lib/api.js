@@ -644,37 +644,88 @@ function runPlugins(effectiveConfig) {
     return { utilitiesCssExtra, componentsCssExtra };
   }
 
-  const ctx = {
-    config: effectiveConfig
+  let sdk = null;
+  try {
+    sdk = require(pathInPackage("packages/plugin-sdk/index.cjs"));
+  } catch (err) {
+    console.warn("[rarog] Plugin SDK недоступен:", err.message);
+  }
+
+  const runtime = {
+    rarogVersion: readPackageJson("package.json").version,
+    rootDir: PROJECT_ROOT
   };
 
-  for (const plugin of plugins) {
-    let fn = plugin;
+  const ctx = {
+    config: effectiveConfig,
+    meta: {
+      mode: effectiveConfig.mode || "full",
+      rootDir: PROJECT_ROOT,
+      env: process.env.NODE_ENV || "production"
+    },
+    helpers: {
+      warn(message) {
+        console.warn(`[rarog/plugin] ${message}`);
+      }
+    }
+  };
 
-    // Строка → путь до модуля
-    if (typeof plugin === "string") {
-      const resolved = path.isAbsolute(plugin)
-        ? plugin
-        : pathInProject(plugin);
+  for (const pluginEntry of plugins) {
+    let loaded = pluginEntry;
+    let manifest = null;
+
+    if (typeof pluginEntry === "string") {
+      const resolved = path.isAbsolute(pluginEntry)
+        ? pluginEntry
+        : pathInProject(pluginEntry);
 
       try {
         const mod = require(resolved);
-        fn = mod.default || mod.plugin || mod;
+        loaded = mod.default || mod.plugin || mod;
       } catch (err) {
-        console.warn("[rarog] Не удалось загрузить плагин:", plugin, "-", err.message);
+        console.warn("[rarog] Не удалось загрузить плагин:", pluginEntry, "-", err.message);
         continue;
       }
     }
 
-    if (typeof fn !== "function") continue;
-
     try {
-      const result = fn(ctx) || {};
+      let result = {};
+
+      if (loaded && loaded.__rarogPlugin && typeof loaded.setup === "function") {
+        manifest = loaded.manifest || null;
+        if (sdk && typeof sdk.validatePluginCompatibility === "function") {
+          const compatibility = sdk.validatePluginCompatibility(loaded, runtime);
+          if (!compatibility.ok) {
+            console.warn("[rarog] Плагин пропущен из-за несовместимости:", compatibility.errors.join(" | "));
+            continue;
+          }
+          compatibility.warnings.forEach((warning) => console.warn("[rarog] Plugin warning:", warning));
+        }
+        result = loaded.setup(ctx) || {};
+      } else if (typeof loaded === "function") {
+        result = loaded({ config: effectiveConfig }) || {};
+      } else {
+        console.warn("[rarog] Пропущен некорректный plugin entry:", typeof loaded);
+        continue;
+      }
+
+      if (manifest && manifest.name) {
+        console.log(`[rarog] Plugin loaded: ${manifest.name}@${manifest.version}`);
+      }
+
       if (result.utilitiesCss) {
         utilitiesCssExtra += "\n" + String(result.utilitiesCss) + "\n";
       }
       if (result.componentsCss) {
         componentsCssExtra += "\n" + String(result.componentsCss) + "\n";
+      }
+      if (Array.isArray(result.diagnostics)) {
+        result.diagnostics.forEach((item) => {
+          if (!item || !item.message) return;
+          const level = item.level || "info";
+          const label = manifest && manifest.name ? manifest.name : "legacy-plugin";
+          console.log(`[rarog] plugin:${label} ${level}: ${item.message}`);
+        });
       }
     } catch (err) {
       console.warn("[rarog] Ошибка в плагине:", err.message);
@@ -683,7 +734,6 @@ function runPlugins(effectiveConfig) {
 
   return { utilitiesCssExtra, componentsCssExtra };
 }
-
 
 function resolveCssSources() {
   const coreCssCandidates = [
@@ -1130,6 +1180,7 @@ function printHelp() {
   console.log("  rarog build [--debug]    Сгенерировать токены и optional JIT CSS из rarog.config.js + rarog.build.json");
   console.log("  rarog init              Создать rarog.config.js + rarog.build.json + src/index.html");
   console.log("  rarog docs              Запустить dev-документацию из пакета Rarog");
+  console.log("  create-rarog-plugin     Сгенерировать starter template для нового плагина");
   console.log("  rarog analyze           Показать summary по content scanning и неизвестным utility-классам");
   console.log("  rarog doctor            Проверить JIT/build surface и типовые проблемы");
   console.log("  rarog validate          Проверить theme-config и build-manifest");
