@@ -38,7 +38,7 @@ addCheck(checks, "package.json", () => rootPkg.scripts?.["verify:artifacts"] ===
 addCheck(checks, "package.json", () => Array.isArray(rootPkg.files) && rootPkg.files.includes("packages/themes/dist"), "root files allow-list includes built theme artifacts");
 addCheck(checks, "package.json", () => rootPkg.publishConfig?.access === "public", "root publishConfig.access is public");
 addCheck(checks, "package-lock.json", () => hasFile("package-lock.json"), "root package-lock.json exists for npm ci reproducibility");
-addCheck(checks, "docs/.vitepress/config.ts", () => hasFile("docs/.vitepress/config.ts"), "vitepress config exists");
+addCheck(checks, ".gitbook.yaml", () => hasFile(".gitbook.yaml"), "GitBook config exists");
 addCheck(checks, "tools/check-package-artifacts.mjs", () => hasFile("tools/check-package-artifacts.mjs"), "artifact verification tool exists");
 addCheck(checks, "tests/cli-temp-project-smoke.mjs", () => hasFile("tests/cli-temp-project-smoke.mjs"), "temp-project smoke test exists");
 addCheck(checks, "rarog.build.json", () => hasFile("rarog.build.json"), "canonical build manifest exists at repo root");
