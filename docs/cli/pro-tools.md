@@ -1,8 +1,8 @@
 # CLI Pro tools
 
-Rarog CLI Pro adds diagnostics, token inspection and delivery tooling around the core build flow.
+Rarog CLI Pro добавляет диагностику, инспекцию токенов и инструменты поставки вокруг базового build-flow.
 
-## Commands
+## Команды
 
 ```bash
 rarog doctor
@@ -14,9 +14,9 @@ rarog audit a11y src
 rarog audit bundle dist
 ```
 
-## Real workflows
+## Реальные workflow-сценарии
 
-### 1. Check a white-label release candidate
+### 1. Проверка white-label релиз-кандидата
 
 ```bash
 rarog doctor
@@ -24,34 +24,34 @@ rarog audit bundle dist
 rarog audit a11y src
 ```
 
-Use this before shipping a tenant-specific bundle to ensure config, outputs and obvious static accessibility issues are visible.
+Запускайте это перед отправкой tenant-specific bundle, чтобы увидеть конфиг, артефакты сборки и очевидные статические проблемы доступности.
 
-### 2. Review a token change request
+### 2. Ревью изменения токенов
 
 ```bash
 rarog token inspect rarog.tokens.json --path=tokens.color.semantic
 rarog token diff rarog.tokens.json snapshots/rarog.tokens.prev.json
 ```
 
-This lets design-system maintainers inspect the exact semantic aliases that changed instead of reading a full JSON diff.
+Это помогает design-system maintainers увидеть, какие именно semantic aliases поменялись, вместо чтения полного JSON diff.
 
-### 3. Compare a new theme against baseline
+### 3. Сравнение новой темы с baseline
 
 ```bash
 rarog theme diff packages/themes/presets/enterprise-plus.json themes/acme-finance.json
 ```
 
-Use this in code review to confirm that only intended semantic and runtime tokens changed.
+Используйте это в code review, чтобы подтвердить, что изменились только ожидаемые semantic и runtime токены.
 
-### 4. Start a product component quickly
+### 4. Быстрый старт продуктового компонента
 
 ```bash
 rarog component scaffold BillingHero --dir src/components/marketing
 ```
 
-The scaffold generates a React component, styles, a test stub and a Storybook story.
+Scaffold создаёт React-компонент, стили, test stub и story для Storybook.
 
-## Notes
+## Примечания
 
-- `rarog audit a11y` is static and intentionally lightweight. It catches missing `alt`, weak button labels and likely unlabeled inputs.
-- `rarog audit bundle` is size-oriented and helps spot unexpectedly large CSS/JS artifacts.
+- `rarog audit a11y` статический и намеренно лёгкий. Он ловит пропущенные `alt`, слабые подписи кнопок и вероятно неподписанные поля ввода.
+- `rarog audit bundle` ориентирован на размер и помогает замечать неожиданно крупные CSS/JS-артефакты.
