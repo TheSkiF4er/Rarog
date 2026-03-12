@@ -1,8 +1,8 @@
-# Installation
+# Установка
 
 Сводка по установке, базовой настройке и стартовым сценариям для разных стеков.
 
-## Included legacy sources
+## Включено legacy sources
 
 - `getting-started.md`
 - `guide-react.md`
@@ -12,7 +12,7 @@
 
 ## Imported from `getting-started.md`
 
-## Getting Started
+## Быстрый старт
 
 Этот раздел описывает **канонический install/build flow** для текущего состояния репозитория.
 
@@ -68,7 +68,7 @@ module.exports = {
 };
 ```
 
-#### Build manifest
+#### Сборка manifest
 
 Канонический build-manifest:
 - `rarog.build.json`
@@ -133,7 +133,7 @@ npm run verify:artifacts
 - `npm run verify:artifacts` — запускается **после полной сборки**;
 - `npm run test:ci` — включает temp-project smoke test (`init → validate → build → output exists`).
 
-### Root package surface
+### Поверхность root-пакета
 
 Root `rarog` публикует CSS surface через:
 - `style`
@@ -189,9 +189,9 @@ npm install rarog --save-dev
 В корне проекта:
 
 ```ts
-import type { RarogConfig } from "rarog/rarog.config.types";
+import type { RarogКонфигурация } from "rarog/rarog.config.types";
 
-const config: RarogConfig = {
+const config: RarogКонфигурация = {
   mode: "jit",
   content: [
     "./index.html",
@@ -210,11 +210,11 @@ export default config;
 В `vite.config.ts`:
 
 ```ts
-import { defineConfig } from 'vite'
+import { defineКонфигурация } from 'vite'
 import react from '@vitejs/plugin-react'
 import { rarogPlugin } from 'rarog/tools/vite-plugin-rarog'
 
-export default defineConfig({
+export default defineКонфигурация({
   plugins: [
     react(),
     rarogPlugin()
@@ -364,9 +364,9 @@ npm install rarog --save-dev
 ### 2. rarog.config.*
 
 ```ts
-import type { RarogConfig } from "rarog/rarog.config.types";
+import type { RarogКонфигурация } from "rarog/rarog.config.types";
 
-const config: RarogConfig = {
+const config: RarogКонфигурация = {
   mode: "jit",
   content: [
     "./index.html",
@@ -383,11 +383,11 @@ export default config;
 В `vite.config.ts`:
 
 ```ts
-import { defineConfig } from 'vite'
+import { defineКонфигурация } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { rarogPlugin } from 'rarog/tools/vite-plugin-rarog'
 
-export default defineConfig({
+export default defineКонфигурация({
   plugins: [
     vue(),
     rarogPlugin()
@@ -443,7 +443,7 @@ npm install rarog @rarog/vue
 
 ```ts
 // nuxt.config.ts
-export default defineNuxtConfig({
+export default defineNuxtКонфигурация({
   css: [
     "rarog/dist/rarog-core.min.css",
     "rarog/dist/rarog-utilities.min.css",
@@ -507,9 +507,9 @@ npm install rarog --save-dev
 В корне Next‑проекта:
 
 ```ts
-import type { RarogConfig } from "rarog/rarog.config.types";
+import type { RarogКонфигурация } from "rarog/rarog.config.types";
 
-const config: RarogConfig = {
+const config: RarogКонфигурация = {
   mode: "jit",
   content: [
     "./app/**/*.{ts,tsx,js,jsx}",
@@ -618,7 +618,7 @@ npm install rarog --save-dev
 Создай `rarog.config.js` в корне Laravel‑проекта (не в монорепе):
 
 ```js
-/** @type {import('rarog/rarog.config.types').RarogConfig} */
+/** @type {import('rarog/rarog.config.types').RarogКонфигурация} */
 module.exports = {
   mode: "jit",
   content: [
