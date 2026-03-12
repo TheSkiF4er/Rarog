@@ -1,35 +1,35 @@
-# Benchmark program
+# Программа бенчмарков
 
-Rarog больше не должен просто *казаться* быстрым. Этот раздел фиксирует единый benchmark program и связывает его с optimization backlog и release gates.
+Rarog больше не должен просто *казаться* быстрым. Этот раздел фиксирует единую программу бенчмарков и связывает её с бэклогом оптимизаций и release gates.
 
-## Metrics
+## Метрики
 
-- **Build speed** — полный CSS/JS build path
-- **JIT speed** — скорость локальной генерации проекта
-- **Output size** — итоговый размер publishable CSS output
-- **Runtime cost** — стоимость runtime theme diff / orchestration
-- **Theme switch cost** — переключение white-label темы
-- **Component render overhead** — накладные расходы на рендер компонентных шаблонов
+- **Скорость сборки** — полный CSS/JS build path
+- **Скорость JIT** — скорость локальной генерации проекта
+- **Размер output** — итоговый размер publishable CSS output
+- **Стоимость рантайма** — цена runtime orchestration
+- **Стоимость переключения темы** — переключение white-label темы
+- **Накладные расходы рендера компонентов** — влияние component render overhead
 
-## Compared stacks
+## Сравниваемые стеки
 
 - Bootstrap
 - Tailwind
 - UnoCSS
-- shadcn/ui stack
+- shadcn/ui
 - Chakra UI
 - MUI
 
-## Public benchmark page
+## Публичная страница бенчмарков
 
-Benchmark page строится из `benchmarks/results/latest.json` и публикуется в docs через `npm run bench:publish`.
+Страница бенчмарков строится из `benchmarks/results/latest.json` и публикуется в docs через `npm run bench:publish`.
 
-- [Latest benchmark snapshot](latest.md)
-- [Optimization backlog](optimization-backlog.md)
-- [Reproducible benchmark workspace](../../benchmarks/README.md)
+- [Последний snapshot бенчмарков](latest.md)
+- [Бэклог оптимизаций](optimization-backlog.md)
+- [Воспроизводимое benchmark-workspace](../../benchmarks/README.md)
 
-## Rules
+## Правила
 
-1. Любая optimization claim должна ссылаться на metric category.
-2. Любой regression выше agreed threshold должен попадать в backlog.
-3. Release без benchmark snapshot для затронутого pipeline не считается завершённым.
+1. Любое утверждение об оптимизации должно ссылаться на категорию метрики.
+2. Любая регрессия выше согласованного порога должна попадать в backlog.
+3. Релиз без benchmark snapshot для затронутого pipeline не считается завершённым.

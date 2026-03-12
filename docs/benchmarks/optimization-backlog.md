@@ -1,19 +1,19 @@
-# Optimization backlog
+# Бэклог оптимизаций
 
 ## P0
 
-- Reduce core build time by caching token normalization between CSS and JS build steps.
-- Deduplicate JIT selector escape work in repeated content scans.
-- Introduce benchmark threshold alerts in CI for build and JIT regressions.
+- Снизить время core-сборки за счёт кеширования нормализации токенов между CSS и JS build-steps.
+- Дедуплицировать escape-обработку JIT-селекторов при повторных content-scan.
+- Ввести benchmark threshold alerts в CI для регрессий сборки и JIT.
 
 ## P1
 
-- Add pinned competitor checkouts for Tailwind and UnoCSS fixture parity.
-- Add browser-based runtime benchmark for theme switch and initial hydration cost.
-- Split component CSS output into optional bundles for dashboard and marketing scenarios.
+- Добавить pinned checkouts конкурентов для parity-сценариев Tailwind и UnoCSS.
+- Добавить browser-based runtime benchmark для стоимости переключения темы и initial hydration.
+- Разделить component CSS output на опциональные бандлы для dashboard и marketing сценариев.
 
 ## P2
 
-- Add Storybook-driven render overhead capture per component family.
-- Publish historical trend chart for median results across releases.
-- Track white-label theme import/export cost on large token sets.
+- Добавить Storybook-driven захват render overhead по семействам компонентов.
+- Публиковать график исторических трендов по median-результатам между релизами.
+- Отслеживать стоимость import/export тем для больших наборов токенов.

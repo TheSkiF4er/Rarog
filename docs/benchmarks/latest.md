@@ -1,6 +1,6 @@
-# Benchmark results
+# Результаты бенчмарков
 
-Generated: 2026-03-12T04:33:49.911Z
+Сгенерировано: 2026-03-12T04:33:49.911Z
 
 | framework | build ms | jit ms | output KB | runtime ms | theme switch ms | render overhead ms |
 | rarog | 420 | 95 | 313.09 | 4.69 | 0.102 | 0.032 |
@@ -11,8 +11,8 @@ Generated: 2026-03-12T04:33:49.911Z
 | chakra-ui | 1490 | 1490 | 164 | 3.4 | 2.3 | 7.8 |
 | mui | 1710 | 1710 | 193 | 3.9 | 2.6 | 8.4 |
 
-## Notes
+## Примечания
 
-- Rarog metrics are measured from this repo with the reproducible harness in `benchmarks/`.
-- Non-Rarog frameworks are declared baselines from `benchmarks/scenarios/framework-baselines.json` until their checkout commands are wired into CI.
-- Update baselines only together with scenario notes and optimization backlog.
+- Метрики Rarog измеряются в этом репозитории через воспроизводимый harness из `benchmarks/`.
+- Для не-Rarog стеков пока используются зафиксированные baseline-значения из `benchmarks/scenarios/framework-baselines.json`, пока checkout-команды не подключены к CI.
+- Обновляйте baseline-значения только вместе с примечаниями к сценариям и бэклогом оптимизаций.
