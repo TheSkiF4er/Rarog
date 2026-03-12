@@ -28,3 +28,8 @@ rarog theme validate packages/themes/presets/enterprise-plus.json
 ## Runtime model
 
 A tenant wrapper can opt into a theme via `data-rg-theme="..."`. Theme CSS only overrides semantic/runtime variables, so utilities and components continue to work unchanged.
+
+
+## Theme builder
+
+A browser-based theme builder is available in `examples/ui-kits/white-label-demo/index.html`. It supports token editing, compare mode, import/export and accessibility preview.
