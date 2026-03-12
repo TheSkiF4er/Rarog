@@ -1,8 +1,8 @@
-# Contributor Guide
+# Руководство для контрибьюторов
 
 Материалы для контрибьюторов: локальная разработка, playground/storybook, плагины и поддержка документации.
 
-## Included legacy sources
+## Включено legacy sources
 
 - `design-system.md`
 - `playground.md`
@@ -19,7 +19,7 @@
 
 ### Слои дизайн‑системы
 
-1. **Tokens**  
+1. **Токены**  
    Базовый уровень — `rarog.tokens.json` и CSS‑переменные:
 
    - цветовые шкалы (`primary`, `secondary`, `success`, `danger`, `info`);
@@ -27,7 +27,7 @@
    - semantic‑токены (`bg`, `surface`, `border`, `text`, `accentSoft`, `focusRing`);
    - `tokens.themes.*` для `default`, `dark`, `contrast`, `enterprise`, `creative`.
 
-2. **Themes**  
+2. **Темы**  
    Набор готовых тем в пакете `packages/themes`:
 
    - `rarog-theme-default.css`
@@ -38,21 +38,21 @@
 
    Темы переопределяют только семантические переменные и не ломают утилити‑слой.
 
-3. **Components & JS**  
+3. **Компоненты & JS**  
    Компонентный слой (CSS) и JS‑ядро используют только семантические токены,
    поэтому переключение темы не требует переписывать компоненты.
 
 4. **Figma Design Kit**  
    В каталоге `design/` находятся артефакты для Figma:
 
-   - `design/figma.tokens.json` — экспорт токенов в формате Tokens Studio;
+   - `design/figma.tokens.json` — экспорт токенов в формате Токены Studio;
    - `design/figma-kit/` — описание состава Figma Design Kit и рекомендованного flow.
 
 ### Design → Dev handshake
 
 Рекомендуемый цикл работы команды «дизайнеры + разработчики»:
 
-1. **Дизайнеры** настраивают токены и темы в Figma через Tokens Studio,
+1. **Дизайнеры** настраивают токены и темы в Figma через Токены Studio,
    основываясь на `design/figma.tokens.json`.
 2. **Разработчики** описывают те же значения в `rarog.config.*` (или правят существующие).
 3. Запускается `npx rarog build`, который обновляет CSS‑переменные и `rarog.tokens.json`.
@@ -107,9 +107,9 @@ npm run storybook
 
 ### Что уже покрыто
 
-- Foundations / Button
+- Foundations / Кнопка
 - Overlays / Modal
-- Overlays / Dropdown
+- Overlays / Выпадающее меню
 - Data / DataTable
 
 Storybook собран на `@storybook/html-vite`, поэтому истории работают прямо с исходными CSS entrypoints и `packages/js/src/rarog.esm.js`.
@@ -168,9 +168,9 @@ node tools/generate-class-dictionary.mjs
 В `rarog.config.ts/js` есть поле `plugins`:
 
 ```ts
-import type { RarogConfig, RarogPlugin } from './rarog.config.types';
+import type { RarogКонфигурация, RarogPlugin } from './rarog.config.types';
 
-const config: RarogConfig = {
+const config: RarogКонфигурация = {
   // ...
   plugins: [
     "./packages/plugin-forms/index.cjs",
@@ -190,7 +190,7 @@ export default config;
 
 ```ts
 export interface RarogPluginContext {
-  config: RarogConfig;
+  config: RarogКонфигурация;
 }
 
 export interface RarogPluginResult {
@@ -206,7 +206,7 @@ export type RarogPlugin =
 Плагины вызываются в JIT-режиме (`mode: "jit"`):
 
 - регистрируются в `rarog.config.*`;
-- CLI вызывает их в `runPlugins(effectiveConfig)`;
+- CLI вызывает их в `runPlugins(effectiveКонфигурация)`;
 - возвращённый CSS добавляется в итоговый `dist/rarog.jit.css`:
 
   - `utilitiesCss` → секция `/* Rarog plugin utilities */`;
@@ -236,7 +236,7 @@ export type RarogPlugin =
 
 ```ts
 // rarog.config.ts
-const config: RarogConfig = {
+const config: RarogКонфигурация = {
   // ...
   plugins: [
     "./packages/plugin-forms/index.cjs"
@@ -279,13 +279,13 @@ plugins: [
 ]
 ```
 
-### Design Tokens → Figma
+### Design Токены → Figma
 
 Для интеграции с дизайн-инструментами используется файл:
 
 - `design/figma.tokens.json`
 
-Формат совместим с Tokens Studio / Design Tokens tooling:
+Формат совместим с Токены Studio / Design Токены tooling:
 
 - секции: `color`, `spacing`, `radius`, `shadow`;
 - значения — объект вида:
@@ -297,9 +297,9 @@ plugins: [
   }
   ```
 
-#### Подключение в Figma (Tokens Studio)
+#### Подключение в Figma (Токены Studio)
 
-1. Установи плагин Tokens Studio в Figma.
+1. Установи плагин Токены Studio в Figma.
 2. В настройках проекта выбери импорт из локального/удалённого JSON.
 3. Укажи путь до `design/figma.tokens.json` (через Git-провайдер или ручной импорт).
 4. Сопоставь группы:
