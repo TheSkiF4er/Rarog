@@ -21,6 +21,15 @@ const {
 } = require("./config");
 const jit = require("./jit");
 const { spawnSync } = require("child_process");
+const {
+  cmdTokenInspect,
+  cmdTokenDiff,
+  cmdThemeDiff,
+  cmdComponentScaffold,
+  cmdAuditA11y,
+  cmdAuditBundle,
+  cmdDoctorPro
+} = require("./pro-tools");
 
 function generateColorCss(theme) {
   const c = theme.colors || {};
@@ -923,6 +932,10 @@ function cmdAnalyze() {
 }
 
 function cmdDoctor() {
+  return cmdDoctorPro();
+}
+
+function cmdDoctorLegacy() {
   const surface = getConfigSurfaceDiagnostics();
   const effective = getEffectiveConfig();
   const contentPatterns = effective.content && effective.content.length
@@ -1182,8 +1195,14 @@ function printHelp() {
   console.log("  rarog docs              Запустить dev-документацию из пакета Rarog");
   console.log("  create-rarog-plugin     Сгенерировать starter template для нового плагина");
   console.log("  rarog analyze           Показать summary по content scanning и неизвестным utility-классам");
-  console.log("  rarog doctor            Проверить JIT/build surface и типовые проблемы");
+  console.log("  rarog doctor            Проверить config, outputs, плагины и token surface");
   console.log("  rarog validate          Проверить theme-config и build-manifest");
+  console.log("  rarog token inspect     Inspect token snapshots / paths");
+  console.log("  rarog token diff        Compare two token JSON files");
+  console.log("  rarog theme diff        Compare two theme manifests");
+  console.log("  rarog component scaffold  Generate component starter files");
+  console.log("  rarog audit a11y        Static accessibility checks");
+  console.log("  rarog audit bundle      Bundle size audit for CSS/JS outputs");
   console.log("");
 }
 
@@ -1216,6 +1235,46 @@ function main() {
         break;
       }
       console.error(`[rarog] Неизвестная inspect-команда: ${args[0] || '(empty)'}`);
+      process.exit(1);
+      break;
+    case "token":
+      if (args[0] === 'inspect') {
+        cmdTokenInspect(args.slice(1));
+        break;
+      }
+      if (args[0] === 'diff') {
+        cmdTokenDiff(args.slice(1));
+        break;
+      }
+      console.error(`[rarog] Неизвестная token-команда: ${args[0] || '(empty)'}`);
+      process.exit(1);
+      break;
+    case "theme":
+      if (args[0] === 'diff') {
+        cmdThemeDiff(args.slice(1));
+        break;
+      }
+      console.error(`[rarog] Неизвестная theme-команда: ${args[0] || '(empty)'}`);
+      process.exit(1);
+      break;
+    case "component":
+      if (args[0] === 'scaffold') {
+        cmdComponentScaffold(args.slice(1));
+        break;
+      }
+      console.error(`[rarog] Неизвестная component-команда: ${args[0] || '(empty)'}`);
+      process.exit(1);
+      break;
+    case "audit":
+      if (args[0] === 'a11y') {
+        cmdAuditA11y(args.slice(1));
+        break;
+      }
+      if (args[0] === 'bundle') {
+        cmdAuditBundle(args.slice(1));
+        break;
+      }
+      console.error(`[rarog] Неизвестная audit-команда: ${args[0] || '(empty)'}`);
       process.exit(1);
       break;
     case "migrate":
@@ -1259,6 +1318,13 @@ module.exports = {
   cmdValidate,
   cmdAnalyze,
   cmdDoctor,
+  cmdDoctorLegacy,
+  cmdTokenInspect,
+  cmdTokenDiff,
+  cmdThemeDiff,
+  cmdComponentScaffold,
+  cmdAuditA11y,
+  cmdAuditBundle,
   printHelp,
   main
 };
