@@ -28,8 +28,8 @@ jobs:
       - name: Build all packages
         run: npm run build:all
 
-      - name: Run release test gate
-        run: npm run test:release
+      - name: Run release quality gates
+        run: npm run quality:gates && npm run test:release
 
       - name: Verify publishable package artifacts
         run: npm run verify:artifacts

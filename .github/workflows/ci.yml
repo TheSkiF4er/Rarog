@@ -50,3 +50,6 @@ jobs:
 
       - name: Run fast CI test gate
         run: npm run test:ci
+
+      - name: Run release quality gates subset
+        run: npm run test:starters-install && npm run test:package-matrix && npm run test:examples-ci && npm run docs:links
