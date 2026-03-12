@@ -1,6 +1,6 @@
 # Multi-theme SaaS showcase
 
-Фокус: one-codebase SaaS с tenant themes, upsell surfaces, billing widgets и app shell continuity.
+Фокус: one-codebase SaaS с tenant themes, upsell surfaces, billing widgets и оболочка приложения continuity.
 
 Использование:
 
