@@ -5,7 +5,7 @@ Chakra UI хороша как React-first component system с удобным the
 Rarog выигрывает, когда продукту нужны:
 
 - framework-agnostic delivery surfaces;
-- utility + token + component hybrid;
-- stronger admin/dashboard presets;
+- hybrid-подход utilities + tokens + components;
+- более сильные admin/dashboard presets;
 - white-label operational workflows;
-- launch-ready examples outside a single runtime.
+- готовые к запуску examples вне одного runtime.

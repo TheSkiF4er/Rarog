@@ -1,21 +1,21 @@
-# Comparison pages
+# Страницы сравнений
 
-Эти страницы нужны для positioning launch: не просто перечислить features, а показать, где Rarog выигрывает по operational fit.
+Эти страницы нужны для позиционирования запуска: не просто перечислить возможности, а показать, где Rarog выигрывает по операционному соответствию.
 
-## Included
+## Что включено
 
 - [Rarog vs Tailwind](rarog-vs-tailwind.md)
 - [Rarog vs Bootstrap](rarog-vs-bootstrap.md)
-- [Rarog vs shadcn/ui stack](rarog-vs-shadcn.md)
+- [Rarog vs shadcn/ui](rarog-vs-shadcn.md)
 - [Rarog vs Chakra UI](rarog-vs-chakra.md)
 - [Rarog vs MUI](rarog-vs-mui.md)
 
-## Positioning lens
+## Линза сравнения
 
 Сравнение идёт по пяти критериям:
 
-1. theming maturity;
-2. white-label readiness;
-3. dashboard/admin readiness;
-4. migration and operational tooling;
-5. production release discipline.
+1. зрелость theming-подхода;
+2. готовность к white-label сценариям;
+3. готовность к dashboard/admin продуктам;
+4. migration и operational tooling;
+5. дисциплина production-релизов.
