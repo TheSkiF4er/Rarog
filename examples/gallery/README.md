@@ -1,8 +1,8 @@
-# Rarog examples gallery
+# Rarog галерея примеров
 
-Галерея для launch-позиционирования: starters, UI kits и production-shaped showcase apps.
+Галерея для launch-позиционирования: starters, UI kits и production-shaped демо-приложения.
 
-## Included
+## Включено
 
 - `../ui-kits/rarog-launch`
 - `../showcase/multi-theme-saas`
