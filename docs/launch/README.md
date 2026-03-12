@@ -1,53 +1,53 @@
-# Rarog 1.0 positioning launch
+# Позиционирующий запуск Rarog 1.0
 
-Rarog 1.0 должен запускаться не как «ещё один utility framework», а как **design system platform для multi-theme product teams**.
+Rarog 1.0 должен запускаться не как «ещё один utility framework», а как **design system platform для продуктовых команд с несколькими темами, white-label сценариями и dashboard/admin нагрузкой**.
 
-## Clear positioning
+## Чёткое позиционирование
 
 **Rarog** — это платформа для команд, которым нужно одновременно:
 
-- быстро собирать product UI без кастомного CSS-sprawl;
+- быстро собирать product UI без разрастания кастомного CSS;
 - поддерживать несколько тем и white-label брендов;
 - выпускать dashboard/admin и SaaS surfaces без бесконечной ручной сборки design system;
-- держать production-качество: a11y, bundle discipline, stable exports, migration path.
+- держать production-качество: a11y, дисциплину бандлов, стабильные экспорты и понятный migration path.
 
-## Why now
+## Почему сейчас
 
 Большинство конкурентов хорошо решают только одну часть задачи:
 
-- utility speed;
-- component DX;
+- скорость utility-first разработки;
+- DX компонентов;
 - theming;
-- enterprise dashboard needs.
+- потребности enterprise dashboard-продуктов.
 
 Rarog 1.0 объединяет это в один stack:
 
-1. **utility + components + tokens + themes** в одной системе;
-2. **theme builder / token editor** как customer-facing workflow;
+1. **utilities + components + tokens + themes** в одной системе;
+2. **theme builder / token editor** как workflow для заказчиков;
 3. **plugin SDK** для расширения платформы;
-4. **CLI pro tools** для migration, audit и release hygiene;
-5. **benchmark + quality bar** как доказательство зрелости.
+4. **CLI Pro tools** для migration, audit и release hygiene;
+5. **benchmark program + quality bar** как доказательство зрелости.
 
-## Where Rarog wins
+## Где Rarog выигрывает
 
 ### 1. Multi-theme SaaS
 
-Один кодбейс, несколько tenant themes, предсказуемый theme switch и токены как source of truth.
+Один кодбейс, несколько tenant themes, предсказуемое переключение тем и токены как source of truth.
 
-### 2. White-label B2B apps
+### 2. White-label B2B приложения
 
-Быстрый брендовый онбординг, export/import тем, review flows для procurement и enterprise delivery.
+Быстрый брендовый онбординг, import/export тем, review flows для procurement и enterprise delivery.
 
-### 3. Internal dashboards and admins
+### 3. Внутренние дашборды и админки
 
 Плотные интерфейсы, формы, таблицы, аналитические блоки, dashboard kits и admin-focused starters.
 
-## Launch deliverables map
+## Карта launch deliverables
 
-- [Why Rarog narrative](why-rarog.md)
-- [Comparison pages](../comparisons/README.md)
-- [Starter and showcase gallery](starter-gallery.md)
-- [Showcase apps](showcase-apps.md)
-- [Production recommendations](production-recommendations.md)
-- [Roadmap v2](roadmap-v2.md)
-- [Migration guides](../migration/README.md)
+- [Нарратив «Почему Rarog»](why-rarog.md)
+- [Страницы сравнений](../comparisons/README.md)
+- [Галерея стартеров и showcase-материалов](starter-gallery.md)
+- [Демо-приложения](showcase-apps.md)
+- [Рекомендации для production](production-recommendations.md)
+- [Дорожная карта v2](roadmap-v2.md)
+- [Гайды по миграции](../migration/README.md)

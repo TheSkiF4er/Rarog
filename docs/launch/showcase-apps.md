@@ -1,4 +1,4 @@
-# Showcase apps
+# Демо-приложения
 
 ## Multi-theme SaaS
 
@@ -12,6 +12,6 @@
 
 Показывает dense tables, forms, analytics cards, alerts, approvals, filters и accessibility-sensitive flows.
 
-## Why showcase apps matter
+## Why демо-приложения matter
 
-Showcase apps — это bridge между docs и purchase/adoption decision. Они доказывают, что Rarog годится для production-shaped приложений, а не только для demo components.
+Демо-приложения — это bridge между docs и purchase/adoption decision. Они доказывают, что Rarog годится для production-shaped приложений, а не только для demo components.

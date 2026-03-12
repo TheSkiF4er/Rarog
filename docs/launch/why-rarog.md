@@ -1,16 +1,16 @@
-# Why Rarog
+# Почему Rarog
 
-## The narrative
+## Нарратив
 
 Rarog — это не просто CSS framework и не просто component library.
 
-Это **product UI platform** для команд, которые строят:
+Это **платформа продуктового UI** для команд, которые строят:
 
 - multi-theme SaaS;
-- white-label B2B apps;
-- internal dashboards/admins.
+- white-label B2B приложения;
+- внутренние дашборды и админки.
 
-## The problem Rarog solves
+## Какую проблему решает Rarog
 
 Команды обычно собирают стек из разрозненных частей:
 
@@ -22,35 +22,35 @@ Rarog — это не просто CSS framework и не просто component 
 - accessibility process;
 - release checks.
 
-На старте это кажется гибким. Через 6–12 месяцев получается другое:
+На старте это кажется гибким. Через 6–12 месяцев картина меняется:
 
 - theme drift;
-- inconsistent spacing and radius;
-- ad-hoc component forks;
+- непоследовательные spacing и radius;
+- ad-hoc форки компонентов;
 - сложные миграции;
-- white-label ветки вместо одной платформы;
-- слабая reproducibility в CI.
+- отдельные white-label ветки вместо одной платформы;
+- слабая воспроизводимость в CI.
 
-## Rarog approach
+## Подход Rarog
 
-Rarog делает ставку на **системность**:
+Rarog делает ставку на **системность**.
 
-### Tokens first
+### Токены прежде всего
 
-Тема, плотность, radius, shadow, semantic colors и compatibility policy живут в токенах, а не в разовых CSS-патчах.
+Тема, плотность, radius, shadow, semantic colors и compatibility policy живут в токенах, а не в случайных CSS-патчах.
 
-### Product-ready components
+### Компоненты, готовые к продукту
 
 Rarog ориентирован не только на marketing pages, но и на form-heavy, admin-heavy и dashboard-heavy surfaces.
 
-### Real theming
+### Настоящий theming
 
-Theme builder, import/export, compare themes, accessibility preview и white-label demo превращают theming в продуктовую capability.
+Theme builder, import/export, сравнение тем, предпросмотр доступности и white-label demo превращают theming в продуктовую capability.
 
-### Operational maturity
+### Операционная зрелость
 
-Doctor, token/theme diff, audit-команды, benchmark program и release gates делают систему пригодной для реального релиза.
+Doctor, diff токенов и тем, audit-команды, benchmark program и release gates делают систему пригодной для реального релиза.
 
-## The one-line pitch
+## Pitch в одну строку
 
-**Rarog helps product teams ship branded, accessible, multi-theme applications faster — without building a custom design system platform from scratch.**
+**Rarog помогает продуктовым командам быстрее выпускать брендированные, доступные и multi-theme приложения — без необходимости строить собственную design system platform с нуля.**
