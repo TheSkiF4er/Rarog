@@ -1,6 +1,6 @@
 {
   "name": "@rarog/react",
-  "version": "3.5.0",
+  "version": "1.0.0",
   "description": "react bindings for rarog js core and component primitives",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
@@ -20,7 +20,7 @@
     "README.md"
   ],
   "peerDependencies": {
-    "@rarog/js": ">=3.5.0",
+    "@rarog/js": ">=1.0.0 <2.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
