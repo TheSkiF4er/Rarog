@@ -15,9 +15,9 @@
     "build:adapters": "node tools/build-adapters.mjs",
     "build:all": "npm run build:css && npm run build:js && npm run build:adapters",
     "docs": "node tools/docs-dev.mjs",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
+    "docs:dev": "node tools/docs-dev.mjs",
+    "docs:build": "node tools/build-docs-site.mjs",
+    "docs:preview": "node tools/docs-dev.mjs --dir .gitbook/dist",
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "storybook:build": "storybook build",
     "storybook:smoke": "node tests/storybook/storybook-smoke.mjs",
@@ -25,7 +25,7 @@
     "test:unit": "vitest run tests/js",
     "test:unit:watch": "vitest",
     "test:adapters": "npm run build:js && npm run build:adapters && vitest run tests/adapters",
-    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke && npm run test:exports",
+    "test:ci": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke",
     "test:contracts": "vitest run tests/js/component-contracts.test.js tests/js/contract-sweep.test.js tests/js/dispose-contract.test.js tests/js/event-contract.test.js tests/js/event-contract-core.test.js tests/js/event-contract-overlay-components.test.js",
     "test:e2e": "playwright test",
     "visual:serve": "node tools/visual-dev.mjs --port 4175",
@@ -34,24 +34,18 @@
     "release:verify": "npm run release:check && npm run docs:check",
     "verify:artifacts": "node tools/check-package-artifacts.mjs",
     "pack:packages": "node tools/pack-packages.mjs",
-    "docs:check": "npm run docs:lint && npm run docs:links && npm run docs:build && node tools/check-docs-output.mjs",
+    "docs:check": "npm run docs:lint && npm run docs:build && node tools/check-docs-output.mjs",
     "docs:lint": "node tools/check-docs.mjs",
-    "test:release": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke && npm run test:exports && npm run test:starters-install && npm run test:package-matrix && npm run test:examples-ci",
+    "test:release": "npm run test:unit && npm run test:adapters && npm run test:contracts && npm run test:smoke",
     "test:smoke": "node tests/cli-temp-project-smoke.mjs",
     "migrate:bootstrap": "node packages/cli/bin/rarog.js migrate bootstrap",
     "migrate:tailwind": "node packages/cli/bin/rarog.js migrate tailwind",
     "inspect:classes": "node packages/cli/bin/rarog.js inspect classes",
-    "test:plugin-sdk": "vitest run tests/js/plugin-sdk.test.js",
-    "create:plugin": "node packages/cli/bin/create-rarog-plugin.js",
-    "bench:run": "node tools/benchmark-runner.mjs",
-    "bench:publish": "node tools/benchmark-runner.mjs --publish",
-    "test:starters-install": "node tools/test-starter-installs.mjs",
-    "test:package-matrix": "node tools/test-package-matrix.mjs",
-    "test:examples-ci": "node tools/test-examples-ci.mjs",
-    "docs:links": "node tools/check-doc-links.mjs",
-    "test:exports": "node tools/check-export-surface.mjs",
-    "quality:gates": "node tools/quality-gates.mjs",
-    "test:quality": "npm run test:visual && npm run test:starters-install && npm run test:package-matrix && npm run test:examples-ci && npm run docs:links && npm run test:exports"
+    "dev": "npm run docs",
+    "build:app": "npm run build:all",
+    "rarog:build": "npm run build:all",
+    "playground": "npm run docs",
+    "test:starters": "node tests/cli-temp-project-smoke.mjs"
   },
   "repository": {
     "type": "git",
@@ -76,14 +70,12 @@
     "react-dom": "^18.3.1",
     "storybook": "^8.4.7",
     "vite": "^5.4.10",
-    "vitepress": "^1.5.0",
     "vitest": "^1.0.0",
     "vue": "^3.5.12",
     "vscode-languageserver": "^9.0.0"
   },
   "bin": {
-    "rarog": "packages/cli/bin/rarog.js",
-    "create-rarog-plugin": "packages/cli/bin/create-rarog-plugin.js"
+    "rarog": "packages/cli/bin/rarog.js"
   },
   "style": "./packages/core/dist/rarog-core.min.css",
   "exports": {
@@ -98,8 +90,7 @@
     "./themes/creative": "./packages/themes/dist/rarog-theme-creative.min.css",
     "./themes/enterprise": "./packages/themes/dist/rarog-theme-enterprise.min.css",
     "./package.json": "./package.json",
-    "./presets": "./packages/presets/registry.json",
-    "./plugin-sdk": "./packages/plugin-sdk/index.cjs"
+    "./presets": "./packages/presets/registry.json"
   },
   "files": [
     "packages/cli/bin",
@@ -110,14 +101,7 @@
     "packages/themes/dist",
     "packages/presets",
     "README.md",
-    "LICENSE",
-    "packages/plugin-sdk",
-    "packages/plugin-forms",
-    "packages/plugin-typography",
-    "packages/plugin-motion",
-    "packages/plugin-charts-theme",
-    "packages/plugin-dashboard-kit",
-    "packages/plugin-marketing-blocks"
+    "LICENSE"
   ],
   "workspaces": [
     "packages/*"

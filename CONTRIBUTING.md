@@ -121,7 +121,7 @@ node packages/cli/bin/rarog.js validate
 npm run docs:lint
 ```
 
-Полный `npm run docs:check` нужен, когда вы хотите локально подтвердить, что VitePress действительно собирается и output не пустой.
+Полный `npm run docs:check` нужен, когда вы хотите локально подтвердить, что GitBook-экспорт действительно собирается и output не пустой.
 
 ---
 
