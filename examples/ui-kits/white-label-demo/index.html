@@ -3,44 +3,299 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rarog White-label Demo</title>
+    <title>Rarog Theme Builder / White-label Demo</title>
     <link rel="stylesheet" href="../../../packages/core/src/rarog-core.css" />
     <link rel="stylesheet" href="../../../packages/utilities/src/rarog-utilities.css" />
     <link rel="stylesheet" href="../../../packages/components/src/rarog-components.css" />
-    <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-aurora.css" />
-    <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-graphite.css" />
-    <link rel="stylesheet" href="../../../packages/themes/src/rarog-theme-enterprise-plus.css" />
     <style>
-      body { background: var(--rarog-color-bg, #f5f7fb); margin: 0; }
-      .tenant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; padding: 1.5rem; }
-      .tenant-card { background: var(--rarog-color-surface); border: 1px solid var(--rarog-color-border); border-radius: 1rem; box-shadow: 0 12px 30px rgba(15,23,42,.08); overflow: hidden; }
-      .tenant-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--rarog-color-border-subtle); }
-      .tenant-body { padding: 1.25rem; }
+      :root {
+        --builder-bg: #0f172a;
+        --builder-panel: #111827;
+        --builder-border: rgba(148, 163, 184, 0.22);
+        --builder-text: #e5eefb;
+        --builder-muted: #94a3b8;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Inter, system-ui, sans-serif; background: linear-gradient(180deg, #0b1120, #111827 35%, #0f172a); color: var(--builder-text); }
+      .layout { display: grid; grid-template-columns: 360px 1fr; min-height: 100vh; }
+      .sidebar { padding: 1.25rem; border-right: 1px solid var(--builder-border); background: rgba(15, 23, 42, 0.84); backdrop-filter: blur(18px); }
+      .content { padding: 1.25rem; }
+      .panel { background: rgba(15, 23, 42, 0.72); border: 1px solid var(--builder-border); border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; }
+      .panel h2, .panel h3 { margin-top: 0; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+      .field { display: grid; gap: 0.35rem; margin-bottom: 0.75rem; }
+      .field label { color: var(--builder-muted); font-size: 0.875rem; }
+      .field input, .field select, .field textarea, .toolbar button { width: 100%; border-radius: 0.75rem; border: 1px solid var(--builder-border); background: rgba(15, 23, 42, 0.92); color: white; padding: 0.7rem 0.8rem; }
+      .toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+      .toolbar button { width: auto; cursor: pointer; }
+      .preview-grid { display: grid; grid-template-columns: repeat(2, minmax(320px, 1fr)); gap: 1rem; }
+      .theme-shell { border: 1px solid var(--builder-border); border-radius: 1.25rem; overflow: hidden; min-height: 640px; background: var(--rarog-color-bg); color: var(--rarog-color-text); box-shadow: 0 22px 60px rgba(2, 6, 23, 0.28); }
+      .theme-shell[data-density="compact"] .preview-section { padding: 0.75rem; }
+      .theme-shell[data-density="cozy"] .preview-section { padding: 1.125rem; }
+      .theme-shell[data-density="comfortable"] .preview-section { padding: 1.5rem; }
+      .preview-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--rarog-color-border); background: var(--rarog-color-bgSoft); }
+      .preview-section { padding: 1.25rem; border-bottom: 1px solid var(--rarog-color-border-subtle); }
+      .hero-card, .metric-card, .demo-table, .a11y-box { background: var(--rarog-color-surface); border: 1px solid var(--rarog-color-border); border-radius: var(--preview-surface-radius, 1rem); box-shadow: var(--preview-shadow-md, 0 14px 34px rgba(15,23,42,.12)); }
+      .hero-card, .metric-card, .a11y-box { padding: 1rem; }
+      .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+      .demo-table { width: 100%; border-collapse: collapse; overflow: hidden; }
+      .demo-table th, .demo-table td { padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--rarog-color-border-subtle); }
+      .swatch { height: 44px; border-radius: 0.8rem; border: 1px solid rgba(255,255,255,.18); }
+      .compare-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+      .metric-label { font-size: 0.82rem; color: var(--rarog-color-text-muted); }
+      .metric-value { font-size: 1.15rem; font-weight: 700; }
+      .small { font-size: 0.875rem; color: var(--builder-muted); }
+      .danger { color: #fda4af; }
+      .ok { color: #86efac; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } .preview-grid { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
-    <div class="tenant-grid">
-      <section class="tenant-card" data-rg-theme="aurora">
-        <div class="tenant-header"><strong>Aurora tenant</strong></div>
-        <div class="tenant-body">
-          <button class="btn btn-primary mb-3">Primary action</button>
-          <div class="alert alert-info">Brand-friendly SaaS tenant theme.</div>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="panel">
+          <h2>Theme builder</h2>
+          <p class="small">Browser-based editor for white-label teams: live preview, compare mode, import/export and accessibility checks.</p>
+          <div class="toolbar">
+            <button id="importTheme">Import theme</button>
+            <button id="exportTheme">Export theme JSON</button>
+            <button id="exportManifest">Export build manifest</button>
+          </div>
+          <input id="themeFile" type="file" accept="application/json" hidden />
         </div>
-      </section>
-      <section class="tenant-card" data-rg-theme="graphite">
-        <div class="tenant-header"><strong>Graphite tenant</strong></div>
-        <div class="tenant-body">
-          <button class="btn btn-primary mb-3">Approve</button>
-          <div class="alert alert-warning">Dark operations tenant running side-by-side.</div>
+
+        <div class="panel">
+          <h3>Brand & semantic tokens</h3>
+          <div class="field"><label for="themeName">Theme name</label><input id="themeName" value="enterprise-plus-custom" /></div>
+          <div class="grid-2">
+            <div class="field"><label for="primary">Primary</label><input id="primary" type="color" value="#1d4ed8" /></div>
+            <div class="field"><label for="secondary">Secondary</label><input id="secondary" type="color" value="#475569" /></div>
+            <div class="field"><label for="surface">Surface</label><input id="surface" type="color" value="#ffffff" /></div>
+            <div class="field"><label for="bg">Background</label><input id="bg" type="color" value="#f5f7fb" /></div>
+            <div class="field"><label for="text">Text</label><input id="text" type="color" value="#0f172a" /></div>
+            <div class="field"><label for="textMuted">Text muted</label><input id="textMuted" type="color" value="#475569" /></div>
+            <div class="field"><label for="border">Border</label><input id="border" type="color" value="#d9e2ec" /></div>
+            <div class="field"><label for="focusRing">Focus ring</label><input id="focusRing" type="color" value="#2563eb" /></div>
+          </div>
         </div>
-      </section>
-      <section class="tenant-card" data-rg-theme="enterprise-plus">
-        <div class="tenant-header"><strong>Enterprise+ tenant</strong></div>
-        <div class="tenant-body">
-          <button class="btn btn-primary mb-3">Save policy</button>
-          <div class="alert alert-success">White-label baseline for per-tenant overrides.</div>
+
+        <div class="panel">
+          <h3>Density / radius / shadow</h3>
+          <div class="field"><label for="density">Density</label><select id="density"><option value="compact">Compact</option><option value="cozy">Cozy</option><option value="comfortable" selected>Comfortable</option></select></div>
+          <div class="field"><label for="radius">Surface radius</label><input id="radius" type="range" min="10" max="32" value="20" /></div>
+          <div class="field"><label for="controlRadius">Control radius</label><input id="controlRadius" type="range" min="6" max="24" value="14" /></div>
+          <div class="field"><label for="shadow">Shadow intensity</label><input id="shadow" type="range" min="0" max="48" value="24" /></div>
         </div>
-      </section>
+
+        <div class="panel">
+          <h3>Compare & accessibility</h3>
+          <div class="field"><label for="compareTheme">Compare against</label><select id="compareTheme"><option value="aurora">Aurora</option><option value="graphite">Graphite</option><option value="enterprise-plus" selected>Enterprise+</option></select></div>
+          <div id="contrastReport" class="small"></div>
+          <div class="compare-grid" id="swatches"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Export preview</h3>
+          <pre id="jsonPreview" class="small"></pre>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="panel">
+          <h2>White-label product team demo</h2>
+          <p class="small">Two synchronized previews: edited theme on the left, baseline compare theme on the right. Use this during brand review, tenant onboarding and accessibility sign-off.</p>
+        </div>
+        <div class="preview-grid">
+          <section class="theme-shell" id="primaryPreview"></section>
+          <section class="theme-shell" id="comparePreview"></section>
+        </div>
+      </main>
     </div>
+
+    <script>
+      const presets = {
+        aurora: {
+          name: 'aurora',
+          semantic: { color: { bg: '#f6fbff', bgSoft: '#ffffff', bgElevated: '#ffffff', bgElevatedSoft: '#eef8ff', surface: '#ffffff', border: '#d6e8f5', borderSubtle: '#e7f1f8', borderStrong: '#1f3b5b', muted: '#7f9bb7', text: '#12324d', textMuted: '#4f6d8a', focusRing: '#38bdf8', accentSoft: '#e0f2fe', primary: '#0ea5e9', primaryForeground: '#ffffff', secondary: '#14b8a6', secondaryForeground: '#ffffff' } },
+          runtime: { density: { comfortable: { controlX: '0.875rem', controlY: '0.625rem', panelGap: '1rem' } }, shape: { soft: { control: '0.875rem', surface: '1.125rem', pill: '9999px' } }, shadow: { balanced: { sm: '0 4px 10px rgba(14,165,233,.12)', md: '0 16px 36px rgba(14,165,233,.16)' } } }
+        },
+        graphite: {
+          name: 'graphite',
+          semantic: { color: { bg: '#0b1020', bgSoft: '#111827', bgElevated: '#111827', bgElevatedSoft: '#162033', surface: '#0f172a', border: '#243146', borderSubtle: '#182235', borderStrong: '#f8fafc', muted: '#7b8ba8', text: '#f8fafc', textMuted: '#c7d2fe', focusRing: '#60a5fa', accentSoft: '#172554', primary: '#8b5cf6', primaryForeground: '#ffffff', secondary: '#22d3ee', secondaryForeground: '#0b1020' } },
+          runtime: { density: { comfortable: { controlX: '0.875rem', controlY: '0.625rem', panelGap: '1rem' } }, shape: { soft: { control: '0.75rem', surface: '1rem', pill: '9999px' } }, shadow: { balanced: { sm: '0 8px 20px rgba(2,6,23,.35)', md: '0 24px 56px rgba(2,6,23,.48)' } } }
+        },
+        'enterprise-plus': {
+          name: 'enterprise-plus',
+          semantic: { color: { bg: '#f5f7fb', bgSoft: '#fbfcfe', bgElevated: '#ffffff', bgElevatedSoft: '#f8fafc', surface: '#ffffff', border: '#d9e2ec', borderSubtle: '#e8eef5', borderStrong: '#0f172a', muted: '#8a94a6', text: '#0f172a', textMuted: '#475569', focusRing: '#2563eb', accentSoft: '#e8efff', primary: '#1d4ed8', primaryForeground: '#ffffff', secondary: '#475569', secondaryForeground: '#ffffff' } },
+          runtime: { density: { comfortable: { controlX: '0.9375rem', controlY: '0.625rem', panelGap: '1rem' } }, shape: { rounded: { control: '0.875rem', surface: '1.25rem', pill: '9999px' } }, shadow: { subtle: { sm: '0 2px 8px rgba(15,23,42,.08)', md: '0 14px 34px rgba(15,23,42,.12)' } } }
+        }
+      };
+
+      const state = JSON.parse(JSON.stringify(presets['enterprise-plus']));
+      const els = {
+        themeName: document.getElementById('themeName'), primary: document.getElementById('primary'), secondary: document.getElementById('secondary'), surface: document.getElementById('surface'), bg: document.getElementById('bg'), text: document.getElementById('text'), textMuted: document.getElementById('textMuted'), border: document.getElementById('border'), focusRing: document.getElementById('focusRing'), density: document.getElementById('density'), radius: document.getElementById('radius'), controlRadius: document.getElementById('controlRadius'), shadow: document.getElementById('shadow'), compareTheme: document.getElementById('compareTheme'), primaryPreview: document.getElementById('primaryPreview'), comparePreview: document.getElementById('comparePreview'), contrastReport: document.getElementById('contrastReport'), jsonPreview: document.getElementById('jsonPreview'), swatches: document.getElementById('swatches'), importTheme: document.getElementById('importTheme'), exportTheme: document.getElementById('exportTheme'), exportManifest: document.getElementById('exportManifest'), themeFile: document.getElementById('themeFile') };
+
+      function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+      function hexToRgb(hex) { const clean = hex.replace('#', ''); const full = clean.length === 3 ? clean.split('').map((c) => c + c).join('') : clean; const n = parseInt(full, 16); return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 }; }
+      function luminance(hex) { const { r, g, b } = hexToRgb(hex); const c = [r, g, b].map((v) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+      function contrast(a, b) { const l1 = luminance(a); const l2 = luminance(b); const hi = Math.max(l1, l2); const lo = Math.min(l1, l2); return ((hi + 0.05) / (lo + 0.05)).toFixed(2); }
+      function cssVars(theme) {
+        const c = theme.semantic.color;
+        return {
+          '--rarog-color-bg': c.bg,
+          '--rarog-color-bgSoft': c.bgSoft || c.bg,
+          '--rarog-color-surface': c.surface,
+          '--rarog-color-bg-elevated': c.bgElevated || c.surface,
+          '--rarog-color-bg-elevated-soft': c.bgElevatedSoft || c.bg,
+          '--rarog-color-border': c.border,
+          '--rarog-color-border-subtle': c.borderSubtle || c.border,
+          '--rarog-color-border-strong': c.borderStrong || c.text,
+          '--rarog-color-text': c.text,
+          '--rarog-color-text-muted': c.textMuted,
+          '--rarog-color-primary': c.primary,
+          '--rarog-color-primary-foreground': c.primaryForeground || '#ffffff',
+          '--rarog-color-secondary': c.secondary,
+          '--rarog-color-secondary-foreground': c.secondaryForeground || '#ffffff',
+          '--rarog-color-focus-ring': c.focusRing,
+          '--rarog-color-accent-soft': c.accentSoft || c.bg,
+          '--preview-surface-radius': theme.runtime.shape.custom.surface,
+          '--preview-control-radius': theme.runtime.shape.custom.control,
+          '--preview-shadow-md': theme.runtime.shadow.custom.md
+        };
+      }
+      function createThemeSnapshot(theme) {
+        return {
+          $schema: 'https://rarog.dev/schema/theme-manifest-v1.json',
+          version: 1,
+          name: theme.name,
+          extends: 'enterprise-plus',
+          meta: { mode: 'light', brand: 'white-label', description: 'Generated by browser-based theme builder.' },
+          semantic: theme.semantic,
+          runtime: {
+            density: { [theme.density]: { controlX: theme.runtime.density.custom.controlX, controlY: theme.runtime.density.custom.controlY, panelGap: theme.runtime.density.custom.panelGap } },
+            shape: { custom: theme.runtime.shape.custom },
+            shadow: { custom: theme.runtime.shadow.custom }
+          },
+          selectors: { scoped: `[data-rg-theme="${theme.name}"]` }
+        };
+      }
+      function buildManifest(theme) {
+        return {
+          version: 1,
+          theme: theme.name,
+          outputs: { jitCss: `dist/${theme.name}.jit.css`, tokens: `dist/${theme.name}.tokens.json` },
+          tokens: { semanticColor: 'dist/tokens/_semantic-color.css', runtime: 'dist/tokens/_runtime.css' }
+        };
+      }
+      function renderPreview(node, title, theme, compare = false) {
+        node.dataset.density = theme.density;
+        Object.entries(cssVars(theme)).forEach(([key, value]) => node.style.setProperty(key, value));
+        const c = theme.semantic.color;
+        node.innerHTML = `
+          <div class="preview-header">
+            <div>
+              <div class="small">${compare ? 'Compare theme' : 'Edited theme'}</div>
+              <strong>${title}</strong>
+            </div>
+            <div class="toolbar">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-secondary">Secondary</button>
+            </div>
+          </div>
+          <div class="preview-section">
+            <div class="hero-card">
+              <div class="badge badge-primary mb-3">White-label flow</div>
+              <h3 class="h4 mb-2">Tenant-ready dashboard surface</h3>
+              <p class="text-muted mb-4">Live preview for onboarding, procurement demos and customer-specific theme sign-off.</p>
+              <div class="toolbar"><button class="btn btn-primary">Launch workspace</button><button class="btn btn-secondary">Export tokens</button></div>
+            </div>
+          </div>
+          <div class="preview-section">
+            <div class="metrics">
+              <div class="metric-card"><div class="metric-label">Primary</div><div class="metric-value">${c.primary}</div></div>
+              <div class="metric-card"><div class="metric-label">Surface radius</div><div class="metric-value">${theme.runtime.shape.custom.surface}</div></div>
+              <div class="metric-card"><div class="metric-label">Density</div><div class="metric-value">${theme.density}</div></div>
+            </div>
+          </div>
+          <div class="preview-section">
+            <table class="demo-table">
+              <thead><tr><th>Workspace</th><th>Status</th><th>Owner</th></tr></thead>
+              <tbody>
+                <tr><td>Northwind Retail</td><td><span class="badge badge-success">Healthy</span></td><td>PM team</td></tr>
+                <tr><td>Contoso Cloud</td><td><span class="badge badge-warning">Review</span></td><td>Design ops</td></tr>
+                <tr><td>Fabrikam Finance</td><td><span class="badge badge-info">Ready</span></td><td>Implementation</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="preview-section">
+            <div class="a11y-box">
+              <div class="metric-label mb-2">Accessibility preview</div>
+              <p class="mb-2">Text on surface contrast: <strong>${contrast(c.text, c.surface)}:1</strong></p>
+              <p class="mb-0">Primary on background contrast: <strong>${contrast(c.primary, c.bg)}:1</strong></p>
+            </div>
+          </div>`;
+      }
+      function updateStateFromInputs() {
+        state.name = els.themeName.value.trim() || 'custom-theme';
+        Object.assign(state.semantic.color, { primary: els.primary.value, secondary: els.secondary.value, surface: els.surface.value, bg: els.bg.value, text: els.text.value, textMuted: els.textMuted.value, border: els.border.value, borderSubtle: els.border.value, focusRing: els.focusRing.value, accentSoft: els.bg.value });
+        state.density = els.density.value;
+        state.runtime = {
+          density: { custom: { controlX: els.density.value === 'compact' ? '0.75rem' : els.density.value === 'cozy' ? '0.875rem' : '0.9375rem', controlY: els.density.value === 'compact' ? '0.5rem' : '0.625rem', panelGap: els.density.value === 'compact' ? '0.75rem' : els.density.value === 'cozy' ? '1rem' : '1.125rem' } },
+          shape: { custom: { control: `${els.controlRadius.value}px`, surface: `${els.radius.value}px`, pill: '9999px' } },
+          shadow: { custom: { md: `0 ${Math.round(Number(els.shadow.value) / 2)}px ${els.shadow.value}px rgba(15,23,42,.18)` } }
+        };
+      }
+      function updatePreview() {
+        updateStateFromInputs();
+        const compareTheme = clone(presets[els.compareTheme.value]);
+        compareTheme.density = 'comfortable';
+        compareTheme.runtime = compareTheme.runtime || {};
+        compareTheme.runtime.shape = { custom: { control: '14px', surface: '20px', pill: '9999px' } };
+        compareTheme.runtime.shadow = { custom: { md: '0 14px 34px rgba(15,23,42,.12)' } };
+        renderPreview(els.primaryPreview, state.name, state);
+        renderPreview(els.comparePreview, compareTheme.name, compareTheme, true);
+        const c = state.semantic.color;
+        const reports = [
+          { label: 'Text / surface', ratio: Number(contrast(c.text, c.surface)), target: 4.5 },
+          { label: 'Muted text / background', ratio: Number(contrast(c.textMuted, c.bg)), target: 3 },
+          { label: 'Primary / background', ratio: Number(contrast(c.primary, c.bg)), target: 3 }
+        ];
+        els.contrastReport.innerHTML = reports.map((item) => `<div class="${item.ratio >= item.target ? 'ok' : 'danger'}">${item.label}: ${item.ratio.toFixed(2)}:1 ${item.ratio >= item.target ? 'pass' : 'review'}</div>`).join('');
+        els.swatches.innerHTML = [c.primary, c.secondary, c.surface, c.bg].map((color) => `<div><div class="swatch" style="background:${color}"></div><div class="small">${color}</div></div>`).join('');
+        els.jsonPreview.textContent = JSON.stringify(createThemeSnapshot(state), null, 2);
+      }
+      function downloadJson(filename, payload) {
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      ['themeName','primary','secondary','surface','bg','text','textMuted','border','focusRing','density','radius','controlRadius','shadow','compareTheme'].forEach((key) => els[key].addEventListener('input', updatePreview));
+      els.exportTheme.addEventListener('click', () => downloadJson(`${state.name || 'theme'}.json`, createThemeSnapshot(state)));
+      els.exportManifest.addEventListener('click', () => downloadJson(`${state.name || 'theme'}.build.json`, buildManifest(state)));
+      els.importTheme.addEventListener('click', () => els.themeFile.click());
+      els.themeFile.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const json = JSON.parse(await file.text());
+        const color = (((json || {}).semantic || {}).color) || {};
+        els.themeName.value = json.name || 'imported-theme';
+        [['primary','#1d4ed8'],['secondary','#475569'],['surface','#ffffff'],['bg','#f5f7fb'],['text','#0f172a'],['textMuted','#475569'],['border','#d9e2ec'],['focusRing','#2563eb']].forEach(([key, fallback]) => { els[key].value = color[key] || fallback; });
+        const shape = (((json.runtime || {}).shape || {}).custom) || (((json.runtime || {}).shape || {}).rounded) || {};
+        const shadow = (((json.runtime || {}).shadow || {}).custom) || (((json.runtime || {}).shadow || {}).subtle) || {};
+        const densityKey = Object.keys((json.runtime || {}).density || {})[0] || 'comfortable';
+        els.density.value = densityKey;
+        els.radius.value = parseInt(shape.surface || '20', 10) || 20;
+        els.controlRadius.value = parseInt(shape.control || '14', 10) || 14;
+        const blurMatch = String(shadow.md || '').match(/\s(\d+)px\srgba|\s(\d+)px\)$/);
+        if (blurMatch) els.shadow.value = Number(blurMatch[1] || blurMatch[2]) || 24;
+        updatePreview();
+      });
+      updatePreview();
+    </script>
   </body>
 </html>
