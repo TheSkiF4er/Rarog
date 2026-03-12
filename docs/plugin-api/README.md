@@ -5,12 +5,12 @@ Plugin system в Rarog 3.5+ теперь рассматривается как *
 ## Что входит в Plugin SDK v1
 
 - **stable plugin contract** — стабильный объектный контракт `createPlugin()` / `definePlugin()`;
-- **plugin test harness** — `createPluginTestHarness()` для локальной и CI-проверки плагинов;
-- **plugin starter template** — генератор `create-rarog-plugin`;
-- **plugin compatibility docs** — правила совместимости и поддержки движка;
-- **semantic version policy** — зафиксированная SemVer-политика для API v1.
+- **test harness для плагинов** — `createPluginTestHarness()` для локальной и CI-проверки плагинов;
+- **starter-шаблон плагина** — генератор `create-rarog-plugin`;
+- **документация по совместимости плагинов** — правила совместимости и поддержки движка;
+- **политика семантического версионирования** — зафиксированная SemVer-политика для API v1.
 
-## Stable plugin contract
+## Стабильный контракт плагинов
 
 Rarog поддерживает два типа плагинов:
 
@@ -60,13 +60,13 @@ module.exports = createPlugin({
 - `keywords`
 - `official`
 
-## Plugin context
+## Контекст плагина
 
 `setup(ctx)` получает стабильный контекст:
 
 ```ts
 interface RarogPluginContext {
-  config: RarogConfig;
+  config: RarogКонфигурация;
   meta?: {
     mode: "full" | "jit";
     rootDir: string;
@@ -93,7 +93,7 @@ interface RarogPluginContext {
 - регистрация новых CLI-команд через runtime hook;
 - мутация внутренних структур build pipeline.
 
-## Plugin result
+## Результат работы плагина
 
 ```ts
 interface RarogPluginResult {
@@ -175,7 +175,7 @@ module.exports = function legacyPlugin(ctx) {
 
 Но для новых плагинов SDK v1 обязателен.
 
-## Deliverables
+## Deживойrables
 
 В рамках Plugin SDK v1 в репозитории добавлены:
 

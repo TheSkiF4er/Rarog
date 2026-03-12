@@ -1,4 +1,4 @@
-# Plugin Compatibility & SemVer Policy
+# Совместимость плагинов и политика SemVer
 
 ## Compatibility contract
 
@@ -49,7 +49,7 @@ engine: {
 - MINOR — новые классы и компоненты назад-совместимым способом;
 - MAJOR — удаление классов, rename публичных селекторов, изменение required engine range.
 
-## Capability flags
+## Возможность flags
 
 Текущие flags:
 
