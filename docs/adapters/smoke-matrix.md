@@ -1,4 +1,4 @@
-# Adapter smoke matrix
+# Матрица smoke-тестов адаптеров
 
 ## React
 

@@ -20,24 +20,24 @@ Register the plugin once, then use `<RarogProvider>` at the shell level.
 
 ## Component coverage
 
-- Button
-- Input
-- Textarea
-- SelectField
-- Checkbox
-- Radio
-- Switch
-- Card
-- Alert
-- Badge
-- Spinner
-- Skeleton
-- Tabs
-- Accordion
-- Tooltip
+- Кнопка
+- Поле ввода
+- Текстовая область
+- ВыборField
+- Чекбокс
+- Радиокнопка
+- Переключатель
+- Карточка
+- Алерт
+- Бейдж
+- Спиннер
+- Скелетон
+- Вкладки
+- Аккордеон
+- Подсказка
 - Modal
 - Offcanvas
-- Dropdown
+- Выпадающее меню
 
 ## Nuxt notes
 

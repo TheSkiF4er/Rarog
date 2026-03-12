@@ -21,28 +21,28 @@ import {
 } from "@rarog/react";
 ```
 
-Use `RarogProvider` near the app shell so dynamic nodes can be re-initialized safely after route transitions.
+Use `RarogProvider` near the оболочка приложения so dynamic nodes can be re-initialized safely after route transitions.
 
 ## Wrapped components
 
-- Button
-- Input
-- Textarea
-- SelectField
-- Checkbox
-- Radio
-- Switch
-- Card
-- Alert
-- Badge
-- Spinner
-- Skeleton
-- Tabs
-- Accordion
-- Tooltip
+- Кнопка
+- Поле ввода
+- Текстовая область
+- ВыборField
+- Чекбокс
+- Радиокнопка
+- Переключатель
+- Карточка
+- Алерт
+- Бейдж
+- Спиннер
+- Скелетон
+- Вкладки
+- Аккордеон
+- Подсказка
 - Modal
 - Offcanvas
-- Dropdown
+- Выпадающее меню
 
 ## SSR notes
 
