@@ -1,8 +1,8 @@
-# Official starters
+# Официальные стартеры
 
-This directory contains the official starter fleet for Rarog.
+Эта директория содержит официальный набор стартеров для Rarog.
 
-## Included
+## Что включено
 
 - vanilla-app
 - vite-react
@@ -13,9 +13,9 @@ This directory contains the official starter fleet for Rarog.
 - saas-starter
 - white-label-starter
 
-## Validation
+## Валидация
 
-Run:
+Запуск:
 
 ```bash
 npm run test:starters
