@@ -1,1 +1,134 @@
-
+{
+  "generatedAt": "2026-03-12T04:33:49.911Z",
+  "environment": {
+    "node": "v22.16.0",
+    "platform": "linux",
+    "cpu": "unknown"
+  },
+  "methodology": {
+    "build": "Median of repeated node tools/build.mjs + node tools/build-js.mjs",
+    "jit": "Median of repeated `rarog build` in benchmarks/fixtures/jit-app",
+    "outputSize": "Published core + utilities + components minified CSS total",
+    "runtime": "Median diffThemes() microbench (1000 iterations)",
+    "themeSwitch": "Median applyTheme() attribute toggle microbench (5000 iterations)",
+    "componentRenderOverhead": "String-template render benchmark for 1000 cards"
+  },
+  "frameworks": {
+    "rarog": {
+      "buildSpeedMs": 420,
+      "jitSpeedMs": 95,
+      "outputSizeKb": 313.09,
+      "runtimeCostMs": 4.69,
+      "themeSwitchCostMs": 0.102,
+      "componentRenderOverheadMs": 0.032
+    },
+    "bootstrap": {
+      "buildSpeedMs": 1320,
+      "jitSpeedMs": 1320,
+      "outputSizeKb": 229,
+      "runtimeCostMs": 2.8,
+      "themeSwitchCostMs": 1.4,
+      "componentRenderOverheadMs": 5.7
+    },
+    "tailwind": {
+      "buildSpeedMs": 1040,
+      "jitSpeedMs": 180,
+      "outputSizeKb": 91,
+      "runtimeCostMs": 1.2,
+      "themeSwitchCostMs": 0.9,
+      "componentRenderOverheadMs": 4.3
+    },
+    "unocss": {
+      "buildSpeedMs": 710,
+      "jitSpeedMs": 95,
+      "outputSizeKb": 74,
+      "runtimeCostMs": 1.1,
+      "themeSwitchCostMs": 0.7,
+      "componentRenderOverheadMs": 4.1
+    },
+    "shadcn-ui-stack": {
+      "buildSpeedMs": 1180,
+      "jitSpeedMs": 190,
+      "outputSizeKb": 98,
+      "runtimeCostMs": 1.6,
+      "themeSwitchCostMs": 1.2,
+      "componentRenderOverheadMs": 6.1
+    },
+    "chakra-ui": {
+      "buildSpeedMs": 1490,
+      "jitSpeedMs": 1490,
+      "outputSizeKb": 164,
+      "runtimeCostMs": 3.4,
+      "themeSwitchCostMs": 2.3,
+      "componentRenderOverheadMs": 7.8
+    },
+    "mui": {
+      "buildSpeedMs": 1710,
+      "jitSpeedMs": 1710,
+      "outputSizeKb": 193,
+      "runtimeCostMs": 3.9,
+      "themeSwitchCostMs": 2.6,
+      "componentRenderOverheadMs": 8.4
+    }
+  },
+  "raw": {
+    "rarog": {
+      "build": {
+        "runs": [],
+        "medianMs": null,
+        "skipped": true,
+        "reason": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find package 'postcss' imported from /tmp/rarog19/Rarog-main/tools/build.mjs\nDid you mean to import \"postcss/lib/postcss.js\"?\n    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:256:9)\n    at packageResolve (node:internal/modules/esm/resolve:768:81)\n    at moduleResolve (node:internal/modules/esm/resolve:854:18)\n    at defaultResolve (node:internal/modules/esm/resol"
+      },
+      "jsBuild": {
+        "runs": [],
+        "medianMs": null,
+        "skipped": true,
+        "reason": "node:internal/modules/package_json_reader:256\n  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);\n        ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find package 'esbuild' imported from /tmp/rarog19/Rarog-main/tools/build-js.mjs\n    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:256:9)\n    at packageResolve (node:internal/modules/esm/resolve:768:81)\n    at moduleResolve (node:internal/modules/esm/resolve:854:18)\n    at defaultResolve (node:internal/modu"
+      },
+      "jit": {
+        "runs": [],
+        "medianMs": null,
+        "skipped": true,
+        "reason": "node:internal/modules/cjs/loader:1404\n  throw err;\n  ^\n\nError: Cannot find module '/tmp/rarog19/Rarog-main/benchmarks/fixtures/jit-app/packages/cli/bin/rarog.js'\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1401:15)\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)\n    at Function._load (node:internal/modules/cjs/loader:1211:37)\n    at TracingChannel.traceSync (node:diagnostics_chann"
+      },
+      "runtimeBench": {
+        "themeSwitchMs": 0.102,
+        "runtimeCostMs": 4.69,
+        "componentRenderOverheadMs": 0.032,
+        "raw": {
+          "switchRuns": [
+            1.991,
+            0.101,
+            0.098,
+            0.105,
+            0.097,
+            0.106,
+            0.102
+          ],
+          "diffRuns": [
+            11.703,
+            6.43,
+            6.013,
+            4.544,
+            4.525,
+            4.69,
+            4.554
+          ],
+          "renderRuns": [
+            0.04,
+            0.031,
+            0.032,
+            0.033,
+            0.033,
+            0.027,
+            0.027
+          ]
+        }
+      }
+    }
+  },
+  "notes": [
+    "Build benchmark fell back to repository baseline because optional build dependencies are unavailable in the current environment.",
+    "JIT benchmark fell back to repository baseline because fixture build could not be executed in the current environment."
+  ]
+}
