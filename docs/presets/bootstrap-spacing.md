@@ -1,4 +1,4 @@
-# Bootstrap-like spacing preset
+# Bootstrap-like preset spacing
 
 Используйте этот preset, когда команда мигрирует с Bootstrap и хочет сохранить знакомую spacing scale `0..5`.
 

@@ -1,4 +1,4 @@
-# Tailwind-like utility aliases
+# Tailwind-like aliases утилит
 
 Используйте этот preset, когда adoption начинается с utility-heavy codebase и нужно сохранить знакомый Tailwind vocabulary.
 

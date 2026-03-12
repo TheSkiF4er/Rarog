@@ -1,11 +1,11 @@
 # Compatibility presets
 
-Presets помогают ускорять adoption и миграции, не заставляя команду сразу менять весь mental model.
+Пресеты помогают ускорять adoption и миграции, не заставляя команду сразу менять весь mental model.
 
-## Included official presets
+## Включено official presets
 
 - [Bootstrap-like spacing](bootstrap-spacing.md)
-- [Tailwind-like utility aliases](tailwind-aliases.md)
+- [Tailwind-like aliases утилит](tailwind-aliases.md)
 - [Enterprise design-system](enterprise-design-system.md)
 - [Dashboard](dashboard.md)
 
