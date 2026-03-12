@@ -22,6 +22,7 @@ const _tabsInstances = new WeakMap();
 const _maskHandlers = Object.create(null);
 
 const _eventBusListeners = new Map();
+const VERSION = "1.0.0";
 
 const RarogConfig = {
   debug:
@@ -2740,6 +2741,7 @@ const Rarog = {
   InputMask,
   Events,
   config: RarogConfig,
+  VERSION,
   /**
    * Включить/выключить debug-режим в рантайме.
    * Эквивалентно установке window.RAROG_DEBUG / RAROG_DEV, но управляется из кода.
@@ -2782,6 +2784,7 @@ export {
   init,
   dispose,
   reinit,
-  Rarog
+  Rarog,
+  VERSION
 };
 export default Rarog;
