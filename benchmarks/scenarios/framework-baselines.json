@@ -1,1 +1,52 @@
-
+{
+  "frameworks": {
+    "bootstrap": {
+      "buildSpeedMs": 1320,
+      "jitSpeedMs": 1320,
+      "outputSizeKb": 229,
+      "runtimeCostMs": 2.8,
+      "themeSwitchCostMs": 1.4,
+      "componentRenderOverheadMs": 5.7
+    },
+    "tailwind": {
+      "buildSpeedMs": 1040,
+      "jitSpeedMs": 180,
+      "outputSizeKb": 91,
+      "runtimeCostMs": 1.2,
+      "themeSwitchCostMs": 0.9,
+      "componentRenderOverheadMs": 4.3
+    },
+    "unocss": {
+      "buildSpeedMs": 710,
+      "jitSpeedMs": 95,
+      "outputSizeKb": 74,
+      "runtimeCostMs": 1.1,
+      "themeSwitchCostMs": 0.7,
+      "componentRenderOverheadMs": 4.1
+    },
+    "shadcn-ui-stack": {
+      "buildSpeedMs": 1180,
+      "jitSpeedMs": 190,
+      "outputSizeKb": 98,
+      "runtimeCostMs": 1.6,
+      "themeSwitchCostMs": 1.2,
+      "componentRenderOverheadMs": 6.1
+    },
+    "chakra-ui": {
+      "buildSpeedMs": 1490,
+      "jitSpeedMs": 1490,
+      "outputSizeKb": 164,
+      "runtimeCostMs": 3.4,
+      "themeSwitchCostMs": 2.3,
+      "componentRenderOverheadMs": 7.8
+    },
+    "mui": {
+      "buildSpeedMs": 1710,
+      "jitSpeedMs": 1710,
+      "outputSizeKb": 193,
+      "runtimeCostMs": 3.9,
+      "themeSwitchCostMs": 2.6,
+      "componentRenderOverheadMs": 8.4
+    }
+  }
+}
