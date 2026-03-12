@@ -1,14 +1,40 @@
 {
   "official": [
     {
-      "name": "@rarog/plugin-forms",
-      "description": "Форменные утилиты и паттерны поверх Rarog.",
-      "since": "2.4.0"
+      "name": "@rarog/plugin-typography",
+      "description": "Content typography for docs, blogs and long-form pages.",
+      "since": "3.5.0",
+      "sdk": "v1"
     },
     {
-      "name": "@rarog/plugin-typography",
-      "description": "Типографика для статей, документации, блогов.",
-      "since": "2.4.0"
+      "name": "@rarog/plugin-forms",
+      "description": "Form controls, helpers and ergonomic input primitives.",
+      "since": "3.5.0",
+      "sdk": "v1"
+    },
+    {
+      "name": "@rarog/plugin-motion",
+      "description": "Motion primitives and accessible transition helpers.",
+      "since": "3.5.0",
+      "sdk": "v1"
+    },
+    {
+      "name": "@rarog/plugin-charts-theme",
+      "description": "Theming primitives for dashboards and embedded charts.",
+      "since": "3.5.0",
+      "sdk": "v1"
+    },
+    {
+      "name": "@rarog/plugin-dashboard-kit",
+      "description": "Dashboard shells, KPI cards and analytics layout primitives.",
+      "since": "3.5.0",
+      "sdk": "v1"
+    },
+    {
+      "name": "@rarog/plugin-marketing-blocks",
+      "description": "Hero, pricing and CTA building blocks for marketing pages.",
+      "since": "3.5.0",
+      "sdk": "v1"
     }
   ],
   "community": []
