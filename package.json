@@ -40,7 +40,9 @@
     "test:smoke": "node tests/cli-temp-project-smoke.mjs",
     "migrate:bootstrap": "node packages/cli/bin/rarog.js migrate bootstrap",
     "migrate:tailwind": "node packages/cli/bin/rarog.js migrate tailwind",
-    "inspect:classes": "node packages/cli/bin/rarog.js inspect classes"
+    "inspect:classes": "node packages/cli/bin/rarog.js inspect classes",
+    "test:plugin-sdk": "vitest run tests/js/plugin-sdk.test.js",
+    "create:plugin": "node packages/cli/bin/create-rarog-plugin.js"
   },
   "repository": {
     "type": "git",
@@ -71,7 +73,8 @@
     "vscode-languageserver": "^9.0.0"
   },
   "bin": {
-    "rarog": "packages/cli/bin/rarog.js"
+    "rarog": "packages/cli/bin/rarog.js",
+    "create-rarog-plugin": "packages/cli/bin/create-rarog-plugin.js"
   },
   "style": "./packages/core/dist/rarog-core.min.css",
   "exports": {
@@ -86,7 +89,8 @@
     "./themes/creative": "./packages/themes/dist/rarog-theme-creative.min.css",
     "./themes/enterprise": "./packages/themes/dist/rarog-theme-enterprise.min.css",
     "./package.json": "./package.json",
-    "./presets": "./packages/presets/registry.json"
+    "./presets": "./packages/presets/registry.json",
+    "./plugin-sdk": "./packages/plugin-sdk/index.cjs"
   },
   "files": [
     "packages/cli/bin",
@@ -97,7 +101,14 @@
     "packages/themes/dist",
     "packages/presets",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "packages/plugin-sdk",
+    "packages/plugin-forms",
+    "packages/plugin-typography",
+    "packages/plugin-motion",
+    "packages/plugin-charts-theme",
+    "packages/plugin-dashboard-kit",
+    "packages/plugin-marketing-blocks"
   ],
   "workspaces": [
     "packages/*"

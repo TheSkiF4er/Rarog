@@ -35,6 +35,35 @@ export interface RarogThemeConfig {
   shadow: Record<string, string>;
 }
 
+export interface RarogPluginDiagnostic {
+  level: "info" | "warn" | "error";
+  message: string;
+}
+
+export interface RarogPluginCapabilities {
+  utilities?: boolean;
+  components?: boolean;
+  tokens?: boolean;
+  themes?: boolean;
+  js?: boolean;
+  diagnostics?: boolean;
+}
+
+export interface RarogPluginManifest {
+  apiVersion: 1;
+  name: string;
+  version: string;
+  displayName?: string;
+  description?: string;
+  engine?: {
+    rarog: string;
+  };
+  compatibility?: string;
+  capabilities?: RarogPluginCapabilities;
+  keywords?: string[];
+  official?: boolean;
+}
+
 export interface RarogConfig {
   theme: RarogThemeConfig;
   screens: Record<string, string>;
@@ -57,11 +86,27 @@ export interface RarogConfig {
 
 export interface RarogPluginContext {
   config: RarogConfig;
+  meta?: {
+    mode: "full" | "jit";
+    rootDir: string;
+    env: string;
+  };
+  helpers?: {
+    warn(message: string): void;
+  };
 }
 
 export interface RarogPluginResult {
   utilitiesCss?: string;
   componentsCss?: string;
+  diagnostics?: RarogPluginDiagnostic[];
 }
 
-export type RarogPlugin = ((ctx: RarogPluginContext) => void | RarogPluginResult) | string;
+export interface RarogPluginObject {
+  __rarogPlugin: true;
+  manifest: RarogPluginManifest;
+  setup(ctx: RarogPluginContext): void | RarogPluginResult;
+}
+
+export type RarogLegacyPlugin = (ctx: Pick<RarogPluginContext, "config">) => void | RarogPluginResult;
+export type RarogPlugin = RarogLegacyPlugin | RarogPluginObject | string;
