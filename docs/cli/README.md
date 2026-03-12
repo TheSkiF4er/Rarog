@@ -58,3 +58,25 @@ Use the CLI when you want to:
 - `rarog audit bundle` — проверяет размеры CSS/JS output
 
 Подробнее: [CLI Pro tools](./pro-tools.md)
+
+
+## CLI Pro workflow
+
+Rarog CLI Pro теперь включает эксплуатационные команды для quality bar и design-system governance:
+
+- `rarog doctor`
+- `rarog token inspect`
+- `rarog token diff`
+- `rarog theme diff`
+- `rarog component scaffold`
+- `rarog audit a11y`
+- `rarog audit bundle`
+
+Для release-готовности используйте также:
+
+- `npm run test:starters-install`
+- `npm run test:package-matrix`
+- `npm run test:examples-ci`
+- `npm run docs:links`
+- `npm run test:exports`
+- `npm run quality:gates`
