@@ -52,7 +52,9 @@
     "test:starters-install": "node tools/test-starter-installs.mjs",
     "test:package-matrix": "node tools/test-package-matrix.mjs",
     "test:examples-ci": "node tools/test-examples-ci.mjs",
-    "create:plugin": "node packages/cli/bin/create-rarog-plugin.js"
+    "create:plugin": "node packages/cli/bin/create-rarog-plugin.js",
+    "quality:gates": "node tools/quality-gates.mjs",
+    "test:exports": "node tools/check-export-surface.mjs"
   },
   "repository": {
     "type": "git",

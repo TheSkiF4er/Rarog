@@ -9,6 +9,8 @@
 - `npm run release:verify` — release/docs contract gate.
 - `npm run verify:artifacts` — post-build проверка publishable tarball.
 - `npm run pack:packages` — упаковка publishable пакетов в `.artifacts/`.
+- `npm run quality:gates` — прогон расширенных quality gates перед публикацией.
+- `npm run test:exports` — проверка export surface всех publishable пакетов.
 
 ## Перед релизом
 
@@ -27,13 +29,14 @@ Release workflow выполняет именно этот порядок:
 1. `npm ci`
 2. `npm run release:verify`
 3. `npm run build:all`
-4. `npm run test:release`
-5. `npm run verify:artifacts`
-6. `npm run pack:packages`
-7. `npm publish . --access public`
-8. `npm publish ./packages/js --access public`
-9. `npm publish ./packages/react --access public`
-10. `npm publish ./packages/vue --access public`
+4. `npm run quality:gates`
+5. `npm run test:release`
+6. `npm run verify:artifacts`
+7. `npm run pack:packages`
+8. `npm publish . --access public`
+9. `npm publish ./packages/js --access public`
+10. `npm publish ./packages/react --access public`
+11. `npm publish ./packages/vue --access public`
 
 ## Release invariants
 
@@ -49,7 +52,7 @@ Release workflow выполняет именно этот порядок:
 
 Перепроверьте:
 - `README.md`
-- `docs/getting-started.md`
-- `docs/stability.md`
-- `docs/versioning.md`
+- `docs/getting-started/README.md`
+- `docs/launch/production-recommendations.md`
+- `RELEASE.md`
 - `.github/workflows/release.yml`
