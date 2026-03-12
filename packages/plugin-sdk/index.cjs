@@ -1,7 +1,7 @@
 const path = require("path");
 
 const SDK_API_VERSION = 1;
-const DEFAULT_ENGINE_RANGE = ">=3.5.0 <4.0.0";
+const DEFAULT_ENGINE_RANGE = ">=1.0.0 <2.0.0";
 
 function normalizeCapabilities(capabilities) {
   const source = capabilities && typeof capabilities === "object" ? capabilities : {};
@@ -129,7 +129,7 @@ function validatePluginCompatibility(plugin, runtime) {
 
 function createPluginTestHarness(options = {}) {
   const runtime = {
-    rarogVersion: options.rarogVersion || "3.5.0",
+    rarogVersion: options.rarogVersion || "1.0.0",
     rootDir: options.rootDir || process.cwd()
   };
 
