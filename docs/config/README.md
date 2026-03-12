@@ -1,8 +1,8 @@
-# Config
+# Конфигурация
 
 Конфигурация Rarog: canonical config, build manifest, content scanning, variants и связанные настройки.
 
-## Included legacy sources
+## Включено legacy sources
 
 - `getting-started.md`
 - `integration-guides.md`
@@ -13,7 +13,7 @@
 
 ## Imported from `getting-started.md`
 
-## Getting Started
+## Быстрый старт
 
 Этот раздел описывает **канонический install/build flow** для текущего состояния репозитория.
 
@@ -69,7 +69,7 @@ module.exports = {
 };
 ```
 
-#### Build manifest
+#### Сборка manifest
 
 Канонический build-manifest:
 - `rarog.build.json`
@@ -134,7 +134,7 @@ npm run verify:artifacts
 - `npm run verify:artifacts` — запускается **после полной сборки**;
 - `npm run test:ci` — включает temp-project smoke test (`init → validate → build → output exists`).
 
-### Root package surface
+### Поверхность root-пакета
 
 Root `rarog` публикует CSS surface через:
 - `style`
@@ -179,11 +179,11 @@ Rarog не привязан к конкретному фреймворку и х
 
 ```ts
 // vite.config.ts
-import { defineConfig } from 'vite'
+import { defineКонфигурация } from 'vite'
 import react from '@vitejs/plugin-react'
 import { rarogPlugin } from '../tools/vite-plugin-rarog'
 
-export default defineConfig({
+export default defineКонфигурация({
   plugins: [
     react(),
     rarogPlugin()
@@ -324,7 +324,7 @@ npx rarog build
 
 ## Imported from `tokens.md`
 
-## Tokens
+## Токены
 
 Rarog строится вокруг универсального слоя дизайн-токенов.
 
@@ -348,9 +348,9 @@ npx rarog build
 
 Для использования тех же токенов в дизайн-системе доступен экспорт:
 
-- файл `design/figma.tokens.json` — совместим с Tokens Studio / Design Tokens tooling.
+- файл `design/figma.tokens.json` — совместим с Токены Studio / Design Токены tooling.
 
-Подробнее про импорт в Figma и Tokens Studio см. раздел **IDE & Plugins**.
+Подробнее про импорт в Figma и Токены Studio см. раздел **IDE & Plugins**.
 
 ### Token pipeline v2 (3.3.0+)
 
@@ -372,7 +372,7 @@ npx rarog build
 1. Настраиваете токены в `rarog.config.*`.
 2. Запускаете `npx rarog build` для генерации CSS и `rarog.tokens.json`.
 3. Обновляете `design/figma.tokens.json` (через тот же пайплайн).
-4. Обновляете токены в Figma (Tokens Studio или аналог).
+4. Обновляете токены в Figma (Токены Studio или аналог).
 
 
 ## Imported from `variants-jit.md`
@@ -472,7 +472,7 @@ JIT поддерживает:
 
 Это позволяет использовать Rarog util-классы во фреймворковых проектах без потерь при tree-shaking.
 
-### Config: variants
+### Конфигурация: variants
 
 В `rarog.config.ts/js` появилась секция:
 
@@ -487,7 +487,7 @@ variants: {
 Сейчас она используется как декларация поддерживаемых variants. В будущих версиях может
 расшириться до полноценного маппинга variant → генерация CSS.
 
-### Build modes и интеграция
+### Сборка modes и интеграция
 
 В `rarog.config.ts` по-прежнему доступны режимы:
 
@@ -498,11 +498,11 @@ variants: {
 
 ```ts
 // tools/vite-plugin-rarog.js
-import { defineConfig } from 'vite'
+import { defineКонфигурация } from 'vite'
 import react from '@vitejs/plugin-react'
 import { rarogPlugin } from './tools/vite-plugin-rarog'
 
-export default defineConfig({
+export default defineКонфигурация({
   plugins: [
     react(),
     rarogPlugin()
@@ -545,7 +545,7 @@ Rarog изначально спроектирован так, чтобы:
 В `rarog.config.*`:
 
 ```ts
-const config: RarogConfig = {
+const config: RarogКонфигурация = {
   mode: "jit", // или "full"
   // ...
 };
