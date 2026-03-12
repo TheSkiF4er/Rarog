@@ -45,7 +45,14 @@
     "build:app": "npm run build:all",
     "rarog:build": "npm run build:all",
     "playground": "npm run docs",
-    "test:starters": "node tests/cli-temp-project-smoke.mjs"
+    "test:starters": "node tests/cli-temp-project-smoke.mjs",
+    "bench:run": "node tools/benchmark-runner.mjs",
+    "bench:publish": "node tools/benchmark-runner.mjs --publish",
+    "docs:links": "node tools/check-doc-links.mjs",
+    "test:starters-install": "node tools/test-starter-installs.mjs",
+    "test:package-matrix": "node tools/test-package-matrix.mjs",
+    "test:examples-ci": "node tools/test-examples-ci.mjs",
+    "create:plugin": "node packages/cli/bin/create-rarog-plugin.js"
   },
   "repository": {
     "type": "git",
