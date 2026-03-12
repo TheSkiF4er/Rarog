@@ -15,7 +15,7 @@ describe("plugin sdk v1", () => {
       }
     });
 
-    const harness = createPluginTestHarness({ rarogVersion: "3.5.0", rootDir: process.cwd() });
+    const harness = createPluginTestHarness({ rarogVersion: "1.0.0", rootDir: process.cwd() });
     const execution = harness.execute(plugin, { config: { mode: "jit" } });
 
     expect(execution.compatibility.ok).toBe(true);
@@ -34,7 +34,7 @@ describe("plugin sdk v1", () => {
       }
     });
 
-    const result = validatePluginCompatibility(plugin, { rarogVersion: "3.5.0" });
+    const result = validatePluginCompatibility(plugin, { rarogVersion: "1.0.0" });
     expect(result.ok).toBe(false);
     expect(result.errors[0]).toContain("expects Rarog");
   });
