@@ -43,7 +43,7 @@ module.exports = {\n  plugins: [require("./${path.posix.join(folderName.replace(
 
   writeProjectFile(
     testPath,
-    `const { describe, it, expect } = require("vitest");\nconst { createPluginTestHarness } = require("../../packages/plugin-sdk/index.cjs");\nconst plugin = require("./index.cjs");\n\ndescribe("${packageName}", () => {\n  it("returns css", () => {\n    const harness = createPluginTestHarness({ rarogVersion: "3.5.0", rootDir: process.cwd() });\n    const execution = harness.execute(plugin, { config: { mode: "jit" } });\n    expect(execution.result.utilitiesCss).toContain("plugin-my-plugin-stack");\n  });\n});\n`
+    `const { describe, it, expect } = require("vitest");\nconst { createPluginTestHarness } = require("../../packages/plugin-sdk/index.cjs");\nconst plugin = require("./index.cjs");\n\ndescribe("${packageName}", () => {\n  it("returns css", () => {\n    const harness = createPluginTestHarness({ rarogVersion: "1.0.0", rootDir: process.cwd() });\n    const execution = harness.execute(plugin, { config: { mode: "jit" } });\n    expect(execution.result.utilitiesCss).toContain("plugin-my-plugin-stack");\n  });\n});\n`
   );
 
   return {
