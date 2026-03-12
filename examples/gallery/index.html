@@ -1,1 +1,35 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rarog Examples Gallery</title>
+  <style>
+    :root { --bg:#09111f; --panel:#111c30; --soft:#16233d; --text:#ecf2ff; --muted:#9fb0d1; --line:#233250; --brand:#6ea8fe; }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,#09111f,#0d1527);color:var(--text)}
+    a{color:inherit;text-decoration:none} .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 64px}
+    .hero{padding:24px 0 28px}.eyebrow{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:var(--brand);font-size:12px}
+    h1{font-size:48px;line-height:1.05;margin:16px 0 12px}.lead{max-width:760px;color:var(--muted);font-size:18px;line-height:1.6}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:28px}.card{background:rgba(17,28,48,.88);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--soft);color:var(--brand);font-size:12px;margin-bottom:12px}.card p{color:var(--muted);min-height:72px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#13203a}.btn.primary{background:linear-gradient(135deg,#2563eb,#7c3aed);border-color:transparent}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <span class="eyebrow">Rarog 1.0 launch assets</span>
+      <h1>Examples gallery for product, platform and design teams</h1>
+      <p class="lead">Одна витрина для starters, showcase apps и niche-focused demos: multi-theme SaaS, white-label B2B и internal dashboards/admins.</p>
+    </section>
+    <section class="grid">
+      <article class="card"><span class="tag">Launch site</span><h2>Rarog 1.0 website</h2><p>Полированный launch-ready landing с positioning, comparison CTA и нишевым фокусом.</p><div class="actions"><a class="btn primary" href="../ui-kits/rarog-launch/index.html">Открыть</a></div></article>
+      <article class="card"><span class="tag">Showcase</span><h2>Multi-theme SaaS</h2><p>Tenant-aware продуктовый интерфейс с несколькими темами, usage widgets и app shell.</p><div class="actions"><a class="btn primary" href="../showcase/multi-theme-saas/index.html">Открыть</a></div></article>
+      <article class="card"><span class="tag">Showcase</span><h2>White-label B2B</h2><p>Брендирование под клиентов, procurement-ready flows и preview для согласования.</p><div class="actions"><a class="btn primary" href="../showcase/white-label-b2b/index.html">Открыть</a></div></article>
+      <article class="card"><span class="tag">Showcase</span><h2>Internal admin</h2><p>Плотная админка: approvals, queues, KPI, alerts и сложные operational screens.</p><div class="actions"><a class="btn primary" href="../showcase/internal-admin/index.html">Открыть</a></div></article>
+      <article class="card"><span class="tag">Builder</span><h2>White-label theme builder</h2><p>Интерактивный token editor, compare mode, a11y preview и export/import сценарии.</p><div class="actions"><a class="btn" href="../ui-kits/white-label-demo/index.html">Открыть</a></div></article>
+      <article class="card"><span class="tag">Starter</span><h2>Current starter fleet</h2><p>Официальные стартеры для vanilla, React, Next, Vue, Nuxt, dashboards, SaaS и white-label.</p><div class="actions"><a class="btn" href="../starters/README.md">README</a></div></article>
+    </section>
+  </div>
+</body>
+</html>
