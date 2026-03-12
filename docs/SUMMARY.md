@@ -6,6 +6,7 @@
 - [CLI](cli/README.md)
 - [Config](config/README.md)
 - [Build](build/README.md)
+- [Benchmarks](benchmarks/README.md)
 - [Tokens](tokens/README.md)
 - [Themes](themes/README.md)
 - [Utilities](utilities/README.md)
@@ -43,3 +44,4 @@
 - [Utility API audit vs Tailwind](utilities/utility-api-audit.md)
 - [How JIT works](build/jit-how-it-works.md)
 - [JIT troubleshooting guide](build/jit-troubleshooting.md)
+- [Optimization backlog](benchmarks/optimization-backlog.md)

@@ -15,7 +15,7 @@ Rarog docs platform v2 теперь ориентирована на **GitBook** 
 
 ## Key sections
 
-- [Docs platform v2](docs-platform-v2.md)
+- [Docs platform v2](docs-platform.md)
 - [Live playground](live-playground.md)
 - [Copy-paste examples](copy-paste-examples.md)
 - [Utility lookup](utilities/lookup.md)
