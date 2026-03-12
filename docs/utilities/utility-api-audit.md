@@ -1,6 +1,6 @@
 # Utility API audit vs Tailwind
 
-Этот аудит закрывает requested deliverables по utility parity и фиксирует текущий план добора API до Tailwind-like surface.
+Этот аудит закрывает запрошенные deliverables по utility parity и фиксирует текущий план добора API до Tailwind-like surface.
 
 ## Что уже сделано в этой итерации
 

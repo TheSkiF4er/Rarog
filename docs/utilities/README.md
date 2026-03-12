@@ -1,6 +1,6 @@
-# Utilities
+# Утилиты
 
-Utilities provide low-level helpers for styling, composition, and authoring ergonomics.
+Утилиты provide low-level helpers for styling, composition, and authoring ergonomics.
 
 ## When to use utilities
 
@@ -15,8 +15,8 @@ Keep utilities focused, predictable, and easy to combine.
 
 ## Related sections
 
-- [Components](../components/README.md)
-- [Themes](../themes/README.md)
+- [Компоненты](../components/README.md)
+- [Темы](../themes/README.md)
 
 ## Audit and parity work
 

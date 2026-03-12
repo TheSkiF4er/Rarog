@@ -1,34 +1,34 @@
-# Utility lookup
+# Справочник утилит
 
-Utility lookup — это быстрый навигатор по наиболее частым задачам и соответствующим utility-классам Rarog.
+Справочник утилит — это быстрый навигатор по наиболее частым задачам и соответствующим utility-классам Rarog.
 
-## Layout and spacing
+## Layout и spacing
 
-- stack with gaps → `d-flex flex-column gap-*`
+- stack с gap → `d-flex flex-column gap-*`
 - horizontal cluster → `d-flex gap-* flex-wrap align-items-center`
 - responsive columns → `rg-row` + `rg-col-*`
 - dashboard shell → `d-grid`, `grid-cols-*`, `min-h-screen`, `p-*`
 
-## Sizing
+## Размеры
 
-- fixed width → `w-*` / arbitrary `w-[320px]`
-- min height panel → `min-h-*`
-- full viewport section → `min-h-screen`
+- фиксированная ширина → `w-*` / arbitrary `w-[320px]`
+- panel с минимальной высотой → `min-h-*`
+- секция на весь viewport → `min-h-screen`
 
-## Typography
+## Типографика
 
-- title hierarchy → `h1`…`h6`
-- body emphasis → `fw-semibold`, `text-muted`
-- truncation → `text-truncate`
+- иерархия заголовков → `h1`…`h6`
+- акценты в основном тексте → `fw-semibold`, `text-muted`
+- усечение → `text-truncate`
 
-## States and variants
+## Состояния и варианты
 
 - hover → `hover:*`
 - focus-visible ring → `focus:*`
 - responsive → `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
 - contextual/data variants → `data-*`, `group-*`, `peer-*`
 
-## Related docs
+## Связанные документы
 
-- [Utility API audit vs Tailwind](utility-api-audit.md)
-- [Migration from Tailwind](../migration/from-tailwind.md)
+- [Аудит Utility API vs Tailwind](utility-api-audit.md)
+- [Миграция с Tailwind](../migration/from-tailwind.md)
