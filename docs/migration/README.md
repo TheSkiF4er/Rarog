@@ -6,6 +6,8 @@
 
 - [Bootstrap → Rarog migration guide](bootstrap-to-rarog.md)
 - [Tailwind → Rarog migration guide](tailwind-to-rarog.md)
+- [Chakra UI → Rarog](chakra-to-rarog.md)
+- [MUI → Rarog](mui-to-rarog.md)
 - [Class mapping tables](class-mapping-tables.md)
 - [Migration assistant MVP](migration-assistant-mvp.md)
 
