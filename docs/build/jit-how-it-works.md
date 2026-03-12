@@ -1,4 +1,4 @@
-# How JIT works
+# Как работает JIT
 
 ## Flow
 

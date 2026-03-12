@@ -1,4 +1,4 @@
-# JIT troubleshooting guide
+# Руководство по устранению проблем JIT
 
 ## Симптом: класс не попал в output
 
@@ -39,7 +39,7 @@
 - arbitrary value использует неподдерживаемое семейство
 - проект ожидает stacked variants шире, чем текущий generator
 
-## Recommended workflow
+## Рекомендуемый workflow
 
 1. `rarog doctor`
 2. `rarog analyze`

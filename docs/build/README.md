@@ -1,15 +1,15 @@
-# Build
+# Сборка
 
-Build docs or runtime assets for production.
+Сборка docs or runtime assets for production.
 
 ## Typical flow
 
 1. Validate config
 2. Resolve tokens and themes
-3. Build runtime output
+3. Сборка runtime output
 4. Verify generated artifacts
 
-## Build goals
+## Сборка goals
 
 A good build should be:
 - reproducible
@@ -18,10 +18,10 @@ A good build should be:
 
 ## Related sections
 
-- [Config](../config/README.md)
-- [Runtime](../runtime/README.md)
+- [Конфигурация](../config/README.md)
+- [Рантайм](../runtime/README.md)
 
 ## JIT hardening docs
 
-- [How JIT works](jit-how-it-works.md)
-- [JIT troubleshooting guide](jit-troubleshooting.md)
+- [Как работает JIT](jit-how-it-works.md)
+- [Руководство по устранению проблем JIT](jit-troubleshooting.md)
