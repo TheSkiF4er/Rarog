@@ -1,4 +1,4 @@
-# Token and theme explorer
+# Обозреватель токенов и тем
 
 Token/theme explorer объединяет token architecture v2, semantic tokens и theme engine v1 в одну исследовательскую поверхность.
 

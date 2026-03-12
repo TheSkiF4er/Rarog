@@ -1,6 +1,6 @@
-# Theme engine
+# Движок тем
 
-Theme engine turns themes into a first-class product feature.
+Движок тем turns themes into a first-class product feature.
 
 ## Supported scenarios
 
@@ -25,11 +25,11 @@ rarog theme validate packages/themes/presets/enterprise-plus.json
 - `graphite` — dark operations UI
 - `enterprise-plus` — white-label B2B baseline
 
-## Runtime model
+## Рантайм model
 
 A tenant wrapper can opt into a theme via `data-rg-theme="..."`. Theme CSS only overrides semantic/runtime variables, so utilities and components continue to work unchanged.
 
 
-## Theme builder
+## Конструктор тем
 
-A browser-based theme builder is available in `examples/ui-kits/white-label-demo/index.html`. It supports token editing, compare mode, import/export and accessibility preview.
+A браузерный конструктор тем is available in `examples/ui-kits/white-label-demo/index.html`. It supports token editing, режим сравнения, import/export and предпросмотр доступности.

@@ -1,40 +1,40 @@
-# Theme builder / token editor
+# Конструктор тем / редактор токенов
 
-Theme builder turns token editing into a product surface for white-label teams.
+Theme builder превращает редактирование токенов в полноценную продуктовую поверхность для white-label команд.
 
-## What ships
+## Что входит
 
-- visual token editor
-- live theme preview
-- side-by-side compare themes
-- export/import theme JSON
-- export build manifest
-- accessibility preview for critical text/background pairs
-- density / radius / shadow controls
+- визуальный редактор токенов;
+- живой предпросмотр темы;
+- сравнение тем бок о бок;
+- import/export JSON темы;
+- экспорт build manifest;
+- предпросмотр доступности для критичных сочетаний текста и фона;
+- управление плотностью, радиусами и тенями.
 
-## Browser demo
+## Браузерное демо
 
-Open:
+Откройте:
 
 ```text
 examples/ui-kits/white-label-demo/index.html
 ```
 
-Use it for:
+Используйте демо для:
 
-1. tenant brand onboarding
-2. product marketing review
-3. accessibility sign-off
-4. exporting a starter manifest for implementation teams
+1. онбординга бренда тенанта;
+2. маркетингового ревью продукта;
+3. финального согласования доступности;
+4. экспорта стартового manifest для команд внедрения.
 
-## Export outputs
+## Что экспортируется
 
-The builder exports two JSON artifacts:
+Конструктор экспортирует два JSON-артефакта:
 
-- a theme manifest compatible with `rarog theme diff`
-- a build manifest starter for project handoff
+- manifest темы, совместимый с `rarog theme diff`;
+- стартовый build manifest для handoff в продуктовую команду.
 
-## Recommended workflow
+## Рекомендуемый workflow
 
 ```bash
 rarog theme diff packages/themes/presets/enterprise-plus.json my-theme.json
@@ -42,11 +42,11 @@ rarog token inspect rarog.tokens.json --path=tokens.color.semantic
 rarog audit a11y examples/ui-kits/white-label-demo
 ```
 
-## White-label handoff checklist
+## Чек-лист white-label handoff
 
-- confirm primary / secondary colors
-- confirm contrast targets
-- compare against enterprise baseline
-- export theme JSON
-- export build manifest
-- commit alongside tenant docs
+- подтвердить primary / secondary цвета;
+- подтвердить цели по контрасту;
+- сравнить тему с enterprise-базой;
+- экспортировать JSON темы;
+- экспортировать build manifest;
+- закоммитить артефакты рядом с tenant docs.
