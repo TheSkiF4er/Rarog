@@ -28,3 +28,13 @@ Rarog docs platform v2 теперь ориентирована на **GitBook** 
 ## Authoring model
 
 GitBook является source of truth для структуры разделов и навигации. Для локальной проверки репозиторий также умеет делать lightweight static export в `.gitbook/dist`, чтобы CI мог проверить структуру, ссылки и готовность документации к публикации.
+
+## Launch-ready positioning
+
+Rarog 1.0 docs теперь включают отдельный launch-layer:
+
+- positioning и narrative для **why Rarog**;
+- comparison pages против Tailwind / Bootstrap / shadcn / Chakra / MUI;
+- starter + showcase gallery;
+- production recommendations для multi-theme SaaS, white-label B2B и internal dashboards/admins;
+- roadmap v2 как продолжение 1.0 launch story.
