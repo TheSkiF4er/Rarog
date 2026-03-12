@@ -54,7 +54,7 @@ npm run verify:artifacts
 - `npm run verify:artifacts` — post-build проверка publishable tarball;
 - `npm run pack:packages` — упаковка всех publishable пакетов в `.artifacts/`.
 
-## Root package surface
+## Поверхность root-пакета
 
 Root package предсказуемо публикует CSS surface:
 - `style` → `./packages/core/dist/rarog-core.min.css`
@@ -71,13 +71,13 @@ Root package предсказуемо публикует CSS surface:
 
 Сомнительный root `main` для CSS больше не используется, чтобы не ломать tooling.
 
-## Surface matrix
+## Матрица поверхностей
 
 | Surface | Status | Notes |
 |---|---|---|
 | Core CSS | Stable | Основной publish surface root package. |
-| Utilities CSS | Stable | Поддерживаемые utility classes и tokens. |
-| Components CSS | Stable | Поддерживаемые компонентные CSS-слои. |
+| Утилиты CSS | Stable | Поддерживаемые utility classes и tokens. |
+| Компоненты CSS | Stable | Поддерживаемые компонентные CSS-слои. |
 | Built-in themes | Stable | `default`, `dark`, `contrast`, `creative`, `enterprise`. |
 | CLI config/build flow | Stable | `init → validate → build` с `rarog.config.js` и `rarog.build.json`. |
 | JS runtime (`@rarog/js`) | Beta | Поддерживается, но API ещё расширяется. |
@@ -108,7 +108,7 @@ node packages/cli/bin/rarog.js validate
 node packages/cli/bin/rarog.js build
 ```
 
-## Publish flow
+## Процесс публикации
 
 Канонический publish pipeline в CI:
 

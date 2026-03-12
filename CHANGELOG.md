@@ -84,7 +84,7 @@
   - `design/figma.tokens.json` с semantic‑слоем и темами,
   - `design/figma-kit/README.md` с описанием официального Figma Design Kit.
 - Новый раздел документации **Design System Suite** (`/design-system`)
-  и обновлённые разделы **Tokens** / **Theming** с описанием пайплайна токенов.
+  и обновлённые разделы **Токены** / **Theming** с описанием пайплайна токенов.
 
 ### Изменено
 - README дополнен блоком о Rarog как production‑ready дизайн‑системе.
@@ -111,7 +111,7 @@
 - `rg-select` — настраиваемый select с поддержкой single/multiple, клавиатурной навигации и data-API (`data-rg-select`).
 - `rg-combobox` — комбинированный input+dropdown с поиском по опциям и событиями `rg:combobox:*`.
 - `rg-tags-input` — компонент для ввода тегов с добавлением по Enter/запятой, удалением по Backspace и интеграцией с валидацией.
-- Input masks (`data-rg-mask="phone|card|custom"`) и API `Rarog.InputMask.register()` для подключения своих масок.
+- Поле ввода masks (`data-rg-mask="phone|card|custom"`) и API `Rarog.InputMask.register()` для подключения своих масок.
 - `DataTable` (MVP) — сортировка по колонкам (`data-rg-sort`), поиск по таблице и клиентская пагинация через `data-rg-table`.
 
 ### Улучшено
@@ -119,7 +119,7 @@
 - Табличные паттерны: вспомогательные классы для сортировки и пагинации (`rg-table`, `rg-table-pagination`).
 
 ### Документация
-- Обновлён раздел **Components**: добавлены блоки по advanced form-компонентам и Data Table.
+- Обновлён раздел **Компоненты**: добавлены блоки по advanced form-компонентам и Data Table.
 - В разделе **Accessibility** — заметки по a11y для новых форменных и табличных компонентов.
 
 
@@ -167,12 +167,12 @@
 ### Добавлено
 - Rarog UI Kits & Templates:
   - **Rarog UI Admin** (`examples/ui-kits/admin-dashboard`) — демонстрационный admin‑dashboard с sidebar, navbar, KPI‑карточками, таблицами, формами, модалками и toast‑уведомлениями;
-  - **Rarog Landing Kit** (`examples/ui-kits/landing-kit`) — набор секций для лендингов (hero, features, pricing, blog, FAQ, CTA);
+  - **Rarog Landing Kit** (`examples/ui-kits/landing-kit`) — набор секций для лендингов (hero, возможности, pricing, blog, FAQ, CTA);
   - **Rarog SaaS Starter** (`examples/ui-kits/saas-starter`) — мини‑проект с layout’ами auth, dashboard и settings/billing для SaaS‑приложений.
 - Showcase & Docs:
   - новая страница **Showcase & UI Kits** в документации;
   - обновлённые Laravel/React/Next.js/Cajeer guides с примерами интеграции UI‑китов;
-  - дополнения в **Why Rarog** и README про UI‑киты и позиционирование Rarog как «готового» решения.
+  - дополнения в **Почему Rarog** и README про UI‑киты и позиционирование Rarog как «готового» решения.
 - Guides & Examples:
   - связка guides ↔ examples через ссылки на `examples/ui-kits/*`;
   - README обновлён списком доступных starters и UI‑китов.
@@ -187,9 +187,9 @@
 - Accessibility & Internationalization:
   - новая страница **Accessibility** с чек-листом по ключевым компонентам и примерами доступных форм;
   - расширенные a11y-утилиты: `not-sr-only`, `focus-ring`, `focus-outline-none`, `motion-safe:animate-*`;
-  - обновлённые рекомендации по доступности компонентов в разделе **Components**.
+  - обновлённые рекомендации по доступности компонентов в разделе **Компоненты**.
 - EN-документация (MVP):
-  - базовые страницы `/en/` (Getting Started, Why Rarog, Tokens, Utilities);
+  - базовые страницы `/en/` (Быстрый старт, Почему Rarog, Токены, Утилиты);
   - англоязычные React и Laravel guides (`/en/guide-react`, `/en/guide-laravel`);
   - переключатель языка (RU → EN) в навигации docs-сайта.
 
@@ -200,7 +200,7 @@
 ## [2.7.0] - 2025-12-27
 
 ### Добавлено
-- Components v3 & JS Core v3:
+- Компоненты v3 & JS Core v3:
   - Carousel / Slider: `.carousel`, `.carousel-item`, `.carousel-control-prev/next`, `.carousel-indicators` + JS-API `Rarog.Carousel.getOrCreate(el)`, autoplay и swipes (MVP);
   - Stepper / Wizard: `.stepper`, `.stepper-step`, `.stepper-content` + JS-API `Rarog.Stepper.getOrCreate(el)` и события `rg:stepper:*`;
   - Advanced Navbar & Offcanvas: sticky navbar-паттерн, улучшенные position-варианты для offcanvas;
@@ -211,14 +211,14 @@
   - debug-режим через глобальные флаги `window.RAROG_DEBUG` / `RAROG_DEV`.
 
 ### Изменено
-- Обновлён разделы **Components**, **JavaScript** и **Cookbook**:
+- Обновлён разделы **Компоненты**, **JavaScript** и **Cookbook**:
   - примеры carousel/landing, stepper-wizard, data-heavy admin layout.
 - Версия фреймворка обновлена до `2.7.0`.
 
 ## [2.6.0] - 2025-12-27
 
 ### Добавлено
-- Utilities v3 & Advanced Effects:
+- Утилиты v3 & Advanced Effects:
   - filter-утилиты: `blur-*`, `brightness-*`, `contrast-*`, `grayscale`, `invert`, `sepia`;
   - backdrop-фильтры: `backdrop-blur-*`;
   - blend-режимы: `mix-blend-*`, `bg-blend-*`.
@@ -238,7 +238,7 @@
   - `ps-*`, `pe-*` на `padding-inline-*`.
 
 ### Изменено
-- Обновлён раздел **Utilities** в документации:
+- Обновлён раздел **Утилиты** в документации:
   - отдельные секции Effects & Filters, Scroll & Overscroll, Scroll Snap, Multi-column, Print, RTL.
 - Версия фреймворка обновлена до `2.6.0`.
 
@@ -253,7 +253,7 @@
   - `guide-laravel` — подробный Laravel Guide;
   - `guide-react` — React + Vite;
   - `guide-vue`, `guide-nextjs`, `guide-cajeer-stack`.
-- Страница **Why Rarog**:
+- Страница **Почему Rarog**:
   - позиционирование как альтернатива Tailwind + Bootstrap;
   - таблица сравнения по tokens/utilities/components/JS/JIT/DX.
 - Страница **Performance & Bundle Size**:
@@ -264,7 +264,7 @@
 
 ### Изменено
 - Обновлён VitePress‑navigation:
-  - добавлены разделы Cookbook, Guides, Why Rarog, Performance, Branding.
+  - добавлены разделы Cookbook, Guides, Почему Rarog, Performance, Branding.
 - Версия фреймворка обновлена до `2.5.0`.
 
 
@@ -283,12 +283,12 @@
   - `packages/plugin-forms` — утилиты и улучшения для форм;
   - `packages/plugin-typography` — `.prose` и расширенный типографический слой.
 - Экспорт токенов для Figma:
-  - `design/figma.tokens.json` — JSON-формат, совместимый с Tokens Studio / Design Tokens tooling.
+  - `design/figma.tokens.json` — JSON-формат, совместимый с Токены Studio / Design Токены tooling.
 
 ### Изменено
 - Документация:
   - добавлена страница **IDE & Plugins**;
-  - в разделе **Tokens** добавлена секция про Figma-интеграцию.
+  - в разделе **Токены** добавлена секция про Figma-интеграцию.
 - Версия фреймворка обновлена до `2.4.0`.
 
 ## [2.3.0] - 2025-12-27
@@ -333,7 +333,7 @@
 
 ### Изменено
 - Обновлена документация:
-  - раздел **Components** дополнен примерами Navbar + Offcanvas, Tables v2, Forms v2, Toasts, Tooltips/Popovers;
+  - раздел **Компоненты** дополнен примерами Navbar + Offcanvas, Tables v2, Forms v2, Toasts, Подсказкаs/Popovers;
   - раздел **JavaScript** описывает полный список компонентов JS, Data-API и события.
 - Пример `examples/starters/html-basic` обновлён: добавлены Navbar и Offcanvas на главной странице.
 - Версия пакета и токенов обновлена до `2.2.0`.
@@ -359,7 +359,7 @@
   - размеры текста (`text-xs` … `text-4xl`);
   - веса (`font-normal`, `font-medium`, `font-semibold`, `font-bold`);
   - line-height (`leading-none` … `leading-loose`).
-- Обновлён раздел **Utilities** в VitePress-документации и добавлен примерный блок в `docs/index.html`.
+- Обновлён раздел **Утилиты** в VitePress-документации и добавлен примерный блок в `docs/index.html`.
 
 ### Изменено
 - Расширен JIT-фильтр `isRarogClass`:
@@ -372,7 +372,7 @@
 
 ### Добавлено
 - Раздел **API Reference** в docs-сайте, фиксирующий список поддерживаемых утилит, компонентов и JS-API ветки 2.x.
-- Разделы **Migration 1.x → 2.x** и **Versioning & Support**:
+- Разделы **Миграция 1.x → 2.x** и **Versioning & Support**:
   - описаны правила миграции (в т.ч. отказ от legacy-классов `.grid-2`, `.grid-3`, `.grid-4`);
   - задокументирована политика семантического версионирования и поддержки 2.x.
 - Обновлён README:
@@ -389,7 +389,7 @@
 
 ### Добавлено
 - Docs v2 на базе VitePress:
-  - отдельный docs-сайт с разделами: Getting Started, Tokens, Utilities, Components, JavaScript, Theming, Integration Guides, Playground;
+  - отдельный docs-сайт с разделами: Быстрый старт, Токены, Утилиты, Компоненты, JavaScript, Theming, Integration Guides, Playground;
   - конфигурация в `docs-site/.vitepress/config.ts` с базовым путём `/rarog/` (готово к деплою, например, на `https://docs.cajeer.ru/rarog`).
 - Примерные проекты (starters) в директории `examples/starters`:
   - `html-basic` — чистый HTML starter с подключением Rarog из `dist/` и демонстрацией сетки, карточек, alerts и модалки;
@@ -414,7 +414,7 @@
   - размеры: `w-[...]`, `h-[...]`;
   - цвета: `bg-[...]`, `text-[...]`.
 - Расширенная документация:
-  - раздел «Build modes» с описанием режимов `full` и `jit`;
+  - раздел «Сборка modes» с описанием режимов `full` и `jit`;
   - раздел «Arbitrary values» с примерами использования произвольных значений.
 
 ## [1.6.0] - 2025-12-27
@@ -435,7 +435,7 @@
 
 ### Изменено
 - Версия пакета и внутренних конфигов обновлена до 1.6.0.
-- Документация дополнена разделом "Config & CLI" с примерами использования `rarog.config.*` и команды `rarog`.
+- Документация дополнена разделом "Конфигурация & CLI" с примерами использования `rarog.config.*` и команды `rarog`.
 - Добавлен регрессионный тест `tests/rarog-build-regress.test.mjs`, проверяющий, что дефолтная сборка токенов совпадает с текущими файлами 1.5.x.
 
 ## [1.5.0] - 2025-12-27
@@ -477,14 +477,14 @@
   - усиленный контраст текста, фона и границ, более заметный `focus-ring`.
 - JSON-представление токенов:
   - файл `rarog.tokens.json` с экспортом цветовых шкал, spacing, radius и shadow-токенов;
-  - подготовка к интеграции с Figma/Design Tokens tooling.
+  - подготовка к интеграции с Figma/Design Токены tooling.
 - Улучшения системы тем:
   - актуализированные темы `default` и `dark` с учётом новых semantic-переменных;
   - конфигурация сборки поддерживает минимум три темы: `default`, `dark`, `contrast`.
 
 ### Изменено
 - Обновлён файл цветовых токенов `packages/core/src/tokens/_color.css` до версии v2 (шкалы + semantic alias'ы).
-- Обновлён раздел документации по темизации (Theming & Design Tokens).
+- Обновлён раздел документации по темизации (Theming & Design Токены).
 
 
 ## [1.3.0] - 2025-12-27
