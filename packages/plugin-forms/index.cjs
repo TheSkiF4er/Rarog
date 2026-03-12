@@ -1,47 +1,20 @@
-/*!
- * @rarog/plugin-forms
- * Простейший официальный плагин форм Rarog.
- *
- * Экспортирует функцию-плагин:
- *   module.exports = function (ctx) { return { utilitiesCss, componentsCss? } }
- */
+const { createPlugin } = require("../plugin-sdk/index.cjs");
 
-module.exports = function rarogFormsPlugin(ctx) {
-  const utilitiesCss = `
+module.exports = createPlugin({
+  name: "@rarog/plugin-forms",
+  version: "1.0.0",
+  description: "Form controls, field helpers and ergonomic input primitives for Rarog.",
+  official: true,
+  capabilities: { utilities: true },
+  setup() {
+    const utilitiesCss = `
 /* Rarog Forms Plugin (utilities) */
-
-.form-control-sm {
-  min-height: 2rem;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-}
-
-.form-control-lg {
-  min-height: 3rem;
-  padding: 0.75rem 1rem;
-  font-size: 1.125rem;
-}
-
-.field {
-  margin-bottom: var(--rarog-spacing-4, 1rem);
-}
-
-.field-label-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--rarog-spacing-2, 0.5rem);
-}
-
-.field-hint {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: var(--rarog-color-semantic-muted);
-}
-
-.input-muted {
-  background-color: rgba(15, 23, 42, 0.02);
-}
-
+.form-control-sm { min-height: 2rem; padding: 0.25rem 0.5rem; font-size: 0.875rem; }
+.form-control-lg { min-height: 3rem; padding: 0.75rem 1rem; font-size: 1.125rem; }
+.field { margin-bottom: var(--rarog-spacing-4, 1rem); }
+.field-label-inline { display: inline-flex; align-items: center; gap: var(--rarog-spacing-2, 0.5rem); }
+.field-hint { margin-top: 0.25rem; font-size: 0.875rem; color: var(--rarog-color-semantic-muted); }
+.input-muted { background-color: rgba(15, 23, 42, 0.02); }
 input[type="checkbox"].switch,
 input[type="radio"].switch {
   width: 2.5rem;
@@ -53,7 +26,6 @@ input[type="radio"].switch {
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-
 input[type="checkbox"].switch::before,
 input[type="radio"].switch::before {
   content: "";
@@ -67,19 +39,11 @@ input[type="radio"].switch::before {
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
   transition: transform 0.2s ease;
 }
-
 input[type="checkbox"].switch:checked,
-input[type="radio"].switch:checked {
-  background-color: var(--rarog-color-primary);
-}
-
+input[type="radio"].switch:checked { background-color: var(--rarog-color-primary); }
 input[type="checkbox"].switch:checked::before,
-input[type="radio"].switch:checked::before {
-  transform: translateX(1.1rem);
-}
+input[type="radio"].switch:checked::before { transform: translateX(1.1rem); }
 `;
-
-  return {
-    utilitiesCss
-  };
-};
+    return { utilitiesCss };
+  }
+});
