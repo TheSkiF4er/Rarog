@@ -1,4 +1,4 @@
-/* Rarog Utilities 3.5.0 */
+/* Rarog Utilities 1.0.0 */
 
 /* >>> packages/utilities/src/_layout.css */
 /* Layout, flex and grid utilities */
@@ -144,7 +144,7 @@
 /* <<< {p.relative_to(root)} */
 
 /* >>> packages/utilities/src/_container.css */
-/* Rarog Container & Modern Layout Helpers (3.5.0)
+/* Rarog Container & Modern Layout Helpers (1.0.0)
  *
  * Цель: дать простой слой для использования container queries и новых layout-фич.
  *
