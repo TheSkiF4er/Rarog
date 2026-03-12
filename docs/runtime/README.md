@@ -1,8 +1,8 @@
-# Runtime
+# Рантайм
 
-Runtime-поведение JS-ядра, lifecycle, события, стабильность surface и практики интеграции.
+Рантайм-поведение JS-ядра, lifecycle, события, стабильность surface и практики интеграции.
 
-## Included legacy sources
+## Включено legacy sources
 
 - `javascript.md`
 - `api-reference.md`
@@ -348,7 +348,7 @@ Debug-режим не должен использоваться в production-с
 
 #### Stable event names
 
-##### Dropdown / Collapse / Modal / Offcanvas / Toast
+##### Выпадающее меню / Collapse / Modal / Offcanvas / Toast
 
 - `rg:dropdown:show|shown|hide|hidden`
 - `rg:collapse:show|shown|hide|hidden`
@@ -356,7 +356,7 @@ Debug-режим не должен использоваться в production-с
 - `rg:offcanvas:show|shown|hide|hidden`
 - `rg:toast:show|shown|hide|hidden`
 
-##### Tooltip / Popover
+##### Подсказка / Popover
 
 - `rg:tooltip:show|shown|hide|hidden`
 - `rg:popover:show|shown|hide|hidden`
@@ -387,7 +387,7 @@ Legacy-compatible события навигации:
 - `rg:stepper:goto`
 - `rg:stepper:reset`
 
-##### Datepicker / Select / Combobox
+##### Datepicker / Выбор / Combobox
 
 - `rg:datepicker:show|shown|hide|hidden`
 - `rg:datepicker:select`
@@ -401,7 +401,7 @@ Legacy-compatible для combobox:
 - `rg:combobox:open`
 - `rg:combobox:close`
 
-##### TagsInput / DataTable / Core
+##### TagsПоле ввода / DataTable / Core
 
 - `rg:tags-input:add`
 - `rg:tags-input:remove`
@@ -443,7 +443,7 @@ function onShown(event: RarogCustomEvent<"rg:modal:shown">) {
 - `Rarog.reinit(root?)`
 - `Rarog.Events.on/off/emit(...)`
 
-### CSS / Components
+### CSS / Компоненты
 
 Остальные группы API — utilities, токены, компоненты и модификаторы — описаны в профильных разделах docs. Ветка 3.x считает стабильными только те классы и варианты, которые явно перечислены в документации и migration guides.
 
@@ -459,8 +459,8 @@ function onShown(event: RarogCustomEvent<"rg:modal:shown">) {
 | Surface | Status | Compatibility promise |
 |---|---|---|
 | Core CSS | Stable | Не ломается в patch/minor без deprecation window. |
-| Utilities CSS | Stable | Имена классов и поведение меняются только через documented deprecation. |
-| Components CSS | Stable | Breaking changes только в major. |
+| Утилиты CSS | Stable | Имена классов и поведение меняются только через documented deprecation. |
+| Компоненты CSS | Stable | Breaking changes только в major. |
 | Built-in themes | Stable | Публичные theme entrypoints сохраняются в пределах major. |
 | CLI flow (`init`, `validate`, `build`) | Stable | Канонический flow поддерживается как основной DX path. |
 | `rarog.config.js` | Stable | Основной theme-config contract. |
