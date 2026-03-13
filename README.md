@@ -1,116 +1,157 @@
-# Farog
+# Rarog CSS Framework 1.0.0
 
-Farog 1.0 is a zero-dependency reactive UI runtime for teams that want a **small runtime**, **explicit reactivity**, and **internals they can actually understand**.
+> **Rarog** — CSS-фреймворк и дизайн-система на базе design-tokens, utilities, компонентов и CLI.
 
-## Positioning
+<p align="left">
+  <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
+    <img src="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://www.npmjs.com/package/rarog">
+    <img src="https://img.shields.io/npm/v/rarog.svg?logo=npm" alt="npm" />
+  </a>
+  <a href="https://github.com/TheSkiF4er/rarog/releases">
+    <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub release" />
+  </a>
+  <a href="https://docs.skif4er.ru/rarog">
+    <img src="https://img.shields.io/badge/docs-docs.skif4er.ru%2Frarog-blue?logo=readthedocs" alt="Docs" />
+  </a>
+</p>
 
-Farog should not be sold as “Vue, but better”. Farog is better than Vue **when you need**:
+- Текущая стабильная ветка: **1.x**
+- Текущая версия: **1.0.0**
+- Документация: `https://docs.skif4er.ru/rarog`
 
-- less runtime
-- explicit reactivity without large framework magic
-- simpler internals
-- UI embedded into a чужой сайт
-- microfrontends and widgets
-- performance-sensitive small/medium apps
-- a faster start with lower cognitive load
+## Канонический install/build/publish flow
 
-## 1.0 release includes
-
-- stable core
-- keyed rendering
-- hydration
-- documented support matrix
-- tiny router package
-- starters and Vite integration
-- benchmarks
-- migration guide and comparison page
-- adoption-oriented docs
-- published release notes, architecture overview, roadmap after 1.0, known limitations, and support policy
-
-## Install
+### Для пользователя CLI
 
 ```bash
-npm install farog
+npm install rarog
+npx rarog init
+npx rarog validate
+npx rarog build
 ```
 
-## Quick example
+По умолчанию `init` создаёт ровно три файла:
+- `rarog.config.js` — канонический theme-config;
+- `rarog.build.json` — канонический build-manifest;
+- `src/index.html` — минимальный smoke-input для JIT.
 
-```js
-import { component, createApp, h, signal } from 'farog';
+`rarog.config.ts` поддерживается только как compatibility-path. `rarog.config.json` остаётся legacy-форматом для build-manifest и больше не является каноническим путём.
 
-const count = signal(0);
-
-const App = component(() =>
-  h('main', null,
-    h('h1', null, 'Farog'),
-    h('button', { onClick: () => count.update((n) => n + 1) }, () => `count=${count.get()}`)
-  )
-);
-
-createApp(App).mount(document.getElementById('app'));
-```
-
-## Start a project
+### Для разработки репозитория
 
 ```bash
-npm create farog vanilla my-app
+npm ci
+npm run build
+npm run test:ci
+npm run verify:artifacts
 ```
 
-Templates:
+Где:
+- `npm run build` — каноническая полная сборка (`build:css + build:js + build:adapters`);
+- `npm run test:ci` — unit/adapters/contracts + temp-project smoke test;
+- `npm run verify:artifacts` — post-build проверка publishable tarball;
+- `npm run pack:packages` — упаковка всех publishable пакетов в `.artifacts/`.
 
-- `vanilla`
-- `router`
-- `ssr-lite`
-- `widget-embed`
+## Поверхность root-пакета
 
-## Stable API surface
+Root package предсказуемо публикует CSS surface:
+- `style` → `./packages/core/dist/rarog-core.min.css`
+- subpath exports:
+  - `rarog/core`
+  - `rarog/utilities`
+  - `rarog/components`
+  - `rarog/themes/default`
+  - `rarog/themes/dark`
+  - `rarog/themes/contrast`
+  - `rarog/themes/creative`
+  - `rarog/themes/enterprise`
+  - `rarog/cli`
 
-Stable in 1.x:
+Сомнительный root `main` для CSS больше не используется, чтобы не ломать tooling.
 
-- `signal`, `derive`, `effect`, `watch`, `batch`, `untrack`
-- `h`, `component`, `mount`, `hydrate`, `createApp`, `renderToString`
-- `Fragment`, `Show`, `For`
-- `ref`, `onMount`, `onCleanup`, `onUnmount`, `nextTick`
-- `resource`
+## Матрица поверхностей
 
-Compatibility alias kept in 1.x:
+| Surface | Status | Notes |
+|---|---|---|
+| Core CSS | Stable | Основной publish surface root package. |
+| Утилиты CSS | Stable | Поддерживаемые utility classes и tokens. |
+| Компоненты CSS | Stable | Поддерживаемые компонентные CSS-слои. |
+| Built-in themes | Stable | `default`, `dark`, `contrast`, `creative`, `enterprise`. |
+| CLI config/build flow | Stable | `init → validate → build` с `rarog.config.js` и `rarog.build.json`. |
+| JS runtime (`@rarog/js`) | Beta | Поддерживается, но API ещё расширяется. |
+| React bindings (`@rarog/react`) | Experimental | Требуют отдельной compatibility-проверки. |
+| Vue bindings (`@rarog/vue`) | Experimental | Требуют отдельной compatibility-проверки. |
+| Plugin API | Experimental | Для больших изменений нужен RFC. |
 
-- `computed()` as alias of `derive()`
+Подробности:
+- `docs/stability.md`
+- `docs/versioning.md`
 
-## Docs map
+## Быстрый старт
 
+### Подключение собранных CSS-слоёв
+
+```html
+<link rel="stylesheet" href="/css/rarog-core.min.css">
+<link rel="stylesheet" href="/css/rarog-utilities.min.css">
+<link rel="stylesheet" href="/css/rarog-components.min.css">
+<link rel="stylesheet" href="/css/rarog-theme-default.min.css">
+```
+
+### Локальный запуск CLI из репозитория
+
+```bash
+node packages/cli/bin/rarog.js --help
+node packages/cli/bin/rarog.js validate
+node packages/cli/bin/rarog.js build
+```
+
+## Процесс публикации
+
+Канонический publish pipeline в CI:
+
+```bash
+npm ci
+npm run release:verify
+npm run build
+npm run test:release
+npm run verify:artifacts
+npm run pack:packages
+```
+
+После этого release workflow публикует:
+- `rarog`
+- `@rarog/js`
+- `@rarog/react`
+- `@rarog/vue`
+
+## Документация
+
+Основные документы:
 - `docs/getting-started.md`
-- `docs/rendering-model.md`
-- `docs/reactivity-deep-dive.md`
-- `docs/bug-taxonomy.md`
-- `docs/lists-and-keys.md`
-- `docs/ssr-and-hydration.md`
-- `docs/support-matrix.md`
-- `docs/router.md`
-- `docs/anti-patterns.md`
-- `docs/migration.md`
-- `docs/api-stability.md`
-- `docs/release-1.0.md`
-- `docs/release-notes-1.0.md`
-- `docs/architecture.md`
-- `docs/roadmap-after-1.0.md`
-- `docs/known-limitations.md`
-- `docs/support-policy.md`
-- `docs/comparison.md`
-- `docs/benchmark-page.md`
-- `docs/build-x-series.md`
-- `docs/showcase.md`
+- `docs/stability.md`
+- `docs/versioning.md`
+- `docs/javascript.md`
+- `RELEASE.md`
 
-## Development
+## Contributing
+
+Перед PR:
 
 ```bash
 npm run build
-npm test
-npm run bench
+npm run test:ci
+npm run docs:lint
 ```
 
-## Project assets
+Перед релизом:
 
-- docs site: `docs/`
-- playground: `playground/`
-- examples: `examples/`
+```bash
+npm run release:verify
+npm run build
+npm run test:release
+npm run verify:artifacts
+npm run pack:packages
+```
