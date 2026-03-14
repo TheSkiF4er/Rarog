@@ -1,3 +1,3 @@
-# saas-starter
+# saas-стартовый шаблон
 
-Official SaaS starter with landing-to-app bridge, pricing cards and settings surfaces.
+Official SaaS стартовый шаблон with landing-to-app bridge, тарифы cards and Настройки Поверхностьs.
