@@ -1,7 +1,7 @@
 {
   "name": "@rarog/presets",
   "version": "1.0.0",
-  "description": "official compatibility presets for migration and adoption flows",
+  "description": "official Наборы совместимости for migration and adoption flows",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
   "type": "module",
