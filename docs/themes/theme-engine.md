@@ -2,16 +2,16 @@
 
 Движок тем turns themes into a first-class product feature.
 
-## Supported scenarios
+## Поддерживаемые сценарии
 
 - light / dark
 - multi-brand
 - per-tenant themes
-- runtime switching
+- среда выполнения switching
 - scoped themes
 - theme diffing
 
-## CLI
+## средство командной строки
 
 ```bash
 rarog theme create themes/acme.json --name=acme --extends=default
@@ -23,11 +23,11 @@ rarog theme validate packages/themes/presets/enterprise-plus.json
 
 - `aurora` — bright SaaS
 - `graphite` — dark operations UI
-- `enterprise-plus` — white-label B2B baseline
+- `enterprise-plus` — под стороннюю марку B2B базовый уровень
 
 ## Рантайм model
 
-A tenant wrapper can opt into a theme via `data-rg-theme="..."`. Theme CSS only overrides semantic/runtime variables, so utilities and components continue to work unchanged.
+A tenant оболочка can opt into a theme via `data-rg-theme="..."`. Theme CSS only overrides semantic/runtime variables, so вспомогательные классы and Компонентs Продолжить to work unchanged.
 
 
 ## Конструктор тем

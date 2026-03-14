@@ -1,6 +1,6 @@
 # Конструктор тем / редактор токенов
 
-Theme builder превращает редактирование токенов в полноценную продуктовую поверхность для white-label команд.
+Конструктор тем превращает редактирование токенов в полноценную продуктовую поверхность для под стороннюю марку команд.
 
 ## Что входит
 
@@ -34,7 +34,7 @@ examples/ui-kits/white-label-demo/index.html
 - manifest темы, совместимый с `rarog theme diff`;
 - стартовый build manifest для handoff в продуктовую команду.
 
-## Рекомендуемый workflow
+## Рекомендуемый порядок работы
 
 ```bash
 rarog theme diff packages/themes/presets/enterprise-plus.json my-theme.json
@@ -42,11 +42,11 @@ rarog token inspect rarog.tokens.json --path=tokens.color.semantic
 rarog audit a11y examples/ui-kits/white-label-demo
 ```
 
-## Чек-лист white-label handoff
+## Чек-лист под стороннюю марку handoff
 
-- подтвердить primary / secondary цвета;
+- подтвердить Основной / Дополнительный цвета;
 - подтвердить цели по контрасту;
 - сравнить тему с enterprise-базой;
 - экспортировать JSON темы;
 - экспортировать build manifest;
-- закоммитить артефакты рядом с tenant docs.
+- закоммитить артефакты рядом с tenant Документация.
