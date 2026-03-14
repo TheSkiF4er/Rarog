@@ -1,8 +1,8 @@
 # Рантайм
 
-Рантайм-поведение JS-ядра, lifecycle, события, стабильность surface и практики интеграции.
+Рантайм-поведение JS-ядра, lifecycle, события, стабильность Поверхность и практики интеграции.
 
-## Включено legacy sources
+## Включено устаревший sources
 
 - `javascript.md`
 - `api-reference.md`
@@ -12,7 +12,7 @@
 
 ## JavaScript
 
-JS-ядро Rarog v2 поставляется в виде:
+JS-ядро Рарог v2 поставляется в виде:
 
 - UMD-бандла: `packages/js/dist/rarog.js`
 - ESM-бандла: `packages/js/dist/rarog.esm.js`
@@ -31,12 +31,12 @@ JS-ядро Rarog v2 поставляется в виде:
 
 ---
 
-### Data-API
+### Data-интерфейс
 
 Любой компонент можно инициализировать с помощью data-атрибутов:
 
 ```html
-<!-- Modal -->
+<!-- Модальное окно -->
 <button class="btn btn-primary" data-rg-toggle="modal" data-rg-target="#welcomeModal">
   Открыть модалку
 </button>
@@ -80,12 +80,12 @@ Dismiss-атрибуты:
 ```
 
 Инициализация выполняется автоматически при загрузке документа. Для SPA/SSR
-и сложных сценариев можно использовать lifecycle-API JS Core v3:
+и сложных сценариев можно использовать lifecycle-интерфейс JS Core v3:
 
 ```js
 import { Rarog } from "../packages/js/dist/rarog.esm.js";
 
-// базовая инициализация Data-API и tooltip/popover для всего документа
+// базовая инициализация Data-интерфейс и tooltip/popover для всего документа
 Rarog.init();
 
 // инициализация внутри конкретного контейнера (например, после рендера React/Vue)
@@ -94,12 +94,12 @@ Rarog.init(root);
 
 // dispose / reinit
 Rarog.dispose(root); // удалить tooltip/popover внутри контейнера
-Rarog.reinit(root);  // пересобрать Data-API и всплывающие компоненты
+Rarog.reinit(root);  // пересобрать Data-интерфейс и всплывающие компоненты
 ```
 
 ---
 
-### JS-API и события
+### JS-интерфейс и события
 
 Каждый компонент имеет статические методы `getInstance` / `getOrCreate`:
 
@@ -119,9 +119,9 @@ const toast = Toast.getOrCreate(toastElement);
 toast.show();
 ```
 
-#### События (Event API)
+#### События (Event интерфейс)
 
-Rarog генерирует события в стиле Bootstrap, но с префиксом `rg:`:
+Рарог генерирует события в стиле Bootstrap, но с префиксом `rg:`:
 
 - `rg:modal:show` / `rg:modal:hide`
 - `rg:dropdown:show` / `rg:dropdown:hide`
@@ -152,9 +152,9 @@ modalEl.addEventListener("rg:modal:hide", event => {
 Минимальный интерфейс освобождения ресурсов — через сам браузер (удаление DOM-узлов).
 Если вам нужно явно удалить обработчики, можно реализовать свою обёртку, сохраняя
 инстансы и вызывая `hide()` перед удалением элементов. В будущих версиях может
-появиться `dispose()`-API.
+появиться `dispose()`-интерфейс.
 
-### Carousel & Stepper JS-API
+### Carousel & Stepper JS-интерфейс
 
 ```js
 import { Rarog } from "../packages/js/dist/rarog.esm.js";
@@ -211,22 +211,22 @@ Rarog.Events.on("rg:modal:show", ({ element, detail }) => {
 
 ### Debug / Devtools
 
-Для отладки поведения компонент и событий Rarog JS Core есть debug-режим.
+Для отладки поведения компонент и событий Рарог JS Core есть debug-режим.
 
 Варианты включения:
 
 - через глобальные флаги (ещё до загрузки скриптов):
 
-  ```html
+ ```html
   <script>
     window.RAROG_DEBUG = true;
   </script>
   <script src="/js/rarog.umd.js"></script>
   ```
 
-- через JS-API в рантайме:
+- через JS-интерфейс в рантайме:
 
-  ```js
+ ```js
   import Rarog from "rarog/dist/rarog.esm.js";
 
   Rarog.setDebug(true);
@@ -237,7 +237,7 @@ Rarog.Events.on("rg:modal:show", ({ element, detail }) => {
 
 - логирует все `rg:*`-события через `console.log("[Rarog]", "event", type, payload)`;
 - выводит предупреждения о некорректной структуре HTML/атрибутов
-  (например, отсутствующий `.modal-dialog` или `.stepper-step`);
+ (например, отсутствующий `.modal-dialog` или `.stepper-step`);
 - логирует ошибки обработчиков событий в консоль как `[Rarog Events]`.
 
 Debug-режим не должен использоваться в production-сборках; его цель — помочь
@@ -260,29 +260,29 @@ Debug-режим не должен использоваться в production-с
 
 ## Imported from `api-reference.md`
 
-## API Reference (Rarog 3.x)
+## интерфейс Reference (Рарог 3.x)
 
-Этот раздел фиксирует **стабильный публичный API 3.x** для CSS, компонентов и JS Core. Используйте его как быстрый справочник по именам классов, конструкторам, методам и событиям.
+Этот раздел фиксирует **стабильный публичный интерфейс 3.x** для CSS, компонентов и JS Core. Используйте его как быстрый справочник по именам классов, конструкторам, методам и событиям.
 
 ### JS Core
 
-Канонический пакетный surface:
+Канонический пакетный Поверхность:
 
 - `@rarog/js`
-- default export: `Rarog`
+- default выгрузка: `Rarog`
 - именованные экспорты: `Dropdown`, `Collapse`, `Modal`, `Offcanvas`, `Toast`, `Tooltip`, `Popover`, `Carousel`, `Stepper`, `Datepicker`, `DatetimePicker`, `Select`, `Combobox`, `TagsInput`, `DataTable`, `InputMask`, `Events`
 - type exports: `RarogEventMap`, `RarogEventName`, `RarogEventDetail<TName>`, `RarogCustomEvent<TName>`
 
 #### Общий lifecycle contract
 
-Для компонентов с открытием/закрытием Rarog 3.x использует единый контракт:
+Для компонентов с открытием/закрытием Рарог 3.x использует единый контракт:
 
 - pre-event: `rg:<component>:show`
 - post-event: `rg:<component>:shown`
 - pre-hide: `rg:<component>:hide`
 - post-hide: `rg:<component>:hidden`
 
-Где runtime уже поддерживает lifecycle-контракт, pre-events считаются **cancelable** и могут использоваться с `preventDefault()` перед изменением состояния.
+Где среда выполнения уже поддерживает lifecycle-контракт, pre-events считаются **cancelable** и могут использоваться с `preventDefault()` перед изменением состояния.
 
 `event.detail` в lifecycle-событиях может содержать:
 
@@ -295,7 +295,7 @@ Debug-режим не должен использоваться в production-с
 
 #### Constructors / methods
 
-##### Overlay & disclosure
+##### Всплывающий слой & disclosure
 
 - `Dropdown.getInstance(element)` / `Dropdown.getOrCreate(element, options)`
 - `Collapse.getInstance(element)` / `Collapse.getOrCreate(element, options)`
@@ -314,41 +314,41 @@ Debug-режим не должен использоваться в production-с
 ##### Flow & selection
 
 - `Carousel.getInstance(element)` / `Carousel.getOrCreate(element, options)`
-  - `next()`
-  - `prev()`
-  - `goTo(index)`
-  - `play()`
-  - `pause()`
-  - `destroy()`
+ - `next()`
+ - `prev()`
+ - `goTo(index)`
+ - `play()`
+ - `pause()`
+ - `destroy()`
 - `Stepper.getInstance(element)` / `Stepper.getOrCreate(element, options)`
-  - `next()`
-  - `prev()`
-  - `goTo(index)`
-  - `reset()`
-  - `destroy()`
+ - `next()`
+ - `prev()`
+ - `goTo(index)`
+ - `reset()`
+ - `destroy()`
 - `Datepicker.getInstance(element)` / `Datepicker.getOrCreate(element, options)`
-  - `show()` / `hide()` / `toggle()`
-  - `dispose()`
+ - `show()` / `hide()` / `toggle()`
+ - `dispose()`
 - `DatetimePicker.getInstance(element)` / `DatetimePicker.getOrCreate(element, options)`
 - `Select.getInstance(element)` / `Select.getOrCreate(element, options)`
-  - `show()` / `hide()` / `toggle()`
-  - `dispose()`
+ - `show()` / `hide()` / `toggle()`
+ - `dispose()`
 - `Combobox.getInstance(element)` / `Combobox.getOrCreate(element, options)`
-  - `show()` / `hide()` / `toggle()`
-  - `dispose()`
+ - `show()` / `hide()` / `toggle()`
+ - `dispose()`
 - `TagsInput.getInstance(element)` / `TagsInput.getOrCreate(element, options)`
-  - `addTag(value)`
-  - `removeTag(value)`
-  - `clear()`
-  - `dispose()`
+ - `addTag(value)`
+ - `removeTag(value)`
+ - `clear()`
+ - `dispose()`
 - `DataTable.getInstance(element)` / `DataTable.getOrCreate(element, options)`
-  - `dispose()`
+ - `dispose()`
 - `InputMask.apply(element, pattern)`
 - `InputMask.remove(element)`
 
-#### Stable event names
+#### Стабильное event names
 
-##### Выпадающее меню / Collapse / Modal / Offcanvas / Toast
+##### Выпадающее меню / Collapse / Modal / Боковая панель / Toast
 
 - `rg:dropdown:show|shown|hide|hidden`
 - `rg:collapse:show|shown|hide|hidden`
@@ -356,7 +356,7 @@ Debug-режим не должен использоваться в production-с
 - `rg:offcanvas:show|shown|hide|hidden`
 - `rg:toast:show|shown|hide|hidden`
 
-##### Подсказка / Popover
+##### Подсказка / Всплывающий блок
 
 - `rg:tooltip:show|shown|hide|hidden`
 - `rg:popover:show|shown|hide|hidden`
@@ -370,7 +370,7 @@ Lifecycle:
 - `rg:carousel:slide`
 - `rg:carousel:slid`
 
-Legacy-compatible события навигации:
+Устаревший-compatible события навигации:
 
 - `rg:carousel:next`
 - `rg:carousel:prev`
@@ -396,7 +396,7 @@ Legacy-compatible события навигации:
 - `rg:combobox:show|shown|hide|hidden`
 - `rg:combobox:change`
 
-Legacy-compatible для combobox:
+Устаревший-compatible для combobox:
 
 - `rg:combobox:open`
 - `rg:combobox:close`
@@ -412,7 +412,7 @@ Legacy-compatible для combobox:
 - `rg:table:update`
 - `rg:core:dispose`
 
-#### Typed events in TypeScript
+#### Типизированный events in TypeScript
 
 В `packages/js/src/index.d.ts` экспортируются:
 
@@ -432,7 +432,7 @@ function onShown(event: RarogCustomEvent<"rg:modal:shown">) {
 }
 ```
 
-#### Namespace helpers
+#### Namespace вспомогательные средства
 
 - `Rarog.config`
 - `Rarog.setDebug(value)`
@@ -445,67 +445,67 @@ function onShown(event: RarogCustomEvent<"rg:modal:shown">) {
 
 ### CSS / Компоненты
 
-Остальные группы API — utilities, токены, компоненты и модификаторы — описаны в профильных разделах docs. Ветка 3.x считает стабильными только те классы и варианты, которые явно перечислены в документации и migration guides.
+Остальные группы интерфейс — вспомогательные классы, токены, компоненты и модификаторы — описаны в профильных разделах Документация. Ветка 3.x считает стабильными только те классы и варианты, которые явно перечислены в документации и migration guides.
 
 
 ## Imported from `stability.md`
 
 ## Stability Matrix
 
-Этот документ фиксирует, что в Rarog считается **stable**, **beta** и **experimental**.
+Этот документ фиксирует, что в Рарог считается **stable**, **beta** и **experimental**.
 
-### Public surface matrix
+### Public Поверхность matrix
 
-| Surface | Status | Compatibility promise |
+| Поверхность | Состояние | Compatibility promise |
 |---|---|---|
-| Core CSS | Stable | Не ломается в patch/minor без deprecation window. |
-| Утилиты CSS | Stable | Имена классов и поведение меняются только через documented deprecation. |
-| Компоненты CSS | Stable | Breaking changes только в major. |
-| Built-in themes | Stable | Публичные theme entrypoints сохраняются в пределах major. |
-| CLI flow (`init`, `validate`, `build`) | Stable | Канонический flow поддерживается как основной DX path. |
-| `rarog.config.js` | Stable | Основной theme-config contract. |
-| `rarog.build.json` | Stable | Основной build-manifest contract. |
-| `rarog.config.ts` | Beta | Поддерживается как compatibility-path. Может быть упрощён или убран в следующем major. |
-| `@rarog/js` | Beta | API usable, но ещё расширяется. |
-| `@rarog/react` | Experimental | Без strong compatibility guarantees. |
-| `@rarog/vue` | Experimental | Без strong compatibility guarantees. |
-| Plugin API | Experimental | Все большие изменения идут через RFC. |
+| Core CSS | Стабильное | Не ломается в patch/minor без deprecation window. |
+| Утилиты CSS | Стабильное | Имена классов и поведение меняются только через documented deprecation. |
+| Компоненты CSS | Стабильное | Breaking changes только в major. |
+| Built-in themes | Стабильное | Публичные theme entrypoints сохраняются в пределах major. |
+| средство командной строки flow (`init`, `validate`, `build`) | Стабильное | Канонический flow поддерживается как основной DX path. |
+| `rarog.config.js` | Стабильное | Основной описание темы contract. |
+| `rarog.build.json` | Стабильное | Основной описание сборки contract. |
+| `rarog.config.ts` | Предварительное | Поддерживается как путь совместимости. Может быть упрощён или убран в следующем major. |
+| `@rarog/js` | Предварительное | интерфейс usable, но ещё расширяется. |
+| `@rarog/react` | Экспериментальное | Без strong compatibility guarantees. |
+| `@rarog/vue` | Экспериментальное | Без strong compatibility guarantees. |
+| Интерфейс расширений | Экспериментальное | Все большие изменения идут через RFC. |
 
 ### Что значит каждый статус
 
-#### Stable
+#### Стабильное
 
 Гарантии:
 - SemVer обязателен;
 - breaking changes только в major;
 - deprecations документируются заранее;
-- docs и publish surface должны совпадать с реальностью.
+- Документация и публикация Поверхность должны совпадать с реальностью.
 
-#### Beta
+#### Предварительное
 
 Гарантии:
-- surface публичный, но может ещё доформировываться;
-- minor-релизы могут менять детали API, если это явно задокументировано;
+- Поверхность публичный, но может ещё доформировываться;
+- minor-релизы могут менять детали интерфейс, если это явно задокументировано;
 - при возможности даётся migration note.
 
-#### Experimental
+#### Экспериментальное
 
 Гарантии:
-- feedback-first surface;
+- feedback-first Поверхность;
 - изменения возможны даже в minor;
 - production adoption только после собственной проверки команды.
 
-### Stable-by-default rules
+### Стабильное-by-default rules
 
 Следующие вещи должны оставаться предсказуемыми:
-- один канонический theme-config (`rarog.config.js`);
-- один канонический build-manifest (`rarog.build.json`);
+- один канонический описание темы (`rarog.config.js`);
+- один канонический описание сборки (`rarog.build.json`);
 - root package без CSS `main`;
 - `verify:artifacts` только после полной сборки;
-- publish pipeline без обхода release/test/artifact gates.
+- публикация pipeline без обхода release/test/artifact gates.
 
-### Изменение статуса surface
+### Изменение статуса Поверхность
 
-Surface можно перевести:
-- из Experimental в Beta — после smoke/compatibility gates и стабилизации docs;
-- из Beta в Stable — после как минимум одного релизного цикла без неожиданных breaking changes и с понятным publish contract.
+Поверхность можно перевести:
+- из Экспериментальное в Предварительное — после smoke/compatibility gates и стабилизации Документация;
+- из Предварительное в Стабильное — после как минимум одного релизного цикла без неожиданных breaking changes и с понятным публикация contract.
