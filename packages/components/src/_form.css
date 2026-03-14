@@ -26,7 +26,7 @@
   margin-bottom: var(--rarog-space-4);
 }
 
-/* Form layout helpers */
+/* Form Компоновка вспомогательные средства */
 
 .form-inline {
   display: flex;
@@ -81,7 +81,7 @@
   }
 }
 
-/* Helper-текст под полем ввода */
+/* Вспомогательное средство-текст под полем ввода */
 
 .form-help {
   margin-top: var(--rarog-space-1);
@@ -196,7 +196,7 @@
   color: var(--rarog-color-danger, var(--rarog-color-danger-400));
 }
 
-/* Extended validation helpers --------------------------------------------- */
+/* Extended validation вспомогательные средства --------------------------------------------- */
 
 .has-warning .form-control,
 .has-warning .input {

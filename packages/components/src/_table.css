@@ -39,7 +39,7 @@
   border: 1px solid var(--rarog-color-border-subtle, rgba(148, 163, 184, 0.6));
 }
 
-/* Responsive wrapper */
+/* Responsive оболочка */
 
 .table-responsive {
   width: 100%;
@@ -64,7 +64,7 @@
   align-items: center;
 }
 \n
-/* Rarog DataTable helpers (MVP) ------------------------------------------- */
+/* Рарог DataTable вспомогательные средства (MVP) ------------------------------------------- */
 
 .rg-table {
   width: 100%;
