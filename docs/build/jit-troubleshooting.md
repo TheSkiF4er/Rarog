@@ -39,9 +39,9 @@
 - arbitrary value использует неподдерживаемое семейство
 - проект ожидает stacked variants шире, чем текущий generator
 
-## Рекомендуемый workflow
+## Рекомендуемый порядок работы
 
 1. `rarog doctor`
 2. `rarog analyze`
 3. `rarog build --debug`
-4. поправить `content` / utility usage / missing utility backlog
+4. поправить `content` / utility usage / missing utility очередь задач
