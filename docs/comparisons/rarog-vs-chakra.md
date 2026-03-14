@@ -1,11 +1,11 @@
-# Rarog vs Chakra UI
+# Рарог vs Chakra UI
 
-Chakra UI хороша как React-first component system с удобным theming API.
+Chakra UI хороша как React-first Компонент system с удобным темизация интерфейс.
 
-Rarog выигрывает, когда продукту нужны:
+Рарог выигрывает, когда продукту нужны:
 
-- framework-agnostic delivery surfaces;
-- hybrid-подход utilities + tokens + components;
+- framework-agnostic delivery Поверхностьs;
+- hybrid-подход вспомогательные классы + tokens + Компонентs;
 - более сильные admin/dashboard presets;
-- white-label operational workflows;
-- готовые к запуску examples вне одного runtime.
+- под стороннюю марку operational workflows;
+- готовые к запуску Примеры вне одного среда выполнения.
