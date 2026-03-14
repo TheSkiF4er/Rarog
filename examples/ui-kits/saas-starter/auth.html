@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Rarog SaaS Starter – Auth</title>
-  <link rel="stylesheet" href="../../dist/rarog-core.min.css" />
-  <link rel="stylesheet" href="../../dist/rarog-utilities.min.css" />
-  <link rel="stylesheet" href="../../dist/rarog-components.min.css" />
-  <script src="../../packages/js/dist/rarog.js" defer></script>
-  <style>
+<meta charset="utf-8"/>
+<title>Начальный SaaS-шаблон «Рарог» – Auth</title>
+<link href="../../dist/rarog-core.min.css" rel="stylesheet"/>
+<link href="../../dist/rarog-utilities.min.css" rel="stylesheet"/>
+<link href="../../dist/rarog-components.min.css" rel="stylesheet"/>
+<script defer="" src="../../packages/js/dist/rarog.js"></script>
+<style>
     body {
       min-height: 100vh;
       background: radial-gradient(circle at top, rgba(59,130,246,0.25), transparent 55%),
@@ -31,59 +31,57 @@
   </style>
 </head>
 <body>
-  <div class="card auth-card d-grid" style="grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: var(--rarog-space-6);">
-    <div class="auth-hero p-4 d-flex flex-column justify-between">
-      <div>
-        <span class="badge badge-secondary mb-2">Rarog SaaS Starter</span>
-        <h1 class="h3 mb-2">Вход в панель управления</h1>
-        <p class="text-muted mb-4">
-          Стартовый шаблон для SaaS‑продуктов: готовые layout’ы auth, dashboard, settings и billing.
-        </p>
-      </div>
-      <div class="d-flex flex-column gap-1 text-muted" style="font-size: 0.85rem;">
-        <div>• Utility‑слой уровня Tailwind</div>
-        <div>• Компоненты и JS‑ядро уровня Bootstrap</div>
-        <div>• Подготовлено для Cajeer‑экосистемы</div>
-      </div>
-    </div>
-    <div class="p-4">
-      <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-          <a href="#" class="nav-link nav-link-active">Вход</a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">Регистрация</a>
-        </li>
-      </ul>
-
-      <form class="mb-3">
-        <div class="mb-3">
-          <label class="label" for="email">Email</label>
-          <input id="email" type="email" class="input" placeholder="you@example.com" />
-        </div>
-        <div class="mb-3">
-          <label class="label" for="password">Пароль</label>
-          <input id="password" type="password" class="input" />
-        </div>
-        <div class="d-flex justify-between items-center mb-3">
-          <label class="d-flex items-center gap-1">
-            <input type="checkbox" />
-            <span class="text-muted" style="font-size: 0.85rem;">Запомнить меня</span>
-          </label>
-          <a href="#" class="text-primary" style="font-size: 0.85rem;">Забыли пароль?</a>
-        </div>
-        <button type="submit" class="btn btn-primary w-full mb-2">
-          Войти
-        </button>
-        <button type="button" class="btn btn-ghost w-full">
-          Продолжить с SSO
-        </button>
-      </form>
-
-      <p class="text-muted" style="font-size: 0.8rem;">
-        Нажимая «Войти», вы соглашаетесь с условиями использования и политикой конфиденциальности.
-      </p>
-    </div>
-  </div>
+<div class="card auth-card d-grid" style="grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: var(--rarog-space-6);">
+<div class="auth-hero p-4 d-flex flex-column justify-between">
+<div>
+<span class="badge badge-secondary mb-2">Начальный SaaS-шаблон «Рарог»</span>
+<h1 class="h3 mb-2">Вход в панель управления</h1>
+<p class="text-muted mb-4">
+ Стартовый шаблон для SaaS‑продуктов: готовые Компоновка’ы auth, Панель, Настройки и Расчёты.
+ </p>
+</div>
+<div class="d-flex flex-column gap-1 text-muted" style="font-size: 0.85rem;">
+<div>• Utility‑слой уровня Tailwind</div>
+<div>• Компоненты и JS‑ядро уровня Bootstrap</div>
+<div>• Подготовлено для Cajeer‑экосистемы</div>
+</div>
+</div>
+<div class="p-4">
+<ul class="nav nav-tabs mb-3">
+<li class="nav-item">
+<a class="nav-link nav-link-active" href="#">Вход</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="#">Регистрация</a>
+</li>
+</ul>
+<form class="mb-3">
+<div class="mb-3">
+<label class="label" for="email">Email</label>
+<input class="input" id="email" placeholder="you@example.com" type="email"/>
+</div>
+<div class="mb-3">
+<label class="label" for="password">Пароль</label>
+<input class="input" id="password" type="password"/>
+</div>
+<div class="d-flex justify-between items-center mb-3">
+<label class="d-flex items-center gap-1">
+<input type="checkbox"/>
+<span class="text-muted" style="font-size: 0.85rem;">Запомнить меня</span>
+</label>
+<a class="text-primary" href="#" style="font-size: 0.85rem;">Забыли пароль?</a>
+</div>
+<button class="btn btn-primary w-full mb-2" type="submit">
+ Войти
+ </button>
+<button class="btn btn-ghost w-full" type="button">
+ Продолжить с SSO
+ </button>
+</form>
+<p class="text-muted" style="font-size: 0.8rem;">
+ Нажимая «Войти», вы соглашаетесь с условиями использования и политикой конфиденциальности.
+ </p>
+</div>
+</div>
 </body>
 </html>
