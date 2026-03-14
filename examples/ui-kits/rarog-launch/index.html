@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rarog 1.0</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Рарог 1.0</title>
+<style>
     :root{--bg:#07111f;--panel:#0f1b31;--soft:#152542;--line:#213353;--text:#eef4ff;--muted:#9db0d3;--brand:#60a5fa;--brand2:#8b5cf6;--brand3:#22c55e}
     *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top,#13284d 0%,#09111f 42%,#07111f 100%);color:var(--text)} a{text-decoration:none;color:inherit}
     .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px}.nav,.card,.compare,.feature{background:rgba(15,27,49,.8);border:1px solid var(--line);border-radius:24px}.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;position:sticky;top:16px;backdrop-filter:blur(16px);z-index:10}.logo{font-weight:800;letter-spacing:.3px}.actions,.hero-actions,.card-actions{display:flex;gap:10px;flex-wrap:wrap}.btn{padding:11px 15px;border-radius:14px;border:1px solid var(--line);background:#152542;color:var(--text)}.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));border:none}.btn.success{background:linear-gradient(135deg,#0f766e,var(--brand3));border:none}
@@ -18,75 +18,70 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="nav">
-      <div class="logo">Rarog 1.0</div>
-      <div class="actions">
-        <a class="btn" href="../../gallery/index.html">Галерея примеров</a>
-        <a class="btn" href="../../../docs/launch/README.md">Документация запуска</a>
-        <a class="btn primary" href="../white-label-demo/index.html">Конструктор тем</a>
-      </div>
-    </header>
-
-    <section class="hero">
-      <div>
-        <span class="eyebrow">Позиционирующий запуск</span>
-        <h1>Платформа дизайн-системы для продуктовых команд с несколькими темами</h1>
-        <p class="lead">Rarog помогает быстрее запускать брендированные, доступные и насыщенные дашбордами приложения — без ручной сборки собственного платформенного слоя дизайн-системы с нуля.</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="../../gallery/index.html">Посмотреть примеры</a>
-          <a class="btn" href="../../../docs/comparisons/README.md">Сравнить стеки</a>
-          <a class="btn success" href="../../../docs/launch/production-recommendations.md">Гайд для production</a>
-        </div>
-        <div class="stats">
-          <div class="stat"><span class="muted">Фокус</span><strong>3 ниши</strong></div>
-          <div class="stat"><span class="muted">Операционный слой</span><strong>CLI + quality gates</strong></div>
-          <div class="stat"><span class="muted">Работа с темами</span><strong>Builder + diff + export</strong></div>
-        </div>
-      </div>
-      <aside class="card">
-        <span class="tag">Почему Rarog</span>
-        <h2>Создан для команд, которые не могут позволить себе UI drift</h2>
-        <p class="muted">Когда у продукта несколько брендов, dashboard-heavy интерфейсы и реальные release constraints, нужен не просто CSS toolkit, а целостная платформа: tokens, themes, components, tooling, benchmarks и quality gates.</p>
-        <div class="card-actions">
-          <a class="btn" href="../../../docs/launch/why-rarog.md">Читать narrative</a>
-          <a class="btn" href="../../../docs/launch/roadmap-v2.md">Дорожная карта v2</a>
-        </div>
-      </aside>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">Сфокусированное доминирование в трёх нишах</h2>
-      <div class="grid3">
-        <article class="feature"><span class="tag">Multi-theme SaaS</span><h3>Одна оболочка продукта, много тенантов</h3><p class="muted">Общий app shell, переключение тем на базе токенов, связность от pricing до dashboard и безопасные для релиза manifests тем.</p><a class="btn primary" href="../../showcase/multi-theme-saas/index.html">Открыть демо</a></article>
-        <article class="feature"><span class="tag">White-label B2B</span><h3>Бренд-онбординг без форков продукта</h3><p class="muted">Сравнение тем, import/export, procurement-safe preview и бренд-паки для конкретных клиентов.</p><a class="btn primary" href="../../showcase/white-label-b2b/index.html">Открыть демо</a></article>
-        <article class="feature"><span class="tag">Внутренние дашборды и админки</span><h3>Плотные интерфейсы без потери дисциплины</h3><p class="muted">Формы, таблицы, approvals, alerts, audits и admin-эргономика без потери консистентности.</p><a class="btn primary" href="../../showcase/internal-admin/index.html">Открыть демо</a></article>
-      </div>
-    </section>
-
-    <section class="section compare">
-      <span class="tag">Линза сравнения</span>
-      <h2 class="section-title">Почему команды выбирают Rarog вместо сборки стека из отдельных инструментов</h2>
-      <div class="compare-table">
-        <div class="compare-row"><strong>Возможность</strong><strong>Rarog</strong><strong>Низкоуровневый utility-стек</strong><strong>Стек только из компонентов</strong></div>
-        <div class="compare-row"><span>Поставка multi-theme продукта</span><span class="yes">Сильная сторона</span><span class="mid">Нужна самостоятельная сборка</span><span class="mid">Обычно только React</span></div>
-        <div class="compare-row"><span>White-label workflow</span><span class="yes">Builder + export + compare</span><span class="no">Нужна кастомная сборка</span><span class="mid">Частично</span></div>
-        <div class="compare-row"><span>Пригодность для dashboard/admin</span><span class="yes">Поддерживается на первом уровне</span><span class="mid">Нужен дополнительный kit-слой</span><span class="mid">Зависит от покрытия</span></div>
-        <div class="compare-row"><span>Операционные инструменты</span><span class="yes">Doctor, audit, diff и quality gates</span><span class="no">Отдельный набор инструментов</span><span class="mid">Зависит от фреймворка</span></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">Галерея стартеров и demo-apps</h2>
-      <div class="gallery">
-        <article class="card"><span class="tag">Стартер</span><h3>Стартеры для фреймворков</h3><p class="muted">Точки входа для Vanilla, React, Next, Vue и Nuxt.</p><a class="btn" href="../../starters/README.md">Открыть список</a></article>
-        <article class="card"><span class="tag">Демо</span><h3>Приложения, похожие на production</h3><p class="muted">SaaS, white-label и internal-admin примеры для позиционирования и внедрения.</p><a class="btn" href="../../gallery/index.html">Открыть галерею</a></article>
-        <article class="card"><span class="tag">Миграция</span><h3>Переход со старого стека</h3><p class="muted">Гайды по переходу с Bootstrap, Tailwind, Chakra UI, MUI и Ant Design.</p><a class="btn" href="../../../docs/migration/README.md">Открыть гайды</a></article>
-        <article class="card"><span class="tag">Ops</span><h3>Релизы с дисциплиной</h3><p class="muted">Бенчмарки, quality gates релиза и валидация экспортируемой поверхности.</p><a class="btn" href="../../../docs/benchmarks/README.md">Открыть бенчмарки</a></article>
-      </div>
-    </section>
-
-    <footer class="footer">Rarog 1.0: polished website, страницы сравнений, галерея стартеров, пути миграции, demo-apps, production-рекомендации и дорожная карта v2.</footer>
-  </div>
+<div class="wrap">
+<header class="nav">
+<div class="logo">Рарог 1.0</div>
+<div class="actions">
+<a class="btn" href="../../gallery/index.html">Галерея примеров</a>
+<a class="btn" href="../../../docs/launch/README.md">Документация запуска</a>
+<a class="btn primary" href="../white-label-demo/index.html">Конструктор тем</a>
+</div>
+</header>
+<section class="hero">
+<div>
+<span class="eyebrow">Позиционирующий запуск</span>
+<h1>Платформа дизайн-системы для продуктовых команд с несколькими темами</h1>
+<p class="lead">Рарог помогает быстрее запускать брендированные, доступные и насыщенные дашбордами приложения — без ручной сборки собственного платформенного слоя дизайн-системы с нуля.</p>
+<div class="hero-actions">
+<a class="btn primary" href="../../gallery/index.html">Посмотреть примеры</a>
+<a class="btn" href="../../../docs/comparisons/README.md">Сравнить стеки</a>
+<a class="btn success" href="../../../docs/launch/production-recommendations.md">Гайд для production</a>
+</div>
+<div class="stats">
+<div class="stat"><span class="muted">Фокус</span><strong>3 ниши</strong></div>
+<div class="stat"><span class="muted">Операционный слой</span><strong>средство командной строки + контрольные пороги качества</strong></div>
+<div class="stat"><span class="muted">Работа с темами</span><strong>Конструктор + различие + выгрузка</strong></div>
+</div>
+</div>
+<aside class="card">
+<span class="tag">Почему Рарог</span>
+<h2>Создан для команд, которые не могут позволить себе UI drift</h2>
+<p class="muted">Когда у продукта несколько брендов, Панель-heavy интерфейсы и реальные выпуск constraints, нужен не просто CSS toolkit, а целостная платформа: tokens, themes, Компонентs, tooling, сравнительные замеры и контрольные пороги качества.</p>
+<div class="card-actions">
+<a class="btn" href="../../../docs/launch/why-rarog.md">Читать повествовательная основа</a>
+<a class="btn" href="../../../docs/launch/roadmap-v2.md">Дорожная карта v2</a>
+</div>
+</aside>
+</section>
+<section class="section">
+<h2 class="section-title">Сфокусированное доминирование в трёх нишах</h2>
+<div class="grid3">
+<article class="feature"><span class="tag">Многотемный SaaS</span><h3>Одна оболочка продукта, много тенантов</h3><p class="muted">Общий app shell, переключение тем на базе токенов, связность от тарифы до Панель и безопасные для релиза manifests тем.</p><a class="btn primary" href="../../showcase/multi-theme-saas/index.html">Открыть демо</a></article>
+<article class="feature"><span class="tag">Под стороннюю марку B2B</span><h3>Бренд-онбординг без форков продукта</h3><p class="muted">Сравнение тем, import/export, procurement-safe предварительный просмотр и бренд-паки для конкретных клиентов.</p><a class="btn primary" href="../../showcase/white-label-b2b/index.html">Открыть демо</a></article>
+<article class="feature"><span class="tag">Внутренние дашборды и админки</span><h3>Плотные интерфейсы без потери дисциплины</h3><p class="muted">Формы, таблицы, approvals, alerts, audits и admin-эргономика без потери консистентности.</p><a class="btn primary" href="../../showcase/internal-admin/index.html">Открыть демо</a></article>
+</div>
+</section>
+<section class="section compare">
+<span class="tag">Линза сравнения</span>
+<h2 class="section-title">Почему команды выбирают Рарог вместо сборки стека из отдельных инструментов</h2>
+<div class="compare-table">
+<div class="compare-row"><strong>Возможность</strong><strong>Рарог</strong><strong>Низкоуровневый utility-стек</strong><strong>Стек только из компонентов</strong></div>
+<div class="compare-row"><span>Поставка многотемный продукта</span><span class="yes">Сильная сторона</span><span class="mid">Нужна самостоятельная сборка</span><span class="mid">Обычно только React</span></div>
+<div class="compare-row"><span>Под стороннюю марку порядок работы</span><span class="yes">Конструктор + выгрузка + compare</span><span class="no">Нужна кастомная сборка</span><span class="mid">Частично</span></div>
+<div class="compare-row"><span>Пригодность для dashboard/admin</span><span class="yes">Поддерживается на первом уровне</span><span class="mid">Нужен дополнительный kit-слой</span><span class="mid">Зависит от покрытия</span></div>
+<div class="compare-row"><span>Операционные инструменты</span><span class="yes">Doctor, проверка, различие и контрольные пороги качества</span><span class="no">Отдельный набор инструментов</span><span class="mid">Зависит от фреймворка</span></div>
+</div>
+</section>
+<section class="section">
+<h2 class="section-title">Галерея стартеров и demo-apps</h2>
+<div class="gallery">
+<article class="card"><span class="tag">Стартер</span><h3>Стартеры для фреймворков</h3><p class="muted">Точки входа для Vanilla, React, Next, Vue и Nuxt.</p><a class="btn" href="../../starters/README.md">Открыть список</a></article>
+<article class="card"><span class="tag">Демо</span><h3>Приложения, похожие на production</h3><p class="muted">SaaS, под стороннюю марку и internal-admin примеры для позиционирования и внедрения.</p><a class="btn" href="../../gallery/index.html">Открыть галерею</a></article>
+<article class="card"><span class="tag">Миграция</span><h3>Переход со старого стека</h3><p class="muted">Гайды по переходу с Bootstrap, Tailwind, Chakra UI, MUI и Ant Design.</p><a class="btn" href="../../../docs/migration/README.md">Открыть гайды</a></article>
+<article class="card"><span class="tag">Ops</span><h3>Релизы с дисциплиной</h3><p class="muted">Бенчмарки, контрольные пороги качества релиза и валидация экспортируемой поверхности.</p><a class="btn" href="../../../docs/benchmarks/README.md">Открыть бенчмарки</a></article>
+</div>
+</section>
+<footer class="footer">Рарог 1.0: polished website, страницы сравнений, галерея стартеров, пути миграции, demo-apps, production-рекомендации и дорожная карта v2.</footer>
+</div>
 </body>
 </html>
