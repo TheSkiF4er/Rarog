@@ -1,17 +1,17 @@
-# MUI → Rarog
+# MUI → Рарог
 
 ## Когда миграция особенно уместна
 
-Подходит командам, которым нужен более лёгкий platform layer, сильнее white-label story и меньше React-specific lock-in.
+Подходит командам, которым нужен более лёгкий platform layer, сильнее под стороннюю марку story и меньше React-specific lock-in.
 
 ## Стратегия сопоставления
 
-- MUI palette / shape / shadows → Rarog tokens
-- MUI layout wrappers → Rarog layout utilities
-- MUI themed apps → Rarog multi-theme manifests
+- MUI palette / shape / shadows → Рарог tokens
+- MUI Компоновка оболочки → Рарог Компоновка вспомогательные классы
+- MUI themed apps → Рарог multi-Описание темыs
 
 ## Рекомендуемый путь
 
 1. Зафиксируйте design tokens.
-2. Поднимите один showcase-flow на Rarog.
+2. Поднимите один витрина-flow на Рарог.
 3. Затем заменяйте сложные app sections поэтапно.

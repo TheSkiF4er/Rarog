@@ -1,4 +1,4 @@
-# Chakra UI → Rarog
+# Chakra UI → Рарог
 
 ## Когда миграция особенно уместна
 
@@ -6,12 +6,12 @@
 
 ## Стратегия сопоставления
 
-- Chakra theme tokens → Rarog semantic tokens
-- Chakra component variants → Rarog component classes + tokens
-- app shell layouts → Rarog grid + utilities
+- Chakra theme tokens → Рарог semantic tokens
+- Chakra Компонент variants → Рарог Компонент classes + tokens
+- app shell Компоновкаs → Рарог grid + вспомогательные классы
 
 ## Рекомендуемый путь
 
 1. Сначала перенесите vocabulary темы.
-2. Затем переведите app shell и primitives.
-3. После этого мигрируйте form-heavy и dashboard-heavy страницы.
+2. Затем переведите app shell и базовые элементы.
+3. После этого мигрируйте form-heavy и Панель-heavy страницы.
