@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Глобальное подключение CSS Rarog для SvelteKit
+  // Глобальное подключение CSS Рарог для SvelteKit
   import "rarog/dist/rarog-core.min.css";
   import "rarog/dist/rarog-utilities.min.css";
   import "rarog/dist/rarog-components.min.css";
