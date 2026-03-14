@@ -1,3 +1,3 @@
-# White-label B2B showcase
+# Демонстрация B2B под стороннюю марку
 
-Фокус: брендирование под клиентов, procurement-safe preview, customer onboarding и theme sign-off.
+Фокус: брендирование под клиентов, procurement-safe предварительный просмотр, customer onboarding и theme sign-off.
