@@ -1,7 +1,7 @@
 {
   "name": "rarog",
   "version": "1.0.0",
-  "description": "Rarog CSS Framework — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
+  "description": "«Рарог» — каркас каскадных таблиц стилей — современный гибридный CSS-фреймворк на базе дизайн-токенов, утилит и компонентов.",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
   "scripts": {

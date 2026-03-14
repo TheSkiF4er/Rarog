@@ -1,9 +1,9 @@
 /**
- * Rarog Config (JavaScript)
+ * Рарог Config (JavaScript)
  * Базовый конфиг для темы, брейкпоинтов и расширений.
  */
 
-/** @type {import('./rarog.config.types').RarogConfig | any} */
+/** @type {загрузка('./rarog.config.types').РарогConfig | any} */
 const config = {
   "theme": {
     "colors": {

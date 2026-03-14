@@ -1,29 +1,29 @@
-# Рарог: каркас CSS 1.0.0
+# «Рарог» — каркас каскадных таблиц стилей 1.0.0
 
-> **Рарог** — каркас CSS и система оформления на основе именованных величин оформления, служебных классов, составных частей и CLI.
+> **Рарог** — каркас каскадных таблиц стилей и система оформления на основе токенов оформления, вспомогательных классов, компонентов и средства командной строки.
 
 <p align="left">
- <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
- <img src="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml/badge.svg" alt="Непрерывная проверка" />
- </a>
- <a href="https://www.npmjs.com/package/rarog">
- <img src="https://img.shields.io/npm/v/rarog.svg?logo=npm" alt="npm" />
- </a>
- <a href="https://github.com/TheSkiF4er/rarog/releases">
- <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="Выпуск GitHub" />
- </a>
- <a href="https://docs.skif4er.ru/rarog">
- <img src="https://img.shields.io/badge/docs-docs.skif4er.ru%2Frarog-blue?logo=readthedocs" alt="Документация" />
- </a>
+  <a href="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml">
+    <img src="https://github.com/TheSkiF4er/rarog/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://www.npmjs.com/package/rarog">
+    <img src="https://img.shields.io/npm/v/rarog.svg?logo=npm" alt="npm" />
+  </a>
+  <a href="https://github.com/TheSkiF4er/rarog/releases">
+    <img src="https://img.shields.io/github/v/release/TheSkiF4er/rarog?logo=github" alt="GitHub выпуск" />
+  </a>
+  <a href="https://docs.skif4er.ru/rarog">
+    <img src="https://img.shields.io/badge/docs-docs.skif4er.ru%2Frarog-blue?logo=readthedocs" alt="Документация" />
+  </a>
 </p>
 
 - Текущая стабильная ветка: **1.x**
 - Текущая версия: **1.0.0**
 - Документация: `https://docs.skif4er.ru/rarog`
 
-## Канонический порядок установки, сборки и выпуска
+## Канонический порядок установки, сборки и публикации
 
-### Для пользователя CLI
+### Для пользователя средства командной строки
 
 ```bash
 npm install rarog
@@ -33,11 +33,11 @@ npx rarog build
 ```
 
 По умолчанию `init` создаёт ровно три файла:
-- `rarog.config.js` — канонический настройочный файл темы;
-- `rarog.build.json` — каноническая опись сборки;
-- `src/index.html` — минимальный пробный входной файл для JIT.
+- `rarog.config.js` — каноническое описание темы;
+- `rarog.build.json` — каноническое описание сборки;
+- `src/index.html` — минимальный вход для краткого проверочного теста JIT.
 
-`rarog.config.ts` поддерживается только как путь совместимости. `rarog.config.json` остаётся устаревшим форматом для описи сборки и больше не является каноническим путём.
+`rarog.config.ts` поддерживается только как путь совместимости. `rarog.config.json` остаётся устаревшим форматом для описания сборки и больше не является каноническим путём.
 
 ### Для разработки репозитория
 
@@ -50,15 +50,15 @@ npm run verify:artifacts
 
 Где:
 - `npm run build` — каноническая полная сборка (`build:css + build:js + build:adapters`);
-- `npm run test:ci` — модульные проверки, слои сопряжения, договоры и пробная проверка временного проекта;
-- `npm run verify:artifacts` — проверка пригодного к выпуску tarball после сборки;
-- `npm run pack:packages` — упаковка всех пригодных к выпуску пакетов в `.artifacts/`.
+- `npm run test:ci` — модульные проверки, проверки согласующих слоёв, контрактов и краткий проверочный тест временного проекта;
+- `npm run verify:artifacts` — послесборочная проверка пригодного для публикации архива tarball;
+- `npm run pack:packages` — упаковка всех пригодных для публикации пакетов в `.artifacts/`.
 
 ## Поверхность корневого пакета
 
-Корневой пакет предсказуемо публикует доступную часть CSS:
+Корневой пакет предсказуемо публикует CSS-поверхность:
 - `style` → `./packages/core/dist/rarog-core.min.css`
-- выдачу по подпутям:
+- экспорт по вложенным путям:
  - `rarog/core`
  - `rarog/utilities`
  - `rarog/components`
@@ -69,21 +69,21 @@ npm run verify:artifacts
  - `rarog/themes/enterprise`
  - `rarog/cli`
 
-Сомнительный корневой `main` для CSS больше не используется, чтобы не ломать инструменты.
+Сомнительный корневой `main` для CSS больше не используется, чтобы не ломать инструментарий.
 
 ## Матрица поверхностей
 
-| Доступная часть | Состояние | Примечания |
+| Поверхность | Состояние | Примечания |
 |---|---|---|
-| Core CSS | Устойчива | Основная выпускаемая доступная часть корневого пакета. |
-| Утилиты CSS | Устойчива | Поддерживаемые служебные классы и именованные величины. |
-| Компоненты CSS | Устойчива | Поддерживаемые слои составных частей CSS. |
-| Встроенные темы | Устойчива | `default`, `dark`, `contrast`, `creative`, `enterprise`. |
-| Порядок CLI для настройки и сборки | Устойчива | `init → validate → build` с `rarog.config.js` и `rarog.build.json`. |
-| Исполняющая часть JS (`@rarog/js`) | Предварительна | Поддерживается, но API ещё расширяется. |
-| Связки React (`@rarog/react`) | Опытны | Требуют отдельной проверки совместимости. |
-| Связки Vue (`@rarog/vue`) | Опытны | Требуют отдельной проверки совместимости. |
-| API дополнений | Опытна | Для больших изменений нужен RFC. |
+| Core CSS | Стабильное | Основной публикация Поверхность root package. |
+| Утилиты CSS | Стабильное | Поддерживаемые вспомогательные классы и токены. |
+| Компоненты CSS | Стабильное | Поддерживаемые компонентные CSS-слои. |
+| Встроенные темы | Стабильное | `default`, `dark`, `contrast`, `creative`, `enterprise`. |
+| Порядок настройки и сборки через командную строку | Стабильное | `init → validate → build` с `rarog.config.js` и `rarog.build.json`. |
+| Исполняемое ядро JS (`@rarog/js`) | Предварительное | Поддерживается, но интерфейс ещё расширяется. |
+| React-привязки (`@rarog/react`) | Экспериментальное | Требуют отдельной проверки совместимости. |
+| Vue-привязки (`@rarog/vue`) | Экспериментальное | Требуют отдельной проверки совместимости. |
+| Интерфейс расширений | Экспериментальное | Для крупных изменений нужен RFC. |
 
 Подробности:
 - `docs/stability.md`
@@ -100,7 +100,7 @@ npm run verify:artifacts
 <link rel="stylesheet" href="/css/rarog-theme-default.min.css">
 ```
 
-### Локальный запуск CLI из репозитория
+### Локальный запуск средства командной строки из репозитория
 
 ```bash
 node packages/cli/bin/rarog.js --help
@@ -110,7 +110,7 @@ node packages/cli/bin/rarog.js build
 
 ## Процесс публикации
 
-Каноническая цепочка выпуска в CI:
+Канонический порядок публикации в CI:
 
 ```bash
 npm ci
@@ -136,7 +136,7 @@ npm run pack:packages
 - `docs/javascript.md`
 - `RELEASE.md`
 
-## Участие в разработке
+## Внесение вклада
 
 Перед PR:
 
