@@ -1,15 +1,15 @@
-# React adapter v1
+# Согласующий слой React v1
 
-`@rarog/react` gives a typed, SSR-safe wrapper layer above Rarog CSS and `@rarog/js`.
+`@rarog/react` предоставляет типизированный и пригодный для серверного вывода слой-оболочку поверх CSS «Рарог» и `@rarog/js`.
 
-## What is included
+## Что входит
 
-- wrapped primitives for form/input/layout feedback
-- overlay wrappers for modal, offcanvas, dropdown, tooltip
-- controlled/uncontrolled APIs for `RarogSwitch`, `RarogTabs`, `RarogAccordion`, overlays
-- starter examples for Vite and Next.js
+- оболочки базовых элементов для форм, ввода и обратной связи по компоновке
+- оболочки всплывающего слоя для модального окна, боковой панели, выпадающего меню и подсказки
+- управляемые и неуправляемые интерфейсы для `RarogSwitch`, `RarogTabs`, `RarogAccordion` и всплывающих слоёв
+- примеры стартовых шаблонов для Vite и Next.js
 
-## Recommended usage
+## Рекомендуемое применение
 
 ```tsx
 import {
@@ -21,14 +21,14 @@ import {
 } from "@rarog/react";
 ```
 
-Use `RarogProvider` near the оболочка приложения so dynamic nodes can be re-initialized safely after route transitions.
+Размещайте `RarogProvider` рядом с оболочкой приложения, чтобы динамические узлы можно было безопасно повторно инициализировать после переходов по маршрутам.
 
-## Wrapped components
+## Охваченные компоненты
 
 - Кнопка
 - Поле ввода
 - Текстовая область
-- ВыборField
+- Поле выбора
 - Чекбокс
 - Радиокнопка
 - Переключатель
@@ -40,15 +40,15 @@ Use `RarogProvider` near the оболочка приложения so dynamic no
 - Вкладки
 - Аккордеон
 - Подсказка
-- Modal
-- Offcanvas
+- Модальное окно
+- Боковая панель
 - Выпадающее меню
 
-## SSR notes
+## Примечания по серверному выводу
 
-All DOM-bound work is guarded behind runtime checks. The adapter renders markup on the server and activates JS-only behavior on the client.
+Вся работа, связанная с DOM, защищена проверками среды выполнения. Согласующий слой выводит разметку на сервере и включает поведение только для JS на стороне клиента.
 
-## Examples
+## Примеры
 
 - `examples/starters/vite-react`
 - `examples/starters/nextjs-rarog`

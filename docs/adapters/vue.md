@@ -1,16 +1,16 @@
-# Vue adapter v1
+# Согласующий слой Vue v1
 
-`@rarog/vue` provides Vue 3 and Nuxt-friendly wrappers around Rarog primitives and `@rarog/js`.
+`@rarog/vue` provides Vue 3 and Пригодный для Nuxt оболочки around Рарог базовые элементы and `@rarog/js`.
 
-## What is included
+## Что входит
 
-- plugin install path for app-wide registration
-- core wrapped components for forms, feedback and layout
-- overlay wrappers for modal, offcanvas, dropdown and tooltip
-- composable helpers for direct instance access
-- Nuxt starter example
+- расширение install path for app-wide registration
+- core wrapped Компонентs for forms, feedback and Компоновка
+- всплывающий слой оболочки for modal, боковая панель, dropdown and tooltip
+- composable вспомогательные средства for direct instance access
+- Nuxt стартовый шаблон Пример
 
-## Recommended usage
+## Рекомендуемое применение
 
 ```ts
 import RarogPlugin from "@rarog/vue";
@@ -18,12 +18,12 @@ import RarogPlugin from "@rarog/vue";
 
 Register the plugin once, then use `<RarogProvider>` at the shell level.
 
-## Component coverage
+## Компонент coverage
 
 - Кнопка
 - Поле ввода
 - Текстовая область
-- ВыборField
+- Поле выбора
 - Чекбокс
 - Радиокнопка
 - Переключатель
@@ -35,14 +35,14 @@ Register the plugin once, then use `<RarogProvider>` at the shell level.
 - Вкладки
 - Аккордеон
 - Подсказка
-- Modal
-- Offcanvas
+- Модальное окно
+- Боковая панель
 - Выпадающее меню
 
 ## Nuxt notes
 
-The adapter defers DOM work until mounted, so SSR output stays stable and client activation is predictable.
+The согласующий слой defers DOM work until mounted, so SSR output stays stable and client activation is predictable.
 
-## Examples
+## Примеры
 
 - `examples/starters/nuxt-rarog`
