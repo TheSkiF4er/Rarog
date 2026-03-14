@@ -1,3 +1,3 @@
-# white-label-starter
+# под стороннюю марку-стартовый шаблон
 
-Official white-label starter for multi-brand and per-tenant theme scenarios.
+Official под стороннюю марку стартовый шаблон for multi-brand and per-tenant theme scenarios.
