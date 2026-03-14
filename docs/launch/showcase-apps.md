@@ -1,12 +1,12 @@
 # Демо-приложения
 
-## Multi-theme SaaS
+## Многотемный SaaS
 
-Показывает tenant switching, pricing-to-dashboard continuity, token-driven theme changes и admin settings surface.
+Показывает tenant switching, тарифы-to-Панель continuity, token-driven theme changes и admin Настройки Поверхность.
 
-## White-label B2B app
+## Под стороннюю марку B2B app
 
-Показывает brand onboarding, logo/color/radius adaptation, comparison preview и export-ready theme payload.
+Показывает brand onboarding, logo/color/radius adaptation, comparison предварительный просмотр и выгрузка-ready theme payload.
 
 ## Internal dashboard/admin
 
@@ -14,4 +14,4 @@
 
 ## Why демо-приложения matter
 
-Демо-приложения — это bridge между docs и purchase/adoption decision. Они доказывают, что Rarog годится для production-shaped приложений, а не только для demo components.
+Демо-приложения — это bridge между Документация и purchase/adoption decision. Они доказывают, что Рарог годится для production-shaped приложений, а не только для demo Компонентs.
