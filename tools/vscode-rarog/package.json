@@ -1,7 +1,7 @@
 {
   "name": "rarog",
   "displayName": "Rarog CSS",
-  "description": "Autocomplete и hover-доки для Rarog CSS Framework.",
+  "description": "Autocomplete и hover-доки для «Рарог» — каркас каскадных таблиц стилей.",
   "version": "0.1.0",
   "publisher": "cajeer",
   "engines": {
