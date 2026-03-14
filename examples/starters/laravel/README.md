@@ -1,16 +1,16 @@
-# Laravel + Rarog Starter
+# Laravel + Рарог Стартовый шаблон
 
-Черновой пример интеграции Rarog в Laravel-проект.
+Черновой пример интеграции Рарог в Laravel-проект.
 
 ## Шаги интеграции
 
-1. В вашем Laravel-проекте установите Rarog:
-   ```bash
+1. В вашем Laravel-проекте установите Рарог:
+ ```bash
    npm install rarog --save-dev
    ```
 
 2. Добавьте скрипт сборки в `package.json` Laravel-проекта:
-   ```json
+ ```json
    {
      "scripts": {
        "rarog:build": "rarog build"
@@ -19,7 +19,7 @@
    ```
 
 3. Создайте `rarog.config.js` в корне Laravel-проекта:
-   ```js
+ ```js
    module.exports = {
      mode: "jit",
      content: [
@@ -32,17 +32,17 @@
    ```
 
 4. Запустите сборку:
-   ```bash
+ ```bash
    npx rarog build
    ```
 
 5. Подключите CSS в `resources/views/layouts/app.blade.php`:
-   ```blade
+ ```blade
    <link rel="stylesheet" href="{{ mix('/css/rarog.jit.css') }}">
    ```
 
-6. Используйте классы Rarog в Blade-шаблонах:
-   ```blade
+6. Используйте классы Рарог в Blade-шаблонах:
+ ```blade
    <div class="rg-container-lg py-6">
      <div class="card">
        <div class="card-header">Rarog + Laravel</div>
