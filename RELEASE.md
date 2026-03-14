@@ -41,8 +41,8 @@ Release workflow выполняет именно этот порядок:
 ## Release invariants
 
 Перед публикацией нужно убедиться, что:
-- канонический theme-config — `rarog.config.js`;
-- канонический build-manifest — `rarog.build.json`;
+- канонический настройочный файл темы — `rarog.config.js`;
+- каноническая опись сборки — `rarog.build.json`;
 - root package публикует `style` и subpath exports;
 - root package не использует CSS `main`;
 - `verify:artifacts` запускается только после полной сборки;
