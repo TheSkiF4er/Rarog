@@ -22,7 +22,7 @@ export default function App() {
           <RarogCard
             title="Rarog + Vite + React"
             subtitle="React adapter v1 starter"
-            footer={<RarogBadge>Stable starter</RarogBadge>}
+            footer={<RarogBadge>Стабильное starter</RarogBadge>}
             bodyClassName="p-6"
           >
             <div className="d-flex flex-column gap-3">
