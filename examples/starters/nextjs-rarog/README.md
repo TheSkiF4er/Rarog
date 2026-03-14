@@ -1,13 +1,13 @@
-# Rarog + Next.js Starter
+# Рарог + Next.js Стартовый шаблон
 
-Next.js starter for `@rarog/react`.
+Next.js стартовый шаблон for `@rarog/react`.
 
-## What it covers
+## Что охватывает
 
 - SSR-friendly `RarogProvider`
-- wrapped components instead of raw HTML-only integration
+- wrapped Компонентs instead of raw HTML-only integration
 - controlled + composable APIs
-- modal and tabs example in App Router
+- modal and tabs Пример in App Router
 
 ## Run
 
