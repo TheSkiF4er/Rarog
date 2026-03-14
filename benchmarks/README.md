@@ -1,20 +1,20 @@
-# Rarog benchmark program
+# Программа сравнительных замеров «Рарог»
 
-This directory is the reproducible benchmark workspace for Rarog.
+This directory is the reproducible сравнительный замер рабочее пространство for Рарог.
 
-## What we measure
+## Что измеряется
 
 - build speed
 - JIT speed
 - output size
-- runtime cost
+- среда выполнения cost
 - theme switch cost
-- component render overhead
+- Компонент render overhead
 
-## Layout
+## Компоновка
 
-- `fixtures/jit-app/` — minimal app used by the JIT benchmark
-- `results/latest.json` — latest machine-readable benchmark snapshot
+- `fixtures/jit-app/` — minimal app used by the JIT сравнительный замер
+- `results/latest.json` — latest machine-readable сравнительный замер snapshot
 - `results/latest.md` — latest markdown summary
 - `scenarios/framework-baselines.json` — comparison baselines for Bootstrap, Tailwind, UnoCSS, shadcn/ui stack, Chakra UI and MUI
 
@@ -25,10 +25,10 @@ npm run bench:run
 npm run bench:publish
 ```
 
-`bench:run` regenerates the local snapshot. `bench:publish` also copies the latest snapshot into `docs/benchmarks/` so docs can render the current public page.
+`bench:run` regenerates the local snapshot. `bench:publish` also copies the latest snapshot into `docs/benchmarks/` so Документация can render the current public page.
 
 ## Reproducibility model
 
-Rarog numbers are measured directly from this repository. Cross-framework comparisons are intentionally stored as scenario baselines until each competitor checkout is wired into CI with pinned versions and fixture parity.
+Рарог numbers are measured directly from this repository. Cross-framework comparisons are intentionally stored as scenario baselines until each competitor checkout is wired into CI with pinned versions and fixture parity.
 
-That means the harness is reproducible today for Rarog and structurally ready for external framework checkouts without changing the report format.
+That means the harness is reproducible Сегодня for Рарог and structurally ready for external framework checkouts without changing the report format.
