@@ -2,37 +2,37 @@
   "official": [
     {
       "name": "@rarog/plugin-typography",
-      "description": "Content typography for docs, blogs and long-form pages.",
+      "description": "Типографика содержимого для документации, блогов и длинных страниц.",
       "since": "1.0.0",
       "sdk": "v1"
     },
     {
       "name": "@rarog/plugin-forms",
-      "description": "Form controls, helpers and ergonomic input primitives.",
+      "description": "Элементы форм, вспомогательные средства и удобные базовые элементы ввода.",
       "since": "1.0.0",
       "sdk": "v1"
     },
     {
       "name": "@rarog/plugin-motion",
-      "description": "Motion primitives and accessible transition helpers.",
+      "description": "Базовые элементы движения и доступные вспомогательные средства переходов.",
       "since": "1.0.0",
       "sdk": "v1"
     },
     {
       "name": "@rarog/plugin-charts-theme",
-      "description": "Theming primitives for dashboards and embedded charts.",
+      "description": "Базовые элементы темизации для панелей и встроенных диаграмм.",
       "since": "1.0.0",
       "sdk": "v1"
     },
     {
       "name": "@rarog/plugin-dashboard-kit",
-      "description": "Dashboard shells, KPI cards and analytics layout primitives.",
+      "description": "Панель shells, KPI cards and analytics Компоновка базовые элементы.",
       "since": "1.0.0",
       "sdk": "v1"
     },
     {
       "name": "@rarog/plugin-marketing-blocks",
-      "description": "Hero, pricing and CTA building blocks for marketing pages.",
+      "description": "Составные части главного блока, тарифов и призыва к действию для рекламных страниц.",
       "since": "1.0.0",
       "sdk": "v1"
     }
