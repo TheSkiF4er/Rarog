@@ -1,13 +1,13 @@
-# Rarog + Nuxt Starter
+# Рарог + Nuxt Стартовый шаблон
 
-Nuxt starter for `@rarog/vue`.
+Nuxt стартовый шаблон for `@rarog/vue`.
 
-## What it covers
+## Что охватывает
 
-- Nuxt-compatible plugin usage
-- wrapped component coverage for common UI work
+- Nuxt-compatible расширение usage
+- wrapped Компонент coverage for common UI work
 - composable-friendly mount path through `RarogProvider`
-- modal and tabs example
+- modal and tabs Пример
 
 ## Run
 

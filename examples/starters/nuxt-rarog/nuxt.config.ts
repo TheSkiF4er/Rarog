@@ -1,4 +1,4 @@
-// Nuxt 3 + Rarog starter config
+// Nuxt 3 + Рарог стартовый шаблон config
 export default defineNuxtConfig({
   css: [
     "rarog/dist/rarog-core.min.css",
