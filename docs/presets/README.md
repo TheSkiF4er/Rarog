@@ -1,13 +1,13 @@
-# Compatibility presets
+# Наборы совместимости
 
 Пресеты помогают ускорять adoption и миграции, не заставляя команду сразу менять весь mental model.
 
 ## Включено official presets
 
 - [Bootstrap-like spacing](bootstrap-spacing.md)
-- [Tailwind-like aliases утилит](tailwind-aliases.md)
-- [Enterprise design-system](enterprise-design-system.md)
-- [Dashboard](dashboard.md)
+- [Псевдонимы вспомогательных классов в духе Tailwind](tailwind-aliases.md)
+- [Enterprise система оформления](enterprise-design-system.md)
+- [Панель](dashboard.md)
 
 ## Registry
 
