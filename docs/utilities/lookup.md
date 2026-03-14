@@ -1,13 +1,13 @@
 # Справочник утилит
 
-Справочник утилит — это быстрый навигатор по наиболее частым задачам и соответствующим utility-классам Rarog.
+Справочник утилит — это быстрый навигатор по наиболее частым задачам и соответствующим utility-классам Рарог.
 
-## Layout и spacing
+## Компоновка и spacing
 
 - stack с gap → `d-flex flex-column gap-*`
 - horizontal cluster → `d-flex gap-* flex-wrap align-items-center`
 - responsive columns → `rg-row` + `rg-col-*`
-- dashboard shell → `d-grid`, `grid-cols-*`, `min-h-screen`, `p-*`
+- Панель shell → `d-grid`, `grid-cols-*`, `min-h-screen`, `p-*`
 
 ## Размеры
 
@@ -30,5 +30,5 @@
 
 ## Связанные документы
 
-- [Аудит Utility API vs Tailwind](utility-api-audit.md)
+- [Аудит Utility интерфейс vs Tailwind](utility-api-audit.md)
 - [Миграция с Tailwind](../migration/from-tailwind.md)

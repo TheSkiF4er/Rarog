@@ -1,24 +1,24 @@
 # Утилиты
 
-Утилиты provide low-level helpers for styling, composition, and authoring ergonomics.
+Утилиты provide low-level вспомогательные средства for styling, composition, and authoring ergonomics.
 
-## When to use utilities
+## When to use вспомогательные классы
 
-Use utilities for:
-- small reusable helpers
-- layout and composition primitives
-- cross-cutting concerns that do not belong to a single component
+Use вспомогательные классы for:
+- small reusable вспомогательные средства
+- Компоновка and composition базовые элементы
+- cross-cutting concerns that do not belong to a single Компонент
 
 ## Recommended approach
 
-Keep utilities focused, predictable, and easy to combine.
+Keep вспомогательные классы focused, predictable, and easy to combine.
 
-## Related sections
+## Связанные разделы
 
 - [Компоненты](../components/README.md)
 - [Темы](../themes/README.md)
 
-## Audit and parity work
+## Проверка and parity work
 
-- [Utility API audit vs Tailwind](utility-api-audit.md)
-- `rarog-tailwind-parity.xlsx` — spreadsheet parity matrix, missing utilities, backlog
+- [Проверка полноты вспомогательного интерфейса относительно Tailwind](utility-api-audit.md)
+- `rarog-tailwind-parity.xlsx` — spreadsheet parity matrix, missing вспомогательные классы, очередь задач
