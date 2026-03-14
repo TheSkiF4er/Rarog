@@ -10,7 +10,7 @@ describe("component pack v1 accessibility baseline", () => {
           <button class="tab-trigger" data-rg-tab data-rg-target="#panel-b">Two</button>
         </div>
         <div id="panel-a" class="tab-panel" data-rg-tab-panel>Alpha</div>
-        <div id="panel-b" class="tab-panel" data-rg-tab-panel hidden>Beta</div>
+        <div id="panel-b" class="tab-panel" data-rg-tab-panel hidden>Предварительное</div>
       </section>
     `;
 

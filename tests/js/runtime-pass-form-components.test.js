@@ -116,7 +116,7 @@ describe("runtime pass: stepper / datepicker / select / combobox / tags-input / 
         <input data-rg-table-search />
         <table>
           <thead><tr><th data-rg-sort="name">Name</th></tr></thead>
-          <tbody><tr><td>Beta</td></tr><tr><td>Alpha</td></tr></tbody>
+          <tbody><tr><td>Предварительное</td></tr><tr><td>Alpha</td></tr></tbody>
         </table>
         <div class="rg-table-pagination"></div>
       </div>

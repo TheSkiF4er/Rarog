@@ -271,7 +271,7 @@ describe("JS core component contracts", () => {
         <input type="hidden" id="select-value" />
         <div data-rg-select-menu hidden>
           <button type="button" data-rg-value="alpha">Alpha</button>
-          <button type="button" data-rg-value="beta">Beta</button>
+          <button type="button" data-rg-value="beta">Предварительное</button>
         </div>
       </div>
     `;
@@ -363,7 +363,7 @@ describe("JS core component contracts", () => {
           <tbody>
             <tr><td>Gamma</td><td>30</td></tr>
             <tr><td>Alpha</td><td>10</td></tr>
-            <tr><td>Beta</td><td>20</td></tr>
+            <tr><td>Предварительное</td><td>20</td></tr>
           </tbody>
         </table>
         <div data-rg-table-pagination></div>

@@ -6,7 +6,7 @@
 import { Rarog } from "../../packages/js/src/rarog.esm.js";
 
 describe("Rarog.Datepicker", () => {
-  test("инициализация через data-API и выбор даты обновляет value", () => {
+  test("инициализация через data-интерфейс и выбор даты обновляет value", () => {
     document.body.innerHTML = `
       <div class="rg-datepicker" data-rg-datepicker>
         <input type="date" class="rg-datepicker-input" id="birthday" />

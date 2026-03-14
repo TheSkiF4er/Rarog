@@ -1,6 +1,6 @@
 /**
  * @file event-contract.test.js
- * Контрактные тесты для стабильного lifecycle Event API.
+ * Контрактные тесты для стабильного lifecycle Event интерфейс.
  */
 
 import { Rarog } from "../../packages/js/src/rarog.esm.js";

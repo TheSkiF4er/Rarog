@@ -9,7 +9,7 @@ import Rarog, {
   reinit
 } from "../../packages/js/src/index.js";
 
-describe("Rarog public API", () => {
+describe("Rarog public интерфейс", () => {
   test("canonical entrypoint exposes stable modules", () => {
     expect(Rarog.Dropdown).toBe(Dropdown);
     expect(Rarog.Modal).toBe(Modal);

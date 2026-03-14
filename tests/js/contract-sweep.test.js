@@ -315,7 +315,7 @@ describe("JS Core contract sweep", () => {
         <button type="button" class="rg-combobox-toggle">Toggle</button>
         <div class="rg-combobox-list" hidden>
           <button type="button" data-rg-value="alpha">Alpha</button>
-          <button type="button" data-rg-value="beta">Beta</button>
+          <button type="button" data-rg-value="beta">Предварительное</button>
         </div>
         <input type="hidden" id="combobox-hidden" />
       </div>
