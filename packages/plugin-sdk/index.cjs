@@ -113,7 +113,7 @@ function validatePluginCompatibility(plugin, runtime) {
   }
 
   if (manifest.apiVersion !== SDK_API_VERSION) {
-    errors.push(`Plugin ${manifest.name} uses plugin API v${manifest.apiVersion}, expected v${SDK_API_VERSION}.`);
+    errors.push(`Plugin ${manifest.name} uses plugin интерфейс v${manifest.apiVersion}, expected v${SDK_API_VERSION}.`);
   }
 
   if (!manifest.capabilities || typeof manifest.capabilities !== "object") {
