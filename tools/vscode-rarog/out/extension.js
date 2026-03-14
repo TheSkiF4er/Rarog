@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Простое расширение VSCode для Rarog:
+ * Простое расширение VSCode для Рарог:
  * - автодополнение классов (из rarog-classmap.json);
  * - hover-доки по классам.
  */
