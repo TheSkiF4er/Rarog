@@ -1,8 +1,8 @@
 # @rarog/vue
 
-Vue adapter v1 for Rarog with Nuxt-friendly SSR usage, composable-style helpers and wrapped components for core UI primitives.
+Согласующий слой Vue v1 for Рарог with Пригодный для Nuxt SSR usage, composable-style вспомогательные средства and wrapped Компонентs for core UI базовые элементы.
 
-Included wrappers:
+Входящие оболочки:
 - `RarogProvider`
 - `RarogButton`
 - `RarogInput`
@@ -23,7 +23,7 @@ Included wrappers:
 - `RarogOffcanvas`
 - `RarogDropdown`
 
-Composable helpers:
+Composable вспомогательные средства:
 - `useRarogInit`
 - `useModal`
 - `useOffcanvas`
@@ -31,5 +31,5 @@ Composable helpers:
 - `useTooltip`
 - `useCollapse`
 
-Examples:
+Примеры:
 - `examples/starters/nuxt-rarog`

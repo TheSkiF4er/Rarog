@@ -1,7 +1,7 @@
 {
   "name": "@rarog/vue",
   "version": "1.0.0",
-  "description": "vue 3 bindings for rarog js core and component primitives",
+  "description": "vue 3 привязки for Рарог js core and Компонент базовые элементы",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
   "type": "module",
