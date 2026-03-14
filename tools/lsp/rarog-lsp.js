@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*!
- * Rarog LSP Server
+ * Рарог LSP Server
  * LSP-сервер для автодополнения классов, токенов и базовой валидации rarog.config.*.
  */
 
@@ -105,7 +105,7 @@ function buildTokenCompletions() {
   const radius = theme.radius || {};
   const shadow = theme.shadow || {};
 
-  // Цветовые токены: primary-500, success-600...
+  // Цветовые токены: Основной-500, success-600...
   Object.entries(colors).forEach(([scale, shades]) => {
     if (typeof shades !== "object") return;
     Object.entries(shades).forEach(([key, value]) => {
@@ -295,7 +295,7 @@ connection.onCompletion(params => {
 
   const items = [];
 
-  // Классы Rarog (rg-*, btn-*, bg-*, text-*)
+  // Классы Рарог (rg-*, btn-*, bg-*, Текст-*)
   classMap.forEach(entry => {
     if (!prefix || entry.className.startsWith(prefix)) {
       items.push({
@@ -307,7 +307,7 @@ connection.onCompletion(params => {
     }
   });
 
-  // Токены (primary-500, space-4 и т.п.) — особенно полезно внутри rarog.config.* и build-manifest.
+  // Токены (Основной-500, space-4 и т.п.) — особенно полезно внутри rarog.config.* и описание сборки.
   if (doc.uri.endsWith("rarog.config.ts") || doc.uri.endsWith("rarog.config.js") || doc.uri.endsWith("rarog.config.json") || doc.uri.endsWith("rarog.build.json")) {
     tokenCompletionsCache.forEach(tok => {
       if (!prefix || tok.label.startsWith(prefix)) {
