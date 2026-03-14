@@ -1,7 +1,7 @@
 {
   "name": "@rarog/js",
   "version": "1.0.0",
-  "description": "vanilla js runtime for rarog interactive components",
+  "description": "vanilla Исполняемое ядро JS for Рарог interactive Компонентs",
   "author": "TheSkiF4er <dev@cajeer.ru>",
   "license": "Apache-2.0",
   "type": "module",
