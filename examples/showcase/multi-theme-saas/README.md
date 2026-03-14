@@ -1,9 +1,9 @@
-# Multi-theme SaaS showcase
+# Демонстрация многотемного SaaS
 
-Фокус: one-codebase SaaS с tenant themes, upsell surfaces, billing widgets и оболочка приложения continuity.
+Фокус: one-codebase SaaS с tenant themes, upsell Поверхностьs, Расчёты widgets и оболочка приложения continuity.
 
 Использование:
 
-- показать theming и product continuity на демо;
+- показать темизация и product continuity на демо;
 - валидировать SaaS positioning;
-- использовать как reference для production starter.
+- использовать как reference для production стартовый шаблон.
