@@ -1,5 +1,5 @@
 :root {
-  /* Primary scale (blue) */
+  /* Основной scale (blue) */
   --rarog-color-primary-50:  #eff6ff;
   --rarog-color-primary-100: #dbeafe;
   --rarog-color-primary-200: #bfdbfe;
@@ -11,7 +11,7 @@
   --rarog-color-primary-800: #1e40af;
   --rarog-color-primary-900: #1e3a8a;
 
-  /* Secondary scale (slate) */
+  /* Дополнительный scale (slate) */
   --rarog-color-secondary-50:  #f8fafc;
   --rarog-color-secondary-100: #f1f5f9;
   --rarog-color-secondary-200: #e2e8f0;
@@ -83,7 +83,7 @@
   --rarog-color-warning: var(--rarog-color-warning-600);
   --rarog-color-info:    var(--rarog-color-info-600);
 
-  /* Backgrounds & neutrals (default theme) */
+  /* Фонs & neutrals (default theme) */
   --rarog-color-bg:              #f3f4f6;
   --rarog-color-bg-soft:         #ffffff;
   --rarog-color-bg-elevated:     #ffffff;
@@ -98,7 +98,7 @@
   --rarog-color-text:            #0f172a;
   --rarog-color-text-muted:      #6b7280;
 
-  /* Semantic helpers */
+  /* Semantic вспомогательные средства */
   --rarog-color-focus-ring:      var(--rarog-color-primary-500);
   --rarog-color-accent-soft:     var(--rarog-color-primary-50);
 }
