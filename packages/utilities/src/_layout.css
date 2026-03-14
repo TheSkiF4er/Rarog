@@ -1,4 +1,4 @@
-/* Layout, flex and grid utilities */
+/* Компоновка, flex and grid вспомогательные классы */
 .block { display: block; }
 .inline { display: inline; }
 .inline-block { display: inline-block; }

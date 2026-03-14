@@ -1,11 +1,11 @@
-/* Rarog Grid System (rarog-grid)
+/* Рарог Grid System (Рарог-grid)
  *
  * 12-колоночная сетка в стиле Bootstrap.
  * Базовые концепты:
- *   - .rg-row — строка сетки (flex-контейнер с gutter'ами)
- *   - .rg-col — колонка "на всю ширину"
- *   - .rg-col-1..12 — фиксированная ширина колонки в долях от 12
- *   - .rg-col-sm-*, .rg-col-md-*, .rg-col-lg-*, .rg-col-xl-*, .rg-col-2xl-* — responsive-варианты
+ * - .rg-row — строка сетки (flex-контейнер с gutter'ами)
+ * - .rg-col — колонка "на всю ширину"
+ * - .rg-col-1..12 — фиксированная ширина колонки в долях от 12
+ * - .rg-col-sm-*, .rg-col-md-*, .rg-col-lg-*, .rg-col-xl-*, .rg-col-2xl-* — responsive-варианты
  */
 
 .rg-row {
@@ -78,7 +78,7 @@
 
 /* Responsive-варианты для колонок, order и offset */
 
-/* sm: ≥ --rarog-breakpoint-sm */
+/* sm: ≥ --Рарог-breakpoint-sm */
 @media (min-width: var(--rarog-breakpoint-sm)) {
   .rg-col-sm-1 { flex: 0 0 auto; width: calc(100% / 12 * 1); }
   .rg-col-sm-2 { flex: 0 0 auto; width: calc(100% / 12 * 2); }
@@ -120,7 +120,7 @@
   .rg-offset-sm-11 { margin-left: calc(100% / 12 * 11); }
 }
 
-/* md: ≥ --rarog-breakpoint-md */
+/* md: ≥ --Рарог-breakpoint-md */
 @media (min-width: var(--rarog-breakpoint-md)) {
   .rg-col-md-1 { flex: 0 0 auto; width: calc(100% / 12 * 1); }
   .rg-col-md-2 { flex: 0 0 auto; width: calc(100% / 12 * 2); }
@@ -162,7 +162,7 @@
   .rg-offset-md-11 { margin-left: calc(100% / 12 * 11); }
 }
 
-/* lg: ≥ --rarog-breakpoint-lg */
+/* lg: ≥ --Рарог-breakpoint-lg */
 @media (min-width: var(--rarog-breakpoint-lg)) {
   .rg-col-lg-1 { flex: 0 0 auto; width: calc(100% / 12 * 1); }
   .rg-col-lg-2 { flex: 0 0 auto; width: calc(100% / 12 * 2); }
@@ -204,7 +204,7 @@
   .rg-offset-lg-11 { margin-left: calc(100% / 12 * 11); }
 }
 
-/* xl: ≥ --rarog-breakpoint-xl */
+/* xl: ≥ --Рарог-breakpoint-xl */
 @media (min-width: var(--rarog-breakpoint-xl)) {
   .rg-col-xl-1 { flex: 0 0 auto; width: calc(100% / 12 * 1); }
   .rg-col-xl-2 { flex: 0 0 auto; width: calc(100% / 12 * 2); }
@@ -246,7 +246,7 @@
   .rg-offset-xl-11 { margin-left: calc(100% / 12 * 11); }
 }
 
-/* 2xl: ≥ --rarog-breakpoint-2xl */
+/* 2xl: ≥ --Рарог-breakpoint-2xl */
 @media (min-width: var(--rarog-breakpoint-2xl)) {
   .rg-col-2xl-1 { flex: 0 0 auto; width: calc(100% / 12 * 1); }
   .rg-col-2xl-2 { flex: 0 0 auto; width: calc(100% / 12 * 2); }

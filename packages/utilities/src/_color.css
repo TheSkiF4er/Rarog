@@ -1,4 +1,4 @@
-/* Color, background and border utilities */
+/* Color, Фон and Граница вспомогательные классы */
 .bg-transparent { background-color: transparent; }
 .text-transparent { color: transparent; }
 .border-transparent { border-color: transparent; }

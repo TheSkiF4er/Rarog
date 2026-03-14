@@ -1,4 +1,4 @@
-/* State and variant utilities */
+/* State and variant вспомогательные классы */
 
 .hover\:bg-primary:hover { background-color: var(--rarog-color-primary); color: var(--rarog-color-primary-foreground); }
 .hover\:bg-primary-600:hover { background-color: var(--rarog-color-primary-600); color: #ffffff; }

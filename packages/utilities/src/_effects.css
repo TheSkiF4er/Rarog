@@ -1,4 +1,4 @@
-/* Effects, borders, transitions, transforms and filters */
+/* Effects, Границаs, transitions, transforms and filters */
 .rounded-none { border-radius: 0; }
 .rounded-xs { border-radius: var(--rarog-radius-xs, 0.125rem); }
 .rounded-sm { border-radius: var(--rarog-radius-sm, 0.25rem); }

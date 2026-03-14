@@ -1,4 +1,4 @@
-/* Overflow utilities */
+/* Overflow вспомогательные классы */
 
 .overflow-hidden { overflow: hidden; }
 .overflow-auto { overflow: auto; }
@@ -20,7 +20,7 @@
 .scroll-auto   { scroll-behavior: auto; }
 .scroll-smooth { scroll-behavior: smooth; }
 
-/* Scroll snap utilities */
+/* Scroll snap вспомогательные классы */
 
 .snap-none { scroll-snap-type: none; }
 .snap-x    { scroll-snap-type: x mandatory; }
@@ -31,7 +31,7 @@
 .snap-center { scroll-snap-align: center; }
 .snap-end    { scroll-snap-align: end; }
 
-/* Scroll margin / padding utilities (anchor offsets) */
+/* Scroll margin / padding вспомогательные классы (anchor offsets) */
 .scroll-mt-0 { scroll-margin-top: 0; }
 .scroll-mt-1 { scroll-margin-top: 0.25rem; }
 .scroll-mt-2 { scroll-margin-top: 0.5rem; }

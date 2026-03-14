@@ -1,4 +1,4 @@
-/* Print utilities */
+/* Print вспомогательные классы */
 
 @media print {
   .print\:hidden { display: none !important; }

@@ -1,4 +1,4 @@
-/* Position & z-index utilities */
+/* Position & z-index вспомогательные классы */
 .static { position: static; }
 .relative { position: relative; }
 .absolute { position: absolute; }

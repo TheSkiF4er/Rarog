@@ -1,4 +1,4 @@
-/* Spacing utilities */
+/* Spacing вспомогательные классы */
 .m-auto { margin: auto; }
 .m-0 { margin: 0; }
 .m-1 { margin: var(--rarog-space-1); }
