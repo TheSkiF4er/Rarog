@@ -15,7 +15,7 @@ export const Overview = {
           <div class="d-flex gap-2 flex-wrap">
             <button class="btn btn-primary">Primary</button>
             <button class="btn btn-secondary">Secondary</button>
-            <span class="badge badge-primary">Beta</span>
+            <span class="badge badge-primary">Предварительное</span>
           </div>
           <input class="input" placeholder="Input" />
           <textarea class="textarea" placeholder="Textarea"></textarea>
@@ -28,7 +28,7 @@ export const Overview = {
       <section class="tabs" data-rg-tabs>
         <div class="tab-list" data-rg-tab-list>
           <button class="tab-trigger" data-rg-tab data-rg-target="#story-tab-a" aria-selected="true">Overview</button>
-          <button class="tab-trigger" data-rg-tab data-rg-target="#story-tab-b">Status</button>
+          <button class="tab-trigger" data-rg-tab data-rg-target="#story-tab-b">Состояние</button>
         </div>
         <div id="story-tab-a" class="tab-panel" data-rg-tab-panel>Accordion, tooltip and dialog are covered in the visual fixture.</div>
         <div id="story-tab-b" class="tab-panel" data-rg-tab-panel hidden><span class="spinner"></span> <span class="ml-2">Loading state</span></div>
