@@ -200,7 +200,7 @@ function cmdComponentScaffold(args = []) {
   const storyFile = path.join(componentDir, `${name}.stories.ts`);
   const styleImport = style === 'css' ? `import './${kebab}.css';` : `import styles from './${name}.module.css';`;
   const rootClass = style === 'css' ? `${kebab}` : '{styles.root}';
-  fs.writeFileSync(componentFile, `import React from 'react';\n${styleImport}\n\nexport interface ${name}Props {\n  title?: string;\n  description?: string;\n}\n\nexport function ${name}({ title = '${name}', description = 'Scaffolded by Rarog CLI Pro.' }: ${name}Props) {\n  return (\n    <section className=${style === 'css' ? `'${kebab}'` : rootClass}>\n      <div className=\"card\">\n        <div className=\"card-body\">\n          <h3 className=\"h6 mb-2\">{title}</h3>\n          <p className=\"text-muted mb-0\">{description}</p>\n        </div>\n      </div>\n    </section>\n  );\n}\n\nexport default ${name};\n`, 'utf8');
+  fs.writeFileSync(componentFile, `import React from 'react';\n${styleImport}\n\nexport interface ${name}Props {\n  title?: string;\n  description?: string;\n}\n\nexport function ${name}({ title = '${name}', description = 'Scaffolded by Rarog средство командной строки Pro.' }: ${name}Props) {\n  return (\n    <section className=${style === 'css' ? `'${kebab}'` : rootClass}>\n      <div className=\"card\">\n        <div className=\"card-body\">\n          <h3 className=\"h6 mb-2\">{title}</h3>\n          <p className=\"text-muted mb-0\">{description}</p>\n        </div>\n      </div>\n    </section>\n  );\n}\n\nexport default ${name};\n`, 'utf8');
   fs.writeFileSync(styleFile, style === 'css'
     ? `.${kebab} {\n  display: block;\n}\n`
     : `.root {\n  display: block;\n}\n`, 'utf8');

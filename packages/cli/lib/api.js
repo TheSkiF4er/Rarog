@@ -43,7 +43,7 @@ function generateColorCss(theme) {
 
   return [
 ":root {",
-"  /* Primary scale (blue) */",
+"  /* Основной scale (blue) */",
 `  --rarog-color-primary-50:  ${primary[50] || "#eff6ff"};`,
 `  --rarog-color-primary-100: ${primary[100] || "#dbeafe"};`,
 `  --rarog-color-primary-200: ${primary[200] || "#bfdbfe"};`,
@@ -55,7 +55,7 @@ function generateColorCss(theme) {
 `  --rarog-color-primary-800: ${primary[800] || "#1e40af"};`,
 `  --rarog-color-primary-900: ${primary[900] || "#1e3a8a"};`,
 "",
-"  /* Secondary scale (slate) */",
+"  /* Дополнительный scale (slate) */",
 `  --rarog-color-secondary-50:  ${secondary[50] || "#f8fafc"};`,
 `  --rarog-color-secondary-100: ${secondary[100] || "#f1f5f9"};`,
 `  --rarog-color-secondary-200: ${secondary[200] || "#e2e8f0"};`,
@@ -127,7 +127,7 @@ function generateColorCss(theme) {
 "  --rarog-color-warning: var(--rarog-color-warning-600);",
 "  --rarog-color-info:    var(--rarog-color-info-600);",
 "",
-"  /* Backgrounds & neutrals (default theme) */",
+"  /* Фонs & neutrals (default theme) */",
 `  --rarog-color-bg:              ${semantic.bg || "#f3f4f6"};`,
 `  --rarog-color-bg-soft:         ${semantic.bgSoft || "#ffffff"};`,
 `  --rarog-color-bg-elevated:     ${semantic.bgElevated || "#ffffff"};`,
@@ -142,7 +142,7 @@ function generateColorCss(theme) {
 `  --rarog-color-text:            ${semantic.text || "#0f172a"};`,
 `  --rarog-color-text-muted:      ${semantic.textMuted || "#6b7280"};`,
 "",
-"  /* Semantic helpers */",
+"  /* Semantic вспомогательные средства */",
 `  --rarog-color-focus-ring:      ${semantic.focusRing || "var(--rarog-color-primary-500)"};`,
 `  --rarog-color-accent-soft:     ${semantic.accentSoft || "var(--rarog-color-primary-50)"};`,
 "}",
@@ -209,7 +209,7 @@ function generateBreakpointsCss(screens) {
   const x2 = sc["2xl"] || "1536px";
 
   return [
-"/* Rarog CSS Framework - Breakpoints",
+"/* «Рарог» — каркас каскадных таблиц стилей - Breakpoints",
 " *",
 " * Рекомендуемые значения (min-width):",
 ` *   sm: ${sm}   — малые экраны (телефоны в горизонтали, небольшие планшеты)`,
@@ -285,7 +285,7 @@ function generateTokensJson(theme, screens, version) {
 
 
 /* -------------------------------------------------------------------------- */
-/* JIT / Tree-shaking                                                         */
+/* JIT / Tree-shaking */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -332,11 +332,11 @@ function walkDir(dir, exts, acc) {
 
 /**
  * Простейшая поддержка паттернов вида:
- *   ./resources/(recursive)/*.{html,php,js,jsx,ts,tsx,vue}
+ * ./resources/(recursive)/*.{html,php,js,jsx,ts,tsx,vue}
  *
  * Мы разбираем:
- *   - базовую директорию до '**'
- *   - список расширений из {..}
+ * - базовую директорию до '**'
+ * - список расширений из {..}
  */
 function scanContentFiles(patterns) {
   const files = new Set();
@@ -382,7 +382,7 @@ function scanContentFiles(patterns) {
 
 /**
  * Выделение CSS-классов из содержимого файлов (class / className).
- * Лёгкий фильтр по префиксам Rarog.
+ * Лёгкий фильтр по префиксам Рарог.
  */
 function extractClassesFromContent(files) {
   const classSet = new Set();
@@ -421,7 +421,7 @@ function extractClassesFromContent(files) {
     // advanced typography
     if (name.startsWith("font-") || name.startsWith("leading-")) return true;
 
-    // spacing / layout
+    // spacing / Компоновка
     const utilPrefixes = [
       "mt-", "mb-", "ml-", "mr-", "mx-", "my-",
       "pt-", "pb-", "pl-", "pr-", "px-", "py-",
@@ -499,7 +499,7 @@ function extractClassesFromContent(files) {
 
 /**
  * Генерация CSS для произвольных значений:
- *   w-[320px], h-[50vh], bg-[#0f172a], text-[rgba(...)]
+ * w-[320px], h-[50vh], bg-[#0f172a], Текст-[rgba(...)]
  */
 function generateArbitraryCss(usedClasses) {
   const lines = [];
@@ -552,7 +552,7 @@ function generateArbitraryCss(usedClasses) {
     });
 
   if (lines.length === 0) return "";
-  return "/* Rarog JIT arbitrary values */\n" + lines.join("\n") + "\n";
+  return "/* Рарог JIT arbitrary values */\n" + lines.join("\n") + "\n";
 }
 
 
@@ -561,9 +561,9 @@ function generateArbitraryCss(usedClasses) {
  *
  * - Всегда сохраняем комментарии, :root, @keyframes.
  * - Для @media-блоков: если внутри встретился хотя бы один используемый класс,
- *   сохраняем блок целиком.
+ * сохраняем блок целиком.
  * - Для одиночных правил: сохраняем блок, если в нём есть хотя бы один класс
- *   из списка usedClasses.
+ * из списка usedClasses.
  */
 function filterCssByUsedClasses(css, usedClasses) {
   if (!usedClasses || usedClasses.length === 0) {
@@ -621,26 +621,26 @@ function filterCssByUsedClasses(css, usedClasses) {
     let keep = false;
     if (
       trimmed.startsWith("/*") ||
-      trimmed.startsWith(":root") ||
-      trimmed.startsWith("@keyframes") ||
-      trimmed.startsWith("@font-face")
-    ) {
-      keep = true;
-    } else if (hasClass(block)) {
-      keep = true;
-    }
+ trimmed.startsWith(":root") ||
+ trimmed.startsWith("@keyframes") ||
+ trimmed.startsWith("@font-face")
+ ) {
+ keep = true;
+ } else if (hasClass(block)) {
+ keep = true;
+ }
 
-    if (keep) {
-      result += block;
-    }
+ if (keep) {
+ result += block;
+ }
 
-    i = nextClose + 1;
-  }
+ i = nextClose + 1;
+ }
 
-  return result;
+ return result;
 }
 /* -------------------------------------------------------------------------- */
-/* Команды CLI                                                                */
+/* Команды средство командной строки */
 /* -------------------------------------------------------------------------- */
 
 
@@ -870,24 +870,24 @@ function cmdBuild(options = {}) {
   const { utilitiesCssExtra, componentsCssExtra } = runPlugins(effective);
 
   let jitCss = "";
-  jitCss += "/* Rarog CSS Framework - JIT build */\n";
-  jitCss += `/* Generated by rarog build using ${themeConfigLabel} + ${buildManifestLabel}. */\n\n`;
+  jitCss += "/* «Рарог» — каркас каскадных таблиц стилей - JIT build */\n";
+  jitCss += `/* Generated by Рарог build using ${themeConfigLabel} + ${buildManifestLabel}. */\n\n`;
   jitCss += colorCss + "\n";
   jitCss += spacingCss + "\n";
   jitCss += radiusCss + "\n";
   jitCss += shadowCss + "\n";
   jitCss += breakpointsCss + "\n";
-  jitCss += "\n/* Rarog Core */\n";
+  jitCss += "\n/* Рарог Core */\n";
   jitCss += coreCssFull + "\n";
-  jitCss += "\n/* Rarog Utilities (JIT) */\n";
+  jitCss += "\n/* Рарог Вспомогательные классы (JIT) */\n";
   jitCss += utilitiesJit + "\n";
   if (utilitiesCssExtra) {
-    jitCss += "/* Rarog plugin utilities */\n" + utilitiesCssExtra + "\n";
+    jitCss += "/* Рарог расширение вспомогательные классы */\n" + utilitiesCssExtra + "\n";
   }
-  jitCss += "\n/* Rarog Components (JIT) */\n";
+  jitCss += "\n/* Рарог Компонентs (JIT) */\n";
   jitCss += componentsJit + "\n";
   if (componentsCssExtra) {
-    jitCss += "/* Rarog plugin components */\n" + componentsCssExtra + "\n";
+    jitCss += "/* Рарог расширение Компонентs */\n" + componentsCssExtra + "\n";
   }
   jitCss += arbitraryCss;
   jitCss = jit.dedupeCssBlocks(jitCss);
@@ -981,11 +981,11 @@ function cmdInit() {
 
   const initConfig = getDefaultInitConfig();
   const jsContent = `/**
- * Rarog Config (canonical JavaScript flow)
+ * Рарог Config (canonical JavaScript flow)
  * - theme: design tokens
  * - screens: breakpoints
  * - extend: token extensions
- * - plugins: runtime hooks
+ * - plugins: среда выполнения hooks
  */
 const config = ${JSON.stringify(initConfig, null, 2)};
 
@@ -1043,7 +1043,7 @@ function cmdDocs() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Валидация конфига                                                            */
+/* Валидация конфига */
 /* -------------------------------------------------------------------------- */
 
 
@@ -1183,11 +1183,11 @@ function cmdValidate() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Точка входа                                                                */
+/* Точка входа */
 /* -------------------------------------------------------------------------- */
 
 function printHelp() {
-  console.log("Rarog CLI");
+  console.log("Rarog средство командной строки");
   console.log("");
   console.log("Использование:");
   console.log("  rarog build [--debug]    Сгенерировать токены и optional JIT CSS из rarog.config.js + rarog.build.json");

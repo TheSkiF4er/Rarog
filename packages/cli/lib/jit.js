@@ -314,7 +314,7 @@ function generateArbitraryCss(usedClasses) {
   }
 
   return {
-    css: rules.length ? `/* Rarog JIT arbitrary values */\n${rules.join("\n")}\n` : "",
+    css: rules.length ? `/* Рарог JIT arbitrary values */\n${rules.join("\n")}\n` : "",
     issues
   };
 }
@@ -355,20 +355,20 @@ function filterCssByUsedClasses(css, usedClasses) {
     const block = css.slice(i, nextClose + 1);
     const trimmed = block.trim();
     if (trimmed.startsWith("/*") || trimmed.startsWith(":root") || trimmed.startsWith("@keyframes") || trimmed.startsWith("@font-face") || hasClass(block)) {
-      result += block;
-    }
-    i = nextClose + 1;
-  }
-  return result;
+ result += block;
+ }
+ i = nextClose + 1;
+ }
+ return result;
 }
 
 function dedupeCssBlocks(css) {
-  const seen = new Set();
-  let result = "";
-  let i = 0;
-  while (i < css.length) {
-    if (css.startsWith("/*", i)) {
-      const end = css.indexOf("*/", i);
+ const seen = new Set();
+ let result = "";
+ let i = 0;
+ while (i < css.length) {
+ if (css.startsWith("/*", i)) {
+ const end = css.indexOf("*/", i);
       if (end === -1) break;
       const block = css.slice(i, end + 2);
       result += block;
