@@ -2576,7 +2576,7 @@ function reinit(root = document) {
   init(root);
 }
 
-/* Data API                                                                   */
+/* Data интерфейс                                                                   */
 /* -------------------------------------------------------------------------- */
 
 let _dataApiInitialized = false;
