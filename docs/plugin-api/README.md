@@ -1,21 +1,21 @@
-# Plugin SDK v1
+# Набор средств расширения v1
 
-Plugin system в Rarog 3.5+ теперь рассматривается как **реальная расширяемая платформа**, а не как декоративный CSS-hook.
+Система расширений в Рарог 3.5+ теперь рассматривается как **реальная расширяемая платформа**, а не как декоративный точка привязки CSS.
 
-## Что входит в Plugin SDK v1
+## Что входит в Набор средств расширения v1
 
-- **stable plugin contract** — стабильный объектный контракт `createPlugin()` / `definePlugin()`;
-- **test harness для плагинов** — `createPluginTestHarness()` для локальной и CI-проверки плагинов;
-- **starter-шаблон плагина** — генератор `create-rarog-plugin`;
+- **стабильный контракт расширения** — стабильный объектный контракт `createPlugin()` / `definePlugin()`;
+- **испытательная обвязка для плагинов** — `createPluginTestHarness()` для локальной и CI-проверки плагинов;
+- **стартовый шаблон плагина** — генератор `create-rarog-plugin`;
 - **документация по совместимости плагинов** — правила совместимости и поддержки движка;
-- **политика семантического версионирования** — зафиксированная SemVer-политика для API v1.
+- **политика семантического версионирования** — зафиксированная политика SemVer для интерфейса v1.
 
 ## Стабильный контракт плагинов
 
-Rarog поддерживает два типа плагинов:
+Рарог поддерживает два типа плагинов:
 
-1. **SDK v1 plugin object** — рекомендуемый и стабильный формат.
-2. **Legacy function plugin** — обратно совместимый формат для ветки 3.x.
+1. **объект расширения SDK v1** — рекомендуемый и стабильный формат.
+2. **устаревшее расширение-функция** — обратно совместимый формат для ветки 3.x.
 
 ### Рекомендуемый формат
 
@@ -88,9 +88,9 @@ interface RarogPluginContext {
 
 ### Не считается публичным контрактом
 
-- внутренние пути CLI;
+- внутренние пути средство командной строки;
 - прямой доступ к build manifest;
-- регистрация новых CLI-команд через runtime hook;
+- регистрация новых средство командной строки-команд через среда выполнения hook;
 - мутация внутренних структур build pipeline.
 
 ## Результат работы плагина
@@ -106,7 +106,7 @@ interface RarogPluginResult {
 }
 ```
 
-## Plugin test harness
+## Расширение test harness
 
 SDK поставляет test harness для двух сценариев:
 
@@ -130,7 +130,7 @@ console.log(execution.compatibility);
 console.log(execution.result.utilitiesCss);
 ```
 
-## Starter template
+## Стартовый шаблон template
 
 Создать новый плагин можно командой:
 
@@ -161,7 +161,7 @@ npm run create:plugin -- my-plugin
 - `@rarog/plugin-dashboard-kit`
 - `@rarog/plugin-marketing-blocks`
 
-## Legacy compatibility
+## Устаревший compatibility
 
 Функции-плагины старого формата продолжают работать в ветке 3.x:
 
@@ -177,14 +177,14 @@ module.exports = function legacyPlugin(ctx) {
 
 ## Deживойrables
 
-В рамках Plugin SDK v1 в репозитории добавлены:
+В рамках Набор средств расширения v1 в репозитории добавлены:
 
 - `packages/plugin-sdk/index.cjs`
 - `packages/cli/bin/create-rarog-plugin.js`
 - `packages/cli/lib/plugin-starter.js`
-- обновлённый runtime loader в `packages/cli/lib/api.js`
+- обновлённый среда выполнения loader в `packages/cli/lib/api.js`
 - официальный registry в `plugins/registry.json`
 - first-party plugins v1
 - test harness coverage в `tests/js/plugin-sdk.test.js`
 
-Подробнее про версионирование и совместимость — в [Plugin Compatibility](./compatibility.md).
+Подробнее про версионирование и совместимость — в [Расширение Compatibility](./compatibility.md).
