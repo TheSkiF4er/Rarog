@@ -57,7 +57,7 @@ function main() {
   try {
     execFileSync("npm", ["install", "--ignore-scripts", tarballPath], { cwd: projectDir, stdio: "inherit" });
     const cliPath = path.join(projectDir, "node_modules", "rarog", "packages", "cli", "bin", "rarog.js");
-    assert(fs.existsSync(cliPath), "Installed tarball does not contain the CLI entrypoint");
+    assert(fs.existsSync(cliPath), "Installed tarball does not contain the средство командной строки entrypoint");
 
     console.log("[smoke] Step 1/4: init");
     runNode(projectDir, [cliPath, "init"]);
