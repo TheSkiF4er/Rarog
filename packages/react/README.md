@@ -1,8 +1,8 @@
 # @rarog/react
 
-React adapter v1 for Rarog with typed props, SSR-safe primitives, controlled/uncontrolled patterns and wrapped component APIs.
+Согласующий слой React v1 for Рарог with типизированный свойства, Пригодный для серверного вывода базовые элементы, controlled/uncontrolled patterns and wrapped Компонент APIs.
 
-Included wrappers:
+Входящие оболочки:
 - `RarogProvider`
 - `RarogButton`
 - `RarogInput`
@@ -31,6 +31,6 @@ Hooks:
 - `useTooltip`
 - `useCollapse`
 
-Examples:
+Примеры:
 - `examples/starters/vite-react`
 - `examples/starters/nextjs-rarog`
