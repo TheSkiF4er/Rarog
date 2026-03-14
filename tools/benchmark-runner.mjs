@@ -195,7 +195,7 @@ function asTable(frameworks) {
   return [header, ...rows].map((row) => `| ${row.join(' | ')} |`).join('\n');
 }
 
-const md = `# Benchmark results\n\nGenerated: ${report.generatedAt}\n\n${asTable(report.frameworks)}\n\n## Notes\n\n- Rarog metrics are measured from this repo with the reproducible harness in \`benchmarks/\`.\n- Non-Rarog frameworks are declared baselines from \`benchmarks/scenarios/framework-baselines.json\` until their checkout commands are wired into CI.\n- Update baselines only together with scenario notes and optimization backlog.\n`;
+const md = `# Benchmark results\n\nGenerated: ${report.generatedAt}\n\n${asTable(report.frameworks)}\n\n## Примечания\n\n- Rarog metrics are measured from this repo with the reproducible harness in \`benchmarks/\`.\n- Non-Rarog frameworks are declared baselines from \`benchmarks/scenarios/framework-baselines.json\` until their checkout commands are wired into CI.\n- Update baselines only together with scenario notes and optimization backlog.\n`;
 fs.writeFileSync(path.join(resultsDir, 'latest.md'), md, 'utf8');
 
 if (publish) {

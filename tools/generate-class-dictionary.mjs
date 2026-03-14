@@ -1,11 +1,11 @@
 /*!
- * Rarog class dictionary generator
+ * Рарог class dictionary generator
  *
- * Задача: собрать список утилит и компонентных классов Rarog
+ * Задача: собрать список утилит и компонентных классов Рарог
  * и сохранить их в JSON для IDE/плагинов.
  *
  * Запуск:
- *   node tools/generate-class-dictionary.mjs
+ * node tools/generate-class-dictionary.mjs
  */
 
 import fs from "fs";
@@ -29,7 +29,7 @@ function buildClasses() {
     classes.push({ className, description, category });
   };
 
-  // Базовые компоненты и utilities
+  // Базовые компоненты и вспомогательные классы
   [
     ["btn", "Базовая кнопка Rarog", "component"],
     ["btn-primary", "Основная акцентная кнопка", "component"],
@@ -47,7 +47,7 @@ function buildClasses() {
     ["prose", "Контентный блок типографики (@rarog/plugin-typography)", "plugin"]
   ].forEach(([name, desc, cat]) => push(name, desc, cat));
 
-  // Цветовые классы bg-*/text-* по primary/secondary/etc
+  // Цветовые классы bg-*/Текст-* по primary/secondary/etc
   const colorScales = ["primary", "secondary", "success", "danger", "warning", "info"];
   const shades = ["50","100","200","300","400","500","600","700","800","900"];
 

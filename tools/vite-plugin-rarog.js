@@ -1,20 +1,20 @@
 /*!
- * Vite plugin for Rarog CSS
+ * Vite расширение for Рарог CSS
  *
  * Минимальная обёртка вокруг `rarog build` в JIT-режиме.
  * Использование:
  *
- *   // vite.config.ts
- *   import { defineConfig } from 'vite';
- *   import react from '@vitejs/plugin-react';
- *   import { rarogPlugin } from './tools/vite-plugin-rarog';
+ * // vite.config.ts
+ * загрузка { defineConfig } from 'vite';
+ * загрузка react from '@vitejs/plugin-react';
+ * загрузка { РарогPlugin } from './tools/vite-plugin-rarog';
  *
- *   export default defineConfig({
- *     plugins: [
- *       react(),
- *       rarogPlugin()
- *     ]
- *   });
+ * выгрузка default defineConfig({
+ * plugins: [
+ * react(),
+ * РарогPlugin()
+ * ]
+ * });
  */
 const { spawn } = require("child_process");
 const path = require("path");
@@ -52,10 +52,10 @@ function rarogPlugin(userOptions = {}) {
     },
 
     async buildStart() {
-      // Для prod-сборки можно вызвать rarog build вручную из npm-скриптов.
+      // Для prod-сборки можно вызвать Рарог build вручную из npm-скриптов.
       if (this.meta.watchMode) {
         await runRarogBuild(this._rarogRoot, opts).catch(() => {
-          // Ошибку выводит сам rarog; Vite продолжает работать.
+          // Ошибку выводит сам Рарог; Vite продолжает работать.
         });
       }
     },

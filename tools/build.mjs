@@ -31,9 +31,9 @@ function ensureDir(filePath) {
 
 function normalizeBanner(css, targetName) {
   const bannerMap = {
-    core: `/* Rarog Core ${version} */`,
-    utilities: `/* Rarog Utilities ${version} */`,
-    components: `/* Rarog Components ${version} */`
+    core: `/* Рарог Core ${version} */`,
+    utilities: `/* Рарог Вспомогательные классы ${version} */`,
+    components: `/* Рарог Компонентs ${version} */`
   };
 
   if (bannerMap[targetName]) {

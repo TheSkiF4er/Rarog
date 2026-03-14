@@ -41,7 +41,7 @@ async function buildAdapter(pkg) {
     external: pkg.externals,
     logLevel: "info",
     legalComments: "none",
-    banner: { js: `/*! @rarog/${pkg.name} v${version} */` }
+    banner: { js: `/*! @Рарог/${pkg.name} v${version} */` }
   });
   await copyFile(path.join(path.dirname(pkg.entry), "index.d.ts"), path.join(pkg.outdir, "index.d.ts"));
 }
