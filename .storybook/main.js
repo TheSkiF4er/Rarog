@@ -1,4 +1,4 @@
-/** @type {import('@storybook/html-vite').StorybookConfig} */
+/** @type {загрузка('@storybook/html-vite').StorybookConfig} */
 const config = {
   stories: [
     '../stories/**/*.mdx',
