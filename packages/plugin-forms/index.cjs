@@ -8,7 +8,7 @@ module.exports = createPlugin({
   capabilities: { utilities: true },
   setup() {
     const utilitiesCss = `
-/* Rarog Forms Plugin (utilities) */
+/* Рарог Forms Расширение (вспомогательные классы) */
 .form-control-sm { min-height: 2rem; padding: 0.25rem 0.5rem; font-size: 0.875rem; }
 .form-control-lg { min-height: 3rem; padding: 0.75rem 1rem; font-size: 1.125rem; }
 .field { margin-bottom: var(--rarog-spacing-4, 1rem); }
