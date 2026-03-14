@@ -1,13 +1,13 @@
-# Vite + React + Rarog Starter
+# Стартовый шаблон Vite + React + «Рарог»
 
-Стартовый шаблон React adapter v1 c `@rarog/react`.
+Стартовый шаблон Согласующий слой React v1 c `@rarog/react`.
 
 ## Что показывает пример
 
-- SSR-safe `RarogProvider`
-- typed wrapped components
+- Пригодный для серверного вывода `RarogProvider`
+- типизированный wrapped Компонентs
 - controlled tabs/switch
-- overlay usage через `RarogModal`
+- всплывающий слой usage через `RarogModal`
 
 ## Быстрый старт
 
