@@ -8,7 +8,7 @@ module.exports = createPlugin({
   capabilities: { components: true },
   setup() {
     const componentsCss = `
-/* Rarog Typography Plugin */
+/* Рарог Typography Расширение */
 .prose {
   color: var(--rarog-color-semantic-text);
   max-width: 70ch;
