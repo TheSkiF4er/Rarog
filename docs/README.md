@@ -1,30 +1,30 @@
-# Documentation
+# Документация
 
-Rarog docs platform v2 теперь ориентирована на **GitBook** как на основной delivery-слой документации. Цель — сделать документацию не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, lookup-страницами, anatomy-разборами компонентов, accessibility notes, token/theme explorer и понятными migration-путями.
+Платформа документации «Рарог» v2 теперь ориентирована на **GitBook** как на основной слой предоставления документации. Цель — сделать документацию не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, справочными страницами, устройство-разборами компонентов, заметками о доступности, обозревателем токенов и тем и понятными путями перехода.
 
-## What is new in docs platform v2
+## Что нового в платформе документации v2
 
 - **GitBook-native IA** через `docs/SUMMARY.md` и `.gitbook.yaml`
-- **Live playground** в `examples/playground/` для интерактивных сценариев
-- **Utility lookup** для быстрого поиска классов и альтернатив
-- **Component anatomy** и accessibility notes для production-команд
-- **Token/theme explorer** как вход в theming workflows
-- **Migration pages** для перехода с Tailwind и Bootstrap
-- **Copy-paste examples** для быстрых стартов и внедрения в проекты
-- **Starter catalog** с официальными шаблонами и smoke-проверкой
+- **Живая испытательная площадка** в `examples/playground/` для интерактивных сценариев
+- **Справочник вспомогательных классов** для быстрого поиска классов и альтернатив
+- **Устройство компонентов** и заметками о доступности для production-команд
+- **Обозреватель токенов и тем** как вход в темизация workflows
+- **Страницы перехода** для перехода с Tailwind и Bootstrap
+- **Примеры для прямой вставки** для быстрых стартов и внедрения в проекты
+- **Каталог стартовых шаблонов** с официальными шаблонами и smoke-проверкой
 
-## Key sections
+## Ключевые разделы
 
-- [Docs platform v2](docs-platform.md)
-- [Live playground](live-playground.md)
-- [Copy-paste examples](copy-paste-examples.md)
-- [Utility lookup](utilities/lookup.md)
-- [Component anatomy](components/anatomy.md)
-- [Accessibility notes](components/accessibility-notes.md)
-- [Token and theme explorer](themes/token-theme-explorer.md)
-- [Migration guides](migration/README.md)
-- [Official starters](starters/README.md)
+- [Платформа документации v2](docs-platform.md)
+- [Живая испытательная площадка](live-playground.md)
+- [Примеры для прямой вставки](copy-paste-examples.md)
+- [Справочник вспомогательных классов](utilities/lookup.md)
+- [Устройство компонентов](components/anatomy.md)
+- [Заметки о доступности](components/accessibility-notes.md)
+- [Обозреватель токенов и тем](themes/token-theme-explorer.md)
+- [Руководства по переходу](migration/README.md)
+- [Официальные стартовые шаблоны](starters/README.md)
 
-## Authoring model
+## Модель ведения материалов
 
-GitBook является source of truth для структуры разделов и навигации. Для локальной проверки репозиторий также умеет делать lightweight static export в `.gitbook/dist`, чтобы CI мог проверить структуру, ссылки и готовность документации к публикации.
+GitBook является единым источником истины для структуры разделов и навигации. Для локальной проверки репозиторий также умеет делать облегчённую статическую выгрузку в `.gitbook/dist`, чтобы CI мог проверить структуру, ссылки и готовность документации к публикации.

@@ -1,8 +1,8 @@
-# Accessibility checklist template
+# Шаблон перечня проверки доступности
 
-## Component
+## Компонент
 
-- Name:
+- Название:
 - Owner:
 - Version / PR:
 
@@ -21,11 +21,11 @@
 ## Visual accessibility
 
 - [ ] Visible focus ring
-- [ ] Contrast checked for text, borders and interactive states
+- [ ] Contrast checked for Текст, Границаs and interactive states
 - [ ] Reduced motion respected
 
 ## Testing
 
 - [ ] Unit/integration test added or updated
-- [ ] Visual regression touched if component appearance changed
+- [ ] Visual regression touched if Компонент appearance changed
 - [ ] Docs/examples updated
