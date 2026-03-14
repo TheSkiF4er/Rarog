@@ -1,13 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rarog Theme Конструктор / White-label Demo</title>
-    <link rel="stylesheet" href="../../../packages/core/src/rarog-core.css" />
-    <link rel="stylesheet" href="../../../packages/utilities/src/rarog-utilities.css" />
-    <link rel="stylesheet" href="../../../packages/components/src/rarog-components.css" />
-    <style>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Конструктор тем «Рарог» / демонстрация под стороннюю марку</title>
+<link href="../../../packages/core/src/rarog-core.css" rel="stylesheet"/>
+<link href="../../../packages/utilities/src/rarog-utilities.css" rel="stylesheet"/>
+<link href="../../../packages/components/src/rarog-components.css" rel="stylesheet"/>
+<style>
       :root {
         --builder-bg: #0f172a;
         --builder-panel: #111827;
@@ -50,70 +50,64 @@
       pre { white-space: pre-wrap; overflow-wrap: anywhere; }
       @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } .preview-grid { grid-template-columns: 1fr; } }
     </style>
-  </head>
-  <body>
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="panel">
-          <h2>Конструктор тем</h2>
-          <p class="small">Browser-based editor for white-label команд: живой предпросмотр, режим сравнения, import/export and accessibility checks.</p>
-          <div class="toolbar">
-            <button id="importTheme">Import theme</button>
-            <button id="exportTheme">Export JSON темы</button>
-            <button id="exportManifest">Export build manifest</button>
-          </div>
-          <input id="themeFile" type="file" accept="application/json" hidden />
-        </div>
-
-        <div class="panel">
-          <h3>Brand & semantic tokens</h3>
-          <div class="field"><label for="themeName">Theme name</label><input id="themeName" value="enterprise-plus-custom" /></div>
-          <div class="grid-2">
-            <div class="field"><label for="primary">Primary</label><input id="primary" type="color" value="#1d4ed8" /></div>
-            <div class="field"><label for="secondary">Secondary</label><input id="secondary" type="color" value="#475569" /></div>
-            <div class="field"><label for="surface">Surface</label><input id="surface" type="color" value="#ffffff" /></div>
-            <div class="field"><label for="bg">Background</label><input id="bg" type="color" value="#f5f7fb" /></div>
-            <div class="field"><label for="text">Text</label><input id="text" type="color" value="#0f172a" /></div>
-            <div class="field"><label for="textMuted">Text muted</label><input id="textMuted" type="color" value="#475569" /></div>
-            <div class="field"><label for="border">Border</label><input id="border" type="color" value="#d9e2ec" /></div>
-            <div class="field"><label for="focusRing">Фокус ring</label><input id="focusRing" type="color" value="#2563eb" /></div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h3>Density / radius / shadow</h3>
-          <div class="field"><label for="density">Density</label><select id="density"><option value="compact">Compact</option><option value="cozy">Cozy</option><option value="comfortable" selected>Comfortable</option></select></div>
-          <div class="field"><label for="radius">Surface radius</label><input id="radius" type="range" min="10" max="32" value="20" /></div>
-          <div class="field"><label for="controlRadius">Control radius</label><input id="controlRadius" type="range" min="6" max="24" value="14" /></div>
-          <div class="field"><label for="shadow">Shadow intensity</label><input id="shadow" type="range" min="0" max="48" value="24" /></div>
-        </div>
-
-        <div class="panel">
-          <h3>Compare & accessibility</h3>
-          <div class="field"><label for="compareTheme">Compare against</label><select id="compareTheme"><option value="aurora">Aurora</option><option value="graphite">Graphite</option><option value="enterprise-plus" selected>Enterprise+</option></select></div>
-          <div id="contrastReport" class="small"></div>
-          <div class="compare-grid" id="swatches"></div>
-        </div>
-
-        <div class="panel">
-          <h3>Export preview</h3>
-          <pre id="jsonPreview" class="small"></pre>
-        </div>
-      </aside>
-
-      <main class="content">
-        <div class="panel">
-          <h2>White-label product team demo</h2>
-          <p class="small">Two synchronized previews: edited theme on the left, baseline compare theme on the right. Use this during brand review, tenant onboarding and финальное согласование доступности.</p>
-        </div>
-        <div class="preview-grid">
-          <section class="theme-shell" id="primaryPreview"></section>
-          <section class="theme-shell" id="comparePreview"></section>
-        </div>
-      </main>
-    </div>
-
-    <script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="panel">
+<h2>Конструктор тем</h2>
+<p class="small">Browser-based editor for под стороннюю марку команд: живой предпросмотр, режим сравнения, import/export and accessibility checks.</p>
+<div class="toolbar">
+<button id="importTheme">Загрузить тему</button>
+<button id="exportTheme">Выгрузить тему в JSON</button>
+<button id="exportManifest">Выгрузить описание сборки</button>
+</div>
+<input accept="application/json" hidden="" id="themeFile" type="file"/>
+</div>
+<div class="panel">
+<h3>Марочные и семантические токены</h3>
+<div class="field"><label for="themeName">Название темы</label><input id="themeName" value="enterprise-plus-custom"/></div>
+<div class="grid-2">
+<div class="field"><label for="primary">Основной</label><input id="primary" type="color" value="#1d4ed8"/></div>
+<div class="field"><label for="secondary">Дополнительный</label><input id="secondary" type="color" value="#475569"/></div>
+<div class="field"><label for="surface">Поверхность</label><input id="surface" type="color" value="#ffffff"/></div>
+<div class="field"><label for="bg">Фон</label><input id="bg" type="color" value="#f5f7fb"/></div>
+<div class="field"><label for="text">Текст</label><input id="text" type="color" value="#0f172a"/></div>
+<div class="field"><label for="textMuted">Приглушённый текст</label><input id="textMuted" type="color" value="#475569"/></div>
+<div class="field"><label for="border">Граница</label><input id="border" type="color" value="#d9e2ec"/></div>
+<div class="field"><label for="focusRing">Фокус ring</label><input id="focusRing" type="color" value="#2563eb"/></div>
+</div>
+</div>
+<div class="panel">
+<h3>Density / radius / shadow</h3>
+<div class="field"><label for="density">Density</label><select id="density"><option value="compact">Compact</option><option value="cozy">Cozy</option><option selected="" value="comfortable">Comfortable</option></select></div>
+<div class="field"><label for="radius">Поверхность radius</label><input id="radius" max="32" min="10" type="range" value="20"/></div>
+<div class="field"><label for="controlRadius">Control radius</label><input id="controlRadius" max="24" min="6" type="range" value="14"/></div>
+<div class="field"><label for="shadow">Shadow intensity</label><input id="shadow" max="48" min="0" type="range" value="24"/></div>
+</div>
+<div class="panel">
+<h3>Compare &amp; accessibility</h3>
+<div class="field"><label for="compareTheme">Compare against</label><select id="compareTheme"><option value="aurora">Aurora</option><option value="graphite">Graphite</option><option selected="" value="enterprise-plus">Enterprise+</option></select></div>
+<div class="small" id="contrastReport"></div>
+<div class="compare-grid" id="swatches"></div>
+</div>
+<div class="panel">
+<h3>Выгрузка предварительный просмотр</h3>
+<pre class="small" id="jsonPreview"></pre>
+</div>
+</aside>
+<main class="content">
+<div class="panel">
+<h2>Под стороннюю марку product team demo</h2>
+<p class="small">Two synchronized previews: edited theme on the left, базовый уровень compare theme on the right. Use this during brand review, tenant onboarding and финальное согласование доступности.</p>
+</div>
+<div class="preview-grid">
+<section class="theme-shell" id="primaryPreview"></section>
+<section class="theme-shell" id="comparePreview"></section>
+</div>
+</main>
+</div>
+<script>
       const presets = {
         aurora: {
           name: 'aurora',
@@ -220,7 +214,7 @@
           </div>
           <div class="preview-section">
             <table class="demo-table">
-              <thead><tr><th>Workspace</th><th>Status</th><th>Owner</th></tr></thead>
+              <thead><tr><th>Workspace</th><th>Состояние</th><th>Owner</th></tr></thead>
               <tbody>
                 <tr><td>Northwind Retail</td><td><span class="badge badge-success">Healthy</span></td><td>PM team</td></tr>
                 <tr><td>Contoso Cloud</td><td><span class="badge badge-warning">Review</span></td><td>Design ops</td></tr>
@@ -297,5 +291,5 @@
       });
       updatePreview();
     </script>
-  </body>
+</body>
 </html>
