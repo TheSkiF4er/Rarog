@@ -1,7 +1,7 @@
 import React from "react";
 import "./globals.css";
 
-// Rarog CSS (full build or JIT build, в реальном проекте импортируется из node_modules/rarog)
+// Рарог CSS (full build or JIT build, в реальном проекте импортируется из node_modules/rarog)
 import "rarog/dist/rarog-core.min.css";
 import "rarog/dist/rarog-utilities.min.css";
 import "rarog/dist/rarog-components.min.css";

@@ -26,7 +26,7 @@ export default function Page() {
             bodyClassName="p-8"
           >
             <div className="d-flex flex-column gap-4">
-              <RarogAlert tone="info" title="Stable React starter">
+              <RarogAlert tone="info" title="Стабильное React starter">
                 Controlled inputs, composable tabs and wrapped overlays are ready to use.
               </RarogAlert>
               <RarogInput value={query} onChange={event => setQuery(event.target.value)} placeholder="Search tokens or components" />
@@ -34,7 +34,7 @@ export default function Page() {
                 defaultValue="ssr"
                 items={[
                   { value: "ssr", label: "SSR", content: <p>Markup renders on the server and JS activates on the client.</p> },
-                  { value: "api", label: "API", content: <p>Use wrapped components for the common path and hooks when you need lower-level control.</p> }
+                  { value: "api", label: "интерфейс", content: <p>Use wrapped components for the common path and hooks when you need lower-level control.</p> }
                 ]}
               />
               <div className="d-flex gap-2">
