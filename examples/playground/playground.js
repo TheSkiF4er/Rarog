@@ -32,7 +32,7 @@ const scenes = {
         </div>
         <div class="modal-body">
           <input class="input mb-3" placeholder="owner@rarog.dev" data-rg-autofocus />
-          <textarea class="input" rows="4" placeholder="Notes"></textarea>
+          <textarea class="input" rows="4" placeholder="Примечания"></textarea>
         </div>
         <div class="modal-footer d-flex gap-2 justify-content-end">
           <button class="btn btn-secondary" data-rg-dismiss="modal">Отмена</button>
@@ -110,7 +110,7 @@ const scenes = {
         <tr>
           <th data-rg-sort="string">Project</th>
           <th data-rg-sort="string">Owner</th>
-          <th data-rg-sort="string">Status</th>
+          <th data-rg-sort="string">Состояние</th>
         </tr>
       </thead>
       <tbody>
