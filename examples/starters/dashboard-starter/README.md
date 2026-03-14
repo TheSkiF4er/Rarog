@@ -1,3 +1,3 @@
-# dashboard-starter
+# Панель-стартовый шаблон
 
-Official dashboard starter focused on admin shells, side navigation, cards and data-density defaults.
+Official Панель стартовый шаблон focused on admin shells, side navigation, cards and data-density defaults.
