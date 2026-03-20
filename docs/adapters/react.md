@@ -1,15 +1,15 @@
-# Согласующий слой React v1
+# React adapter v1
 
-`@rarog/react` предоставляет типизированный и пригодный для серверного вывода слой-оболочку поверх CSS «Рарог» и `@rarog/js`.
+`@rarog/react` gives a typed, SSR-safe wrapper layer above Rarog CSS and `@rarog/js`.
 
-## Что входит
+## What is included
 
-- оболочки базовых элементов для форм, ввода и обратной связи по компоновке
-- оболочки всплывающего слоя для модального окна, боковой панели, выпадающего меню и подсказки
-- управляемые и неуправляемые интерфейсы для `RarogSwitch`, `RarogTabs`, `RarogAccordion` и всплывающих слоёв
-- примеры стартовых шаблонов для Vite и Next.js
+- wrapped primitives for form/input/layout feedback
+- overlay wrappers for modal, offcanvas, dropdown, tooltip
+- controlled/uncontrolled APIs for `RarogSwitch`, `RarogTabs`, `RarogAccordion`, overlays
+- starter examples for Vite and Next.js
 
-## Рекомендуемое применение
+## Recommended usage
 
 ```tsx
 import {
@@ -21,14 +21,14 @@ import {
 } from "@rarog/react";
 ```
 
-Размещайте `RarogProvider` рядом с оболочкой приложения, чтобы динамические узлы можно было безопасно повторно инициализировать после переходов по маршрутам.
+Use `RarogProvider` near the оболочка приложения so dynamic nodes can be re-initialized safely after route transitions.
 
-## Охваченные компоненты
+## Wrapped components
 
 - Кнопка
 - Поле ввода
 - Текстовая область
-- Поле выбора
+- ВыборField
 - Чекбокс
 - Радиокнопка
 - Переключатель
@@ -40,15 +40,15 @@ import {
 - Вкладки
 - Аккордеон
 - Подсказка
-- Модальное окно
-- Боковая панель
+- Modal
+- Offcanvas
 - Выпадающее меню
 
-## Примечания по серверному выводу
+## SSR notes
 
-Вся работа, связанная с DOM, защищена проверками среды выполнения. Согласующий слой выводит разметку на сервере и включает поведение только для JS на стороне клиента.
+All DOM-bound work is guarded behind runtime checks. The adapter renders markup on the server and activates JS-only behavior on the client.
 
-## Примеры
+## Examples
 
 - `examples/starters/vite-react`
 - `examples/starters/nextjs-rarog`

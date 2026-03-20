@@ -5,13 +5,13 @@
 - provider mount/unmount
 - modal controlled lifecycle
 - dropdown rendering and imperative handle
-- wrapped базовые элементы render in SSR-friendly markup
+- wrapped primitives render in SSR-friendly markup
 - tabs and switch controlled/uncontrolled behavior
 
 ## Vue
 
-- расширение registration
+- plugin registration
 - modal controlled lifecycle via `update:open`
 - dropdown rendering and exposed instance
-- wrapped базовые элементы render with stable slots/attrs behavior
-- Пригодный для Nuxt mount path through `RarogProvider`
+- wrapped primitives render with stable slots/attrs behavior
+- Nuxt-friendly mount path through `RarogProvider`
