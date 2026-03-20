@@ -1,6 +1,6 @@
 # Заметки по доступности
 
-Этот раздел агрегирует общие expectations по доступности для компонентного слоя Рарог.
+Этот раздел агрегирует общие expectations по доступности для компонентного слоя Rarog.
 
 ## Базовый уровень
 
@@ -13,11 +13,11 @@
 
 ## По семействам компонентов
 
-- **Формы**: labels, descriptions, error Текст, required/invalid states
-- **Оверлеи**: focus trap, escape handling, restore focus, expectations по inert Фон
+- **Формы**: labels, descriptions, error text, required/invalid states
+- **Оверлеи**: focus trap, escape handling, restore focus, expectations по inert background
 - **Навигация**: поддержка стрелок там, где этого требует паттерн
-- **Состояние UI**: alerts, badges, spinners не должны создавать шумные анонсы
+- **Status UI**: alerts, badges, spinners не должны создавать шумные анонсы
 
-## Командный порядок работы
+## Командный workflow
 
 Используйте [чек-лист доступности](../accessibility.md) и [шаблон](../accessibility-checklist-template.md) вместе с документацией по компонентам и визуальными fixtures.

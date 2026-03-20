@@ -1,8 +1,8 @@
 # Компоненты
 
-Базовый набор компонентов v1 даёт минимально необходимый комплект для рабочего применения: CSS-базовые элементы, точки доступности, примеры и зрительное покрытие.
+Core component pack v1 provides a production-ready minimum set with CSS primitives, a11y hooks, examples, and visual coverage.
 
-## Включено в v1
+## Включено in v1
 
 - Кнопка
 - Поле ввода
@@ -22,12 +22,12 @@
 - Спиннер
 - Скелетон
 
-## Контракты
+## Contracts
 
-- Общее поведение контура фокуса и ограничения анимации закреплено в `packages/components/src/_component-pack-v1.css`
-- Интерактивное поведение обеспечивается `@rarog/js` для выпадающего меню, модального окна, подсказки, поля выбора и вкладок
-- Зрительное регрессионное покрытие находится в `tests/visual/fixtures/components-v1.html`
+- Shared focus ring and reduced motion behavior живой in `packages/components/src/_component-pack-v1.css`
+- Interactive behaviors are powered by `@rarog/js` for Выпадающее меню, Modal, Подсказка, Выбор and Вкладки
+- Visual regression coverage живойs in `tests/visual/fixtures/components-v1.html`
 
-## Документация по компонентам
+## Component docs
 
-См. отдельные страницы компонентов в этом разделе.
+See the per-component pages in this section.

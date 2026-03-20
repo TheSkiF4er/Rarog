@@ -1,15 +1,15 @@
-# Устройство компонентов
+# Anatomy компонентов
 
-Устройство компонентов помогает объяснять не только внешний интерфейс, но и внутреннюю структуру, важную для темизация, accessibility и composition.
+Anatomy компонентов помогает объяснять не только внешний API, но и внутреннюю структуру, важную для theming, accessibility и composition.
 
-## Общая модель устройство
+## Общая модель anatomy
 
-Почти все компоненты Рарог можно описать через четыре слоя:
+Почти все компоненты Rarog можно описать через четыре слоя:
 
 1. **Root** — контейнер и semantic role
 2. **Control / trigger** — интерактивная часть
 3. **Content / panel** — основное содержимое
-4. **Affordances** — icon slots, badges, вспомогательное средство Текст, dismiss buttons
+4. **Affordances** — icon slots, badges, helper text, dismiss buttons
 
 ## Пример: dialog
 
@@ -28,8 +28,8 @@
 
 ## Почему это важно
 
-Устройство-страницы помогают:
+Anatomy-страницы помогают:
 
 - делать theme overrides без поломки компонента;
 - стабильно оформлять визуальные тесты;
-- держать consistent accessibility перечень проверки между React, Vue и vanilla-реализациями.
+- держать consistent accessibility checklist между React, Vue и vanilla-реализациями.

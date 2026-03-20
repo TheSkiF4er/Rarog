@@ -2,28 +2,28 @@
 
 On/off toggle with reduced-motion-safe track animation.
 
-## Интерфейс CSS
+## CSS API
 
-- Основной селектор: `.switch`
-- Точки привязки темизации: `--rarog-color-*`, `--rarog-radius-*`, `--rarog-shadow-*`, переменные контура фокуса
-- Ограничение анимации соблюдается общими правилами набора компонентов
+- Base selector: `.switch`
+- Theming hooks: `--rarog-color-*`, `--rarog-radius-*`, `--rarog-shadow-*`, focus ring variables
+- Reduced motion: respected via shared component-pack rules
 
-## Поведение с точки зрения доступности
+## Accessibility behavior
 
-- В первую очередь применяется семантическая разметка HTML
-- Видимый контур `:focus-visible`
-- Атрибуты ARIA там, где этого требует взаимодействие
-- Исходные токены с безопасным уровнем контраста
+- Semantic HTML first
+- Visible `:focus-visible` ring
+- ARIA hooks where interaction requires it
+- Contrast-safe default tokens
 
-## Пример
+## Example
 
 ```html
 <div class="card">
   <div class="card-header">Switch</div>
-  <div class="card-body">См. пример набора компонентов в `stories/components/PackV1.stories.js` и `tests/visual/fixtures/components-v1.html`.</div>
+  <div class="card-body">Refer to the component pack example in `stories/components/PackV1.stories.js` and `tests/visual/fixtures/components-v1.html`.</div>
 </div>
 ```
 
-## Покрытие зрительными проверками
+## Visual test coverage
 
-Проверяется файлом `tests/visual/fixtures/components-v1.html`.
+Covered by `tests/visual/fixtures/components-v1.html`.
