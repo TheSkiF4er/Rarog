@@ -1,11 +1,11 @@
-# Рарог vs Bootstrap
+# Rarog vs Bootstrap
 
-Bootstrap быстрее даёт классический UI базовый уровень, но хуже подходит для brand-heavy многотемный продуктов и под стороннюю марку delivery.
+Bootstrap быстрее даёт классический UI baseline, но хуже подходит для brand-heavy multi-theme продуктов и white-label delivery.
 
-Рарог выигрывает, когда нужны:
+Rarog выигрывает, когда нужны:
 
 - semantic tokens;
 - workflows сравнения и экспорта тем;
 - более богатый utility-слой;
 - специализация под dashboard/admin;
-- migration и проверка tooling.
+- migration и audit tooling.

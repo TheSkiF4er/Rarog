@@ -1,18 +1,18 @@
-# Рарог vs Tailwind
+# Rarog vs Tailwind
 
 ## Когда Tailwind особенно силён
 
-- команде нужен с опорой на вспомогательные классы слой без opinionated Компонентs;
-- система оформления уже существует отдельно;
-- темизация и Панельs будут собраны собственными силами.
+- команде нужен utility-first слой без opinionated components;
+- design system уже существует отдельно;
+- theming и dashboards будут собраны собственными силами.
 
-## Когда сильнее Рарог
+## Когда сильнее Rarog
 
-- нужен **готовый путь** от вспомогательные классы к Компонентs, tokens и themes;
-- важны под стороннюю марку сценарии и многотемный product delivery;
-- нужно меньше glue-code между UI layer, Документация, Примеры и средство командной строки governance.
+- нужен **готовый путь** от utilities к components, tokens и themes;
+- важны white-label сценарии и multi-theme product delivery;
+- нужно меньше glue-code между UI layer, docs, examples и CLI governance.
 
 ## Вывод
 
 Tailwind — отличный low-level engine.
-Рарог — более complete product UI system для команд, которые не хотят собирать платформенный слой вручную.
+Rarog — более complete product UI system для команд, которые не хотят собирать платформенный слой вручную.
