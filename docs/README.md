@@ -1,8 +1,8 @@
 # Documentation
 
-Rarog docs platform v2 теперь ориентирована на **GitBook** как на основной delivery-слой документации. Цель — сделать документацию не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, lookup-страницами, anatomy-разборами компонентов, accessibility notes, token/theme explorer и понятными migration-путями.
+Rarog docs platform теперь ориентирована на **GitBook** как на основной delivery-слой документации. Цель — сделать документацию не приложением «рядом», а полноценным конкурентным преимуществом: с быстрым поиском, живыми примерами, lookup-страницами, anatomy-разборами компонентов, accessibility notes, token/theme explorer и понятными migration-путями.
 
-## What is new in docs platform v2
+## What is new in docs platform
 
 - **GitBook-native IA** через `docs/SUMMARY.md` и `.gitbook.yaml`
 - **Live playground** в `examples/playground/` для интерактивных сценариев
@@ -15,7 +15,7 @@ Rarog docs platform v2 теперь ориентирована на **GitBook** 
 
 ## Key sections
 
-- [Docs platform v2](docs-platform.md)
+- [Docs platform](docs-platform.md)
 - [Live playground](live-playground.md)
 - [Copy-paste examples](copy-paste-examples.md)
 - [Utility lookup](utilities/lookup.md)
