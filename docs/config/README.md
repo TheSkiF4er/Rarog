@@ -1,8 +1,8 @@
 # Конфигурация
 
-Конфигурация Рарог: canonical config, build manifest, content scanning, variants и связанные настройки.
+Конфигурация Rarog: canonical config, build manifest, content scanning, variants и связанные настройки.
 
-## Включено устаревший sources
+## Включено legacy sources
 
 - `getting-started.md`
 - `integration-guides.md`
@@ -43,10 +43,10 @@ npx rarog build
 
 #### Theme config
 
-Канонический описание темы:
+Канонический theme-config:
 - `rarog.config.js`
 
-Путь совместимости:
+Compatibility-path:
 - `rarog.config.ts`
 
 `rarog init` по умолчанию создаёт только `rarog.config.js`.
@@ -71,10 +71,10 @@ module.exports = {
 
 #### Сборка manifest
 
-Канонический описание сборки:
+Канонический build-manifest:
 - `rarog.build.json`
 
-Устаревший fallback:
+Legacy fallback:
 - `rarog.config.json`
 
 Пример минимального `rarog.build.json`:
@@ -95,20 +95,20 @@ module.exports = {
 }
 ```
 
-### средство командной строки flow
+### CLI flow
 
 #### `rarog init`
 
 Создаёт стартовый проект без сюрпризов:
-- один описание темы;
-- один описание сборки;
+- один theme-config;
+- один build-manifest;
 - один smoke HTML input.
 
 #### `rarog validate`
 
 Проверяет:
-- описание темы Поверхность;
-- описание сборки Поверхность;
+- theme-config surface;
+- build-manifest surface;
 - предупреждения по legacy/multi-config состояниям.
 
 #### `rarog build`
@@ -116,7 +116,7 @@ module.exports = {
 Делает каноническую пользовательскую сборку:
 - генерирует token CSS по путям из `rarog.build.json`;
 - в режиме `jit` пишет `outputs.jitCss`;
-- если classes не найдены, средство командной строки использует предсказуемый fallback bundle, а не молча публикует пустой output.
+- если classes не найдены, CLI использует предсказуемый fallback bundle, а не молча публикует пустой output.
 
 ### Сборка репозитория
 
@@ -132,11 +132,11 @@ npm run verify:artifacts
 Где:
 - `npm run build` — полная сборка (`build:css + build:js + build:adapters`);
 - `npm run verify:artifacts` — запускается **после полной сборки**;
-- `npm run test:ci` — включает temp-project краткий проверочный тест (`init → validate → build → output exists`).
+- `npm run test:ci` — включает temp-project smoke test (`init → validate → build → output exists`).
 
-### Поверхность корневого пакета
+### Поверхность root-пакета
 
-Root `rarog` публикует CSS Поверхность через:
+Root `rarog` публикует CSS surface через:
 - `style`
 - subpath exports
 
@@ -158,7 +158,7 @@ Root `main` для CSS не используется.
 
 ## Integration Guides
 
-Рарог не привязан к конкретному фреймворку и хорошо интегрируется с:
+Rarog не привязан к конкретному фреймворку и хорошо интегрируется с:
 
 - Чистым HTML/статическими сайтами
 - Laravel / PHP
@@ -167,13 +167,13 @@ Root `main` для CSS не используется.
 
 См. директорию `examples/` в репозитории:
 
-- `examples/starters/html-basic` — чистый HTML стартовый шаблон
-- `examples/starters/laravel` — Laravel + Рарог
-- `examples/starters/vite-react` — Vite + React + Рарог
+- `examples/starters/html-basic` — чистый HTML starter
+- `examples/starters/laravel` — Laravel + Rarog
+- `examples/starters/vite-react` — Vite + React + Rarog
 
-Каждый стартовый шаблон содержит отдельный `README` и пример минимального проекта.
+Каждый starter содержит отдельный `README` и пример минимального проекта.
 
-### Vite + Рарог (официальный плагин)
+### Vite + Rarog (официальный плагин)
 
 Для Vite-проектов рекомендуется использовать плагин:
 
@@ -217,19 +217,19 @@ export default defineКонфигурация({
 
 В репозитории есть готовые starters для SPA/SSR‑стеков:
 
-- `examples/starters/nextjs-rarog` — Next.js 14 (App Router) + Рарог + `@rarog/react`;
-- `examples/starters/nuxt-rarog` — Nuxt 3 + Рарог + `@rarog/vue`;
-- `examples/starters/sveltekit-rarog` — SvelteKit + Рарог.
+- `examples/starters/nextjs-rarog` — Next.js 14 (App Router) + Rarog + `@rarog/react`;
+- `examples/starters/nuxt-rarog` — Nuxt 3 + Rarog + `@rarog/vue`;
+- `examples/starters/sveltekit-rarog` — SvelteKit + Rarog.
 
 Они демонстрируют:
 
-- подключение CSS/JS Рарог в SSR‑фреймворках;
+- подключение CSS/JS Rarog в SSR‑фреймворках;
 - использование JS‑ядра в SPA‑навигации;
-- работу Рарог в гибридном режиме (SSR + client hydration).
+- работу Rarog в гибридном режиме (SSR + client hydration).
 
 ### Microfrontends / Module Federation (MVP)
 
-Рарог можно использовать в микрофронтендах при общей дизайн‑системе:
+Rarog можно использовать в микрофронтендах при общей дизайн‑системе:
 
 - выносите токены и темы в общий пакет (например, `rarog` + темы);
 - подключайте общий CSS‑бандл (или несколько тем) во все микрофронты;
@@ -238,15 +238,15 @@ export default defineКонфигурация({
 Основные рекомендации:
 
 - использовать единый источник токенов (`rarog.tokens.json` + theme‑packs);
-- следить, чтобы Рарог JS Core подключался один раз (singleton);
+- следить, чтобы Rarog JS Core подключался один раз (singleton);
 - для каждого микрофронта вызывать `Rarog.init(root)` / `Rarog.dispose(root)` на уровне его контейнера.
 
 
 ## Imported from `theming.md`
 
-## Темизация
+## Theming
 
-Рарог поддерживает несколько тем (default, dark, contrast), а также свои темы
+Rarog поддерживает несколько тем (default, dark, contrast), а также свои темы
 через переопределение CSS-переменных.
 
 Базовые токены задаются в:
@@ -270,9 +270,9 @@ npx rarog build
 4. Подключите собственный файл темы (если нужно) после базового `rarog-core.css`.
 
 
-### Готовые наборы тем (3.3.0+)
+### Готовые theme packs (3.3.0+)
 
-Начиная с 3.3.0, вместе с базовыми темами (`default`, `dark`, `contrast`) в Рарог
+Начиная с 3.3.0, вместе с базовыми темами (`default`, `dark`, `contrast`) в Rarog
 появились преднастроенные theme‑packs:
 
 - `.theme-enterprise` — спокойная B2B‑палитра для дашбордов и внутренних продуктов.
@@ -326,7 +326,7 @@ npx rarog build
 
 ## Токены
 
-Рарог строится вокруг универсального слоя дизайн-токенов.
+Rarog строится вокруг универсального слоя дизайн-токенов.
 
 Основные группы токенов:
 
@@ -357,11 +357,11 @@ npx rarog build
 В 3.3.0 структура `rarog.tokens.json` была уточнена под сценарий «полноценная
 дизайн‑система»:
 
-- `tokens.color.*` — «сырые» палитры (Основной, Дополнительный, success, danger, info…);
+- `tokens.color.*` — «сырые» палитры (primary, secondary, success, danger, info…);
 - `tokens.spacing`, `tokens.radius`, `tokens.shadow`, `tokens.layout` — атомарные шкалы;
 - `tokens.color.semantic` и `tokens.semantic` — семантические токены (фон, текст, бордеры);
 - `tokens.themes.*` — набор тем (`default`, `dark`, `contrast`, `enterprise`, `creative`),
- каждая из которых задаёт свой набор `semantic`‑значений.
+  каждая из которых задаёт свой набор `semantic`‑значений.
 
 Экспорт в Figma теперь строится поверх этой структуры:
 
@@ -379,7 +379,7 @@ npx rarog build
 
 ## Variants & JIT
 
-Рарог 2.3.0 добавляет более умный Tailwind-style движок:
+Rarog 2.3.0 добавляет более умный Tailwind-style движок:
 
 - поддержка variant-префиксов (`group-hover:`, `peer-*`, `data-[state=…]:*`);
 - расширенные arbitrary values (`rounded-[...]`, `shadow-[...]`, `gap-[...]`, `border-[...]`);
@@ -470,7 +470,7 @@ JIT поддерживает:
 - `cx('alert', kind === 'error' && 'alert-danger')`
 - `classnames('badge', size && 'badge-lg')`
 
-Это позволяет использовать Рарог util-классы во фреймворковых проектах без потерь при tree-shaking.
+Это позволяет использовать Rarog util-классы во фреймворковых проектах без потерь при tree-shaking.
 
 ### Конфигурация: variants
 
@@ -510,14 +510,14 @@ export default defineКонфигурация({
 })
 ```
 
-Стартовый шаблон-проект `examples/starters/vite-react` уже настроен на использование плагина и JIT-режима.
+Starter-проект `examples/starters/vite-react` уже настроен на использование плагина и JIT-режима.
 
 
 ## Imported from `performance.md`
 
 ## Performance & Bundle Size
 
-Рарог изначально спроектирован так, чтобы:
+Rarog изначально спроектирован так, чтобы:
 
 - full‑сборка была предсказуемой и стабильной;
 - JIT‑режим давал **заметное** уменьшение итогового CSS;
@@ -527,17 +527,17 @@ export default defineКонфигурация({
 
 Условный пример (ориентировочные, не жёсткие цифры):
 
-| Тип проекта | Режим | Размер CSS (сырой) | Gzip‑оценка |
+| Тип проекта                      | Режим | Размер CSS (сырой) | Gzip‑оценка |
 |----------------------------------|-------|---------------------|-------------|
-| Малый лендинг | full | 70–90 KB | 15–25 KB |
-| Малый лендинг | jit | 20–35 KB | 6–12 KB |
-| Admin‑панель (Панель) | full | 90–130 KB | 25–35 KB |
-| Admin‑панель (Панель) | jit | 35–60 KB | 10–20 KB |
+| Малый лендинг                    | full  | 70–90 KB            | 15–25 KB    |
+| Малый лендинг                    | jit   | 20–35 KB            | 6–12 KB     |
+| Admin‑панель (dashboard)         | full  | 90–130 KB           | 25–35 KB    |
+| Admin‑панель (dashboard)         | jit   | 35–60 KB            | 10–20 KB    |
 
 Точные значения зависят от:
 
 - используемых компонентов и утилит;
-- объёма Компоновка‑ов и вариаций;
+- объёма layout‑ов и вариаций;
 - количества responsive/state/variant‑классов.
 
 ### Режимы сборки
@@ -631,9 +631,9 @@ clsx("btn", variant === "primary" && "btn-primary");
 - default / dark / contrast и т.п.,
 - можно собирать их в отдельные файлы:
 
- - `rarog.theme.default.css`,
- - `rarog.theme.dark.css`,
- - `rarog.theme.contrast.css`.
+  - `rarog.theme.default.css`,
+  - `rarog.theme.dark.css`,
+  - `rarog.theme.contrast.css`.
 
 И подгружать только нужное (через `<link>` или динамический импорт).
 
@@ -662,7 +662,7 @@ gzip -c dist/rarog.css | wc -c
 
 ### Performance v2 и размеры бандлов
 
-Для Рарог 3.x мы разделяем несколько сценариев сборки:
+Для Rarog 3.x мы разделяем несколько сценариев сборки:
 
 - **full** — полный набор токенов, утилит и компонент;
 - **jit** — только реально используемые классы по анализу `content`;
@@ -672,15 +672,15 @@ gzip -c dist/rarog.css | wc -c
 
 1. На стадии прототипа — использовать full-сборку (быстрый старт).
 2. Для production — включить `mode: "jit"` в `rarog.config.*` и
- ограничить `content` только реальными путями проекта.
+   ограничить `content` только реальными путями проекта.
 3. Для больших систем — рассмотреть split-сборку:
- - общий foundation (tokens + base вспомогательные классы),
- - отдельный бандл для admin UI,
- - отдельный бандл для публичной витрины/лендингов.
+   - общий foundation (tokens + base utilities),
+   - отдельный бандл для admin UI,
+   - отдельный бандл для публичной витрины/лендингов.
 
 Также важно:
 
 - кешировать результаты JIT-сборки (особенно в CI) — это поддерживается
- через стандартные механизмы кеша (`node_modules/.cache`, CI cache);
-- по возможности не держать «мертвые» Компоновка-страницы в одном репо
- без необходимости — JIT всё равно увидит классы и не сможет их выкинуть.
+  через стандартные механизмы кеша (`node_modules/.cache`, CI cache);
+- по возможности не держать «мертвые» layout-страницы в одном репо
+  без необходимости — JIT всё равно увидит классы и не сможет их выкинуть.
