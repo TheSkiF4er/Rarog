@@ -1,6 +1,6 @@
-# средство командной строки Pro tools
+# CLI Pro tools
 
-Рарог средство командной строки Pro добавляет диагностику, инспекцию токенов и инструменты поставки вокруг базового build-flow.
+Rarog CLI Pro добавляет диагностику, инспекцию токенов и инструменты поставки вокруг базового build-flow.
 
 ## Команды
 
@@ -14,9 +14,9 @@ rarog audit a11y src
 rarog audit bundle dist
 ```
 
-## Реальные порядок работы-сценарии
+## Реальные workflow-сценарии
 
-### 1. Проверка под стороннюю марку релиз-кандидата
+### 1. Проверка white-label релиз-кандидата
 
 ```bash
 rarog doctor
@@ -33,15 +33,15 @@ rarog token inspect rarog.tokens.json --path=tokens.color.semantic
 rarog token diff rarog.tokens.json snapshots/rarog.tokens.prev.json
 ```
 
-Это помогает система оформления maintainers увидеть, какие именно semantic aliases поменялись, вместо чтения полного JSON различие.
+Это помогает design-system maintainers увидеть, какие именно semantic aliases поменялись, вместо чтения полного JSON diff.
 
-### 3. Сравнение новой темы с базовый уровень
+### 3. Сравнение новой темы с baseline
 
 ```bash
 rarog theme diff packages/themes/presets/enterprise-plus.json themes/acme-finance.json
 ```
 
-Используйте это в code review, чтобы подтвердить, что изменились только ожидаемые semantic и среда выполнения токены.
+Используйте это в code review, чтобы подтвердить, что изменились только ожидаемые semantic и runtime токены.
 
 ### 4. Быстрый старт продуктового компонента
 

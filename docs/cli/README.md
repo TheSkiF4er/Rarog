@@ -1,6 +1,6 @@
-# средство командной строки
+# CLI
 
-Используйте средство командной строки для локальной разработки, сборок и диагностики.
+Используйте CLI для локальной разработки, сборок и диагностики.
 
 ## Частые команды
 
@@ -20,9 +20,9 @@ rarog migrate bootstrap --input src/index.html --output src/index.migrated.html
 rarog migrate tailwind --input src/App.tsx --output src/App.rg.tsx
 ```
 
-## Когда использовать средство командной строки
+## Когда использовать CLI
 
-Используйте средство командной строки, когда вам нужно:
+Используйте CLI, когда вам нужно:
 
 - запускать локальные development-flows;
 - собирать production-output;
@@ -37,11 +37,11 @@ rarog migrate tailwind --input src/App.tsx --output src/App.rg.tsx
 
 - `rarog build --debug` — пишет debug JSON рядом с JIT output
 - `rarog analyze` — показывает scan summary и неизвестные utility-like classes
-- `rarog doctor` — быстро проверяет config/build/JIT Поверхность
+- `rarog doctor` — быстро проверяет config/build/JIT surface
 
 ## Toolkit для миграции
 
-- `rarog inspect classes` — показывает mix из Рарог / Bootstrap / Tailwind классов
+- `rarog inspect classes` — показывает mix из Rarog / Bootstrap / Tailwind классов
 - `rarog migrate bootstrap` — first-pass codemod для Bootstrap-разметки
 - `rarog migrate tailwind` — first-pass codemod для Tailwind-разметки
 
@@ -50,15 +50,15 @@ rarog migrate tailwind --input src/App.tsx --output src/App.rg.tsx
 - `rarog token inspect` — показывает leaf token values по файлу или dot-path
 - `rarog token diff` — сравнивает два JSON snapshot токенов
 - `rarog theme diff` — сравнивает semantic/runtime manifests тем
-- `rarog component scaffold` — генерирует стартовый шаблон Компонент files
-- `rarog audit a11y` — лёгкий static accessibility проверка
+- `rarog component scaffold` — генерирует starter component files
+- `rarog audit a11y` — лёгкий static accessibility audit
 - `rarog audit bundle` — проверяет размеры CSS/JS output
 
-Подробнее: [средство командной строки Pro tools](./pro-tools.md)
+Подробнее: [CLI Pro tools](./pro-tools.md)
 
-## средство командной строки Pro порядок работы
+## CLI Pro workflow
 
-Рарог средство командной строки Pro теперь включает эксплуатационные команды для quality bar и система оформления governance:
+Rarog CLI Pro теперь включает эксплуатационные команды для quality bar и design-system governance:
 
 - `rarog doctor`
 - `rarog token inspect`
@@ -68,7 +68,7 @@ rarog migrate tailwind --input src/App.tsx --output src/App.rg.tsx
 - `rarog audit a11y`
 - `rarog audit bundle`
 
-Для выпуск-готовности используйте также:
+Для release-готовности используйте также:
 
 - `npm run test:starters-install`
 - `npm run test:package-matrix`
