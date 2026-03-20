@@ -1,9 +1,9 @@
-# Набор отступов в духе Bootstrap
+# Bootstrap-like preset spacing
 
 Используйте этот preset, когда команда мигрирует с Bootstrap и хочет сохранить знакомую spacing scale `0..5`.
 
-## Включает
+## Includes
 
 - spacing scale `0..5`
 - alias mappings `g-* -> rg-gap-*`
-- предсказуемой hand-off для margin/padding вспомогательные классы
+- predictable hand-off для margin/padding utilities

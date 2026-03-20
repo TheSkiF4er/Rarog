@@ -1,9 +1,9 @@
-# Набор для панелей показателей
+# Dashboard preset
 
 Preset для аналитических приложений, admin panels и monitoring interfaces.
 
-## Включает
+## Includes
 
 - compact density
-- elevated Поверхностьs
-- Панель-oriented shell/sidebar/panel defaults
+- elevated surfaces
+- dashboard-oriented shell/sidebar/panel defaults
