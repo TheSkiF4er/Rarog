@@ -26,8 +26,8 @@ rarog migrate tailwind --input <file> --output <file>
 Для adoption важнее сначала дать:
 
 - понятный inspection report;
-- предсказуемой first-pass conversion;
-- Наборы совместимости;
-- Документация с mapping tables.
+- predictable first-pass conversion;
+- compatibility presets;
+- docs с mapping tables.
 
 Полный zero-touch migration можно строить уже поверх этой базы.

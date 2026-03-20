@@ -1,6 +1,6 @@
 # Таблицы сопоставления классов
 
-## Bootstrap → Рарог
+## Bootstrap → Rarog
 
 | Source | Target |
 | --- | --- |
@@ -23,7 +23,7 @@
 | `position-relative` | `relative` |
 | `w-100` | `w-full` |
 
-## Tailwind → Рарог
+## Tailwind → Rarog
 
 | Source | Target |
 | --- | --- |
