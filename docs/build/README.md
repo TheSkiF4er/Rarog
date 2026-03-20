@@ -1,27 +1,27 @@
 # Сборка
 
-Сборка материалов документации или исполняемых ресурсов для рабочего применения.
+Сборка docs or runtime assets for production.
 
-## Обычный порядок действий
+## Typical flow
 
-1. Проверить конфигурацию
-2. Разобрать токены и темы
-3. Собрать выходные ресурсы среды выполнения
-4. Проверить созданные артефакты
+1. Validate config
+2. Resolve tokens and themes
+3. Сборка runtime output
+4. Verify generated artifacts
 
-## Цели сборки
+## Сборка goals
 
-Хорошая сборка должна быть:
-- воспроизводимой
-- предсказуемой
-- простой для проверки
+A good build should be:
+- reproducible
+- predictable
+- easy to inspect
 
-## Связанные разделы
+## Related sections
 
 - [Конфигурация](../config/README.md)
 - [Рантайм](../runtime/README.md)
 
-## JIT hardening Документация
+## JIT hardening docs
 
 - [Как работает JIT](jit-how-it-works.md)
 - [Руководство по устранению проблем JIT](jit-troubleshooting.md)

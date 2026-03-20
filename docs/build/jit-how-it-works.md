@@ -3,7 +3,7 @@
 ## Flow
 
 1. `rarog build` читает `rarog.config.*` и build manifest
-2. если `mode === "jit"`, средство командной строки сканирует файлы из `content`
+2. если `mode === "jit"`, CLI сканирует файлы из `content`
 3. из найденных файлов извлекаются utility/class tokens
 4. source CSS для utilities/components фильтруется по реально найденным классам
 5. arbitrary value classes (`w-[...]`, `bg-[...]`, `translate-x-[...]` и т.д.) компилируются отдельно
@@ -18,7 +18,7 @@
 - итоговый output проходит dedupe pass
 - появился debug report
 
-## Новые средство командной строки команды
+## Новые CLI команды
 
 - `rarog build --debug`
 - `rarog analyze`
