@@ -1,15 +1,15 @@
-# Живой испытательная площадка
+# Живой playground
 
-Интерактивный испытательная площадка расположен в `examples/playground/` и служит общей живой площадкой для demos, устранение неполадок и handoff между Документация, design и development.
+Интерактивный playground расположен в `examples/playground/` и служит общей живой площадкой для demos, troubleshooting и handoff между docs, design и development.
 
 ## Что он покрывает
 
-- всплывающий слой-поведения: modal, боковая панель, toast;
-- интерактивные базовые элементы: dropdown, всплывающий блок, tooltip;
+- overlay-поведения: modal, offcanvas, toast;
+- интерактивные primitives: dropdown, popover, tooltip;
 - form widgets: select, combobox, tags input;
-- data Поверхностьs: sortable table;
+- data surfaces: sortable table;
 - переключение тем и scoped themes;
-- обозреватель токенов для raw / semantic / среда выполнения слоёв.
+- обозреватель токенов для raw / semantic / runtime слоёв.
 
 ## Как запускать локально
 
@@ -19,6 +19,6 @@ npm run docs:dev
 
 Для живых примеров можно также открыть `examples/playground/index.html` напрямую или поднять локальный static server.
 
-## Как Документация ссылаются на испытательная площадка
+## Как docs ссылаются на playground
 
-GitBook-страницы используют испытательная площадка как canonical live reference. Это позволяет держать документацию лёгкой, а интерактивность — в одном месте.
+GitBook-страницы используют playground как canonical live reference. Это позволяет держать документацию лёгкой, а интерактивность — в одном месте.

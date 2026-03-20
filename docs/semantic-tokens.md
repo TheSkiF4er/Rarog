@@ -1,10 +1,10 @@
 # Семантические токены
 
-Семантические токены are the stable интерфейс between design tokens and Компонентs.
+Семантические токены are the stable API between design tokens and components.
 
 ## Naming system
 
-Рарог uses intent-first names instead of direct palette names for shared UI Поверхностьs:
+Rarog uses intent-first names instead of direct palette names for shared UI surfaces:
 
 - `bg`, `bgSoft`, `bgElevated`, `bgElevatedSoft`
 - `surface`
@@ -15,7 +15,7 @@
 
 ## Why this matters
 
-A Компонент should ask for `surface` or `textMuted`, not `slate-100` or `blue-600`. This lets themes switch from SaaS to enterprise to под стороннюю марку without touching Компонент CSS.
+A component should ask for `surface` or `textMuted`, not `slate-100` or `blue-600`. This lets themes switch from SaaS to enterprise to white-label without touching component CSS.
 
 ## Mapping guidance
 
@@ -24,9 +24,9 @@ A Компонент should ask for `surface` or `textMuted`, not `slate-100` or
 - focus styles -> `focusRing`
 - selection and quiet emphasis -> `accentSoft`
 
-## Компонент hooks
+## Component hooks
 
-Примеры of Компонент-token usage:
+Examples of component-token usage:
 
 - `button.radius -> {shape.control}`
 - `card.shadow -> {shadow.md}`

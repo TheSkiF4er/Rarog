@@ -1,4 +1,4 @@
-# Примеры для прямой вставки
+# Copy-paste примеры
 
 Этот раздел собирает короткие production-готовые фрагменты, которые можно вставить в проект без долгой адаптации.
 
@@ -12,7 +12,7 @@
 </div>
 ```
 
-## Настройки form
+## Settings form
 
 ```html
 <div class="card">
@@ -42,6 +42,6 @@
 
 ## Where to go next
 
-- устройство and accessibility details: [Устройство компонентов](components/anatomy.md)
+- anatomy and accessibility details: [Anatomy компонентов](components/anatomy.md)
 - utility search: [Справочник утилит](utilities/lookup.md)
 - full starters: [Официальные стартеры](starters/README.md)
